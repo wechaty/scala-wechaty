@@ -21,4 +21,8 @@ class Message(val payload:MessagePayload,puppet:PuppetHostie) {
       throw new IllegalStateException("roomid and fromid both is null")
     }
   }
+
+  override def toString: String = {
+    payload.text
+  }
 }
