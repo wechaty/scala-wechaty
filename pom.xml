@@ -1,0 +1,197 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.ganshane.wechaty</groupId>
+  <artifactId>wechaty-project_2.12</artifactId>
+  <packaging>pom</packaging>
+  <version>0.1.0-SNAPSHOT</version>
+  <name>wechaty-project</name>
+
+  <description>
+    Wechaty for Scala
+  </description>
+  <url>https://github.com/jcai/scala-wechaty</url>
+
+
+  <modules>
+    <module>wechaty</module>
+    <module>wechaty-puppet</module>
+    <module>wechaty-hostie</module>
+  </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.ganshane.wechaty</groupId>
+        <artifactId>wechaty</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.ganshane.wechaty</groupId>
+        <artifactId>wechaty-puppet</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.ganshane.wechaty</groupId>
+        <artifactId>wechaty-hostie</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.github.wechaty</groupId>
+        <version>0.11.25</version>
+        <artifactId>grpc</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.11.0</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.module</groupId>
+        <artifactId>jackson-module-scala_${scala-binary-version}</artifactId>
+        <version>2.11.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>2.13.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.30</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>1.7.30</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>net.alchim31.maven</groupId>
+          <artifactId>scala-maven-plugin</artifactId>
+          <version>4.4.0</version>
+          <executions>
+            <execution>
+              <id>eclipse-add-source</id>
+              <goals>
+                <goal>add-source</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>scala-compile-first</id>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>compile</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>scala-test-compile-first</id>
+              <phase>process-test-resources</phase>
+              <goals>
+                <goal>testCompile</goal>
+              </goals>
+            </execution>
+            <execution>
+              <!-- <id>attach-scaladocs</id> -->
+              <id>attach-javadocs</id>
+              <!-- <phase>verify</phase> -->
+              <goals>
+                <goal>doc-jar</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <scalaVersion>${scala-release-version}</scalaVersion>
+            <!--
+            <recompileMode>incremental</recompileMode>
+            <useZincServer>true</useZincServer>
+            -->
+            <args>
+              <arg>-unchecked</arg>
+              <arg>-deprecation</arg>
+              <arg>-feature</arg>
+              <arg>-encoding</arg>
+              <arg>UTF-8</arg>
+              <arg>-language:postfixOps</arg>
+            </args>
+            <jvmArgs>
+              <jvmArg>-Xms1024m</jvmArg>
+              <jvmArg>-Xmx1024m</jvmArg>
+              <jvmArg>-XX:PermSize=${PermGen}</jvmArg>
+              <jvmArg>-XX:MaxPermSize=${MaxPermGen}</jvmArg>
+              <jvmArg>-XX:ReservedCodeCacheSize=${CodeCacheSize}</jvmArg>
+            </jvmArgs>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.1</version>
+          <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+            <optimize>true</optimize>
+            <encoding>UTF-8</encoding>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+
+  <contributors>
+    <contributor>
+      <name>Jun Tsai</name>
+      <email>jun.tsai@gmail.com</email>
+    </contributor>
+  </contributors>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Jun Tsai</name>
+      <email>jun.tsai@gmail.com</email>
+    </developer>
+  </developers>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>sonatype</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>sonatype</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
+  <scm>
+    <url>https://github.com/jcai/scala-wechaty</url>
+    <connection>scm:git:ssh://github.com/jcai/scala-wechaty.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/jcai/scala-wechaty.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+  <properties>
+    <encoding>UTF-8</encoding>
+    <update-release-info>false</update-release-info>
+    <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
+    <scala-release-version>2.12.11</scala-release-version>
+    <scala-binary-version>2.12</scala-binary-version>
+    <spring-release-version>5.2.4.RELEASE</spring-release-version>
+    <PermGen>64m</PermGen>
+    <MaxPermGen>512m</MaxPermGen>
+    <CodeCacheSize>512m</CodeCacheSize>
+  </properties>
+</project>
