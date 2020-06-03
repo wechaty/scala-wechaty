@@ -18,8 +18,9 @@ object EventEmitter {
     eventListenerOpts match {
       case Some(eventListeners) =>
         if (converter != null) {
+          val payloadConverted = converter(data)
           eventListeners.foreach { listener =>
-            listener.asInstanceOf[Listener[B]](converter(data))
+            listener.asInstanceOf[Listener[B]](payloadConverted)
           }
         } else
           eventListeners.foreach(x => x.asInstanceOf[Listener[T]](data))
