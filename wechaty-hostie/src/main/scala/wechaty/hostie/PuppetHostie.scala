@@ -16,7 +16,6 @@ class PuppetHostie(option:PuppetOption) extends GrpcSupport
   with MessageSupport
   with GrpcEventSupport {
 
-  private var endpoint:(String,Int)=_
   init()
   private def init(): Unit ={
     if(option.token.isEmpty){
@@ -30,11 +29,9 @@ class PuppetHostie(option:PuppetOption) extends GrpcSupport
     }
     if(option.endpoint.isEmpty)
       throw new IllegalStateException("hostie endpoint not found")
-    val arr = option.endpoint.get.split(":")
-    endpoint = (arr(0),arr(1).toInt)
   }
   def start(): Unit ={
-    startGrpc(endpoint)
+    startGrpc(option.endpoint.get)
   }
   def stop(): Unit = {
     stopGrpc()

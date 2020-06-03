@@ -36,6 +36,7 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
   }
 
   def processEvent(eventType: EventType, data: String):Unit = {
+    debug("receive event:{},data:{}",eventType,data)
     var converter: EventEmitter.Converter[_,_] = null
     val payload = eventType match {
       case EventType.EVENT_TYPE_SCAN =>

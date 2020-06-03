@@ -1,9 +1,11 @@
 package wechaty.hostie
 
+import java.util.concurrent.TimeUnit
+
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Base
 import io.github.wechaty.grpc.puppet.Event.EventRequest
-import io.grpc.ManagedChannelBuilder
+import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder
 import io.grpc.stub.StreamObserver
 import wechaty.puppet.LoggerSupport
 
@@ -17,10 +19,15 @@ trait GrpcSupport {
   protected var grpcClient:PuppetGrpc.PuppetBlockingStub = _
   private var eventStream:PuppetGrpc.PuppetStub = _
 
-  protected def startGrpc(endpoint:(String,Int)): Unit ={
+  protected def startGrpc(endpoint:String): Unit ={
     info("start grpc client ....")
-    val channel = ManagedChannelBuilder
-      .forAddress(endpoint._1,endpoint._2)
+    val channel = NettyChannelBuilder
+      .forTarget(endpoint)
+      .keepAliveTime(20, TimeUnit.SECONDS)
+      .keepAliveTimeout(2, TimeUnit.SECONDS)
+      .keepAliveWithoutCalls(true)
+      .idleTimeout(24, TimeUnit.HOURS)
+      .enableRetry()
       .usePlaintext().build()
     info("start grpc stream")
     this.eventStream = PuppetGrpc.newStub(channel)
