@@ -40,4 +40,5 @@ object Puppet {
     EventType.EVENT_TYPE_UNSPECIFIED-> EventName.PuppetEventNameUnknown
   )
 
+  def isBlank(value:String): Boolean = value == null || value.trim.length ==0
 }

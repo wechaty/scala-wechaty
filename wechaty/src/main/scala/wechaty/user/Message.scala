@@ -2,6 +2,7 @@ package wechaty.user
 
 import wechaty.hostie.PuppetHostie
 import wechaty.puppet.schemas.Message.MessagePayload
+import wechaty.puppet.schemas.Puppet
 
 /**
   * wrap MessagePayload
@@ -13,13 +14,9 @@ class Message(val payload:MessagePayload,puppet:PuppetHostie) {
     puppet.messageSendText(sayId(),text)
   }
   def sayId(): String ={
-    if(payload.roomId != null)
-      payload.roomId
-    else if(payload.fromId != null) {
-      payload.fromId
-    }else {
-      throw new IllegalStateException("roomid and fromid both is null")
-    }
+    if(!Puppet.isBlank(payload.roomId)) payload.roomId
+    else if(!Puppet.isBlank(payload.fromId)) payload.fromId
+    else throw new IllegalStateException("roomid and fromid both is null")
   }
 
   override def toString: String = {
