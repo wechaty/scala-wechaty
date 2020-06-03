@@ -4,9 +4,7 @@ import io.github.wechaty.grpc.puppet.Event.{EventResponse, EventType}
 import io.grpc.stub.StreamObserver
 import wechaty.puppet.LoggerSupport
 import wechaty.puppet.events.EventEmitter
-import wechaty.puppet.schemas.Contact.ContactPayload
 import wechaty.puppet.schemas.Events._
-import wechaty.puppet.schemas.Message.MessagePayload
 import wechaty.puppet.schemas.Puppet
 
 /**
@@ -19,40 +17,27 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
   protected var idOpt: Option[String] = None
 
   override def onNext(v: EventResponse): Unit = {
-    if (v.getType != EventType.EVENT_TYPE_HEARTBEAT) {
-      val hearbeat = new EventHeartbeatPayload
-      hearbeat.data = "onGrpcStreamEvent(%s)".format(v.getType)
-      EventEmitter.emit(EventName.PuppetEventNameHeartbeat, hearbeat)
-    }
-    v.getType match {
-      case EventType.EVENT_TYPE_UNSPECIFIED =>
-        error("PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_UNSPECIFIED ")
-      case other =>
-        val eventName = Puppet.pbEventType2PuppetEventName.getOrElse(other, throw new IllegalAccessException("unsupport event " + other))
-        val payload = unMarshal(other, v.getPayload)
-
-        other match {
-          case EventType.EVENT_TYPE_RESET =>
-            warn("PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_RESET ?")
-            EventEmitter.emit(eventName, payload)
-          case EventType.EVENT_TYPE_LOGIN =>
-            val loginPayload=payload.asInstanceOf[EventLoginPayload]
-            idOpt = Some(loginPayload.contactId)
-            EventEmitter.emit[EventLoginPayload,ContactPayload](eventName, loginPayload)(toContactPayload)
-          case EventType.EVENT_TYPE_MESSAGE =>
-            val messagePayload=payload.asInstanceOf[EventMessagePayload]
-            EventEmitter.emit[EventMessagePayload,MessagePayload](eventName, messagePayload)(toMessagePayload)
-          case EventType.EVENT_TYPE_LOGOUT =>
-            idOpt = None
-            EventEmitter.emit(eventName, payload)
-          case _ =>
-            EventEmitter.emit(eventName, payload)
-        }
+    try {
+      if (v.getType != EventType.EVENT_TYPE_HEARTBEAT) {
+        val hearbeat = new EventHeartbeatPayload
+        hearbeat.data = "onGrpcStreamEvent(%s)".format(v.getType)
+        EventEmitter.emit(EventName.PuppetEventNameHeartbeat, hearbeat)
+      }
+      v.getType match {
+        case EventType.EVENT_TYPE_UNSPECIFIED =>
+          error("PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_UNSPECIFIED ")
+        case other =>
+          processEvent(other, v.getPayload)
+      }
+    }catch{
+      case e:Throwable =>
+        error("Grpc onNext",e)
     }
   }
 
-  def unMarshal(eventType: EventType, data: String): EventPayload = {
-    eventType match {
+  def processEvent(eventType: EventType, data: String):Unit = {
+    var converter: EventEmitter.Converter[_,_] = null
+    val payload = eventType match {
       case EventType.EVENT_TYPE_SCAN =>
         Puppet.objectMapper.readValue(data, classOf[EventScanPayload])
       case EventType.EVENT_TYPE_DONG =>
@@ -64,10 +49,15 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
       case EventType.EVENT_TYPE_FRIENDSHIP =>
         Puppet.objectMapper.readValue(data, classOf[EventFriendshipPayload])
       case EventType.EVENT_TYPE_LOGIN =>
-        Puppet.objectMapper.readValue(data, classOf[EventLoginPayload])
+        converter = toContactPayload
+        val value=Puppet.objectMapper.readValue(data, classOf[EventLoginPayload])
+        idOpt= Some(value.contactId)
+        value
       case EventType.EVENT_TYPE_LOGOUT =>
+        idOpt = None
         Puppet.objectMapper.readValue(data, classOf[EventLogoutPayload])
       case EventType.EVENT_TYPE_MESSAGE =>
+        converter = toMessagePayload
         Puppet.objectMapper.readValue(data, classOf[EventMessagePayload])
       case EventType.EVENT_TYPE_READY =>
         Puppet.objectMapper.readValue(data, classOf[EventReadyPayload])
@@ -80,10 +70,14 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
       case EventType.EVENT_TYPE_ROOM_TOPIC =>
         Puppet.objectMapper.readValue(data, classOf[EventRoomTopicPayload])
       case EventType.EVENT_TYPE_RESET =>
+        warn("PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_RESET ?")
         Puppet.objectMapper.readValue(data, classOf[EventResetPayload])
       case other =>
         throw new IllegalAccessException("event not supported ,event:" + other)
     }
+
+    val eventName = Puppet.pbEventType2PuppetEventName.getOrElse(eventType, throw new IllegalAccessException("unsupport event " + eventType))
+    EventEmitter.emit(eventName,payload)(converter.asInstanceOf[EventEmitter.Converter[EventPayload,_]])
   }
 
   override def onError(throwable: Throwable): Unit = {

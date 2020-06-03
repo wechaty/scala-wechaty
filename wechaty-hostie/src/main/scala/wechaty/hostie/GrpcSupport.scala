@@ -22,10 +22,12 @@ trait GrpcSupport {
     val channel = ManagedChannelBuilder
       .forAddress(endpoint._1,endpoint._2)
       .usePlaintext().build()
+    info("start grpc stream")
     this.eventStream = PuppetGrpc.newStub(channel)
     val startRequest = EventRequest.newBuilder().build()
     this.eventStream.event(startRequest,this)
 
+    info("start grpc client")
     this.grpcClient = PuppetGrpc.newBlockingStub(channel)
     this.grpcClient.start(Base.StartRequest.newBuilder().build())
     info("start grpc client done")

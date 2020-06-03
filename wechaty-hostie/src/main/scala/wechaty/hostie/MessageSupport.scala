@@ -33,7 +33,7 @@ trait MessageSupport {
     messagePayload
   }
   def messageSendText(conversationID :String , text :String , mentionIDList:String*)={
-    info("PuppetHostie messageSendText(%s, %s)\n", conversationID, text)
+    info("PuppetHostie messageSendText({}, {})", conversationID, text)
     val request = MessageSendTextRequest
       .newBuilder()
       .setConversationId(conversationID)

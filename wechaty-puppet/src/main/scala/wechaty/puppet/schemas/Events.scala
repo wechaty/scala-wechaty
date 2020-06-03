@@ -28,8 +28,6 @@ object Events {
     val PuppetEventNameReset: Value = Value("reset")
     val PuppetEventNameStop: Value = Value("stop")
     val PuppetEventNameStart: Value = Value("start")
-
-    def findEvent(name: String): Value = Value(name)
   }
 
   object ScanStatus extends Enumeration {
