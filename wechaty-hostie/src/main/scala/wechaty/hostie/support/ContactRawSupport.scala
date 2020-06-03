@@ -1,18 +1,18 @@
-package wechaty.hostie
+package wechaty.hostie.support
 
 import io.github.wechaty.grpc.puppet.Contact.ContactPayloadRequest
+import wechaty.puppet.Puppet
 import wechaty.puppet.schemas.Contact
 import wechaty.puppet.schemas.Contact.ContactPayload
-import wechaty.puppet.schemas.Events.EventLoginPayload
 
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-02
   */
-trait ContactSupport {
-  self: GrpcSupport =>
-  def contactRawPayload(contactID: String): ContactPayload= {
+trait ContactRawSupport {
+  self: GrpcSupport with Puppet =>
+  override protected def contactRawPayload(contactID: String): ContactPayload= {
     val response = grpcClient.contactPayload(ContactPayloadRequest.newBuilder().setId(contactID).build())
     val contact = new ContactPayload
     contact.id = response.getId
@@ -30,8 +30,5 @@ trait ContactSupport {
     contact.weiXin = response.getWeixin
 
     contact
-  }
-  def toContactPayload(eventLoginPayload: EventLoginPayload):ContactPayload={
-    contactRawPayload(eventLoginPayload.contactId)
   }
 }

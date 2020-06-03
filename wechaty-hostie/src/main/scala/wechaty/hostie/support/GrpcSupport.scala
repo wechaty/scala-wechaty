@@ -1,4 +1,4 @@
-package wechaty.hostie
+package wechaty.hostie.support
 
 import java.util.concurrent.TimeUnit
 
@@ -15,7 +15,7 @@ import wechaty.puppet.LoggerSupport
   * @since 2020-06-02
   */
 trait GrpcSupport {
-  self:GrpcEventSupport with ContactSupport with LoggerSupport =>
+  self:GrpcEventSupport with ContactRawSupport with LoggerSupport =>
   protected var grpcClient:PuppetGrpc.PuppetBlockingStub = _
   private var eventStream:PuppetGrpc.PuppetStub = _
 
@@ -23,9 +23,9 @@ trait GrpcSupport {
     info("start grpc client ....")
     val channel = NettyChannelBuilder
       .forTarget(endpoint)
-      .keepAliveTime(20, TimeUnit.SECONDS)
-      .keepAliveTimeout(2, TimeUnit.SECONDS)
-      .keepAliveWithoutCalls(true)
+//      .keepAliveTime(20, TimeUnit.SECONDS)
+//      .keepAliveTimeout(2, TimeUnit.SECONDS)
+//      .keepAliveWithoutCalls(true)
       .idleTimeout(24, TimeUnit.HOURS)
       .enableRetry()
       .usePlaintext().build()

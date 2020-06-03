@@ -1,4 +1,4 @@
-package wechaty.hostie
+package wechaty.hostie.support
 
 import io.github.wechaty.grpc.puppet.Event.{EventResponse, EventType}
 import io.grpc.stub.StreamObserver
@@ -13,7 +13,7 @@ import wechaty.puppet.schemas.Puppet
   * @since 2020-06-02
   */
 trait GrpcEventSupport extends StreamObserver[EventResponse] {
-  self: LoggerSupport with ContactSupport with MessageSupport =>
+  self: LoggerSupport with ContactRawSupport with MessageRawSupport =>
   protected var idOpt: Option[String] = None
 
   override def onNext(v: EventResponse): Unit = {
@@ -27,7 +27,9 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
         case EventType.EVENT_TYPE_UNSPECIFIED =>
           error("PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_UNSPECIFIED ")
         case other =>
-          processEvent(other, v.getPayload)
+          val payload = processEvent(other, v.getPayload)
+          val eventName = Puppet.pbEventType2PuppetEventName.getOrElse(other, throw new IllegalAccessException("unsupport event " + other))
+          EventEmitter.emit(eventName,payload)
       }
     }catch{
       case e:Throwable =>
@@ -35,10 +37,9 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
     }
   }
 
-  def processEvent(eventType: EventType, data: String):Unit = {
+  private def processEvent(eventType: EventType, data: String):EventPayload= {
     debug("receive event:{},data:{}",eventType,data)
-    var converter: EventEmitter.Converter[_,_] = null
-    val payload = eventType match {
+    eventType match {
       case EventType.EVENT_TYPE_SCAN =>
         Puppet.objectMapper.readValue(data, classOf[EventScanPayload])
       case EventType.EVENT_TYPE_DONG =>
@@ -50,7 +51,6 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
       case EventType.EVENT_TYPE_FRIENDSHIP =>
         Puppet.objectMapper.readValue(data, classOf[EventFriendshipPayload])
       case EventType.EVENT_TYPE_LOGIN =>
-        converter = toContactPayload
         val value=Puppet.objectMapper.readValue(data, classOf[EventLoginPayload])
         idOpt= Some(value.contactId)
         value
@@ -58,7 +58,6 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
         idOpt = None
         Puppet.objectMapper.readValue(data, classOf[EventLogoutPayload])
       case EventType.EVENT_TYPE_MESSAGE =>
-        converter = toMessagePayload
         Puppet.objectMapper.readValue(data, classOf[EventMessagePayload])
       case EventType.EVENT_TYPE_READY =>
         Puppet.objectMapper.readValue(data, classOf[EventReadyPayload])
@@ -77,8 +76,6 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
         throw new IllegalAccessException("event not supported ,event:" + other)
     }
 
-    val eventName = Puppet.pbEventType2PuppetEventName.getOrElse(eventType, throw new IllegalAccessException("unsupport event " + eventType))
-    EventEmitter.emit(eventName,payload)(converter.asInstanceOf[EventEmitter.Converter[EventPayload,_]])
   }
 
   override def onError(throwable: Throwable): Unit = {

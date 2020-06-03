@@ -2,12 +2,11 @@ package wechaty
 
 import wechaty.hostie.PuppetHostie
 import wechaty.puppet.events.EventEmitter
-import wechaty.puppet.schemas.Contact.ContactPayload
-import wechaty.puppet.schemas.Events.{EventLoginPayload, EventName, EventScanPayload}
-import wechaty.puppet.schemas.Message.MessagePayload
+import wechaty.puppet.schemas.Events.{EventLoginPayload, EventMessagePayload, EventName, EventScanPayload}
 import wechaty.puppet.schemas.Puppet.PuppetOptions
 import wechaty.puppet.{LoggerSupport, PuppetOption}
-import wechaty.user.Message
+import wechaty.user.{Contact, Message}
+
 import scala.language.implicitConversions
 
 
@@ -30,18 +29,18 @@ class WechatyOptions {
 }
 
 class Wechaty(options: WechatyOptions) extends LoggerSupport{
-  private var hostie:PuppetHostie = _
+  private implicit var hostie:PuppetHostie = _
 
   def onScan(listener: EventScanPayload=>Unit): Wechaty = {
     EventEmitter.addListener(EventName.PuppetEventNameScan,listener)
     this
   }
-  def onLogin(listener:ContactPayload =>Unit):Wechaty={
-    EventEmitter.addListener(EventName.PuppetEventNameLogin,listener)
+  def onLogin(listener:Contact =>Unit):Wechaty={
+    EventEmitter.addListener[EventLoginPayload](EventName.PuppetEventNameLogin,listener)
     this
   }
   def onMessage(listener:Message =>Unit):Wechaty={
-    EventEmitter.addListener[MessagePayload](EventName.PuppetEventNameMessage,listener)
+    EventEmitter.addListener[EventMessagePayload](EventName.PuppetEventNameMessage,listener)
     this
   }
   def onLogout(listener:EventLoginPayload=>Unit):Wechaty={
@@ -61,8 +60,11 @@ class Wechaty(options: WechatyOptions) extends LoggerSupport{
     }))
 
   }
-  implicit def toMessage(messageListener: Message=>Unit):MessagePayload=>Unit ={
-    messagePayload:MessagePayload => messageListener(new Message(messagePayload,this.hostie))
+  implicit def toMessage(messageListener: Message=>Unit):EventMessagePayload=>Unit ={
+    messagePayload:EventMessagePayload => messageListener(new Message(messagePayload.messageId))
+  }
+  implicit def toContact(contactListener: Contact=>Unit):EventLoginPayload=>Unit ={
+    payload:EventLoginPayload => contactListener(new Contact(payload.contactId))
   }
 }
 

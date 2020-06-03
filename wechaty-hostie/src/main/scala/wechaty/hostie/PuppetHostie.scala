@@ -1,7 +1,8 @@
 package wechaty.hostie
 
+import wechaty.hostie.support.{ContactRawSupport, GrpcEventSupport, GrpcSupport, MessageRawSupport}
 import wechaty.puppet.schemas.Puppet
-import wechaty.puppet.{LoggerSupport, PuppetOption}
+import wechaty.puppet.{LoggerSupport, Puppet, PuppetOption}
 
 import scala.io.Source
 
@@ -10,10 +11,11 @@ import scala.io.Source
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-02
   */
-class PuppetHostie(option:PuppetOption) extends GrpcSupport
+class PuppetHostie(option:PuppetOption) extends Puppet
+  with GrpcSupport
   with LoggerSupport
-  with ContactSupport
-  with MessageSupport
+  with ContactRawSupport
+  with MessageRawSupport
   with GrpcEventSupport {
 
   init()

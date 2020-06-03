@@ -1,7 +1,7 @@
 package wechaty.user
 
-import wechaty.hostie.PuppetHostie
-import wechaty.puppet.schemas.Message.MessagePayload
+import wechaty.puppet.Puppet
+import wechaty.puppet.schemas
 import wechaty.puppet.schemas.Puppet
 
 /**
@@ -9,11 +9,12 @@ import wechaty.puppet.schemas.Puppet
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-02
   */
-class Message(val payload:MessagePayload,puppet:PuppetHostie) {
+class Message(messageId:String)(implicit puppet:Puppet) {
+  lazy val payload: schemas.Message.MessagePayload = puppet.messagePayload(messageId)
   def say(text:String): Unit = {
     puppet.messageSendText(sayId(),text)
   }
-  def sayId(): String ={
+  private def sayId(): String ={
     if(!Puppet.isBlank(payload.roomId)) payload.roomId
     else if(!Puppet.isBlank(payload.fromId)) payload.fromId
     else throw new IllegalStateException("roomid and fromid both is null")
