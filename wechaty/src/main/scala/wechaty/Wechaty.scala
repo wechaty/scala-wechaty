@@ -1,15 +1,17 @@
 package wechaty
 
+import java.util.function.Consumer
+
+import wechaty.Wechaty.PuppetResolver
 import wechaty.helper.ImplicitHelper._
 import wechaty.hostie.PuppetHostie
+import wechaty.puppet.{LoggerSupport, Puppet}
 import wechaty.puppet.events.EventEmitter
 import wechaty.puppet.schemas.Events._
 import wechaty.puppet.schemas.Puppet.PuppetOptions
-import wechaty.puppet.LoggerSupport
 import wechaty.user.{Contact, Message}
 
-import scala.language.implicitConversions
-
+import scala.language.implicitConversions;
 
 /**
   **
@@ -40,6 +42,9 @@ object Wechaty {
     if (globalInstance == null) globalInstance = new Wechaty(options)
     globalInstance
   }
+  trait PuppetResolver{
+    def puppet:Puppet
+  }
 }
 
 class WechatyOptions {
@@ -49,25 +54,28 @@ class WechatyOptions {
   var ioToken: Option[String] = None
 }
 
-class Wechaty(private val options: WechatyOptions) extends LoggerSupport{
-  private implicit var hostie:PuppetHostie = _
+class Wechaty(private val options: WechatyOptions) extends LoggerSupport with PuppetResolver{
+  private var hostie:PuppetHostie = _
+  private implicit val puppetResolver: PuppetResolver = this
 
-  def onScan(listener: EventScanPayload=>Unit): Wechaty = {
-    EventEmitter.addListener(PuppetEventName.SCAN,listener)
+  def onScan(listener: Consumer[EventScanPayload]): Wechaty = {
+    EventEmitter.addListener[EventScanPayload](PuppetEventName.SCAN,listener)
     this
   }
-  def onLogin(listener:Contact =>Unit):Wechaty={
+  def onLogin(listener:Consumer[Contact]):Wechaty={
     EventEmitter.addListener[EventLoginPayload](PuppetEventName.LOGIN,listener)
     this
   }
-  def onMessage(listener:Message =>Unit):Wechaty={
+  def onMessage(listener:Consumer[Message]):Wechaty={
     EventEmitter.addListener[EventMessagePayload](PuppetEventName.MESSAGE,listener)
     this
   }
-  def onLogout(listener:Contact=>Unit):Wechaty={
+  def onLogout(listener:Consumer[Contact]):Wechaty={
     EventEmitter.addListener[EventLogoutPayload](PuppetEventName.LOGOUT,listener)
     this
   }
+
+  override def puppet: Puppet = this.hostie
 
   def start(): Unit = {
     val option = options.puppetOptions match{
@@ -84,6 +92,9 @@ class Wechaty(private val options: WechatyOptions) extends LoggerSupport{
     }))
 
   }
+//  implicit def toScalaUnit(listener:Contact=>Unit):java.util.function.Function[Contact,Void]={
+//
+//  }
 }
 
 

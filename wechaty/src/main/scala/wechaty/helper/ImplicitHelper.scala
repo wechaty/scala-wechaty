@@ -1,7 +1,10 @@
 package wechaty.helper
 
+import java.util.function.Consumer
+
+import wechaty.Wechaty.PuppetResolver
 import wechaty.puppet.Puppet
-import wechaty.puppet.schemas.Events.{EventLoginPayload, EventLogoutPayload, EventMessagePayload}
+import wechaty.puppet.schemas.Events.{EventLoginPayload, EventLogoutPayload, EventMessagePayload, EventScanPayload}
 import wechaty.user.{Contact, Message}
 
 import scala.language.implicitConversions
@@ -12,16 +15,19 @@ import scala.language.implicitConversions
   * @since 2020-06-04
   */
 object ImplicitHelper {
-  private[wechaty] implicit def toMessage(messageListener: Message => Unit)(implicit puppet: Puppet): EventMessagePayload => Unit = {
-    messagePayload: EventMessagePayload => messageListener(new Message(messagePayload.messageId))
+  private[wechaty] implicit def toEventScanPayload(eventScanListener: Consumer[EventScanPayload])(implicit puppet: PuppetResolver): EventScanPayload=> Unit = {
+    eventScanPayload: EventScanPayload => { eventScanListener.accept(eventScanPayload) }
+  }
+  private[wechaty] implicit def toMessage(messageListener: Consumer[Message])(implicit puppet: PuppetResolver): EventMessagePayload => Unit = {
+    messagePayload: EventMessagePayload => { messageListener.accept(new Message(messagePayload.messageId)) }
   }
 
-  private[wechaty] implicit def toContact(contactListener: Contact => Unit)(implicit puppet: Puppet): EventLoginPayload => Unit = {
-    payload: EventLoginPayload => contactListener(new Contact(payload.contactId))
+  private[wechaty] implicit def toContact(contactListener: Consumer[Contact])(implicit puppet: PuppetResolver): EventLoginPayload => Unit = {
+    payload: EventLoginPayload => { contactListener.accept(new Contact(payload.contactId)) }
   }
 
-  private[wechaty] implicit def logoutToContact(contactListener: Contact => Unit)(implicit puppet: Puppet): EventLogoutPayload => Unit = {
-    payload: EventLogoutPayload => contactListener(new Contact(payload.contactId))
+  private[wechaty] implicit def logoutToContact(contactListener: Consumer[Contact])(implicit puppet: PuppetResolver): EventLogoutPayload => Unit = {
+    payload: EventLogoutPayload => { contactListener.accept(new Contact(payload.contactId)) }
   }
 
 }
