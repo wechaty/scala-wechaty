@@ -22,5 +22,4 @@ jobs:
     - name: Run package
       run: mvn package
     - name: Run build docker image
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-      run: mvn -pl wechaty dockerfile:build dockerfile:push
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin  && mvn -pl wechaty dockerfile:build dockerfile:push
