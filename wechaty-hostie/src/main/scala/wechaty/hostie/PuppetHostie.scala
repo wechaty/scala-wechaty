@@ -49,8 +49,8 @@ class PuppetHostie(option:PuppetOptions) extends Puppet
   @throws(classOf[java.io.IOException])
   @throws(classOf[java.net.SocketTimeoutException])
   private def get(url: String,
-          connectTimeout: Int = 5000,
-          readTimeout: Int = 5000,
+          connectTimeout: Int = 10000,
+          readTimeout: Int = 10000,
           requestMethod: String = "GET") =
   {
     import java.net.{HttpURLConnection, URL}

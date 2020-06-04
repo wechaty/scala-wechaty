@@ -13,7 +13,7 @@ import wechaty.puppet.schemas.Puppet
   * @since 2020-06-02
   */
 trait GrpcEventSupport extends StreamObserver[EventResponse] {
-  self: LoggerSupport with ContactRawSupport with MessageRawSupport =>
+  self: LoggerSupport with GrpcSupport with ContactRawSupport with MessageRawSupport =>
   protected var idOpt: Option[String] = None
 
   override def onNext(v: EventResponse): Unit = {
@@ -80,6 +80,10 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
 
   override def onError(throwable: Throwable): Unit = {
     error("Grpc onError",throwable)
+    info("reconnect.....")
+    new Thread(() => {
+      reconnectStream()
+    }).run()
   }
 
   override def onCompleted(): Unit = {
