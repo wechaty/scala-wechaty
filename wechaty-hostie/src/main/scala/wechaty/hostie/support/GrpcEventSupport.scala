@@ -21,7 +21,7 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
       if (v.getType != EventType.EVENT_TYPE_HEARTBEAT) {
         val hearbeat = new EventHeartbeatPayload
         hearbeat.data = "onGrpcStreamEvent(%s)".format(v.getType)
-        EventEmitter.emit(EventName.PuppetEventNameHeartbeat, hearbeat)
+        EventEmitter.emit(PuppetEventName.HEARTBEAT, hearbeat)
       }
       v.getType match {
         case EventType.EVENT_TYPE_UNSPECIFIED =>

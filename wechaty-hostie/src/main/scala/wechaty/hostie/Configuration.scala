@@ -6,6 +6,6 @@ package wechaty.hostie
   * @since 2020-06-02
   */
 object Configuration {
-  lazy val WechatyPuppetHostieToken = sys.props.get("WECHATY_PUPPET_HOSTIE_TOKEN")
-  lazy val WechatyPuppetHostieEndpoint= sys.props.get("WECHATY_PUPPET_HOSTIE_ENDPOINT")
+  lazy val WECHATY_PUPPET_HOSTIE_TOKEN: Option[String] = sys.props.get("WECHATY_PUPPET_HOSTIE_TOKEN")
+  lazy val WECHATY_PUPPET_HOSTIE_ENDPOINT: Option[String] = sys.props.get("WECHATY_PUPPET_HOSTIE_ENDPOINT")
 }

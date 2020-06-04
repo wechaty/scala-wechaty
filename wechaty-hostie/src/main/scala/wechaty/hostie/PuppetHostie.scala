@@ -2,7 +2,8 @@ package wechaty.hostie
 
 import wechaty.hostie.support.{ContactRawSupport, GrpcEventSupport, GrpcSupport, MessageRawSupport}
 import wechaty.puppet.schemas.Puppet
-import wechaty.puppet.{LoggerSupport, Puppet, PuppetOption}
+import wechaty.puppet.schemas.Puppet.PuppetOptions
+import wechaty.puppet.{LoggerSupport, Puppet}
 
 import scala.io.Source
 
@@ -11,7 +12,7 @@ import scala.io.Source
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-02
   */
-class PuppetHostie(option:PuppetOption) extends Puppet
+class PuppetHostie(option:PuppetOptions) extends Puppet
   with GrpcSupport
   with LoggerSupport
   with ContactRawSupport
@@ -21,19 +22,19 @@ class PuppetHostie(option:PuppetOption) extends Puppet
   init()
   private def init(): Unit ={
     if(option.token.isEmpty){
-      option.token = Configuration.WechatyPuppetHostieToken
+      option.token = Configuration.WECHATY_PUPPET_HOSTIE_TOKEN
     }
-    if(option.endpoint.isEmpty){
-      option.endpoint = Configuration.WechatyPuppetHostieEndpoint
+    if(option.endPoint.isEmpty){
+      option.endPoint = Configuration.WECHATY_PUPPET_HOSTIE_ENDPOINT
     }
-    if(option.endpoint.isEmpty){
-      option.endpoint = discoverHostieEndPoint()
+    if(option.endPoint.isEmpty){
+      option.endPoint= discoverHostieEndPoint()
     }
-    if(option.endpoint.isEmpty)
+    if(option.endPoint.isEmpty)
       throw new IllegalStateException("hostie endpoint not found")
   }
   def start(): Unit ={
-    startGrpc(option.endpoint.get)
+    startGrpc(option.endPoint.get)
   }
   def stop(): Unit = {
     stopGrpc()

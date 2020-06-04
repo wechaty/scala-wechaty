@@ -9,25 +9,25 @@ import com.fasterxml.jackson.annotation.{JsonGetter, JsonSetter}
   */
 object Events {
 
-  object EventName extends Enumeration {
+  object PuppetEventName extends Enumeration {
     type Type = Value
-    val PuppetEventNameUnknown: Value = Value("unkown")
-    val PuppetEventNameFriendship: Value = Value("friendship")
-    val PuppetEventNameLogin: Value = Value("login")
-    val PuppetEventNameLogout: Value = Value("logout")
-    val PuppetEventNameMessage: Value = Value("message")
-    val PuppetEventNameRoomInvite: Value = Value("room-invite")
-    val PuppetEventNameRoomJoin: Value = Value("room-join")
-    val PuppetEventNameRoomLeave: Value = Value("room-leave")
-    val PuppetEventNameRoomTopic: Value = Value("room-topic")
-    val PuppetEventNameScan: Value = Value("scan")
-    val PuppetEventNameDong: Value = Value("dong")
-    val PuppetEventNameError: Value = Value("error")
-    val PuppetEventNameHeartbeat: Value = Value("heartbeat")
-    val PuppetEventNameReady: Value = Value("ready")
-    val PuppetEventNameReset: Value = Value("reset")
-    val PuppetEventNameStop: Value = Value("stop")
-    val PuppetEventNameStart: Value = Value("start")
+    val UNKNOWN: Value = Value(0)
+    val FRIENDSHIP: Value = Value(1)
+    val LOGIN: Value = Value(2)
+    val LOGOUT: Value = Value(3)
+    val MESSAGE: Value = Value(4)
+    val INVITE: Value = Value(5)
+    val ROOM_JOIN: Value = Value(6)
+    val ROOM_LEAVE: Value = Value(7)
+    val ROOM_TOPIC: Value = Value(8)
+    val SCAN: Value = Value(9)
+    val DONG: Value = Value(10)
+    val ERROR: Value = Value(11)
+    val HEARTBEAT: Value = Value(12)
+    val READY: Value = Value(13)
+    val RESET: Value = Value(14)
+    val STOP: Value = Value(15)
+    val START: Value = Value(16)
   }
 
   object ScanStatus extends Enumeration {

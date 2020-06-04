@@ -3,7 +3,7 @@ package wechaty.puppet.schemas
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import io.github.wechaty.grpc.puppet.Event.EventType
-import wechaty.puppet.schemas.Events.EventName
+import wechaty.puppet.schemas.Events.PuppetEventName
 
 /**
   *
@@ -22,22 +22,22 @@ object Puppet {
     om.registerModule(DefaultScalaModule)
   }
 
-  val pbEventType2PuppetEventName = Map[EventType,EventName.Type](
-    EventType.EVENT_TYPE_DONG->        EventName.PuppetEventNameDong,
-    EventType.EVENT_TYPE_ERROR->       EventName.PuppetEventNameError,
-    EventType.EVENT_TYPE_HEARTBEAT->   EventName.PuppetEventNameHeartbeat,
-    EventType.EVENT_TYPE_FRIENDSHIP->  EventName.PuppetEventNameFriendship,
-    EventType.EVENT_TYPE_LOGIN->       EventName.PuppetEventNameLogin,
-    EventType.EVENT_TYPE_LOGOUT->      EventName.PuppetEventNameLogout,
-    EventType.EVENT_TYPE_MESSAGE->     EventName.PuppetEventNameMessage,
-    EventType.EVENT_TYPE_READY->       EventName.PuppetEventNameReady,
-    EventType.EVENT_TYPE_ROOM_INVITE-> EventName.PuppetEventNameRoomInvite,
-    EventType.EVENT_TYPE_ROOM_JOIN->   EventName.PuppetEventNameRoomJoin,
-    EventType.EVENT_TYPE_ROOM_LEAVE->  EventName.PuppetEventNameRoomLeave,
-    EventType.EVENT_TYPE_ROOM_TOPIC->  EventName.PuppetEventNameRoomTopic,
-    EventType.EVENT_TYPE_SCAN->        EventName.PuppetEventNameScan,
-    EventType.EVENT_TYPE_RESET->       EventName.PuppetEventNameReset,
-    EventType.EVENT_TYPE_UNSPECIFIED-> EventName.PuppetEventNameUnknown
+  val pbEventType2PuppetEventName = Map[EventType,PuppetEventName.Type](
+    EventType.EVENT_TYPE_DONG->        PuppetEventName.DONG,
+    EventType.EVENT_TYPE_ERROR->       PuppetEventName.ERROR,
+    EventType.EVENT_TYPE_HEARTBEAT->   PuppetEventName.HEARTBEAT,
+    EventType.EVENT_TYPE_FRIENDSHIP->  PuppetEventName.FRIENDSHIP,
+    EventType.EVENT_TYPE_LOGIN->       PuppetEventName.LOGIN,
+    EventType.EVENT_TYPE_LOGOUT->      PuppetEventName.LOGOUT,
+    EventType.EVENT_TYPE_MESSAGE->     PuppetEventName.MESSAGE,
+    EventType.EVENT_TYPE_READY->       PuppetEventName.READY,
+    EventType.EVENT_TYPE_ROOM_INVITE-> PuppetEventName.INVITE,
+    EventType.EVENT_TYPE_ROOM_JOIN->   PuppetEventName.ROOM_JOIN,
+    EventType.EVENT_TYPE_ROOM_LEAVE->  PuppetEventName.ROOM_LEAVE,
+    EventType.EVENT_TYPE_ROOM_TOPIC->  PuppetEventName.ROOM_TOPIC,
+    EventType.EVENT_TYPE_SCAN->        PuppetEventName.SCAN,
+    EventType.EVENT_TYPE_RESET->       PuppetEventName.RESET,
+    EventType.EVENT_TYPE_UNSPECIFIED-> PuppetEventName.UNKNOWN
   )
 
   def isBlank(value:String): Boolean = value == null || value.trim.length ==0
