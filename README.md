@@ -1,5 +1,7 @@
 # scala-wechaty
 
+[![Scala CI](https://github.com/wechaty/scala-wechaty/workflows/Scala%20CI/badge.svg)](https://github.com/wechaty/scala-wechaty/actions?query=workflow%3A%22Scala+CI%22)
+
 ![Scala Wechaty](https://wechaty.github.io/scala-wechaty/images/scala-wechaty.png)
 
 [![Scala Wechaty Getting Started](https://img.shields.io/badge/Scala%20Wechaty-Getting%20Started-red)](https://github.com/wechaty/scala-wechaty-getting-started)
