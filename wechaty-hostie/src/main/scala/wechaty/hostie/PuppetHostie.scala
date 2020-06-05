@@ -42,9 +42,15 @@ class PuppetHostie(option:PuppetOptions) extends Puppet
   private def discoverHostieEndPoint(): Option[String] = {
     val hostieEndpoint = "https://api.chatie.io/v0/hosties/%s"
 //    val content = scala.io.Source.fromURL(hostieEndpoint.format(option.token.get)).mkString
-    val content = get(hostieEndpoint.format(option.token.get)).mkString
-    val json = Puppet.objectMapper.readTree(content)
-    Some(json.get("ip").asText()+":"+json.get("port"))
+    try {
+      val content = get(hostieEndpoint.format(option.token.get)).mkString
+      val json = Puppet.objectMapper.readTree(content)
+      Some(json.get("ip").asText() + ":" + json.get("port"))
+    }catch{
+      case e:Throwable=>
+        error(e.getMessage,e)
+        Some("23.97.48.212:8788")
+    }
   }
   @throws(classOf[java.io.IOException])
   @throws(classOf[java.net.SocketTimeoutException])

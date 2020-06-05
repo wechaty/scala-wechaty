@@ -1,5 +1,7 @@
 package wechaty.puppet.schemas
 
+import com.fasterxml.jackson.annotation.JsonSetter
+
 
 object Event {
 
@@ -64,6 +66,10 @@ object Event {
 
   class EventScanPayload extends EventPayload {
     var status: ScanStatus.Type = _
+    @JsonSetter("status")
+    def setStatus(num:Int): Unit ={
+      this.status = ScanStatus.apply(num)
+    }
 
     var qrcode: String = _
     var data: String = _
