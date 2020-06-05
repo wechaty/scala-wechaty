@@ -1,5 +1,7 @@
 package wechaty.hostie.support
 
+import java.util.concurrent.TimeUnit
+
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Base
 import io.github.wechaty.grpc.puppet.Event.EventRequest
@@ -21,10 +23,10 @@ trait GrpcSupport {
   private def initChannel(endpoint:String)={
     this.channel = NettyChannelBuilder
       .forTarget(endpoint)
-//      .keepAliveTime(20, TimeUnit.SECONDS)
+      .keepAliveTime(20, TimeUnit.SECONDS)
       //      .keepAliveTimeout(2, TimeUnit.SECONDS)
-//      .keepAliveWithoutCalls(true)
-      //      .idleTimeout(2, TimeUnit.HOURS)
+      .keepAliveWithoutCalls(true)
+            .idleTimeout(2, TimeUnit.HOURS)
       .enableRetry()
       .usePlaintext().build()
   }
