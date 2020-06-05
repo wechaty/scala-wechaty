@@ -4,8 +4,9 @@ import io.github.wechaty.grpc.puppet.Event.{EventResponse, EventType}
 import io.grpc.stub.StreamObserver
 import wechaty.puppet.LoggerSupport
 import wechaty.puppet.events.EventEmitter
-import wechaty.puppet.schemas.Events._
+import wechaty.puppet.schemas.Event._
 import wechaty.puppet.schemas.Puppet
+import wechaty.puppet.schemas.Puppet.PuppetEventName
 
 /**
   *

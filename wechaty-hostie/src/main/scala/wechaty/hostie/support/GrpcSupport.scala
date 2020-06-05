@@ -43,16 +43,14 @@ trait GrpcSupport {
     initChannel(endpoint)
     internalStartGrpc()
     //from https://github.com/wechaty/java-wechaty/blob/master/wechaty-puppet/src/main/kotlin/Puppet.kt
-    executorService.scheduleAtFixedRate(new Runnable {
-      override def run(): Unit = {
-        val seq = HEARTBEAT_COUNTER.incrementAndGet()
-        try {
-          ding(s"heartbeat ...${seq}")
-        }catch{
-          case e:Throwable =>
-            warn("ding exception:{}",e.getMessage)
-            //ignore any exception
-        }
+    executorService.scheduleAtFixedRate(() => {
+      val seq = HEARTBEAT_COUNTER.incrementAndGet()
+      try {
+        ding(s"heartbeat ...${seq}")
+      } catch {
+        case e: Throwable =>
+          warn("ding exception:{}", e.getMessage)
+        //ignore any exception
       }
     }, HOSTIE_KEEPALIVE_TIMEOUT, HOSTIE_KEEPALIVE_TIMEOUT, TimeUnit.MILLISECONDS)
 

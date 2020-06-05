@@ -20,7 +20,7 @@ object DingDongBot {
       })
       .onMessage(message=>{
         println(message)
-        if(message.payload.`type` != MessageType.MessageTypeText || message.payload.text != "#ding" ){
+        if(message.payload.`type` != MessageType.Text || message.payload.text != "#ding" ){
           println("Message discarded because it does not match #ding")
         }else {
           println("send message to ",message.payload.fromId)

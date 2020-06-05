@@ -3,8 +3,7 @@ package wechaty.helper
 import java.util.function.Consumer
 
 import wechaty.Wechaty.PuppetResolver
-import wechaty.puppet.Puppet
-import wechaty.puppet.schemas.Events.{EventLoginPayload, EventLogoutPayload, EventMessagePayload, EventScanPayload}
+import wechaty.puppet.schemas.Event.{EventLoginPayload, EventLogoutPayload, EventMessagePayload, EventScanPayload}
 import wechaty.user.{Contact, Message}
 
 import scala.language.implicitConversions

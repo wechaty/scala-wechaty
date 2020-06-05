@@ -3,7 +3,6 @@ package wechaty.puppet.schemas
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import io.github.wechaty.grpc.puppet.Event.EventType
-import wechaty.puppet.schemas.Events.PuppetEventName
 
 /**
   *
@@ -21,6 +20,27 @@ object Puppet {
     val om = new ObjectMapper()
     om.registerModule(DefaultScalaModule)
   }
+  object PuppetEventName extends Enumeration {
+    type Type = Value
+    val UNKNOWN: Value = Value(0)
+    val FRIENDSHIP: Value = Value(1)
+    val LOGIN: Value = Value(2)
+    val LOGOUT: Value = Value(3)
+    val MESSAGE: Value = Value(4)
+    val INVITE: Value = Value(5)
+    val ROOM_JOIN: Value = Value(6)
+    val ROOM_LEAVE: Value = Value(7)
+    val ROOM_TOPIC: Value = Value(8)
+    val SCAN: Value = Value(9)
+    val DONG: Value = Value(10)
+    val ERROR: Value = Value(11)
+    val HEARTBEAT: Value = Value(12)
+    val READY: Value = Value(13)
+    val RESET: Value = Value(14)
+    val STOP: Value = Value(15)
+    val START: Value = Value(16)
+  }
+
 
   val pbEventType2PuppetEventName = Map[EventType,PuppetEventName.Type](
     EventType.EVENT_TYPE_DONG->        PuppetEventName.DONG,

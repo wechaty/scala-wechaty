@@ -1,107 +1,126 @@
 package wechaty.puppet.schemas
 
-/**
-  *
-  * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
-  * @since 2020-06-02
-  */
 object Message {
 
   object MessageType extends Enumeration {
     type Type = Value
-    val MessageTypeUnknown: Value = Value(0)
-    val MessageTypeAttachment: Value = Value(1)
-    val MessageTypeAudio: Value = Value(2)
-    val MessageTypeContact: Value = Value(3)
-    val MessageTypeChatHistory: Value = Value(4)
-    val MessageTypeEmoticon: Value = Value(5)
-    val MessageTypeImage: Value = Value(6)
-    val MessageTypeText: Value = Value(7)
-    val MessageTypeLocation: Value = Value(8)
-    val MessageTypeMiniProgram: Value = Value(9)
-    val MessageTypeTransfer: Value = Value(10)
-    val MessageTypeRedEnvelope: Value = Value(11)
-    val MessageTypeRecalled: Value = Value(12)
-    val MessageTypeUrl: Value = Value(13)
-    val MessageTypeVideo: Value = Value(14)
-    val UNRECOGNIZED:Value=Value(-1)
+    val Unknown: Type = Value(0)
+
+    val Attachment = Value // Attach(6),
+    val Audio = Value // Audio(1), Voice(34)
+    val Contact = Value // ShareCard(42)
+    val ChatHistory = Value // ChatHistory(19)
+    val Emoticon = Value // Sticker: Emoticon(15), Emoticon(47)
+    val Image = Value // Img(2), Image(3)
+    val Text = Value // Text(1)
+    val Location = Value // Location(48)
+    val MiniProgram = Value // MiniProgram(33)
+    val GroupNote = Value // GroupNote(53)
+    val Transfer = Value // Transfers(2000)
+    val RedEnvelope = Value // RedEnvelopes(2001)
+    val Recalled = Value // Recalled(10002)
+    val Url = Value // Url(5)
+    val Video = Value // Video(4), Video(43)
   }
 
-
-  object WeChatAppMessageType extends Enumeration {
+  /**
+    * Huan(202001): Wechat Server Message Type Value (to be confirmed.)
+    */
+  object WechatAppMessageType extends Enumeration {
     type Type = Value
-    val WeChatAppMessageTypeText: Value = Value(1)
-    val WeChatAppMessageTypeImg: Value = Value(2)
-    val WeChatAppMessageTypeAudio: Value = Value(3)
-    val WeChatAppMessageTypeVideo: Value = Value(4)
-    val WeChatAppMessageTypeUrl: Value = Value(5)
-    val WeChatAppMessageTypeAttach: Value = Value(6)
-    val WeChatAppMessageTypeOpen: Value = Value(7)
-    val WeChatAppMessageTypeEmoji: Value = Value(8)
-    val WeChatAppMessageTypeVoiceRemind: Value = Value(9)
-    val WeChatAppMessageTypeScanGood: Value = Value(10)
-    val WeChatAppMessageTypeGood: Value = Value(13)
-    val WeChatAppMessageTypeEmotion: Value = Value(15)
-    val WeChatAppMessageTypeCardTicket: Value = Value(16)
-    val WeChatAppMessageTypeRealtimeShareLocation: Value = Value(17)
-    val WeChatAppMessageTypeChatHistory: Value = Value(19)
-    val WeChatAppMessageTypeMiniProgram: Value = Value(33)
-    val WeChatAppMessageTypeTransfers: Value = Value(2000)
-    val WeChatAppMessageTypeRedEnvelopes: Value = Value(2001)
-    val WeChatAppMessageTypeReaderType: Value = Value(100001)
+    val Text: Type = Value(1)
+    val Img: Type = Value(2)
+    val Audio: Type = Value(3)
+    val Video: Type = Value(4)
+    val Url: Type = Value(5)
+    val Attach: Type = Value(6)
+    val Open: Type = Value(7)
+    val Emoji: Type = Value(8)
+    val VoiceRemind: Type = Value(9)
+    val ScanGood: Type = Value(10)
+    val Good: Type = Value(13)
+    val Emotion: Type = Value(15)
+    val CardTicket: Type = Value(16)
+    val RealtimeShareLocation: Type = Value(17)
+    val ChatHistory: Type = Value(19)
+    val MiniProgram: Type = Value(33)
+    val Transfers: Type = Value(2000)
+    val RedEnvelopes: Type = Value(2001)
+    val ReaderType: Type = Value(100001)
   }
 
-  object WeChatMessageType extends Enumeration {
+  /**
+    * Wechat Server Message Type Value (to be confirmed)
+    * Huan(202001): The Windows(PC) DLL match the following numbers.
+    */
+  object WechatMessageType extends Enumeration {
     type Type = Value
-    val WeChatMessageTypeText: Value = Value(1)
-    val WeChatMessageTypeImage: Value = Value(3)
-    val WeChatMessageTypeVoice: Value = Value(34)
-    val WeChatMessageTypeVerifyMsg: Value = Value(37)
-    val WeChatMessageTypePossibleFriendMsg: Value = Value(40)
-    val WeChatMessageTypeShareCard: Value = Value(42)
-    val WeChatMessageTypeVideo: Value = Value(43)
-    val WeChatMessageTypeEmoticon: Value = Value(47)
-    val WeChatMessageTypeLocation: Value = Value(48)
-    val WeChatMessageTypeApp: Value = Value(49)
-    val WeChatMessageTypeVOIPMsg: Value = Value(50)
-    val WeChatMessageTypeStatusNotify: Value = Value(51)
-    val WeChatMessageTypeVOIPNotify: Value = Value(52)
-    val WeChatMessageTypeVOIPInvite: Value = Value(53)
-    val WeChatMessageTypeMicroVideo: Value = Value(62)
-    val WeChatMessageTypeTransfer: Value = Value(2000) // 转账)
-    val WeChatMessageTypeRedEnvelope: Value = Value(2001) // 红包)
-    val WeChatMessageTypeMiniProgram: Value = Value(2002) // 小程序)
-    val WeChatMessageTypeGroupInvite: Value = Value(2003) // 群邀请)
-    val WeChatMessageTypeFile: Value = Value(2004) // 文件消息)
-    val WeChatMessageTypeSysNotice: Value = Value(9999)
-    val WeChatMessageTypeSys: Value = Value(10000)
-    val WeChatMessageTypeRecalled: Value = Value(10002)
+    val Text: Type = Value(1)
+    val Image: Type = Value(3)
+    val Voice: Type = Value(34)
+    val VerifyMsg: Type = Value(37)
+    val PossibleFriendMsg: Type = Value(40)
+    val ShareCard: Type = Value(42)
+    val Video: Type = Value(43)
+    val Emoticon: Type = Value(47)
+    val Location: Type = Value(48)
+    val App: Type = Value(49)
+    val VoipMsg: Type = Value(50)
+    val StatusNotify: Type = Value(51)
+    val VoipNotify: Type = Value(52)
+    val VoipInvite: Type = Value(53)
+    val MicroVideo: Type = Value(62)
+    val Transfer: Type = Value(2000) //  // 转账
+    val RedEnvelope: Type = Value(2001) //  // 红包
+    val MiniProgram: Type = Value(2002) //  // 小程序
+    val GroupInvite: Type = Value(2003) //  // 群邀请
+    val File: Type = Value(2004) //  // 文件消息
+    val SysNotice: Type = Value(9999)
+    val Sys: Type = Value(10000)
+    val Recalled: Type = Value(10002) //   // NOTIFY 服务通知
   }
 
-  class MessagePayloadBase {
+  /** @hidden */
+  class MessagePayload {
     var id: String = _
 
     // use message id to get rawPayload to get those informations when needed
-    // contactId     string        // Contact ShareCard
-    var mentionIdList: Array[String] = _ // Mentioned Contacts' Ids
+    // contactId?    : string,        // Contact ShareCard
+    var mentionIdList: Array[String] = _ //      // Mentioned Contacts' Ids
 
-    var fileName: String = _
+    var filename: String = _
     var text: String = _
-    var timestamp: Long = _
+    var timestamp: Number = _ //        // Huan(202001): we support both seconds & milliseconds in Wechaty now.
+    var `type`: MessageType.Type = _
+//  }
+
+//  /** @hidden */
+//  class MessagePayloadRoom extends MessagePayload {
+    var fromId: String = _
+    var roomId: String = _
+    var toId: String = _ //    // if to is not set, then room must be set
+//  }
+//
+//  /** @hidden */
+//  class MessagePayloadTo extends MessagePayload {
+//    var fromId: String = _
+//    var roomId: String = _
+//    var toId: String = _ //    // if to is not set, then room must be set
+  }
+
+
+  class MessageQueryFilter {
+    var fromId: String = _
+    var id: String = _
+    var roomId: String = _
+    var text: String = _
+    var toId: String = _
     var `type`: MessageType.Type = _
   }
 
-  trait MessagePayloadRoomTrait {
-    var fromId: String = _
-    var roomId: String = _
-    var toId: String = _
-  }
+  /** @hidden */
+  type MessagePayloadFilterFunction = MessagePayload => Boolean
 
-  class MessagePayloadRoom extends MessagePayloadRoomTrait {
-  }
-
-  type MessagePayloadTo = MessagePayloadRoom
-
-  class MessagePayload extends MessagePayloadBase with MessagePayloadRoomTrait
-
+  /** @hidden */
+  type MessagePayloadFilterFactory = MessageQueryFilter => MessagePayloadFilterFunction
 }

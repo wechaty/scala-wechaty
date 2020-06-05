@@ -7,8 +7,8 @@ import wechaty.helper.ImplicitHelper._
 import wechaty.hostie.PuppetHostie
 import wechaty.puppet.{LoggerSupport, Puppet}
 import wechaty.puppet.events.EventEmitter
-import wechaty.puppet.schemas.Events._
-import wechaty.puppet.schemas.Puppet.PuppetOptions
+import wechaty.puppet.schemas.Event.{EventLoginPayload, EventLogoutPayload, EventMessagePayload, EventScanPayload}
+import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
 import wechaty.user.{Contact, Message}
 
 import scala.language.implicitConversions;

@@ -18,15 +18,15 @@ trait MessageRawSupport {
     val messagePayload = new MessagePayload
     messagePayload.id = response.getId
     messagePayload.mentionIdList = response.getMentionIdsList.toArray(Array[String]())
-    messagePayload.fileName = response.getFilename
+    messagePayload.filename = response.getFilename
     messagePayload.text = response.getText
     messagePayload.timestamp = response.getTimestamp
-    if(response.getTypeValue > MessageType.MessageTypeVideo.id )
-      messagePayload.`type` = MessageType.UNRECOGNIZED
+    if(response.getTypeValue > MessageType.Video.id )
+      messagePayload.`type` = MessageType.Unknown
     else
       messagePayload.`type` = MessageType.apply(response.getTypeValue)
 
-    messagePayload.fromId = response.getFromId
+    messagePayload.fromId= response.getFromId
     messagePayload.roomId = response.getRoomId
     messagePayload.toId = response.getToId
 

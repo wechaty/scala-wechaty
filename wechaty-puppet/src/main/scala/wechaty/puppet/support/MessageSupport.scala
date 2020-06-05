@@ -13,6 +13,24 @@ import wechaty.puppet.{LoggerSupport, Puppet}
 trait MessageSupport {
   self :LoggerSupport with Puppet =>
   private val cacheMessagePayload = createCache().asInstanceOf[Cache[String,MessagePayload]]
+  /*
+  def messageContact(messageId: String):String
+//  def messageFile(messageId: String)FileBox
+//  def messageImage(messageId: String, imageType: ImageType.Type) : FileBox
+    public abstract async messageMiniProgram  (messageId: string)                       : Promise<MiniProgramPayload>
+    public abstract async messageUrl          (messageId: string)                       : Promise<UrlLinkPayload>
+
+    public abstract async messageSendContact      (conversationId: string, contactId: string)                      : Promise<void | string>
+    public abstract async messageSendFile         (conversationId: string, file: FileBox)                          : Promise<void | string>
+    public abstract async messageSendMiniProgram  (conversationId: string, miniProgramPayload: MiniProgramPayload) : Promise<void | string>
+    public abstract async messageSendText         (conversationId: string, text: string, mentionIdList?: string[]) : Promise<void | string>
+    public abstract async messageSendUrl          (conversationId: string, urlLinkPayload: UrlLinkPayload)         : Promise<void | string>
+
+    public abstract async messageRecall (messageId: string) : Promise<boolean>
+
+  protected abstract async messageRawPayload (messageId: string)     : Promise<any>
+  protected abstract async messageRawPayloadParser (rawPayload: any) : Promise<MessagePayload>
+  */
   /**
     * message
     */

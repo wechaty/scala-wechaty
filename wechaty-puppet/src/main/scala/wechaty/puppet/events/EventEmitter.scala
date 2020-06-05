@@ -1,6 +1,7 @@
 package wechaty.puppet.events
 
-import wechaty.puppet.schemas.Events.{PuppetEventName, EventPayload}
+import wechaty.puppet.schemas.Event.EventPayload
+import wechaty.puppet.schemas.Puppet.PuppetEventName
 
 /**
   * global event

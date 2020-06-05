@@ -27,7 +27,7 @@ trait ContactRawSupport {
     contact.province = response.getProvince
     contact.signature = response.getSignature
     contact.star = response.getStar
-    contact.weiXin = response.getWeixin
+    contact.weixin = response.getWeixin
 
     contact
   }

@@ -1,49 +1,26 @@
 package wechaty.puppet.schemas
 
-import com.fasterxml.jackson.annotation.{JsonGetter, JsonSetter}
 
-/**
-  *
-  * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
-  * @since 2020-06-01
-  */
-object Events {
+object Event {
 
-  object PuppetEventName extends Enumeration {
-    type Type = Value
-    val UNKNOWN: Value = Value(0)
-    val FRIENDSHIP: Value = Value(1)
-    val LOGIN: Value = Value(2)
-    val LOGOUT: Value = Value(3)
-    val MESSAGE: Value = Value(4)
-    val INVITE: Value = Value(5)
-    val ROOM_JOIN: Value = Value(6)
-    val ROOM_LEAVE: Value = Value(7)
-    val ROOM_TOPIC: Value = Value(8)
-    val SCAN: Value = Value(9)
-    val DONG: Value = Value(10)
-    val ERROR: Value = Value(11)
-    val HEARTBEAT: Value = Value(12)
-    val READY: Value = Value(13)
-    val RESET: Value = Value(14)
-    val STOP: Value = Value(15)
-    val START: Value = Value(16)
-  }
+  /**
+    * The event `scan` status number.
+    */
 
   object ScanStatus extends Enumeration {
     type Type = Value
-    val UNKNOWN: Value = Value(-1)
-    val CANCEL: Value = Value(0)
-    val WAITING: Value = Value(1)
-    val SCANNED: Value = Value(2)
-    val CONFIRMED: Value = Value(3)
-    val TIMEOUT: Value = Value(4)
+    val Unknown: Type = Value(0)
+    val Cancel: Type = Value(1)
+    val Waiting: Type = Value(2)
+    val Scanned: Type = Value(3)
+    val Confirmed: Type = Value(4)
+    val Timeout: Type = Value(5)
   }
 
-  sealed class EventPayload
+  sealed trait EventPayload
 
   class EventFriendshipPayload extends EventPayload {
-    var friendshipID: String = _
+    var friendshipId: String = _
   }
 
   class EventLoginPayload extends EventPayload {
@@ -67,14 +44,14 @@ object Events {
     var inviteeIdList: Array[String] = _
     var inviterId: String = _
     var roomId: String = _
-    var timestamp: Long = _
+    var timestamp: Number = _
   }
 
   class EventRoomLeavePayload extends EventPayload {
     var removeeIdList: Array[String] = _
     var removerId: String = _
     var roomId: String = _
-    var timestamp: Long = _
+    var timestamp: Number = _
   }
 
   class EventRoomTopicPayload extends EventPayload {
@@ -82,17 +59,14 @@ object Events {
     var newTopic: String = _
     var oldTopic: String = _
     var roomId: String = _
-    var timestamp: Long = _
+    var timestamp: Number = _
   }
 
-  class EventScanPayload extends BaseEventPayload {
-    @JsonGetter
+  class EventScanPayload extends EventPayload {
     var status: ScanStatus.Type = _
+
     var qrcode: String = _
-    @JsonSetter
-    def setStatus(status:Int): Unit ={
-      this.status = ScanStatus(status)
-    }
+    var data: String = _
   }
 
   class BaseEventPayload extends EventPayload {
@@ -108,5 +82,4 @@ object Events {
   type EventResetPayload = BaseEventPayload
 
   type EventHeartbeatPayload = BaseEventPayload
-
 }
