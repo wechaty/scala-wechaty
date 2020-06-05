@@ -17,6 +17,7 @@ trait MessageSupport {
     * message
     */
   protected def messageRawPayload (messageId: String):MessagePayload
+  protected def ding(data:String):Unit
   def messageSendText(conversationID :String , text :String , mentionIDList:String*):String
   def messagePayload(messageId:String):MessagePayload={
     debug("Puppet messagePayload({})", messageId)

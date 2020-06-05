@@ -1,5 +1,6 @@
 package wechaty.hostie.support
 
+import io.github.wechaty.grpc.puppet.Base.DingRequest
 import io.github.wechaty.grpc.puppet.Message.{MessagePayloadRequest, MessageSendTextRequest}
 import wechaty.puppet.schemas.Message.{MessagePayload, MessageType}
 import wechaty.puppet.{LoggerSupport, Puppet}
@@ -31,6 +32,12 @@ trait MessageRawSupport {
 
     messagePayload
   }
+
+  override protected def ding(data: String): Unit = {
+    val request = DingRequest.newBuilder().setData(data).build()
+    grpcClient.ding(request)
+  }
+
   override def messageSendText(conversationID :String , text :String , mentionIDList:String*):String ={
     info("PuppetHostie messageSendText({}, {})", conversationID, text)
     val request = MessageSendTextRequest

@@ -1,13 +1,13 @@
 package wechaty.hostie.support
 
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicLong
+import java.util.concurrent.{Executors, TimeUnit}
 
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Base
 import io.github.wechaty.grpc.puppet.Event.EventRequest
-import io.grpc.ManagedChannel
-import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder
 import io.grpc.stub.StreamObserver
+import io.grpc.{ManagedChannel, ManagedChannelBuilder}
 import wechaty.puppet.LoggerSupport
 
 /**
@@ -16,11 +16,17 @@ import wechaty.puppet.LoggerSupport
   * @since 2020-06-02
   */
 trait GrpcSupport {
-  self:GrpcEventSupport with ContactRawSupport with LoggerSupport =>
+  self:GrpcEventSupport with ContactRawSupport with MessageRawSupport with LoggerSupport =>
   protected var grpcClient:PuppetGrpc.PuppetBlockingStub = _
   private var eventStream:PuppetGrpc.PuppetStub = _
   private var channel: ManagedChannel = _
+  private val executorService = Executors.newSingleThreadScheduledExecutor()
+  //from https://github.com/wechaty/java-wechaty/blob/master/wechaty-puppet/src/main/kotlin/Puppet.kt
+  private val HEARTBEAT_COUNTER = new AtomicLong()
+  private val HOSTIE_KEEPALIVE_TIMEOUT = 15 * 1000L
+  private val DEFAULT_WATCHDOG_TIMEOUT = 60L
   private def initChannel(endpoint:String)={
+    /*
     this.channel = NettyChannelBuilder
       .forTarget(endpoint)
       .keepAliveTime(20, TimeUnit.SECONDS)
@@ -29,11 +35,27 @@ trait GrpcSupport {
             .idleTimeout(2, TimeUnit.HOURS)
       .enableRetry()
       .usePlaintext().build()
+      */
+    this.channel = ManagedChannelBuilder.forTarget(endpoint).usePlaintext().build()
   }
 
   protected def startGrpc(endpoint:String): Unit = {
     initChannel(endpoint)
     internalStartGrpc()
+    //from https://github.com/wechaty/java-wechaty/blob/master/wechaty-puppet/src/main/kotlin/Puppet.kt
+    executorService.scheduleAtFixedRate(new Runnable {
+      override def run(): Unit = {
+        val seq = HEARTBEAT_COUNTER.incrementAndGet()
+        try {
+          ding(s"heartbeat ...${seq}")
+        }catch{
+          case e:Throwable =>
+            warn("ding exception:{}",e.getMessage)
+            //ignore any exception
+        }
+      }
+    }, HOSTIE_KEEPALIVE_TIMEOUT, HOSTIE_KEEPALIVE_TIMEOUT, TimeUnit.MILLISECONDS)
+
   }
   private def internalStartGrpc(){
     info("start grpc client ....")
