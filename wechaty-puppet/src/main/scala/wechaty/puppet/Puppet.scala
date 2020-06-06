@@ -25,4 +25,5 @@ trait Puppet extends MessageSupport
     Caffeine.newBuilder().maximumSize(100).build()
   }
 
+  def selfIdOpt():Option[String]
 }

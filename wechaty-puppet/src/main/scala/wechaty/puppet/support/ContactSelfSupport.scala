@@ -11,8 +11,11 @@ trait ContactSelfSupport {
     * ContactSelf
     *
     */
- def contactSelfName (name: String)           : Unit
- def contactSelfQRCode ()                     : String /* QR Code Value */
- def contactSelfSignature (signature: String) : Unit
+  def contactSelfName(name: String): Unit
+
+  def contactSelfQRCode(): String
+
+  /* QR Code Value */
+  def contactSelfSignature(signature: String): Unit
 
 }

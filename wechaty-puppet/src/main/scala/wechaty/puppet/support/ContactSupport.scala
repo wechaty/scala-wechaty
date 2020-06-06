@@ -1,9 +1,9 @@
 package wechaty.puppet.support
 
 import com.github.benmanes.caffeine.cache.Cache
-import wechaty.puppet.{LoggerSupport, Puppet}
 import wechaty.puppet.schemas.Contact.ContactPayload
 import wechaty.puppet.schemas.Puppet
+import wechaty.puppet.{LoggerSupport, Puppet}
 
 /**
   *
@@ -11,26 +11,24 @@ import wechaty.puppet.schemas.Puppet
   * @since 2020-06-03
   */
 trait ContactSupport {
-  self:Puppet with LoggerSupport =>
-  private val cacheContactPayload = createCache().asInstanceOf[Cache[String,ContactPayload]]
+  self: Puppet with LoggerSupport =>
+  private val cacheContactPayload = createCache().asInstanceOf[Cache[String, ContactPayload]]
+
   /**
     *
     * Contact
     *
     */
- def contactAlias (contactId: String)                       : String
-   def contactAlias (contactId: String, alias: String) : Unit
+  def contactAlias(contactId: String): String
 
-//   def contactAvatar (contactId: String)                : FileBox>
-//   def contactAvatar (contactId: String, file: FileBox) : Promise<void>
+  def contactAlias(contactId: String, alias: String): Unit
 
-   def contactList ()                   : Array[String]
+  //   def contactAvatar (contactId: String)                : FileBox>
+  //   def contactAvatar (contactId: String, file: FileBox) : Promise<void>
 
-  /**
-    * contact
-    */
-  protected def contactRawPayload(contactId: String): ContactPayload
-  def contactPayload(contactId:String):ContactPayload={
+  def contactList(): Array[String]
+
+  def contactPayload(contactId: String): ContactPayload = {
     if (Puppet.isBlank(contactId)) {
       throw new IllegalArgumentException("contact id is blank!")
     }
@@ -39,7 +37,7 @@ trait ContactSupport {
       * 1. Try to get from cache first
       */
     val cachedPayload = this.cacheContactPayload.getIfPresent(contactId)
-    if (cachedPayload !=null) {
+    if (cachedPayload != null) {
       return cachedPayload
     }
 
@@ -53,5 +51,14 @@ trait ContactSupport {
 
     payload
   }
+  def contactPayloadDirty (contactId: String): Unit ={
+    debug("Puppet contactPayloadDirty({})", contactId)
+    this.cacheContactPayload.invalidate(contactId)
+  }
+
+  /**
+    * contact
+    */
+  protected def contactRawPayload(contactId: String): ContactPayload
 
 }

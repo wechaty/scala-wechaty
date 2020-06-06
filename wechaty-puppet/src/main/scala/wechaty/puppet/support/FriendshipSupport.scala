@@ -13,12 +13,14 @@ trait FriendshipSupport {
     * Friendship
     *
     */
-  def friendshipAccept (friendshipId: String)           : Unit
-  def friendshipAdd (contactId: String, hello: String) : Unit
+  def friendshipAccept(friendshipId: String): Unit
 
-  def friendshipSearchPhone (phone: String)   : String
-  def friendshipSearchWeixin (weixin: String) : String
+  def friendshipAdd(contactId: String, hello: String): Unit
 
-  protected def friendshipRawPayload (friendshipId: String)  : FriendshipPayload
+  def friendshipSearchPhone(phone: String): String
+
+  def friendshipSearchWeixin(weixin: String): String
+
+  protected def friendshipRawPayload(friendshipId: String): FriendshipPayload
 
 }

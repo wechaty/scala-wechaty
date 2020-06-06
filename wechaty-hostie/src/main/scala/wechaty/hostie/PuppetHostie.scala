@@ -45,6 +45,9 @@ class PuppetHostie(option:PuppetOptions) extends Puppet
   def stop(): Unit = {
     stopGrpc()
   }
+
+  override def selfIdOpt(): Option[String] = this.idOpt
+
   private def discoverHostieEndPoint(): Option[String] = {
     val hostieEndpoint = "https://api.chatie.io/v0/hosties/%s"
 //    val content = scala.io.Source.fromURL(hostieEndpoint.format(option.token.get)).mkString
