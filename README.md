@@ -4,9 +4,9 @@
 
 ![Scala Wechaty](https://wechaty.github.io/scala-wechaty/images/scala-wechaty.png)
 
-[![Scala Wechaty Getting Started](https://img.shields.io/badge/Scala%20Wechaty-Getting%20Started-red)](https://github.com/wechaty/scala-wechaty-getting-started)
-[![Scala 2.13](https://img.shields.io/badge/scala-2.13+-red.svg)](https://www.scala-lang.org/)
-[![Wechaty in Scala](https://img.shields.io/badge/Wechaty-Scala-red)](https://github.com/wechaty/scala-wechaty)
+[![Scala Wechaty Getting Started](https://img.shields.io/badge/Scala%20Wechaty-Getting%20Started-890)](https://github.com/wechaty/scala-wechaty-getting-started)
+[![Scala 2.13](https://img.shields.io/badge/scala-2.13+-890.svg)](https://www.scala-lang.org/)
+[![Wechaty in Scala](https://img.shields.io/badge/Wechaty-Scala-890)](https://github.com/wechaty/scala-wechaty)
 
 ## Connecting Chatbots
 
@@ -254,10 +254,10 @@ Only one day! This is the fastest record in the world for translating the TypeSc
 
 ## Badge
 
-[![Wechaty in Scala](https://img.shields.io/badge/Wechaty-Scala-red)](https://github.com/wechaty/scala-wechaty)
+[![Wechaty in Scala](https://img.shields.io/badge/Wechaty-Scala-890)](https://github.com/wechaty/scala-wechaty)
 
 ```md
-[![Wechaty in Scala](https://img.shields.io/badge/Wechaty-Scala-red)](https://github.com/wechaty/scala-wechaty)
+[![Wechaty in Scala](https://img.shields.io/badge/Wechaty-Scala-890)](https://github.com/wechaty/scala-wechaty)
 ```
 
 ## Author
