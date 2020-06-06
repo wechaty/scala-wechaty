@@ -1,7 +1,5 @@
 package wechaty.puppet.schemas
 
-import io.github.wechaty.grpc.puppet.Friendship.FriendshipSceneType
-
 object Friendship {
 
   object FriendshipType extends Enumeration {
@@ -47,7 +45,7 @@ object Friendship {
 
   /** @hidden */
   class FriendshipPayloadReceive extends FriendshipPayload {
-    var scene: FriendshipSceneType = _
+    var scene: FriendshipSceneType.Type = _
     var stranger: String = _
     var ticket: String = _
     var `type` = FriendshipType.Receive

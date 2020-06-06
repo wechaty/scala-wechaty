@@ -1,6 +1,6 @@
 package wechaty.hostie
 
-import wechaty.hostie.support.{ContactRawSupport, GrpcEventSupport, GrpcSupport, MessageRawSupport}
+import wechaty.hostie.support._
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.Puppet.PuppetOptions
 import wechaty.puppet.{LoggerSupport, Puppet}
@@ -17,6 +17,12 @@ class PuppetHostie(option:PuppetOptions) extends Puppet
   with LoggerSupport
   with ContactRawSupport
   with MessageRawSupport
+  with ContactSelfRawSupport
+  with FriendshipRawSupport
+  with TagRawSupport
+  with RoomInvitationRawSupport
+  with RoomMemberRawSupport
+  with RoomRawSupport
   with GrpcEventSupport {
 
   init()

@@ -16,30 +16,17 @@ import wechaty.puppet.LoggerSupport
   * @since 2020-06-02
   */
 trait GrpcSupport {
-  self:GrpcEventSupport with ContactRawSupport with MessageRawSupport with LoggerSupport =>
-  protected var grpcClient:PuppetGrpc.PuppetBlockingStub = _
-  private var eventStream:PuppetGrpc.PuppetStub = _
-  private var channel: ManagedChannel = _
+  self: GrpcEventSupport with ContactRawSupport with MessageRawSupport with LoggerSupport =>
   private val executorService = Executors.newSingleThreadScheduledExecutor()
   //from https://github.com/wechaty/java-wechaty/blob/master/wechaty-puppet/src/main/kotlin/Puppet.kt
   private val HEARTBEAT_COUNTER = new AtomicLong()
   private val HOSTIE_KEEPALIVE_TIMEOUT = 15 * 1000L
   private val DEFAULT_WATCHDOG_TIMEOUT = 60L
-  private def initChannel(endpoint:String)={
-    /*
-    this.channel = NettyChannelBuilder
-      .forTarget(endpoint)
-      .keepAliveTime(20, TimeUnit.SECONDS)
-      //      .keepAliveTimeout(2, TimeUnit.SECONDS)
-      .keepAliveWithoutCalls(true)
-            .idleTimeout(2, TimeUnit.HOURS)
-      .enableRetry()
-      .usePlaintext().build()
-      */
-    this.channel = ManagedChannelBuilder.forTarget(endpoint).usePlaintext().build()
-  }
+  protected var grpcClient: PuppetGrpc.PuppetBlockingStub = _
+  private var eventStream: PuppetGrpc.PuppetStub = _
+  private var channel: ManagedChannel = _
 
-  protected def startGrpc(endpoint:String): Unit = {
+  protected def startGrpc(endpoint: String): Unit = {
     initChannel(endpoint)
     internalStartGrpc()
     //from https://github.com/wechaty/java-wechaty/blob/master/wechaty-puppet/src/main/kotlin/Puppet.kt
@@ -55,22 +42,59 @@ trait GrpcSupport {
     }, HOSTIE_KEEPALIVE_TIMEOUT, HOSTIE_KEEPALIVE_TIMEOUT, TimeUnit.MILLISECONDS)
 
   }
-  private def internalStartGrpc(){
+
+  private def initChannel(endpoint: String) = {
+    /*
+    this.channel = NettyChannelBuilder
+      .forTarget(endpoint)
+      .keepAliveTime(20, TimeUnit.SECONDS)
+      //      .keepAliveTimeout(2, TimeUnit.SECONDS)
+      .keepAliveWithoutCalls(true)
+            .idleTimeout(2, TimeUnit.HOURS)
+      .enableRetry()
+      .usePlaintext().build()
+      */
+    this.channel = ManagedChannelBuilder.forTarget(endpoint).usePlaintext().build()
+  }
+
+  protected def reconnectStream() {
+    info("reconnect stream stream...")
+    try {
+      stopGrpc()
+    } catch {
+      case e: Throwable =>
+        warn("fail to stop grpc {}", e.getMessage)
+    }
+    internalStartGrpc()
+    info("reconnect stream stream done")
+
+  }
+
+  private def internalStartGrpc() {
     info("start grpc client ....")
     this.grpcClient = PuppetGrpc.newBlockingStub(channel)
     startStream()
 
     this.grpcClient.start(Base.StartRequest.newBuilder().build())
+    this.grpcClient.logout(Base.LogoutRequest.newBuilder().build())
     info("start grpc client done")
   }
-  protected def stopGrpc(): Unit ={
+
+  private def startStream() {
+    this.eventStream = PuppetGrpc.newStub(channel)
+    val startRequest = EventRequest.newBuilder().build()
+    this.eventStream.event(startRequest, this)
+  }
+
+  protected def stopGrpc(): Unit = {
     //stop stream
     stopStream()
 
     //stop grpc client
     this.grpcClient.stop(Base.StopRequest.getDefaultInstance)
   }
-  private def stopStream(): Unit ={
+
+  private def stopStream(): Unit = {
     try {
       this.eventStream.stop(Base.StopRequest.getDefaultInstance, new StreamObserver[Base.StopResponse] {
         override def onNext(v: Base.StopResponse): Unit = {}
@@ -79,26 +103,9 @@ trait GrpcSupport {
 
         override def onCompleted(): Unit = {}
       })
-    }catch{
-      case e:Throwable =>
-        warn("fail to stop stream {}",e.getMessage)
+    } catch {
+      case e: Throwable =>
+        warn("fail to stop stream {}", e.getMessage)
     }
-  }
-  private def startStream(){
-    this.eventStream = PuppetGrpc.newStub(channel)
-    val startRequest = EventRequest.newBuilder().build()
-    this.eventStream.event(startRequest,this)
-  }
-  protected def reconnectStream(){
-    info("reconnect stream stream...")
-    try{
-      stopGrpc()
-    }catch{
-      case e:Throwable =>
-        warn("fail to stop grpc {}",e.getMessage)
-    }
-    internalStartGrpc()
-    info("reconnect stream stream done")
-
   }
 }

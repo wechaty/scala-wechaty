@@ -14,6 +14,19 @@ trait ContactSupport {
   self:Puppet with LoggerSupport =>
   private val cacheContactPayload = createCache().asInstanceOf[Cache[String,ContactPayload]]
   /**
+    *
+    * Contact
+    *
+    */
+ def contactAlias (contactId: String)                       : String
+   def contactAlias (contactId: String, alias: String) : Unit
+
+//   def contactAvatar (contactId: String)                : FileBox>
+//   def contactAvatar (contactId: String, file: FileBox) : Promise<void>
+
+   def contactList ()                   : Array[String]
+
+  /**
     * contact
     */
   protected def contactRawPayload(contactId: String): ContactPayload

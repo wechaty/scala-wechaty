@@ -30,16 +30,16 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
         case other =>
           val payload = processEvent(other, v.getPayload)
           val eventName = Puppet.pbEventType2PuppetEventName.getOrElse(other, throw new IllegalAccessException("unsupport event " + other))
-          EventEmitter.emit(eventName,payload)
+          EventEmitter.emit(eventName, payload)
       }
-    }catch{
-      case e:Throwable =>
-        error("Grpc onNext",e)
+    } catch {
+      case e: Throwable =>
+        error("Grpc onNext", e)
     }
   }
 
-  private def processEvent(eventType: EventType, data: String):EventPayload= {
-    debug("receive event:{},data:{}",eventType,data)
+  private def processEvent(eventType: EventType, data: String): EventPayload = {
+    debug("receive event:{},data:{}", eventType, data)
     eventType match {
       case EventType.EVENT_TYPE_SCAN =>
         Puppet.objectMapper.readValue(data, classOf[EventScanPayload])
@@ -52,8 +52,8 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
       case EventType.EVENT_TYPE_FRIENDSHIP =>
         Puppet.objectMapper.readValue(data, classOf[EventFriendshipPayload])
       case EventType.EVENT_TYPE_LOGIN =>
-        val value=Puppet.objectMapper.readValue(data, classOf[EventLoginPayload])
-        idOpt= Some(value.contactId)
+        val value = Puppet.objectMapper.readValue(data, classOf[EventLoginPayload])
+        idOpt = Some(value.contactId)
         value
       case EventType.EVENT_TYPE_LOGOUT =>
         idOpt = None
@@ -80,7 +80,7 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
   }
 
   override def onError(throwable: Throwable): Unit = {
-    error("Grpc onError",throwable)
+    error("Grpc onError", throwable)
     info("reconnect.....")
     new Thread(() => {
       reconnectStream()
