@@ -1,17 +1,15 @@
 package wechaty
 
 import io.github.wechaty.grpc.PuppetGrpc
-import io.github.wechaty.grpc.puppet.Base.{LogoutResponse, StartResponse}
+import io.github.wechaty.grpc.puppet.Base.{LogoutResponse, StartResponse, StopResponse}
 import io.github.wechaty.grpc.puppet.Event.EventResponse
-import io.grpc.{ManagedChannel, ManagedChannelBuilder}
+import io.grpc.ManagedChannelBuilder
 import org.grpcmock.GrpcMock
 import org.grpcmock.GrpcMock.{stubFor, unaryMethod}
 import org.grpcmock.junit5.GrpcMockExtension
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.{AfterEach, BeforeEach}
 import org.junit.jupiter.api.extension.ExtendWith
 import wechaty.Wechaty.PuppetResolver
-import wechaty.hostie.PuppetHostie
-import wechaty.puppet.Puppet
 import wechaty.puppet.schemas.Puppet.PuppetOptions
 
 /**
@@ -21,13 +19,11 @@ import wechaty.puppet.schemas.Puppet.PuppetOptions
   */
 @ExtendWith(Array(classOf[GrpcMockExtension]))
 class TestBase {
-  private var serverChannel:ManagedChannel = null
+  private var instance:Wechaty = null
 
   @BeforeEach
   def setupChannel(): Unit = {
-    serverChannel = ManagedChannelBuilder.forAddress("localhost", GrpcMock.getGlobalPort).usePlaintext.build
-  }
-  protected implicit  val puppetResolver: PuppetResolver = new PuppetResolver {
+    val serverChannel = ManagedChannelBuilder.forAddress("localhost", GrpcMock.getGlobalPort).usePlaintext.build
     //for server stub
     val eventResponse = EventResponse.newBuilder().build()
     stubFor(unaryMethod(PuppetGrpc.getEventMethod).willReturn(eventResponse))
@@ -36,17 +32,22 @@ class TestBase {
     val logoutResponse = LogoutResponse.newBuilder().build()
     stubFor(unaryMethod(PuppetGrpc.getLogoutMethod).willReturn(logoutResponse))
 
-    override def puppet: Puppet = {
-      val options = new PuppetOptions
-      options.endPoint=Some("localhost:1234")
-      val p = new PuppetHostie(options){
-        override protected def initChannel(endpoint: String): Unit = {
-          this.channel = serverChannel
-        }
-      }
-      p.start()
-      p
-    }
-  }
+    val stopResponse = StopResponse.newBuilder().build()
+    stubFor(unaryMethod(PuppetGrpc.getStopMethod).willReturn(stopResponse))
 
+    val wechatyOptions = new WechatyOptions
+    val options = new PuppetOptions
+    options.endPoint = Some("localhost:1234")//avoid to fetch api server
+    options.channelOpt = Some(serverChannel) //using test channel
+    wechatyOptions.puppetOptions = Some(options)
+    instance = Wechaty.instance(wechatyOptions)
+    instance.start()
+  }
+  @AfterEach
+  def stopInstance: Unit ={
+    instance.stop()
+  }
+  protected implicit lazy val puppetResolver: PuppetResolver = {
+    instance
+  }
 }

@@ -92,6 +92,10 @@ class Wechaty(private val options: WechatyOptions) extends LoggerSupport with Pu
     }))
 
   }
+  def stop(): Unit ={
+    this.hostie.stop()
+    Wechaty.globalInstance = null
+  }
 //  implicit def toScalaUnit(listener:Contact=>Unit):java.util.function.Function[Contact,Void]={
 //
 //  }

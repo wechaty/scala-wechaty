@@ -12,7 +12,7 @@ import scala.io.Source
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-02
   */
-class PuppetHostie(option:PuppetOptions) extends Puppet
+class PuppetHostie(val option:PuppetOptions) extends Puppet
   with GrpcSupport
   with LoggerSupport
   with ContactRawSupport

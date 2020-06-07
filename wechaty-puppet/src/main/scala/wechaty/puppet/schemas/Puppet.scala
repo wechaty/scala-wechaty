@@ -3,6 +3,7 @@ package wechaty.puppet.schemas
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import io.github.wechaty.grpc.puppet.Event.EventType
+import io.grpc.ManagedChannel
 
 /**
   *
@@ -14,6 +15,7 @@ object Puppet {
     var endPoint: Option[String] = None
     var timeout: Option[Long] = None
     var token: Option[String] = None
+    var channelOpt:Option[ManagedChannel] = None
     var puppetOptionKey: Option[String] = None
   }
   lazy val objectMapper = {

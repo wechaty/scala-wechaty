@@ -8,6 +8,7 @@ import io.github.wechaty.grpc.puppet.Base
 import io.github.wechaty.grpc.puppet.Event.EventRequest
 import io.grpc.stub.StreamObserver
 import io.grpc.{ManagedChannel, ManagedChannelBuilder}
+import wechaty.hostie.PuppetHostie
 import wechaty.puppet.LoggerSupport
 
 /**
@@ -16,7 +17,7 @@ import wechaty.puppet.LoggerSupport
   * @since 2020-06-02
   */
 trait GrpcSupport {
-  self: GrpcEventSupport with ContactRawSupport with MessageRawSupport with LoggerSupport =>
+  self: PuppetHostie with ContactRawSupport with MessageRawSupport with LoggerSupport =>
   private val executorService = Executors.newSingleThreadScheduledExecutor()
   //from https://github.com/wechaty/java-wechaty/blob/master/wechaty-puppet/src/main/kotlin/Puppet.kt
   private val HEARTBEAT_COUNTER = new AtomicLong()
@@ -44,7 +45,11 @@ trait GrpcSupport {
   }
 
   protected def initChannel(endpoint: String) = {
-    /*
+    option.channelOpt match {
+      case Some(channel) =>
+        this.channel = channel
+      case _ =>
+        /*
     this.channel = NettyChannelBuilder
       .forTarget(endpoint)
       .keepAliveTime(20, TimeUnit.SECONDS)
@@ -54,7 +59,8 @@ trait GrpcSupport {
       .enableRetry()
       .usePlaintext().build()
       */
-    this.channel = ManagedChannelBuilder.forTarget(endpoint).usePlaintext().build()
+        this.channel = ManagedChannelBuilder.forTarget(endpoint).usePlaintext().build()
+    }
   }
 
   protected def reconnectStream() {
@@ -87,11 +93,13 @@ trait GrpcSupport {
   }
 
   protected def stopGrpc(): Unit = {
-    //stop stream
-    stopStream()
+    if(option.channelOpt.isEmpty) {  //if no test!
+      //stop stream
+      stopStream()
 
-    //stop grpc client
-    this.grpcClient.stop(Base.StopRequest.getDefaultInstance)
+      //stop grpc client
+      this.grpcClient.stop(Base.StopRequest.getDefaultInstance)
+    }
   }
 
   private def stopStream(): Unit = {
