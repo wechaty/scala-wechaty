@@ -16,6 +16,14 @@
       <groupId>com.ganshane.wechaty</groupId>
       <artifactId>wechaty-hostie</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.grpcmock</groupId>
+      <artifactId>grpcmock-junit5</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

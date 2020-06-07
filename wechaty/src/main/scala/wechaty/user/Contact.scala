@@ -51,7 +51,7 @@ class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Logg
     * @example
     * const name = contact.name()
     */
-  def name(): String = {
+  def name: String = {
     if (this.payload != null)
       this.payload.name
     else null

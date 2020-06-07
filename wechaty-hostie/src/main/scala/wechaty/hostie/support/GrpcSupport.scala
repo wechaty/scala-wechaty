@@ -24,7 +24,7 @@ trait GrpcSupport {
   private val DEFAULT_WATCHDOG_TIMEOUT = 60L
   protected var grpcClient: PuppetGrpc.PuppetBlockingStub = _
   private var eventStream: PuppetGrpc.PuppetStub = _
-  private var channel: ManagedChannel = _
+  protected var channel: ManagedChannel = _
 
   protected def startGrpc(endpoint: String): Unit = {
     initChannel(endpoint)
@@ -43,7 +43,7 @@ trait GrpcSupport {
 
   }
 
-  private def initChannel(endpoint: String) = {
+  protected def initChannel(endpoint: String) = {
     /*
     this.channel = NettyChannelBuilder
       .forTarget(endpoint)
