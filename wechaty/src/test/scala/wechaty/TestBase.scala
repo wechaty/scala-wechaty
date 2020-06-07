@@ -23,6 +23,7 @@ class TestBase {
 
   @BeforeEach
   def setupChannel(): Unit = {
+    println("setup channel....")
     val serverChannel = ManagedChannelBuilder.forAddress("localhost", GrpcMock.getGlobalPort).usePlaintext.build
     //for server stub
     val eventResponse = EventResponse.newBuilder().build()
