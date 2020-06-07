@@ -1,7 +1,7 @@
 package wechaty.user
 
 import io.github.wechaty.grpc.PuppetGrpc
-import io.github.wechaty.grpc.puppet.Contact.{ContactPayloadRequest, ContactPayloadResponse}
+import io.github.wechaty.grpc.puppet.Contact.{ContactAliasResponse, ContactPayloadRequest, ContactPayloadResponse}
 import org.grpcmock.GrpcMock._
 import org.junit.jupiter.api.{Assertions, Test}
 import wechaty.TestBase
@@ -16,7 +16,7 @@ class ContactTest extends TestBase{
 
 
   @Test
-  def test: Unit ={
+  def test(): Unit ={
     //mock server response
     //request1
     val contactPayloadResponse1 = ContactPayloadResponse.newBuilder()
@@ -45,5 +45,30 @@ class ContactTest extends TestBase{
 
     val contact2 = new Contact("contactId2")
     Assertions.assertEquals("jcai2",contact2.name)
+  }
+  @Test
+  def test_alias(): Unit ={
+    //request1
+    val contactPayloadResponse1 = ContactPayloadResponse.newBuilder()
+      .setName("jcai")
+      .build()
+    val contactPayloadResponse2 = ContactPayloadResponse.newBuilder()
+      .setName("jcai")
+      .setAlias("new jcai")
+      .build()
+    stubFor(unaryMethod(PuppetGrpc.getContactPayloadMethod)
+      .willReturn(contactPayloadResponse1)
+        .nextWillReturn(contactPayloadResponse2)
+    )
+
+    val contactAliasResponse  = ContactAliasResponse.newBuilder().build()
+    stubFor(unaryMethod(PuppetGrpc.getContactAliasMethod)
+      .willReturn(contactAliasResponse))
+
+
+    val contact = new Contact("contactId")
+    Assertions.assertEquals("jcai",contact.name)
+    Assertions.assertEquals("new jcai",contact.alias("new jcai"))
+    Assertions.assertEquals("new jcai",contact.payload.alias)
   }
 }

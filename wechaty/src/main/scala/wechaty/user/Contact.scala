@@ -97,7 +97,6 @@ class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Logg
 
     resolver.puppet.contactAlias(this.id, newAlias)
     resolver.puppet.contactPayloadDirty(this.id)
-    //TODO refresh this.payload object
     this.payload.alias
   }
 
@@ -252,8 +251,6 @@ class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Logg
     if (forceSync) {
       resolver.puppet.contactPayloadDirty(this.id)
     }
-    //TODO reload payload
-    //    this.payload = resolver.puppet.contactPayload(this.id)
   }
 
   /**
