@@ -126,8 +126,8 @@ If you are interested in the translation and want to look at how it works, it wi
     - [ ] Documentation
 1. [ ] Class Contact
     - TS SLOC(804): <https://github.com/wechaty/wechaty/blob/master/src/user/contact.ts>
-    - [ ] Code
-    - [ ] Unit Tests
+    - [√] Code
+    - [√] Unit Tests
     - [ ] Documentation
 1. [ ] Class ContactSelf
     - TS SLOC(199): <https://github.com/wechaty/wechaty/blob/master/src/user/contact-self.ts>
