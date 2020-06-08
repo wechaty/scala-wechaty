@@ -23,8 +23,8 @@ trait ContactSupport {
 
   def contactAlias(contactId: String, alias: String): Unit
 
-  //   def contactAvatar (contactId: String)                : FileBox>
-  //   def contactAvatar (contactId: String, file: FileBox) : Promise<void>
+//  def contactAvatar (contactId: String)                : FileBox>
+//  def contactAvatar (contactId: String, file: FileBox) : Promise<void>
 
   def contactList(): Array[String]
 
