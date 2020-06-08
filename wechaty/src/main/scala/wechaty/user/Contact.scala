@@ -1,7 +1,7 @@
 package wechaty.user
 
 import wechaty.Wechaty.PuppetResolver
-import wechaty.puppet.LoggerSupport
+import wechaty.puppet.{LoggerSupport, ResourceBox}
 import wechaty.puppet.schemas.Contact.{ContactGender, ContactPayload, ContactType}
 import wechaty.puppet.schemas.Puppet
 
@@ -56,6 +56,7 @@ class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Logg
       this.payload.name
     else null
   }
+
 
 
   /**
@@ -207,6 +208,9 @@ class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Logg
     else this.payload.city
   }
 
+  def avatar: ResourceBox =  {
+    resolver.puppet.contactAvatar(this.id)
+  }
 
   /**
     * Get all tags of contact

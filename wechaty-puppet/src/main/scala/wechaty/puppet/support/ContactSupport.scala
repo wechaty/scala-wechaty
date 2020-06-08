@@ -3,7 +3,7 @@ package wechaty.puppet.support
 import com.github.benmanes.caffeine.cache.Cache
 import wechaty.puppet.schemas.Contact.ContactPayload
 import wechaty.puppet.schemas.Puppet
-import wechaty.puppet.{LoggerSupport, Puppet}
+import wechaty.puppet.{LoggerSupport, Puppet, ResourceBox}
 
 /**
   *
@@ -23,8 +23,8 @@ trait ContactSupport {
 
   def contactAlias(contactId: String, alias: String): Unit
 
-//  def contactAvatar (contactId: String)                : FileBox>
-//  def contactAvatar (contactId: String, file: FileBox) : Promise<void>
+  def contactAvatar (contactId: String)                : ResourceBox
+  def contactAvatar (contactId: String, file: ResourceBox) : ResourceBox
 
   def contactList(): Array[String]
 

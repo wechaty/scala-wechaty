@@ -9,7 +9,7 @@ import wechaty.puppet.{LoggerSupport, Puppet}
 import wechaty.puppet.events.EventEmitter
 import wechaty.puppet.schemas.Event.{EventLoginPayload, EventLogoutPayload, EventMessagePayload, EventScanPayload}
 import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
-import wechaty.user.{Contact, Message}
+import wechaty.user.{Contact, ContactSelf, Message}
 
 import scala.language.implicitConversions;
 
@@ -62,7 +62,7 @@ class Wechaty(private val options: WechatyOptions) extends LoggerSupport with Pu
     EventEmitter.addListener[EventScanPayload](PuppetEventName.SCAN,listener)
     this
   }
-  def onLogin(listener:Consumer[Contact]):Wechaty={
+  def onLogin(listener:Consumer[ContactSelf]):Wechaty={
     EventEmitter.addListener[EventLoginPayload](PuppetEventName.LOGIN,listener)
     this
   }

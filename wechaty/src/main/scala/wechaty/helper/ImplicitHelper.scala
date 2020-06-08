@@ -4,7 +4,7 @@ import java.util.function.Consumer
 
 import wechaty.Wechaty.PuppetResolver
 import wechaty.puppet.schemas.Event.{EventLoginPayload, EventLogoutPayload, EventMessagePayload, EventScanPayload}
-import wechaty.user.{Contact, Message}
+import wechaty.user.{Contact, ContactSelf, Message}
 
 import scala.language.implicitConversions
 
@@ -21,6 +21,9 @@ object ImplicitHelper {
     messagePayload: EventMessagePayload => { messageListener.accept(new Message(messagePayload.messageId)) }
   }
 
+  private[wechaty] implicit def toContactSelf(contactListener: Consumer[ContactSelf])(implicit puppet: PuppetResolver): EventLoginPayload => Unit = {
+    payload: EventLoginPayload => { contactListener.accept(new ContactSelf(payload.contactId)) }
+  }
   private[wechaty] implicit def toContact(contactListener: Consumer[Contact])(implicit puppet: PuppetResolver): EventLoginPayload => Unit = {
     payload: EventLoginPayload => { contactListener.accept(new Contact(payload.contactId)) }
   }

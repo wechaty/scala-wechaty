@@ -3,8 +3,11 @@ package wechaty.hostie.support
 import com.google.protobuf.StringValue
 import io.github.wechaty.grpc.puppet.Contact
 import io.github.wechaty.grpc.puppet.Contact.ContactPayloadRequest
-import wechaty.puppet.Puppet
+import wechaty.puppet.ResourceBox
+import wechaty.puppet.ResourceBox.ResourceBoxType
 import wechaty.puppet.schemas.Contact.ContactPayload
+import wechaty.puppet.schemas.Puppet
+import wechaty.puppet.support.ContactSupport
 
 /**
   *
@@ -12,7 +15,7 @@ import wechaty.puppet.schemas.Contact.ContactPayload
   * @since 2020-06-02
   */
 trait ContactRawSupport {
-  self: GrpcSupport with Puppet =>
+  self: GrpcSupport with ContactSupport =>
 
   /**
     *
@@ -41,6 +44,40 @@ trait ContactRawSupport {
 
     val response = grpcClient.contactList(request)
     response.getIdsList.toArray(Array[String]())
+  }
+
+  override def contactAvatar(contactId: String): ResourceBox = {
+    val request = Contact.ContactAvatarRequest.newBuilder()
+      .setId(contactId)
+      .build()
+
+    val response = grpcClient.contactAvatar(request)
+    val filebox = response.getFilebox.getValue
+    val root = Puppet.objectMapper.readTree(filebox)
+    val boxType = ResourceBoxType.apply(root.get("boxType").asInt())
+    boxType match{
+      case ResourceBox.ResourceBoxType.Url =>
+        ResourceBox.fromUrl(root.get("remoteUrl").asText())
+      case ResourceBox.ResourceBoxType.Base64 =>
+        ResourceBox.fromBase64(root.get("base64").asText())
+      case other =>
+        throw new UnsupportedOperationException(s"other ${other} type not supported!")
+    }
+  }
+
+  override def contactAvatar(contactId: String, file: ResourceBox): ResourceBox = {
+    val toJsonString = file.toJson()
+
+    val value = StringValue.newBuilder().setValue(toJsonString)
+
+    val request = Contact.ContactAvatarRequest.newBuilder()
+      .setId(contactId)
+      .setFilebox(value)
+      .build()
+
+    grpcClient.contactAvatar(request)
+
+    file
   }
 
   override protected def contactRawPayload(contactID: String): ContactPayload = {
