@@ -3,6 +3,7 @@ package wechaty.user
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Contact.ContactPayloadResponse
 import io.github.wechaty.grpc.puppet.Message.{MessagePayloadResponse, MessageType}
+import io.github.wechaty.grpc.puppet.Room.RoomPayloadResponse
 import io.github.wechaty.grpc.puppet.RoomMember.RoomMemberPayloadResponse
 import org.grpcmock.GrpcMock.{stubFor, unaryMethod}
 import org.junit.jupiter.api.{Assertions, Test}
@@ -14,36 +15,46 @@ import wechaty.TestBase
   * @since 2020-06-08
   */
 class MessageTest extends TestBase{
-  @Test
-  def testMention: Unit ={
-    val wexinText = "hello @member1\u2005@member2\u0020@member3"
+  private def constructMessage(message:String,memberIds:String*): Unit ={
+    val roomId = "roomId"
     val response = MessagePayloadResponse.newBuilder()
-      .setText(wexinText)
+      .setText(message)
       .setType(MessageType.MESSAGE_TYPE_TEXT)
-      .setRoomId("roomId")
+      .setRoomId(roomId)
       .build()
     stubFor(unaryMethod(PuppetGrpc.getMessagePayloadMethod)
       .willReturn(response))
 
-    val member1Resposne = ContactPayloadResponse.newBuilder()
-      .setName("member1")
-      .build()
-    val member2Resposne = ContactPayloadResponse.newBuilder()
-      .setName("member2")
-      .build()
-    val member3Resposne = ContactPayloadResponse.newBuilder()
-      .setName("member3")
-      .build()
-    stubFor(unaryMethod(PuppetGrpc.getContactPayloadMethod)
-      .willReturn(member1Resposne)
-      .nextWillReturn(member2Resposne)
-      .nextWillReturn(member3Resposne)
-    )
+    val method = unaryMethod(PuppetGrpc.getContactPayloadMethod)
+    memberIds.toList match{
+      case head::remain=>
+        val response = ContactPayloadResponse.newBuilder()
+          .setName(head)
+          .build()
+        val next = method.willReturn(response)
+        remain.foldLeft(next){(n,id)=>{
+          val response = ContactPayloadResponse.newBuilder()
+            .setName(id)
+            .build()
+          n.nextWillReturn(response)
+        }}
+    }
+    stubFor(method)
+
     val roomMemberPayloadResponse = RoomMemberPayloadResponse.newBuilder().build()
     stubFor(unaryMethod(PuppetGrpc.getRoomMemberPayloadMethod)
-        .willReturn(roomMemberPayloadResponse)
+      .willReturn(roomMemberPayloadResponse)
     )
-
+    val roomPayloadResponse = RoomPayloadResponse.newBuilder()
+    roomPayloadResponse.setId(roomId)
+    stubFor(unaryMethod(PuppetGrpc.getRoomPayloadMethod)
+      .willReturn(roomPayloadResponse.build())
+    )
+  }
+  @Test
+  def testMention: Unit ={
+    constructMessage("hello @member1\u2005@member2\u0020@member3",
+      "member1","member2","member3")
 
     val message = new Message("messageId")
 
@@ -57,33 +68,7 @@ class MessageTest extends TestBase{
   @Test
   def testMention2: Unit ={
     val wexinText = "中文@member1\u2005@member2\u0020@member3\u0020中文测试"
-    val response = MessagePayloadResponse.newBuilder()
-      .setText(wexinText)
-      .setType(MessageType.MESSAGE_TYPE_TEXT)
-      .setRoomId("roomId")
-      .build()
-    stubFor(unaryMethod(PuppetGrpc.getMessagePayloadMethod)
-      .willReturn(response))
-
-    val member1Resposne = ContactPayloadResponse.newBuilder()
-      .setName("member1")
-      .build()
-    val member2Resposne = ContactPayloadResponse.newBuilder()
-      .setName("member2")
-      .build()
-    val member3Resposne = ContactPayloadResponse.newBuilder()
-      .setName("member3")
-      .build()
-    val roomMemberPayloadResponse = RoomMemberPayloadResponse.newBuilder().build()
-    stubFor(unaryMethod(PuppetGrpc.getRoomMemberPayloadMethod)
-      .willReturn(roomMemberPayloadResponse)
-    )
-    stubFor(unaryMethod(PuppetGrpc.getContactPayloadMethod)
-      .willReturn(member1Resposne)
-      .nextWillReturn(member2Resposne)
-      .nextWillReturn(member3Resposne)
-    )
-
+    constructMessage(wexinText,"member1","member2","member3")
 
     val message = new Message("messageId")
 
@@ -98,33 +83,7 @@ class MessageTest extends TestBase{
   def testMention3: Unit ={
     //测试名称特殊字符
     val wexinText = "中文@mem(|&ber1\u2005@member2\u0020@member3\u0020中文测试"
-    val response = MessagePayloadResponse.newBuilder()
-      .setText(wexinText)
-      .setType(MessageType.MESSAGE_TYPE_TEXT)
-      .setRoomId("roomId")
-      .build()
-    stubFor(unaryMethod(PuppetGrpc.getMessagePayloadMethod)
-      .willReturn(response))
-
-    val member1Resposne = ContactPayloadResponse.newBuilder()
-      .setName("mem(|&ber1")
-      .build()
-    val member2Resposne = ContactPayloadResponse.newBuilder()
-      .setName("member2")
-      .build()
-    val member3Resposne = ContactPayloadResponse.newBuilder()
-      .setName("member3")
-      .build()
-    stubFor(unaryMethod(PuppetGrpc.getContactPayloadMethod)
-      .willReturn(member1Resposne)
-      .nextWillReturn(member2Resposne)
-      .nextWillReturn(member3Resposne)
-    )
-    val roomMemberPayloadResponse = RoomMemberPayloadResponse.newBuilder().build()
-    stubFor(unaryMethod(PuppetGrpc.getRoomMemberPayloadMethod)
-      .willReturn(roomMemberPayloadResponse)
-    )
-
+    constructMessage(wexinText,"mem(|&ber1","member2","member3")
 
     val message = new Message("messageId")
 
