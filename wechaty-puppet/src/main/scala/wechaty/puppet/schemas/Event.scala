@@ -46,14 +46,14 @@ object Event {
     var inviteeIdList: Array[String] = _
     var inviterId: String = _
     var roomId: String = _
-    var timestamp: Number = _
+    var timestamp: Long= _
   }
 
   class EventRoomLeavePayload extends EventPayload {
     var removeeIdList: Array[String] = _
     var removerId: String = _
     var roomId: String = _
-    var timestamp: Number = _
+    var timestamp: Long = _
   }
 
   class EventRoomTopicPayload extends EventPayload {
@@ -61,7 +61,7 @@ object Event {
     var newTopic: String = _
     var oldTopic: String = _
     var roomId: String = _
-    var timestamp: Number = _
+    var timestamp: Long = _
   }
 
   class EventScanPayload extends EventPayload {

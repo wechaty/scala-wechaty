@@ -5,11 +5,10 @@ import java.util.function.Consumer
 import wechaty.Wechaty.PuppetResolver
 import wechaty.helper.ImplicitHelper._
 import wechaty.hostie.PuppetHostie
-import wechaty.puppet.{LoggerSupport, Puppet}
-import wechaty.puppet.events.EventEmitter
-import wechaty.puppet.schemas.Event.{EventLoginPayload, EventLogoutPayload, EventMessagePayload, EventScanPayload}
+import wechaty.puppet.schemas.Event._
 import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
-import wechaty.user.{Contact, ContactSelf, Message}
+import wechaty.puppet.{LoggerSupport, Puppet}
+import wechaty.user.{Contact, ContactSelf, Message, Room}
 
 import scala.language.implicitConversions;
 
@@ -59,19 +58,19 @@ class Wechaty(private val options: WechatyOptions) extends LoggerSupport with Pu
   private implicit val puppetResolver: PuppetResolver = this
 
   def onScan(listener: Consumer[EventScanPayload]): Wechaty = {
-    EventEmitter.addListener[EventScanPayload](PuppetEventName.SCAN,listener)
+    puppet.addListener[EventScanPayload](PuppetEventName.SCAN,listener)
     this
   }
   def onLogin(listener:Consumer[ContactSelf]):Wechaty={
-    EventEmitter.addListener[EventLoginPayload](PuppetEventName.LOGIN,listener)
+    puppet.addListener[EventLoginPayload](PuppetEventName.LOGIN,listener)
     this
   }
   def onMessage(listener:Consumer[Message]):Wechaty={
-    EventEmitter.addListener[EventMessagePayload](PuppetEventName.MESSAGE,listener)
+    puppet.addListener[EventMessagePayload](PuppetEventName.MESSAGE,listener)
     this
   }
   def onLogout(listener:Consumer[Contact]):Wechaty={
-    EventEmitter.addListener[EventLogoutPayload](PuppetEventName.LOGOUT,listener)
+    puppet.addListener[EventLogoutPayload](PuppetEventName.LOGOUT,listener)
     this
   }
 
@@ -83,6 +82,11 @@ class Wechaty(private val options: WechatyOptions) extends LoggerSupport with Pu
       case _ => new PuppetOptions
     }
     this.hostie = new PuppetHostie(option)
+    //room message
+    this.hostie.addListener[EventMessagePayload](PuppetEventName.MESSAGE,Room.messageEvent)
+    this.hostie.addListener[EventRoomJoinPayload](PuppetEventName.ROOM_JOIN,Room.roomJoinEvent)
+    this.hostie.addListener[EventRoomLeavePayload](PuppetEventName.ROOM_LEAVE,Room.roomLeaveEvent)
+    this.hostie.addListener[EventRoomTopicPayload](PuppetEventName.ROOM_TOPIC,Room.roomTopicEvent)
     this.hostie.start()
     Runtime.getRuntime.addShutdownHook(new Thread(new Runnable {
       override def run(): Unit ={
@@ -96,9 +100,6 @@ class Wechaty(private val options: WechatyOptions) extends LoggerSupport with Pu
     this.hostie.stop()
     Wechaty.globalInstance = null
   }
-//  implicit def toScalaUnit(listener:Contact=>Unit):java.util.function.Function[Contact,Void]={
-//
-//  }
 }
 
 

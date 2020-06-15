@@ -182,11 +182,8 @@ class Message(messageId:String)(implicit resolver: PuppetResolver) {
     */
   def date: Date ={
     assertPayload()
-    var timestamp = this.payload.timestamp
-    if (timestamp < 0x1e11) {
-      timestamp *= 1000 // turn seconds to milliseconds
-    }
-    new Date(timestamp)
+    val timestamp = this.payload.timestamp
+    timestampToDate(timestamp)
   }
 
   /**

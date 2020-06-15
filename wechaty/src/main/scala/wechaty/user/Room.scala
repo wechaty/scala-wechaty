@@ -1,9 +1,14 @@
 package wechaty.user
 
+import java.util.Date
+
 import wechaty.Wechaty.PuppetResolver
-import wechaty.puppet.schemas.Puppet.isBlank
+import wechaty.puppet.events.EventEmitter
+import wechaty.puppet.schemas.Event.{EventMessagePayload, EventRoomJoinPayload, EventRoomLeavePayload, EventRoomTopicPayload}
+import wechaty.puppet.schemas.Puppet._
 import wechaty.puppet.schemas.Room.RoomPayload
 import wechaty.puppet.{LoggerSupport, ResourceBox}
+import wechaty.user.Room.{RoomJoinEvent, RoomLeaveEvent, RoomTopicEvent}
 
 /**
   *
@@ -11,6 +16,10 @@ import wechaty.puppet.{LoggerSupport, ResourceBox}
   * @since 2020-06-08
   */
 object Room {
+  type RoomJoinEvent = (Array[Contact],Contact,Date)
+  type RoomLeaveEvent=(Array[Contact],Contact,Date)
+  type RoomTopicEvent=(Contact,Date)
+  private var pool = Map[String,Room]()
   def create(contactList: Array[Contact], topic: String)(implicit puppetResolver: PuppetResolver): Room = {
 
     if (contactList.length < 2) {
@@ -21,9 +30,58 @@ object Room {
     val roomId = puppetResolver.puppet.roomCreate(contactIdList, topic)
     new Room(roomId)
   }
+  def load(roomId:String)(implicit puppetResolver: PuppetResolver): Option[Room]={
+    pool.get(roomId) match{
+      case Some(room) => Some(room)
+      case _ =>
+        val payload = puppetResolver.puppet.roomPayload(roomId)
+        val newRoom = new Room(payload.id)
+        pool += (roomId-> newRoom)
+
+        Some(newRoom)
+    }
+  }
+  def messageEvent(messagePayload: EventMessagePayload)(implicit resolver: PuppetResolver):Unit = {
+    val message = new Message(messagePayload.messageId)
+    val room = message.room
+    if(room != null){
+      room.emit(PuppetEventName.MESSAGE,message)
+    }
+  }
+  def roomJoinEvent(payload:EventRoomJoinPayload)(implicit resolver: PuppetResolver): Unit ={
+    val room = load(payload.roomId).get
+    val inviteeList = payload.inviteeIdList.map(id => new Contact(id))
+    val inviter = new Contact(payload.inviterId)
+    val date = timestampToDate(payload.timestamp)
+    room.emit(PuppetEventName.ROOM_JOIN,(inviteeList,inviter,date))
+  }
+  def roomLeaveEvent(payload:EventRoomLeavePayload)(implicit resolver: PuppetResolver): Unit ={
+    val room = load(payload.roomId).get
+    val leaverList = payload.removeeIdList.map(id => new Contact(id))
+
+    val remover = new Contact(payload.removerId)
+    val date = timestampToDate(payload.timestamp)
+    room.emit(PuppetEventName.ROOM_LEAVE,(leaverList,remover,date))
+    //invalid cache
+    val userIdOpt = resolver.puppet.selfIdOpt()
+    userIdOpt match{
+      case Some(userId) =>
+        if(leaverList.exists(_.id == userId)){
+          resolver.puppet.roomPayloadDirty(payload.roomId)
+          resolver.puppet.roomMemberPayloadDirty(payload.roomId)
+        }
+      case _ =>
+    }
+}
+  def roomTopicEvent(payload:EventRoomTopicPayload)(implicit resolver: PuppetResolver): Unit ={
+    val room = load(payload.roomId).get
+    val changer = new Contact(payload.changerId)
+    val date = timestampToDate(payload.timestamp)
+    room.emit(PuppetEventName.ROOM_TOPIC,(changer,date))
+  }
 }
 
-class Room(roomId: String)(implicit resolver: PuppetResolver) extends Conversation(roomId) with LoggerSupport {
+class Room private(roomId: String)(implicit resolver: PuppetResolver) extends Conversation(roomId) with EventEmitter with LoggerSupport {
   def payload: RoomPayload = {
     resolver.puppet.roomPayload(roomId)
   }
@@ -88,6 +146,16 @@ class Room(roomId: String)(implicit resolver: PuppetResolver) extends Conversati
           memberList.take(3).map(_.name).mkString(",")
         }
     }
+  }
+
+  def onJoin(joinListener:RoomJoinEvent =>Unit): Unit ={
+    this.addListener(PuppetEventName.ROOM_JOIN,joinListener)
+  }
+  def onLeave(leaveListener:RoomLeaveEvent =>Unit): Unit ={
+    this.addListener(PuppetEventName.ROOM_JOIN,leaveListener)
+  }
+  def onTopic(topicListener:RoomTopicEvent =>Unit): Unit ={
+    this.addListener(PuppetEventName.ROOM_TOPIC,topicListener)
   }
 
   def announce(textOpt: Option[String]): String = {

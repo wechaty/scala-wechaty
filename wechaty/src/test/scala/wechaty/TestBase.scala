@@ -19,7 +19,7 @@ import wechaty.puppet.schemas.Puppet.PuppetOptions
   */
 @ExtendWith(Array(classOf[GrpcMockExtension]))
 class TestBase {
-  private var instance:Wechaty = null
+  protected var instance:Wechaty = null
 
   @BeforeEach
   def setupChannel(): Unit = {

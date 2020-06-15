@@ -14,7 +14,7 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
   * @since 2020-06-02
   */
 trait GrpcEventSupport extends StreamObserver[EventResponse] {
-  self: LoggerSupport with GrpcSupport with ContactRawSupport with MessageRawSupport =>
+  self: LoggerSupport with EventEmitter with GrpcSupport with ContactRawSupport with MessageRawSupport =>
   protected var idOpt: Option[String] = None
 
   override def onNext(v: EventResponse): Unit = {
@@ -22,7 +22,7 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
       if (v.getType != EventType.EVENT_TYPE_HEARTBEAT) {
         val hearbeat = new EventHeartbeatPayload
         hearbeat.data = "onGrpcStreamEvent(%s)".format(v.getType)
-        EventEmitter.emit(PuppetEventName.HEARTBEAT, hearbeat)
+        emit(PuppetEventName.HEARTBEAT, hearbeat)
       }
       v.getType match {
         case EventType.EVENT_TYPE_UNSPECIFIED =>
@@ -30,7 +30,7 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
         case other =>
           val payload = processEvent(other, v.getPayload)
           val eventName = Puppet.pbEventType2PuppetEventName.getOrElse(other, throw new IllegalAccessException("unsupport event " + other))
-          EventEmitter.emit(eventName, payload)
+          emit(eventName, payload)
       }
     } catch {
       case e: Throwable =>

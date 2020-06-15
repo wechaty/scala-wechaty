@@ -1,6 +1,7 @@
 package wechaty.puppet
 
 import com.github.benmanes.caffeine.cache.Caffeine
+import wechaty.puppet.events.EventEmitter
 import wechaty.puppet.support._
 
 /**
@@ -10,6 +11,7 @@ import wechaty.puppet.support._
   * @since 2020-06-03
   */
 trait Puppet extends MessageSupport
+  with EventEmitter
   with ContactSupport
   with ContactSelfSupport
   with TagSupport

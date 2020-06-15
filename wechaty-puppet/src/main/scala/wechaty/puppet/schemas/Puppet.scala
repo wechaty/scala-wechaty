@@ -1,5 +1,7 @@
 package wechaty.puppet.schemas
 
+import java.util.Date
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import io.github.wechaty.grpc.puppet.Event.EventType
@@ -65,4 +67,11 @@ object Puppet {
   )
 
   def isBlank(value:String): Boolean = value == null || value.trim.length ==0
+  def timestampToDate(timestamp:Long): Date ={
+    var tmpTimestamp = timestamp
+    if (timestamp < 0x1e11) {
+      tmpTimestamp *= 1000 // turn seconds to milliseconds
+    }
+    new Date(tmpTimestamp)
+  }
 }

@@ -1,6 +1,5 @@
 package wechaty.puppet.events
 
-import wechaty.puppet.schemas.Event.EventPayload
 import wechaty.puppet.schemas.Puppet.PuppetEventName
 
 /**
@@ -9,11 +8,11 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-02
   */
-object EventEmitter {
-  type Listener[T<:EventPayload] = T => Unit
-  private var listeners: Map[PuppetEventName.Type, List[Listener[_<:EventPayload]]] = Map()
+trait EventEmitter {
+  type Listener[T] = T => Unit
+  private var listeners: Map[PuppetEventName.Type, List[Listener[_]]] = Map()
 
-  def emit[T<:EventPayload](event: PuppetEventName.Type, data: T):Unit={
+  def emit[T](event: PuppetEventName.Type, data: T):Unit={
     val eventListenerOpts = listeners.get(event)
     eventListenerOpts match {
       case Some(eventListeners) =>
@@ -23,7 +22,7 @@ object EventEmitter {
     }
   }
 
-  def addListener[T<:EventPayload](event: PuppetEventName.Type, listener: Listener[T]): Unit = {
+  def addListener[T](event: PuppetEventName.Type, listener: Listener[T]): Unit = {
     listeners.get(event) match {
       case Some(eventListeners) => listeners += event -> (eventListeners :+ listener)
       case _ => listeners += event -> List(listener)

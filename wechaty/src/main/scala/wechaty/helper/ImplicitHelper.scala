@@ -17,8 +17,12 @@ object ImplicitHelper {
   private[wechaty] implicit def toEventScanPayload(eventScanListener: Consumer[EventScanPayload])(implicit puppet: PuppetResolver): EventScanPayload=> Unit = {
     eventScanPayload: EventScanPayload => { eventScanListener.accept(eventScanPayload) }
   }
+
   private[wechaty] implicit def toMessage(messageListener: Consumer[Message])(implicit puppet: PuppetResolver): EventMessagePayload => Unit = {
     messagePayload: EventMessagePayload => { messageListener.accept(new Message(messagePayload.messageId)) }
+  }
+  private[wechaty] implicit def toMessage(messageListener: Message => Unit)(implicit puppet: PuppetResolver): EventMessagePayload => Unit = {
+    messagePayload: EventMessagePayload => { messageListener(new Message(messagePayload.messageId)) }
   }
 
   private [wechaty] implicit def toMessage(messageId: String)(implicit puppetResolver: PuppetResolver) = new Message(messageId)
