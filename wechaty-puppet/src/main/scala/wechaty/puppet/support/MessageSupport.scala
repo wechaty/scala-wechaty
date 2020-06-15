@@ -5,7 +5,7 @@ import wechaty.puppet.schemas.Message.MessagePayload
 import wechaty.puppet.schemas.MiniProgram.MiniProgramPayload
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.UrlLink.UrlLinkPayload
-import wechaty.puppet.{LoggerSupport, Puppet}
+import wechaty.puppet.{LoggerSupport, Puppet, ResourceBox}
 
 /**
   *
@@ -21,15 +21,16 @@ trait MessageSupport {
     */
   def messageContact(messageId: String): String
 
-  //  def messageFile(messageId: String)FileBox
-  //  def messageImage(messageId: String, imageType: ImageType.Type) : FileBox
+//    def messageFile(messageId: String)FileBox
+//    def messageImage(messageId: String, imageType: ImageType.Type) : FileBox
   def messageMiniProgram(messageId: String): MiniProgramPayload
 
   def messageUrl(messageId: String): UrlLinkPayload
 
   def messageSendContact(conversationId: String, contactId: String): String
 
-  //   def messageSendFile         (conversationId: String, file: FileBox)                          : Promise<void | String>
+  def messageSendFile         (conversationId: String, file: ResourceBox): String
+
   def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgramPayload): String
 
   def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]): String

@@ -1,6 +1,7 @@
 package wechaty.user
 
 import wechaty.Wechaty.PuppetResolver
+import wechaty.helper.ImplicitHelper._
 import wechaty.puppet.{LoggerSupport, ResourceBox}
 import wechaty.puppet.schemas.Contact.{ContactGender, ContactPayload, ContactType}
 import wechaty.puppet.schemas.Puppet
@@ -17,7 +18,7 @@ import scala.language.implicitConversions
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-03
   */
-class Contact(contactId: String)(implicit resolver: PuppetResolver) extends LoggerSupport {
+class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Conversation with LoggerSupport {
   //  lazy val payload: schemas.Contact.ContactPayload = resolver.puppet.contactPayload(contactId)
   def payload: ContactPayload = {
     resolver.puppet.contactPayload(contactId)
@@ -26,7 +27,6 @@ class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Logg
   //delegate method
   def id = contactId
 
-  private implicit def toMessage(messageId: String) = new Message(messageId)
 
   def say(something: String): Message = {
     resolver.puppet.messageSendText(this.id, something)

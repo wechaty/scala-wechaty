@@ -21,6 +21,8 @@ object ImplicitHelper {
     messagePayload: EventMessagePayload => { messageListener.accept(new Message(messagePayload.messageId)) }
   }
 
+  private [wechaty] implicit def toMessage(messageId: String)(implicit puppetResolver: PuppetResolver) = new Message(messageId)
+
   private[wechaty] implicit def toContactSelf(contactListener: Consumer[ContactSelf])(implicit puppet: PuppetResolver): EventLoginPayload => Unit = {
     payload: EventLoginPayload => { contactListener.accept(new ContactSelf(payload.contactId)) }
   }

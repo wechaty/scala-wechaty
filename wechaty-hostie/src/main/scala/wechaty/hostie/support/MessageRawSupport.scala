@@ -8,7 +8,8 @@ import wechaty.puppet.schemas.MiniProgram.MiniProgramPayload
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.Puppet.objectMapper
 import wechaty.puppet.schemas.UrlLink.UrlLinkPayload
-import wechaty.puppet.{LoggerSupport, Puppet}
+import wechaty.puppet.support.MessageSupport
+import wechaty.puppet.{LoggerSupport, ResourceBox}
 
 /**
   *
@@ -16,7 +17,7 @@ import wechaty.puppet.{LoggerSupport, Puppet}
   * @since 2020-06-02
   */
 trait MessageRawSupport {
-  self: LoggerSupport with GrpcSupport with Puppet =>
+  self: LoggerSupport with GrpcSupport with MessageSupport =>
   /**
     * message
     */
@@ -60,7 +61,18 @@ trait MessageRawSupport {
     response.getId.getValue
   }
 
-  //   def messageSendFile         (conversationId: String, file: FileBox)                          : Promise<void | String>
+  override def messageSendFile(conversationId: String, file: ResourceBox): String = {
+    val fileJson = file.toJson()
+
+    val request = Message.MessageSendFileRequest.newBuilder()
+      .setConversationId(conversationId)
+      .setFilebox(fileJson)
+      .build()
+
+    val response = grpcClient.messageSendFile(request)
+    response.getId.getValue
+  }
+
   override def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgramPayload): String = {
     val request = Message.MessageSendMiniProgramRequest.newBuilder()
       .setConversationId(conversationId)
@@ -119,6 +131,7 @@ trait MessageRawSupport {
     messagePayload.filename = response.getFilename
     messagePayload.text = response.getText
     messagePayload.timestamp = response.getTimestamp
+    println("respon.getTypeValue",response.getTypeValue,response.getType)
     if (response.getTypeValue > MessageType.Video.id)
       messagePayload.`type` = MessageType.Unknown
     else

@@ -9,18 +9,18 @@ object Message {
     val Attachment = Value // Attach(6),
     val Audio = Value // Audio(1), Voice(34)
     val Contact = Value // ShareCard(42)
-    val ChatHistory = Value // ChatHistory(19)
     val Emoticon = Value // Sticker: Emoticon(15), Emoticon(47)
     val Image = Value // Img(2), Image(3)
     val Text = Value // Text(1)
+    val Video = Value // Video(4), Video(43)
+    val ChatHistory = Value // ChatHistory(19)
     val Location = Value // Location(48)
     val MiniProgram = Value // MiniProgram(33)
-    val GroupNote = Value // GroupNote(53)
     val Transfer = Value // Transfers(2000)
     val RedEnvelope = Value // RedEnvelopes(2001)
     val Recalled = Value // Recalled(10002)
     val Url = Value // Url(5)
-    val Video = Value // Video(4), Video(43)
+    //    val GroupNote = Value // GroupNote(53)
   }
 
   /**

@@ -20,6 +20,8 @@ object Puppet {
   }
   lazy val objectMapper = {
     val om = new ObjectMapper()
+    import com.fasterxml.jackson.databind.DeserializationFeature
+    om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
     om.registerModule(DefaultScalaModule)
   }
   object PuppetEventName extends Enumeration {
