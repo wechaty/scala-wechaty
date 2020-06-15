@@ -36,11 +36,12 @@ object Friendship {
     var contactId: String = _
     var hello: String = _
     var timestamp: Number = _ //  // Unix Timestamp, in seconds or milliseconds
+    var `type`:FriendshipType.Type = _
   }
 
   /** @hidden */
   class FriendshipPayloadConfirm extends FriendshipPayload {
-    var `type` = FriendshipType.Confirm
+    override var `type` = FriendshipType.Confirm
   }
 
   /** @hidden */
@@ -48,12 +49,12 @@ object Friendship {
     var scene: FriendshipSceneType.Type = _
     var stranger: String = _
     var ticket: String = _
-    var `type` = FriendshipType.Receive
+    override var `type` = FriendshipType.Receive
   }
 
   /** @hidden */
   class FriendshipPayloadVerify extends FriendshipPayload {
-    var `type` = FriendshipType.Verify
+    override var `type` = FriendshipType.Verify
   }
 
 

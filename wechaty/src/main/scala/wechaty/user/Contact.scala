@@ -1,7 +1,6 @@
 package wechaty.user
 
 import wechaty.Wechaty.PuppetResolver
-import wechaty.helper.ImplicitHelper._
 import wechaty.puppet.{LoggerSupport, ResourceBox}
 import wechaty.puppet.schemas.Contact.{ContactGender, ContactPayload, ContactType}
 import wechaty.puppet.schemas.Puppet
@@ -24,21 +23,6 @@ class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Conv
     resolver.puppet.contactPayload(contactId)
   }
 
-  def say(something: String): Message = {
-    resolver.puppet.messageSendText(this.id, something)
-  }
-
-  def say(something: Contact): Message = {
-    resolver.puppet.messageSendContact(this.id, something.id)
-  }
-
-  def say(something: UrlLink): Message = {
-    resolver.puppet.messageSendUrl(this.id, something.payload)
-  }
-
-  def say(something: MiniProgram): Message = {
-    resolver.puppet.messageSendMiniProgram(this.id, something.payload)
-  }
 
   /**
     * Get the name from a contact

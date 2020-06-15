@@ -4,8 +4,8 @@ import java.util
 
 import com.google.protobuf.StringValue
 import io.github.wechaty.grpc.puppet.Room
-import wechaty.puppet.Puppet
 import wechaty.puppet.schemas.Room.RoomPayload
+import wechaty.puppet.support.RoomSupport
 
 /**
   *
@@ -13,7 +13,7 @@ import wechaty.puppet.schemas.Room.RoomPayload
   * @since 2020-06-06
   */
 trait RoomRawSupport {
-  self: Puppet with GrpcSupport =>
+  self: RoomSupport with GrpcSupport =>
   override def roomAdd(roomId: String, contactId: String): Unit = {
     val request = Room.RoomAddRequest.newBuilder()
       .setContactId(contactId)
