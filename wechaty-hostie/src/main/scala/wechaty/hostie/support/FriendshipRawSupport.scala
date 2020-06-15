@@ -2,7 +2,7 @@ package wechaty.hostie.support
 
 import io.github.wechaty.grpc.puppet.Friendship
 import wechaty.puppet.Puppet
-import wechaty.puppet.schemas.Friendship.{FriendshipPayloadReceive, FriendshipSceneType, FriendshipType}
+import wechaty.puppet.schemas.Friendship._
 
 /**
   *
@@ -55,11 +55,23 @@ trait FriendshipRawSupport {
       .build()
 
     val response = grpcClient.friendshipPayload(request)
-    val payload = new FriendshipPayloadReceive()
+    val payload =
+    response.getType match {
+      case Friendship.FriendshipType.FRIENDSHIP_TYPE_CONFIRM =>
+        val confirm = new FriendshipPayloadConfirm()
+        confirm
+      case Friendship.FriendshipType.FRIENDSHIP_TYPE_RECEIVE=>
+        val receive = new FriendshipPayloadReceive()
+        receive.scene = FriendshipSceneType.apply(response.getSceneValue)
+        receive.stranger = response.getStranger
+        receive.ticket = response.getTicket
+        receive
+      case Friendship.FriendshipType.FRIENDSHIP_TYPE_VERIFY=>
+        new FriendshipPayloadVerify()
+      case other =>
+        new FriendshipPayload()
+    }
 
-    payload.scene = FriendshipSceneType.apply(response.getSceneValue)
-    payload.stranger = response.getStranger
-    payload.ticket = response.getTicket
     payload.`type` = FriendshipType.apply(response.getTypeValue)
     payload.contactId = response.getContactId
     payload.id = response.getId

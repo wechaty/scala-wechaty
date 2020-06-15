@@ -41,7 +41,7 @@ object Friendship {
 
   /** @hidden */
   class FriendshipPayloadConfirm extends FriendshipPayload {
-    override var `type` = FriendshipType.Confirm
+//    override var `type` = FriendshipType.Confirm
   }
 
   /** @hidden */
@@ -49,12 +49,12 @@ object Friendship {
     var scene: FriendshipSceneType.Type = _
     var stranger: String = _
     var ticket: String = _
-    override var `type` = FriendshipType.Receive
+//    override var `type` = FriendshipType.Receive
   }
 
   /** @hidden */
   class FriendshipPayloadVerify extends FriendshipPayload {
-    override var `type` = FriendshipType.Verify
+//    override var `type` = FriendshipType.Verify
   }
 
 

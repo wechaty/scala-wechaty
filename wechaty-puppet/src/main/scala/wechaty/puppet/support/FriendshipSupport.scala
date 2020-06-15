@@ -28,28 +28,28 @@ trait FriendshipSupport {
 
   protected def friendshipRawPayload(friendshipId: String): FriendshipPayload
 
-  def friendshipPayload (
-    friendshipId : String,
-    newPayloadOpt  : Option[FriendshipPayload] = None
-  ): FriendshipPayload = {
-    newPayloadOpt match{
+  def friendshipPayload (friendshipId : String, newPayloadOpt  : Option[FriendshipPayload] = None): FriendshipPayload = {
+    newPayloadOpt match {
       case Some(newPayload) =>
         cacheFriendshipPayload.put(friendshipId, newPayload)
         newPayload
       case _ =>
 
-    /**
-      * 1. Try to get from cache first
-      */
-    val cachedPayload = this.cacheFriendshipPayload.getIfPresent(friendshipId)
-    if (cachedPayload != null) { cachedPayload }
-    else {
-      /**
-        * 2. Cache not found
-        */
-      val rawPayload = friendshipRawPayload(friendshipId)
-      this.cacheFriendshipPayload.put(friendshipId, rawPayload)
-      rawPayload
+        /**
+          * 1. Try to get from cache first
+          */
+        val cachedPayload = this.cacheFriendshipPayload.getIfPresent(friendshipId)
+        if (cachedPayload != null) {
+          cachedPayload
+        }
+        else {
+          /**
+            * 2. Cache not found
+            */
+          val rawPayload = friendshipRawPayload(friendshipId)
+          this.cacheFriendshipPayload.put(friendshipId, rawPayload)
+          rawPayload
+        }
     }
   }
 }

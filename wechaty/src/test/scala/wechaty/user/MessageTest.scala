@@ -3,6 +3,7 @@ package wechaty.user
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Contact.ContactPayloadResponse
 import io.github.wechaty.grpc.puppet.Message.{MessagePayloadResponse, MessageType}
+import io.github.wechaty.grpc.puppet.RoomMember.RoomMemberPayloadResponse
 import org.grpcmock.GrpcMock.{stubFor, unaryMethod}
 import org.junit.jupiter.api.{Assertions, Test}
 import wechaty.TestBase
@@ -38,6 +39,10 @@ class MessageTest extends TestBase{
       .nextWillReturn(member2Resposne)
       .nextWillReturn(member3Resposne)
     )
+    val roomMemberPayloadResponse = RoomMemberPayloadResponse.newBuilder().build()
+    stubFor(unaryMethod(PuppetGrpc.getRoomMemberPayloadMethod)
+        .willReturn(roomMemberPayloadResponse)
+    )
 
 
     val message = new Message("messageId")
@@ -69,6 +74,10 @@ class MessageTest extends TestBase{
     val member3Resposne = ContactPayloadResponse.newBuilder()
       .setName("member3")
       .build()
+    val roomMemberPayloadResponse = RoomMemberPayloadResponse.newBuilder().build()
+    stubFor(unaryMethod(PuppetGrpc.getRoomMemberPayloadMethod)
+      .willReturn(roomMemberPayloadResponse)
+    )
     stubFor(unaryMethod(PuppetGrpc.getContactPayloadMethod)
       .willReturn(member1Resposne)
       .nextWillReturn(member2Resposne)
@@ -110,6 +119,10 @@ class MessageTest extends TestBase{
       .willReturn(member1Resposne)
       .nextWillReturn(member2Resposne)
       .nextWillReturn(member3Resposne)
+    )
+    val roomMemberPayloadResponse = RoomMemberPayloadResponse.newBuilder().build()
+    stubFor(unaryMethod(PuppetGrpc.getRoomMemberPayloadMethod)
+      .willReturn(roomMemberPayloadResponse)
     )
 
 

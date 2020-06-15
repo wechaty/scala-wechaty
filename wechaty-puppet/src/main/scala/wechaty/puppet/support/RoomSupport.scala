@@ -1,7 +1,7 @@
 package wechaty.puppet.support
 
 import com.github.benmanes.caffeine.cache.Cache
-import wechaty.puppet.Puppet
+import wechaty.puppet.{Puppet, ResourceBox}
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.Room.RoomPayload
 
@@ -16,7 +16,8 @@ trait RoomSupport {
 
   def roomAdd(roomId: String, contactId: String): Unit
 
-  //   def roomAvatar (roomId: String)                          : FileBox>
+  def roomAvatar (roomId: String):ResourceBox
+
   def roomCreate(contactIdList: Array[String], topic: String): String
 
   def roomDel(roomId: String, contactId: String): Unit

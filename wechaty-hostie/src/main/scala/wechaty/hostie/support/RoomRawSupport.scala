@@ -4,6 +4,8 @@ import java.util
 
 import com.google.protobuf.StringValue
 import io.github.wechaty.grpc.puppet.Room
+import io.github.wechaty.grpc.puppet.Room.RoomAvatarRequest
+import wechaty.puppet.ResourceBox
 import wechaty.puppet.schemas.Room.RoomPayload
 import wechaty.puppet.support.RoomSupport
 
@@ -21,6 +23,14 @@ trait RoomRawSupport {
       .build()
 
     grpcClient.roomAdd(request)
+  }
+
+  override def roomAvatar(roomId: String): ResourceBox = {
+    val request = RoomAvatarRequest.newBuilder()
+    request.setId(roomId)
+    val response = this.grpcClient.roomAvatar(request.build())
+    val jsonText = response.getFilebox
+    ResourceBox.fromJson(jsonText)
   }
 
   override def roomCreate(contactIdList: Array[String], topic: String): String = {
@@ -53,7 +63,6 @@ trait RoomRawSupport {
     val request = Room.RoomQRCodeRequest.newBuilder()
       .setId(roomId)
       .build()
-
 
     val response = grpcClient.roomQRCode(request)
     response.getQrcode

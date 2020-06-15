@@ -154,9 +154,7 @@ class Message(messageId:String)(implicit resolver: PuppetResolver) {
     }
 
     val toAliasName = (member: Contact) => {
-      val alias = room.alias(member)
-      val name = member.name
-      if(isBlank(alias)) name else alias
+      room.alias(member).getOrElse(member.name)
     }
 
     val mentionNameList = list.map(toAliasName)
