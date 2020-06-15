@@ -18,15 +18,11 @@ import scala.language.implicitConversions
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-03
   */
-class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Conversation with LoggerSupport {
+class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Conversation(contactId) with LoggerSupport {
   //  lazy val payload: schemas.Contact.ContactPayload = resolver.puppet.contactPayload(contactId)
   def payload: ContactPayload = {
     resolver.puppet.contactPayload(contactId)
   }
-
-  //delegate method
-  def id = contactId
-
 
   def say(something: String): Message = {
     resolver.puppet.messageSendText(this.id, something)

@@ -1,7 +1,8 @@
 package wechaty.puppet.support
 
 import com.github.benmanes.caffeine.cache.Cache
-import wechaty.puppet.schemas.Message.MessagePayload
+import wechaty.puppet.schemas.Image.ImageType
+import wechaty.puppet.schemas.Message.{MessagePayload, MessageType}
 import wechaty.puppet.schemas.MiniProgram.MiniProgramPayload
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.UrlLink.UrlLinkPayload
@@ -21,8 +22,8 @@ trait MessageSupport {
     */
   def messageContact(messageId: String): String
 
-//    def messageFile(messageId: String)FileBox
-//    def messageImage(messageId: String, imageType: ImageType.Type) : FileBox
+  def messageFile(messageId: String):ResourceBox
+  def messageImage(messageId: String, imageType: ImageType.Type) : ResourceBox
   def messageMiniProgram(messageId: String): MiniProgramPayload
 
   def messageUrl(messageId: String): UrlLinkPayload
@@ -64,6 +65,47 @@ trait MessageSupport {
     info("Puppet messagePayload({}) cache SET", messageId)
 
     payload
+  }
+  def messageForward (conversationId: String, messageId: String): String= {
+    val payload = this.messagePayload(messageId)
+    payload.`type` match{
+      case MessageType.Attachment |  MessageType.Audio | MessageType.Image | MessageType.Video =>
+        messageSendFile(conversationId,messageFile(messageId))
+      case MessageType.Text =>
+        if(!Puppet.isBlank(payload.text)){
+          this.messageSendText(
+            conversationId,
+            payload.text,
+          )
+        }
+        else {
+          throw new IllegalStateException("Puppet messageForward() payload.text is undefined.")
+        }
+      case MessageType.MiniProgram =>
+        this.messageSendMiniProgram(
+          conversationId,
+          this.messageMiniProgram(messageId) )
+
+      case MessageType.Url =>
+        this.messageSendUrl(
+          conversationId,
+          this.messageUrl(messageId)
+        )
+
+      case MessageType.Contact =>
+        this.messageSendContact(
+          conversationId,
+          this.messageContact(messageId)
+        )
+
+      case MessageType.ChatHistory | MessageType.Location
+           | MessageType.Emoticon | MessageType.Transfer
+           | MessageType.RedEnvelope| MessageType.Recalled =>
+        throw new UnsupportedOperationException
+      case MessageType.Unknown =>
+        throw new Error("Unsupported forward message type:" + payload.`type`)
+    }
+
   }
 
   protected def messageRawPayload(messageId: String): MessagePayload

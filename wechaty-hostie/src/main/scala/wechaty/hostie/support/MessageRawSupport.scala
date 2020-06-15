@@ -3,6 +3,7 @@ package wechaty.hostie.support
 import io.github.wechaty.grpc.puppet.Base.DingRequest
 import io.github.wechaty.grpc.puppet.Message
 import io.github.wechaty.grpc.puppet.Message.{MessagePayloadRequest, MessageSendTextRequest}
+import wechaty.puppet.schemas.Image.ImageType.Type
 import wechaty.puppet.schemas.Message.{MessagePayload, MessageType}
 import wechaty.puppet.schemas.MiniProgram.MiniProgramPayload
 import wechaty.puppet.schemas.Puppet
@@ -27,6 +28,13 @@ trait MessageRawSupport {
       .build()
     val response = grpcClient.messageContact(request)
     response.getId
+  }
+
+  override def messageFile(messageId: String): ResourceBox = {
+    val request = Message.MessageFileRequest.newBuilder().setId(messageId).build()
+    val response = grpcClient.messageFile(request)
+    response.getFilebox
+    ResourceBox.fromJson(response.getFilebox)
   }
 
   override def messageMiniProgram(messageId: String): MiniProgramPayload = {
@@ -142,6 +150,19 @@ trait MessageRawSupport {
     messagePayload.toId = response.getToId
 
     messagePayload
+  }
+
+
+  override def messageImage(messageId: String, imageType: Type): ResourceBox = {
+    val request = Message.MessageImageRequest.newBuilder()
+    request.setId(messageId)
+    request.setType(Message.ImageType.forNumber(imageType.id))
+
+
+    val response = this.grpcClient.messageImage(request.build())
+
+    val jsonText = response.getFilebox
+    ResourceBox.fromJson(jsonText)
   }
 
   override protected def ding(data: String): Unit = {

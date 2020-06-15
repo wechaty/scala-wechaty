@@ -1,10 +1,12 @@
 package wechaty.user
 
+import java.util.Date
+
 import wechaty.Wechaty.PuppetResolver
 import wechaty.helper.ImplicitHelper._
 import wechaty.puppet.schemas.Message.MessageType
-import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.Puppet._
+import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.{ResourceBox, schemas}
 
 
@@ -166,5 +168,117 @@ class Message(messageId:String)(implicit resolver: PuppetResolver) {
     })
 
     textWithoutMention.trim()
+  }
+  def mentionSelf (): Boolean =  {
+    resolver.puppet.selfIdOpt() match{
+      case Some(selfId) =>
+        mentionList.exists(_.id == selfId)
+      case _ =>  false
+    }
+  }
+  def forward (to: Conversation): Unit = {
+    resolver.puppet.messageForward(to.id, this.messageId)
+  }
+  /**
+    * Message sent date
+    */
+  def date: Date ={
+    assertPayload()
+    var timestamp = this.payload.timestamp
+    if (timestamp < 0x1e11) {
+      timestamp *= 1000 // turn seconds to milliseconds
+    }
+    new Date(timestamp)
+  }
+
+  /**
+    * Returns the message age in seconds. <br>
+    *
+    * For example, the message is sent at time `8:43:01`,
+    * and when we received it in Wechaty, the time is `8:43:15`,
+    * then the age() will return `8:43:15 - 8:43:01 = 14 (seconds)`
+    * @returns {number}
+    */
+  def age:Long={
+    val ageMilliseconds = System.currentTimeMillis() - this.date.getTime()
+    val ageSeconds = Math.floor(ageMilliseconds / 1000)
+    ageSeconds.longValue()
+  }
+
+
+  /**
+    * Extract the Media File from the Message, and put it into the FileBox.
+    * > Tips:
+    * This function is depending on the Puppet Implementation, see [puppet-compatible-table](https://github.com/wechaty/wechaty/wiki/Puppet#3-puppet-compatible-table)
+    *
+    * @returns {Promise<FileBox>}
+    *
+    * @example <caption>Save media file from a message</caption>
+    * const fileBox = await message.toFileBox()
+    * const fileName = fileBox.name
+    * fileBox.toFile(fileName)
+    */
+  def toResourceBox (): ResourceBox= {
+    if (this.`type` == MessageType.Text) {
+    throw new Error("text message no file")
+    }
+    resolver.puppet.messageFile(this.messageId)
+  }
+  def toImage (): Image ={
+    if (this.`type` != MessageType.Image) {
+      throw new Error("not a image type message. type: "+this.`type`)
+    }
+    new Image(this.messageId)
+  }
+
+  /**
+    * Get Share Card of the Message
+    * Extract the Contact Card from the Message, and encapsulate it into Contact class
+    * > Tips:
+    * This function is depending on the Puppet Implementation, see [puppet-compatible-table](https://github.com/wechaty/wechaty/wiki/Puppet#3-puppet-compatible-table)
+    * @returns {Promise<Contact>}
+    */
+  def toContact (): Contact ={
+    if (this.`type` != MessageType.Contact) {
+      throw new Error("message not a ShareCard")
+    }
+
+    val contactId = resolver.puppet.messageContact(this.messageId)
+
+    if (Puppet.isBlank(contactId)) {
+    throw new Error(s"can not get Contact id by message: ${contactId}")
+    }
+
+    new Contact(contactId)
+  }
+
+  def toUrlLink (): UrlLink= {
+    assertPayload()
+    if (this.`type` != MessageType.Url) {
+      throw new Error("message not a Url Link")
+    }
+
+    val urlPayload = resolver.puppet.messageUrl(this.messageId)
+    if (urlPayload == null) {
+    throw new Error(s"no url payload for message ${this.messageId}")
+    }
+
+    new UrlLink(urlPayload)
+  }
+
+  def toMiniProgram (): MiniProgram= {
+    assertPayload()
+
+    if (this.`type` != MessageType.MiniProgram) {
+      throw new Error("message not a MiniProgram")
+    }
+
+    val miniProgramPayload = resolver.puppet.messageMiniProgram(this.messageId)
+
+    if (miniProgramPayload == null) {
+      throw new Error(s"no miniProgram payload for message ${this.messageId}")
+    }
+
+    new MiniProgram(miniProgramPayload)
   }
 }

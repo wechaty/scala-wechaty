@@ -23,6 +23,19 @@ object ResourceBox {
   def fromBase64(base64: String): ResourceBox={
     new Base64ResourceBox(base64)
   }
+  def fromJson(json: String): ResourceBox={
+    val root = Puppet.objectMapper.readTree(json)
+    val boxTypeInt = root.get("boxType").asInt()
+    val boxType = ResourceBoxType.apply(boxTypeInt)
+    boxType match{
+      case ResourceBoxType.Base64 =>
+        fromBase64(root.get("base64").asText)
+      case ResourceBoxType.Url =>
+        fromUrl(root.get("remoteUrl").asText)
+      case _ =>
+        throw  new UnsupportedOperationException("boxType %s unsupported".format(boxType))
+    }
+  }
   object ResourceBoxType extends Enumeration {
     type Type = Value
     val Unknown: Type = Value(0)

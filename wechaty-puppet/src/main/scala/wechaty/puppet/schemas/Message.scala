@@ -90,7 +90,7 @@ object Message {
 
     var filename: String = _
     var text: String = _
-    var timestamp: Number = _ //        // Huan(202001): we support both seconds & milliseconds in Wechaty now.
+    var timestamp: Long = _ //        // Huan(202001): we support both seconds & milliseconds in Wechaty now.
     var `type`: MessageType.Type = _
 //  }
 
