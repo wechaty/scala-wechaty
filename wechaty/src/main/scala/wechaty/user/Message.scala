@@ -37,8 +37,10 @@ class Message(messageId:String)(implicit resolver: PuppetResolver) {
   }
 
   def conversation : Conversation = {
-    if (this.room != null) this.room
-    else this.from
+    room match{
+      case Some(r) => r
+      case _ => this.from
+    }
   }
   private def assertPayload(): Unit ={
     if (this.payload == null) {
@@ -61,11 +63,11 @@ class Message(messageId:String)(implicit resolver: PuppetResolver) {
     else new Contact(toId)
   }
 
-  def room :Room ={
+  def room:Option[Room] ={
     assertPayload()
     val roomId = this.payload.roomId
-    if (isBlank(roomId)) null
-    else new Room(roomId)
+    if (isBlank(roomId)) None
+    else Room.load(roomId)
   }
 
 
@@ -149,12 +151,12 @@ class Message(messageId:String)(implicit resolver: PuppetResolver) {
 
     val list = this.mentionList
 
-    if (room == null || list == null || list.length == 0) {
+    if (room.isEmpty || list == null || list.length == 0) {
       return text
     }
 
     val toAliasName = (member: Contact) => {
-      room.alias(member).getOrElse(member.name)
+      room.get.alias(member).getOrElse(member.name)
     }
 
     val mentionNameList = list.map(toAliasName)

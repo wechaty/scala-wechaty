@@ -43,10 +43,8 @@ object Room {
   }
   def messageEvent(messagePayload: EventMessagePayload)(implicit resolver: PuppetResolver):Unit = {
     val message = new Message(messagePayload.messageId)
-    val room = message.room
-    if(room != null){
-      room.emit(PuppetEventName.MESSAGE,message)
-    }
+    val roomOpt = message.room
+    roomOpt.foreach(_.emit(PuppetEventName.MESSAGE,message))
   }
   def roomJoinEvent(payload:EventRoomJoinPayload)(implicit resolver: PuppetResolver): Unit ={
     val room = load(payload.roomId).get
@@ -148,11 +146,14 @@ class Room private(roomId: String)(implicit resolver: PuppetResolver) extends Co
     }
   }
 
+  def onMessage(messageListener:Message=>Unit): Unit ={
+    this.addListener(PuppetEventName.MESSAGE,messageListener)
+  }
   def onJoin(joinListener:RoomJoinEvent =>Unit): Unit ={
     this.addListener(PuppetEventName.ROOM_JOIN,joinListener)
   }
   def onLeave(leaveListener:RoomLeaveEvent =>Unit): Unit ={
-    this.addListener(PuppetEventName.ROOM_JOIN,leaveListener)
+    this.addListener(PuppetEventName.ROOM_LEAVE,leaveListener)
   }
   def onTopic(topicListener:RoomTopicEvent =>Unit): Unit ={
     this.addListener(PuppetEventName.ROOM_TOPIC,topicListener)
