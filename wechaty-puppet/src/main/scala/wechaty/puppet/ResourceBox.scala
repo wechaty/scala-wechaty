@@ -6,7 +6,7 @@ import java.util.Base64
 
 import javax.activation.MimeType
 import org.apache.commons.io.IOUtils
-import wechaty.puppet.schemas.Puppet
+import wechaty.puppet.schemas.Puppet.objectMapper
 
 /**
   * wrap stream,support file stream and url stream
@@ -24,7 +24,7 @@ object ResourceBox {
     new Base64ResourceBox(base64)
   }
   def fromJson(json: String): ResourceBox={
-    val root = Puppet.objectMapper.readTree(json)
+    val root = objectMapper.readTree(json)
     val boxTypeInt = root.get("boxType").asInt()
     val boxType = ResourceBoxType.apply(boxTypeInt)
     boxType match{
@@ -66,7 +66,7 @@ object ResourceBox {
     }
 
     override def toJson(): String = {
-      val objectNode = Puppet.objectMapper.createObjectNode
+      val objectNode = objectMapper.createObjectNode
       objectNode.put("name",url.substring(url.lastIndexOf("/")+1))
       objectNode.put("boxType",ResourceBoxType.Url.id)
       objectNode.put("remoteUrl",url)
@@ -83,7 +83,7 @@ object ResourceBox {
     override def toBase64: String = base64
 
     override def toJson(): String = {
-      val objectNode = Puppet.objectMapper.createObjectNode
+      val objectNode = objectMapper.createObjectNode
       objectNode.put("boxType",ResourceBoxType.Url.id)
       objectNode.put("base64",base64)
       objectNode.toString
