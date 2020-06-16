@@ -18,13 +18,13 @@ jobs:
       with:
         java-version: 1.8
     - name: Run tests
-      run: mvn test
+      run: mvn -B test
     - name: Run package
-      run: mvn package
+      run: mvn -B package
     - name: Run build docker image
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin  && mvn -pl wechaty dockerfile:build dockerfile:push
     - name: generate site
-      run: mvn install site && cp -rp report/target/jacoco-aggregate target/site/
+      run: mvn -B jacoco:prepare-agent install site
     - name: deploy github pages
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
