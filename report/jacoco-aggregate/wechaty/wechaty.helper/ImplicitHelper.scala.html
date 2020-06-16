@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ImplicitHelper.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty</a> &gt; <a href="index.source.html" class="el_package">wechaty.helper</a> &gt; <span class="el_source">ImplicitHelper.scala</span></div><h1>ImplicitHelper.scala</h1><pre class="source lang-java linenums">package wechaty.helper
+
+import java.util.function.Consumer
+
+import wechaty.Wechaty.PuppetResolver
+import wechaty.puppet.schemas.Event.{EventLoginPayload, EventLogoutPayload, EventMessagePayload, EventScanPayload}
+import wechaty.user.{Contact, ContactSelf, Message}
+
+import scala.language.implicitConversions
+
+/**
+  * convert event payload to user class
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-04
+  */
+<span class="nc" id="L16">object ImplicitHelper {</span>
+  private[wechaty] implicit def toEventScanPayload(eventScanListener: Consumer[EventScanPayload])(implicit puppet: PuppetResolver): EventScanPayload=&gt; Unit = {
+<span class="nc" id="L18">    eventScanPayload: EventScanPayload =&gt; { eventScanListener.accept(eventScanPayload) }</span>
+  }
+
+  private[wechaty] implicit def toMessage(messageListener: Consumer[Message])(implicit puppet: PuppetResolver): EventMessagePayload =&gt; Unit = {
+<span class="nc" id="L22">    messagePayload: EventMessagePayload =&gt; { messageListener.accept(new Message(messagePayload.messageId)) }</span>
+  }
+  private[wechaty] implicit def toMessage(messageListener: Message =&gt; Unit)(implicit puppet: PuppetResolver): EventMessagePayload =&gt; Unit = {
+<span class="nc" id="L25">    messagePayload: EventMessagePayload =&gt; { messageListener(new Message(messagePayload.messageId)) }</span>
+  }
+
+<span class="nc" id="L28">  private [wechaty] implicit def toMessage(messageId: String)(implicit puppetResolver: PuppetResolver) = new Message(messageId)</span>
+
+  private[wechaty] implicit def toContactSelf(contactListener: Consumer[ContactSelf])(implicit puppet: PuppetResolver): EventLoginPayload =&gt; Unit = {
+<span class="nc" id="L31">    payload: EventLoginPayload =&gt; { contactListener.accept(new ContactSelf(payload.contactId)) }</span>
+  }
+  private[wechaty] implicit def toContact(contactListener: Consumer[Contact])(implicit puppet: PuppetResolver): EventLoginPayload =&gt; Unit = {
+<span class="nc" id="L34">    payload: EventLoginPayload =&gt; { contactListener.accept(new Contact(payload.contactId)) }</span>
+  }
+
+  private[wechaty] implicit def logoutToContact(contactListener: Consumer[Contact])(implicit puppet: PuppetResolver): EventLogoutPayload =&gt; Unit = {
+<span class="nc" id="L38">    payload: EventLogoutPayload =&gt; { contactListener.accept(new Contact(payload.contactId)) }</span>
+  }
+
+<span class="nc" id="L41">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>MessageRawSupport.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty-hostie</a> &gt; <a href="index.source.html" class="el_package">wechaty.hostie.support</a> &gt; <span class="el_source">MessageRawSupport.scala</span></div><h1>MessageRawSupport.scala</h1><pre class="source lang-java linenums">package wechaty.hostie.support
+
+import io.github.wechaty.grpc.puppet.Base.DingRequest
+import io.github.wechaty.grpc.puppet.Message
+import io.github.wechaty.grpc.puppet.Message.{MessagePayloadRequest, MessageSendTextRequest}
+import wechaty.puppet.schemas.Image.ImageType.Type
+import wechaty.puppet.schemas.Message.{MessagePayload, MessageType}
+import wechaty.puppet.schemas.MiniProgram.MiniProgramPayload
+import wechaty.puppet.schemas.Puppet
+import wechaty.puppet.schemas.Puppet.objectMapper
+import wechaty.puppet.schemas.UrlLink.UrlLinkPayload
+import wechaty.puppet.support.MessageSupport
+import wechaty.puppet.{LoggerSupport, ResourceBox}
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-02
+  */
+<span class="fc" id="L20">trait MessageRawSupport {</span>
+  self: LoggerSupport with GrpcSupport with MessageSupport =&gt;
+  /**
+    * message
+    */
+  override def messageContact(messageId: String): String = {
+<span class="nc" id="L26">    val request = Message.MessageContactRequest.newBuilder()</span>
+<span class="nc" id="L27">      .setId(messageId)</span>
+      .build()
+<span class="nc" id="L29">    val response = grpcClient.messageContact(request)</span>
+<span class="nc" id="L30">    response.getId</span>
+  }
+
+  override def messageFile(messageId: String): ResourceBox = {
+<span class="nc" id="L34">    val request = Message.MessageFileRequest.newBuilder().setId(messageId).build()</span>
+<span class="nc" id="L35">    val response = grpcClient.messageFile(request)</span>
+<span class="nc" id="L36">    response.getFilebox</span>
+<span class="nc" id="L37">    ResourceBox.fromJson(response.getFilebox)</span>
+  }
+
+  override def messageMiniProgram(messageId: String): MiniProgramPayload = {
+<span class="nc" id="L41">    val request = Message.MessageMiniProgramRequest.newBuilder()</span>
+<span class="nc" id="L42">      .setId(messageId)</span>
+      .build()
+
+<span class="nc" id="L45">    val response = grpcClient.messageMiniProgram(request)</span>
+<span class="nc" id="L46">    val miniProgram = response.getMiniProgram</span>
+<span class="nc" id="L47">    Puppet.objectMapper.readValue(miniProgram, classOf[MiniProgramPayload])</span>
+  }
+
+  override def messageUrl(messageId: String): UrlLinkPayload = {
+<span class="nc" id="L51">    val request = Message.MessageUrlRequest.newBuilder()</span>
+<span class="nc" id="L52">      .setId(messageId)</span>
+      .build()
+
+<span class="nc" id="L55">    val response = grpcClient.messageUrl(request)</span>
+<span class="nc" id="L56">    val urlLink = response.getUrlLink</span>
+<span class="nc" id="L57">    Puppet.objectMapper.readValue(urlLink, classOf[UrlLinkPayload])</span>
+
+  }
+
+  override def messageSendContact(conversationId: String, contactId: String): String = {
+<span class="nc" id="L62">    val request = Message.MessageSendContactRequest.newBuilder()</span>
+<span class="nc" id="L63">      .setContactId(contactId)</span>
+<span class="nc" id="L64">      .setConversationId(conversationId)</span>
+      .build()
+
+
+<span class="nc" id="L68">    val response = grpcClient.messageSendContact(request)</span>
+<span class="nc" id="L69">    response.getId.getValue</span>
+  }
+
+  override def messageSendFile(conversationId: String, file: ResourceBox): String = {
+<span class="nc" id="L73">    val fileJson = file.toJson()</span>
+
+<span class="nc" id="L75">    val request = Message.MessageSendFileRequest.newBuilder()</span>
+<span class="nc" id="L76">      .setConversationId(conversationId)</span>
+<span class="nc" id="L77">      .setFilebox(fileJson)</span>
+      .build()
+
+<span class="nc" id="L80">    val response = grpcClient.messageSendFile(request)</span>
+<span class="nc" id="L81">    response.getId.getValue</span>
+  }
+
+  override def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgramPayload): String = {
+<span class="nc" id="L85">    val request = Message.MessageSendMiniProgramRequest.newBuilder()</span>
+<span class="nc" id="L86">      .setConversationId(conversationId)</span>
+<span class="nc" id="L87">      .setMiniProgram(objectMapper.writeValueAsString(miniProgramPayload))</span>
+      .build()
+
+<span class="nc" id="L90">    val response = grpcClient.messageSendMiniProgram(request)</span>
+<span class="nc" id="L91">    response.getId.getValue</span>
+  }
+
+  override def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]): String = {
+<span class="nc" id="L95">    val request = Message.MessageSendTextRequest.newBuilder()</span>
+<span class="nc" id="L96">      .setConversationId(conversationId)</span>
+<span class="nc" id="L97">      .setText(text)</span>
+      .build()
+
+<span class="nc" id="L100">    val response = grpcClient.messageSendText(request)</span>
+<span class="nc" id="L101">    response.getId.getValue</span>
+  }
+
+  override def messageSendUrl(conversationId: String, urlLinkPayload: UrlLinkPayload): String = {
+<span class="nc" id="L105">    val request = Message.MessageSendUrlRequest.newBuilder()</span>
+<span class="nc" id="L106">      .setConversationId(conversationId)</span>
+<span class="nc" id="L107">      .setUrlLink(objectMapper.writeValueAsString(urlLinkPayload))</span>
+      .build()
+
+<span class="nc" id="L110">    val response = grpcClient.messageSendUrl(request)</span>
+<span class="nc" id="L111">    response.getId.getValue</span>
+  }
+
+  override def messageRecall(messageId: String): Boolean = {
+<span class="nc" id="L115">    val request = Message.MessageRecallRequest.newBuilder()</span>
+<span class="nc" id="L116">      .setId(messageId)</span>
+      .build()
+
+<span class="nc" id="L119">    val response = grpcClient.messageRecall(request)</span>
+<span class="nc" id="L120">    response.getSuccess</span>
+  }
+
+  override def messageSendText(conversationID: String, text: String, mentionIDList: String*): String = {
+<span class="nc" id="L124">    info(&quot;PuppetHostie messageSendText({}, {})&quot;, conversationID, text)</span>
+    val request = MessageSendTextRequest
+<span class="nc" id="L126">      .newBuilder()</span>
+<span class="nc" id="L127">      .setConversationId(conversationID)</span>
+<span class="nc" id="L128">      .setText(text).build()</span>
+<span class="nc" id="L129">    val response = grpcClient.messageSendText(request)</span>
+<span class="nc" id="L130">    response.getId.getValue</span>
+  }
+
+  override protected def messageRawPayload(id: String): MessagePayload = {
+<span class="fc" id="L134">    info(&quot;PuppetHostie MessagePayload({})&quot;, id)</span>
+<span class="fc" id="L135">    val response = grpcClient.messagePayload(MessagePayloadRequest.newBuilder().setId(id).build())</span>
+<span class="fc" id="L136">    val messagePayload = new MessagePayload</span>
+<span class="fc" id="L137">    messagePayload.id = response.getId</span>
+<span class="fc" id="L138">    messagePayload.mentionIdList = response.getMentionIdsList.toArray(Array[String]())</span>
+<span class="fc" id="L139">    messagePayload.filename = response.getFilename</span>
+<span class="fc" id="L140">    messagePayload.text = response.getText</span>
+<span class="fc" id="L141">    messagePayload.timestamp = response.getTimestamp</span>
+<span class="fc" id="L142">    println(&quot;respon.getTypeValue&quot;,response.getTypeValue,response.getType)</span>
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">    if (response.getTypeValue &gt; MessageType.Video.id)</span>
+<span class="nc" id="L144">      messagePayload.`type` = MessageType.Unknown</span>
+    else
+<span class="fc" id="L146">      messagePayload.`type` = MessageType.apply(response.getTypeValue)</span>
+
+<span class="fc" id="L148">    messagePayload.fromId = response.getFromId</span>
+<span class="fc" id="L149">    messagePayload.roomId = response.getRoomId</span>
+<span class="fc" id="L150">    messagePayload.toId = response.getToId</span>
+
+<span class="fc" id="L152">    messagePayload</span>
+  }
+
+
+  override def messageImage(messageId: String, imageType: Type): ResourceBox = {
+<span class="nc" id="L157">    val request = Message.MessageImageRequest.newBuilder()</span>
+<span class="nc" id="L158">    request.setId(messageId)</span>
+<span class="nc" id="L159">    request.setType(Message.ImageType.forNumber(imageType.id))</span>
+
+
+<span class="nc" id="L162">    val response = this.grpcClient.messageImage(request.build())</span>
+
+<span class="nc" id="L164">    val jsonText = response.getFilebox</span>
+<span class="nc" id="L165">    ResourceBox.fromJson(jsonText)</span>
+  }
+
+  override protected def ding(data: String): Unit = {
+<span class="nc" id="L169">    val request = DingRequest.newBuilder().setData(data).build()</span>
+<span class="nc" id="L170">    grpcClient.ding(request)</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

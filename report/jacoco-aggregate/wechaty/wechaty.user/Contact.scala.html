@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>Contact.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty</a> &gt; <a href="index.source.html" class="el_package">wechaty.user</a> &gt; <span class="el_source">Contact.scala</span></div><h1>Contact.scala</h1><pre class="source lang-java linenums">package wechaty.user
+
+import wechaty.Wechaty.PuppetResolver
+import wechaty.puppet.{LoggerSupport, ResourceBox}
+import wechaty.puppet.schemas.Contact.{ContactGender, ContactPayload, ContactType}
+import wechaty.puppet.schemas.Puppet
+
+import scala.language.implicitConversions
+
+/**
+  *
+  * All wechat contacts(friend) will be encapsulated as a Contact.
+  * [Examples/Contact-Bot]{@link https://github.com/wechaty/wechaty/blob/1523c5e02be46ebe2cc172a744b2fbe53351540e/examples/contact-bot.ts}
+  *
+  * @property {string}  id               - Get Contact id.
+  *           This function is depending on the Puppet Implementation, see [puppet-compatible-table](https://github.com/wechaty/wechaty/wiki/Puppet#3-puppet-compatible-table)
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-03
+  */
+<span class="pc" id="L20">class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Conversation(contactId) with LoggerSupport {</span>
+  //  lazy val payload: schemas.Contact.ContactPayload = resolver.puppet.contactPayload(contactId)
+  def payload: ContactPayload = {
+<span class="fc" id="L23">    resolver.puppet.contactPayload(contactId)</span>
+  }
+
+
+  /**
+    * Get the name from a contact
+    *
+    * @returns {string}
+    * @example
+    * const name = contact.name()
+    */
+  def name: String = {
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">    if (this.payload != null)</span>
+<span class="fc" id="L36">      this.payload.name</span>
+<span class="pc" id="L37">    else null</span>
+  }
+
+
+
+  /**
+    * GET / SET / DELETE the alias for a contact
+    *
+    * Tests show it will failed if set alias too frequently(60 times in one minute).
+    *
+    * @param {(none | string | null)} newAlias
+    * @returns {(Promise&lt;null | string | void&gt;)}
+    * @example &lt;caption&gt; GET the alias for a contact, return {(Promise&lt;string | null&gt;)}&lt;/caption&gt;
+    *          const alias = await contact.alias()
+    *          if (alias === null) {
+    *   console.log('You have not yet set any alias for contact ' + contact.name())
+    *          } else {
+    *   console.log('You have already set an alias for contact ' + contact.name() + ':' + alias)
+    *          }
+    * @example &lt;caption&gt;SET the alias for a contact&lt;/caption&gt;
+    *          try {
+    *          await contact.alias('lijiarui')
+    *   console.log(`change ${contact.name()}'s alias successfully!`)
+    *          } catch (e) {
+    *   console.log(`failed to change ${contact.name()} alias!`)
+    *          }
+    * @example &lt;caption&gt;DELETE the alias for a contact&lt;/caption&gt;
+    *          try {
+    *          const oldAlias = await contact.alias(null)
+    *   console.log(`delete ${contact.name()}'s alias successfully!`)
+    *   console.log('old alias is ${oldAlias}`)
+    *          } catch (e) {
+    *   console.log(`failed to delete ${contact.name()}'s alias!`)
+    *          }
+    **/
+  def alias(newAlias: String): String = {
+
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">    if (this.payload == null) {</span>
+<span class="nc" id="L75">      throw new Error(&quot;no payload&quot;)</span>
+    }
+
+
+<span class="fc" id="L79">    resolver.puppet.contactAlias(this.id, newAlias)</span>
+<span class="fc" id="L80">    resolver.puppet.contactPayloadDirty(this.id)</span>
+<span class="fc" id="L81">    this.payload.alias</span>
+  }
+
+  /**
+    *
+    * @description
+    * Should use { @link Contact#friend} instead
+    * @deprecated
+    * @ignore
+    */
+  def stranger(): Boolean = {
+<span class="nc bnc" id="L92" title="All 2 branches missed.">    if (this.payload == null) return false</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">    else !this.friend()</span>
+  }
+
+  /**
+    * Check if contact is friend
+    *
+    * &gt; Tips:
+    * This function is depending on the Puppet Implementation, see [puppet-compatible-table](https://github.com/wechaty/wechaty/wiki/Puppet#3-puppet-compatible-table)
+    *
+    * @returns {boolean | null}
+    *
+    *          &lt;br&gt;True for friend of the bot &lt;br&gt;
+    *          False for not friend of the bot, null for unknown.
+    * @example
+    * const isFriend = contact.friend()
+    */
+  def friend(): Boolean = {
+<span class="nc bnc" id="L110" title="All 2 branches missed.">    if (this.payload == null) false</span>
+<span class="nc" id="L111">    else this.payload.friend</span>
+  }
+
+
+  /**
+    * Enum for ContactType
+    *
+    * @enum {number}
+    * @property {number} Unknown    - ContactType.Unknown    (0) for Unknown
+    * @property {number} Personal   - ContactType.Personal   (1) for Personal
+    * @property {number} Official   - ContactType.Official   (2) for Official
+    */
+
+  /**
+    * Return the type of the Contact
+    * &gt; Tips: ContactType is enum here.&lt;/br&gt;
+    *
+    * @returns {ContactType.Unknown | ContactType.Personal | ContactType.Official}
+    * @example
+    * const bot = new Wechaty()
+    * await bot.start()
+    * const isOfficial = contact.type() === bot.Contact.Type.Official
+    */
+  def `type`(): ContactType.Type = {
+<span class="nc bnc" id="L135" title="All 2 branches missed.">    if (this.payload == null) {</span>
+<span class="nc" id="L136">      throw new Error(&quot;no payload&quot;)</span>
+    }
+<span class="nc" id="L138">    this.payload.`type`</span>
+  }
+
+  /**
+    * @ignore
+    * TODO
+    * Check if the contact is star contact.
+    * @returns {boolean | null} - True for star friend, False for no star friend.
+    * @example
+    * const isStar = contact.star()
+    */
+  def star(): Boolean = {
+<span class="nc bnc" id="L150" title="All 2 branches missed.">    if (this.payload == null) false</span>
+<span class="nc" id="L151">    else this.payload.star</span>
+  }
+
+  /**
+    * Contact gender
+    * &gt; Tips: ContactGender is enum here. &lt;/br&gt;
+    *
+    * @returns {ContactGender.Unknown | ContactGender.Male | ContactGender.Female}
+    * @example
+    * const gender = contact.gender() === bot.Contact.Gender.Male
+    */
+  def gender(): ContactGender.Type = {
+<span class="nc bnc" id="L163" title="All 2 branches missed.">    if (this.payload == null) ContactGender.Unknown</span>
+<span class="nc" id="L164">    else payload.gender</span>
+  }
+
+  /**
+    * Get the region 'province' from a contact
+    *
+    * @returns {string | null}
+    * @example
+    * const province = contact.province()
+    */
+  def province(): String = {
+<span class="nc bnc" id="L175" title="All 2 branches missed.">    if (this.payload == null) null</span>
+<span class="nc" id="L176">    else this.payload.province</span>
+  }
+
+  /**
+    * Get the region 'city' from a contact
+    *
+    * @returns {string | null}
+    * @example
+    * const city = contact.city()
+    */
+  def city(): String = {
+<span class="nc bnc" id="L187" title="All 2 branches missed.">    if (this.payload == null) null</span>
+<span class="nc" id="L188">    else this.payload.city</span>
+  }
+
+  def avatar: ResourceBox =  {
+<span class="nc" id="L192">    resolver.puppet.contactAvatar(this.id)</span>
+  }
+
+  /**
+    * Get all tags of contact
+    *
+    * @returns {Promise&lt;Tag[]&gt;}
+    * @example
+    * const tags = await contact.tags()
+    */
+  def tags(): Array[Tag] = {
+
+<span class="nc" id="L204">    val tagIdList = resolver.puppet.tagContactList(this.id)</span>
+<span class="nc" id="L205">    tagIdList.map(id =&gt; new Tag(id))</span>
+  }
+
+
+  /**
+    * Force reload data for Contact, Sync data from lowlevel API again.
+    *
+    * @returns {Promise&lt;this&gt;}
+    * @example
+    * await contact.sync()
+    */
+  def sync(): Unit = {
+<span class="nc" id="L217">    this.ready(true)</span>
+  }
+
+  /**
+    * `ready()` is For FrameWork ONLY!
+    *
+    * Please not to use `ready()` at the user land.
+    * If you want to sync data, uyse `sync()` instead.
+    *
+    * @ignore
+    */
+<span class="nc" id="L228">  def ready(forceSync: Boolean = false): Unit = {</span>
+
+<span class="nc bnc" id="L230" title="All 4 branches missed.">    if (!forceSync &amp;&amp; this.isReady()) { // already ready</span>
+<span class="nc" id="L231">      debug(&quot;Contact ready() isReady() true&quot;)</span>
+<span class="nc" id="L232">      return</span>
+    }
+
+<span class="nc bnc" id="L235" title="All 2 branches missed.">    if (forceSync) {</span>
+<span class="nc" id="L236">      resolver.puppet.contactPayloadDirty(this.id)</span>
+    }
+  }
+
+  /**
+    * @ignore
+    */
+  def isReady(): Boolean = {
+<span class="nc bnc" id="L244" title="All 4 branches missed.">    this.payload != null &amp;&amp; !Puppet.isBlank(this.payload.name)</span>
+  }
+
+  /**
+    * Check if contact is self
+    *
+    * @returns {boolean} True for contact is self, False for contact is others
+    * @example
+    * const isSelf = contact.self()
+    */
+  def self(): Boolean = {
+<span class="nc" id="L255">    val userIdOpt = resolver.puppet.selfIdOpt()</span>
+<span class="nc" id="L256">    userIdOpt match {</span>
+<span class="nc bnc" id="L257" title="All 2 branches missed.">      case Some(userId) =&gt;</span>
+<span class="nc bnc" id="L258" title="All 6 branches missed.">        this.id == userId</span>
+<span class="nc" id="L259">      case _ =&gt; false</span>
+    }
+  }
+
+  /**
+    * Get the weixin number from a contact.
+    *
+    * Sometimes cannot get weixin number due to weixin security mechanism, not recommend.
+    *
+    * @ignore
+    * @returns {string | null}
+    * @example
+    * const weixin = contact.weixin()
+    */
+  def weixin(): String = {
+<span class="nc bnc" id="L274" title="All 2 branches missed.">    if (this.payload == null) null</span>
+<span class="nc" id="L275">    else payload.weixin</span>
+  }
+
+  override def toString: String = {
+
+    val identity =
+<span class="nc bnc" id="L281" title="All 2 branches missed.">      if (!Puppet.isBlank(payload.alias))</span>
+<span class="nc" id="L282">        this.payload.alias</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">      else if (!Puppet.isBlank(payload.name))</span>
+<span class="nc" id="L284">        payload.name</span>
+<span class="nc bnc" id="L285" title="All 2 branches missed.">      else if (!Puppet.isBlank(this.id))</span>
+<span class="nc" id="L286">        id</span>
+<span class="nc" id="L287">      else &quot;loading...&quot;</span>
+
+<span class="nc" id="L289">    s&quot;Contact&lt;${identity}&gt;&quot;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
