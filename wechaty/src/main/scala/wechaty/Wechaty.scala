@@ -56,6 +56,7 @@ class WechatyOptions {
 class Wechaty(private val options: WechatyOptions) extends LoggerSupport with PuppetResolver{
   private var hostie:PuppetHostie = _
   private implicit val puppetResolver: PuppetResolver = this
+  initHostie()
 
   def onScan(listener: Consumer[EventScanPayload]): Wechaty = {
     puppet.addListener[EventScanPayload](PuppetEventName.SCAN,listener)
@@ -84,17 +85,19 @@ class Wechaty(private val options: WechatyOptions) extends LoggerSupport with Pu
 
   override def puppet: Puppet = this.hostie
 
-  def start(): Unit = {
-    val option = options.puppetOptions match{
+  def initHostie(): Unit = {
+    val option = options.puppetOptions match {
       case Some(o) => o
       case _ => new PuppetOptions
     }
     this.hostie = new PuppetHostie(option)
     //room message
-    this.hostie.addListener[EventMessagePayload](PuppetEventName.MESSAGE,Room.messageEvent)
-    this.hostie.addListener[EventRoomJoinPayload](PuppetEventName.ROOM_JOIN,Room.roomJoinEvent)
-    this.hostie.addListener[EventRoomLeavePayload](PuppetEventName.ROOM_LEAVE,Room.roomLeaveEvent)
-    this.hostie.addListener[EventRoomTopicPayload](PuppetEventName.ROOM_TOPIC,Room.roomTopicEvent)
+    this.hostie.addListener[EventMessagePayload](PuppetEventName.MESSAGE, Room.messageEvent)
+    this.hostie.addListener[EventRoomJoinPayload](PuppetEventName.ROOM_JOIN, Room.roomJoinEvent)
+    this.hostie.addListener[EventRoomLeavePayload](PuppetEventName.ROOM_LEAVE, Room.roomLeaveEvent)
+    this.hostie.addListener[EventRoomTopicPayload](PuppetEventName.ROOM_TOPIC, Room.roomTopicEvent)
+  }
+  def start():Unit= {
     this.hostie.start()
     Runtime.getRuntime.addShutdownHook(new Thread(new Runnable {
       override def run(): Unit ={

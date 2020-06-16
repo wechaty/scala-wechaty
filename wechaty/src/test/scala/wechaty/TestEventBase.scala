@@ -5,14 +5,14 @@ import java.util.concurrent.{CountDownLatch, TimeUnit}
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Base.{LogoutResponse, StartResponse, StopResponse}
 import io.github.wechaty.grpc.puppet.Event.{EventResponse, EventType}
-import io.github.wechaty.grpc.puppet.Message.{MessagePayloadResponse, MessageType}
-import io.grpc.ManagedChannelBuilder
+import io.grpc.{ManagedChannel, ManagedChannelBuilder}
 import org.grpcmock.GrpcMock
 import org.grpcmock.GrpcMock.{serverStreamingMethod, stubFor, unaryMethod}
 import org.grpcmock.junit5.GrpcMockExtension
-import org.junit.jupiter.api.{AfterEach, BeforeEach}
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.{AfterEach, BeforeEach}
 import wechaty.Wechaty.PuppetResolver
+import wechaty.puppet.LoggerSupport
 import wechaty.puppet.schemas.Event.EventResetPayload
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.Puppet.PuppetOptions
@@ -23,17 +23,18 @@ import wechaty.puppet.schemas.Puppet.PuppetOptions
   * @since 2020-06-07
   */
 @ExtendWith(Array(classOf[GrpcMockExtension]))
-class TestBase {
+class TestEventBase extends LoggerSupport{
   protected var instance:Wechaty = null
 
+  private var serverChannel:ManagedChannel = _
   @BeforeEach
   def setupChannel(): Unit = {
     GrpcMock.resetMappings()
+    isMockEvented = false
+
     countDownLatch = new CountDownLatch(1)
-    val serverChannel = ManagedChannelBuilder.forAddress("localhost", GrpcMock.getGlobalPort).usePlaintext.build
+    serverChannel = ManagedChannelBuilder.forAddress("localhost", GrpcMock.getGlobalPort).usePlaintext.build
     //for server stub
-    val eventResponse = EventResponse.newBuilder().build()
-    stubFor(unaryMethod(PuppetGrpc.getEventMethod).willReturn(eventResponse))
     val startResponse = StartResponse.newBuilder().build()
     stubFor(unaryMethod(PuppetGrpc.getStartMethod).willReturn(startResponse))
     val logoutResponse = LogoutResponse.newBuilder().build()
@@ -48,7 +49,7 @@ class TestBase {
     options.channelOpt = Some(serverChannel) //using test channel
     wechatyOptions.puppetOptions = Some(options)
     instance = Wechaty.instance(wechatyOptions)
-    instance.start()
+
   }
   @AfterEach
   def stopInstance: Unit ={
@@ -58,18 +59,20 @@ class TestBase {
     instance
   }
   protected def startWithEvent(): Unit ={
-    instance.start()
     instance.onReset(payload=>{
+      debug("on reset")
       countDownLatch.countDown()
     })
+
+    instance.start()
   }
 
-  var countDownLatch = new CountDownLatch(1)
+  private var isMockEvented = false
+  var countDownLatch:CountDownLatch = _
   protected def awaitEventCompletion(time:Long,unit:TimeUnit): Unit ={
     countDownLatch.await(time,unit)
-    countDownLatch = new CountDownLatch(1)
+//    countDownLatch = new CountDownLatch(1)
   }
-  private var isMockEvented = false
   protected def mockEvent(responses:(EventType,AnyRef)*): Unit ={
     if(isMockEvented) throw new IllegalStateException("mock event must be called only one time!")
     val resetPayload = new EventResetPayload
@@ -81,7 +84,8 @@ class TestBase {
         eventResponse.build()
     }
 
-    stubFor(serverStreamingMethod(PuppetGrpc.getEventMethod()).willReturn(eventResponses:_*))
+    stubFor(serverStreamingMethod(PuppetGrpc.getEventMethod())
+      .willReturn(eventResponses:_*))
 
     startWithEvent()
     isMockEvented = true

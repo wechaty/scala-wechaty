@@ -1,6 +1,9 @@
 package wechaty.puppet.schemas
 
 import com.fasterxml.jackson.annotation.JsonSetter
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 
 object Event {
@@ -65,6 +68,7 @@ object Event {
   }
 
   class EventScanPayload extends EventPayload {
+    @JsonSerialize(using=classOf[ScalaEnumerationSerializer])
     var status: ScanStatus.Type = _
     @JsonSetter("status")
     def setStatus(num:Int): Unit ={
@@ -88,4 +92,10 @@ object Event {
   type EventResetPayload = BaseEventPayload
 
   type EventHeartbeatPayload = BaseEventPayload
+  class ScalaEnumerationSerializer extends JsonSerializer[Enumeration#Value]{
+    override def serialize(value: Enumeration#Value, gen: JsonGenerator, serializers: SerializerProvider): Unit = {
+      gen.writeNumber(value.id)
+    }
+  }
+
 }
