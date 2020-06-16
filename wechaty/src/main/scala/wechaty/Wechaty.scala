@@ -77,6 +77,10 @@ class Wechaty(private val options: WechatyOptions) extends LoggerSupport with Pu
     puppet.addListener[EventFriendshipPayload](PuppetEventName.FRIENDSHIP,listener)
     this
   }
+  def onReset(listener:EventResetPayload => Unit):Wechaty={
+    puppet.addListener[EventResetPayload](PuppetEventName.RESET,listener)
+    this
+  }
 
   override def puppet: Puppet = this.hostie
 

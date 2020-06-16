@@ -1,5 +1,7 @@
 package wechaty
 
+import java.util.concurrent.{CountDownLatch, TimeUnit}
+
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Base.{LogoutResponse, StartResponse, StopResponse}
 import io.github.wechaty.grpc.puppet.Event.{EventResponse, EventType}
@@ -11,6 +13,7 @@ import org.grpcmock.junit5.GrpcMockExtension
 import org.junit.jupiter.api.{AfterEach, BeforeEach}
 import org.junit.jupiter.api.extension.ExtendWith
 import wechaty.Wechaty.PuppetResolver
+import wechaty.puppet.schemas.Event.EventResetPayload
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.Puppet.PuppetOptions
 
@@ -25,7 +28,7 @@ class TestBase {
 
   @BeforeEach
   def setupChannel(): Unit = {
-    println("setup channel....")
+    countDownLatch = new CountDownLatch(1)
     val serverChannel = ManagedChannelBuilder.forAddress("localhost", GrpcMock.getGlobalPort).usePlaintext.build
     //for server stub
     val eventResponse = EventResponse.newBuilder().build()
@@ -53,13 +56,33 @@ class TestBase {
   protected implicit lazy val puppetResolver: PuppetResolver = {
     instance
   }
+  protected def startWithEvent(): Unit ={
+    instance.start()
+    instance.onReset(payload=>{
+      countDownLatch.countDown()
+    })
+  }
+
+  var countDownLatch = new CountDownLatch(1)
+  protected def awaitEventCompletion(time:Long,unit:TimeUnit): Unit ={
+    countDownLatch.await(time,unit)
+    countDownLatch = new CountDownLatch(1)
+  }
+  private var isMockEvented = false
   protected def mockEvent(responses:(EventType,AnyRef)*): Unit ={
-    val eventResponses = responses.map{case (event,payload) =>
+    if(isMockEvented) throw new IllegalStateException("mock event must be called only one time!")
+    val resetPayload = new EventResetPayload
+    val tmpResponses = responses.toList :+ (EventType.EVENT_TYPE_RESET ->resetPayload)
+    val eventResponses = tmpResponses.map{case (event,payload) =>
         val eventResponse = EventResponse.newBuilder()
         eventResponse.setType(event)
         eventResponse.setPayload(Puppet.objectMapper.writeValueAsString(payload))
         eventResponse.build()
     }
+
     stubFor(serverStreamingMethod(PuppetGrpc.getEventMethod()).willReturn(eventResponses:_*))
+
+    startWithEvent()
+    isMockEvented = true
   }
 }

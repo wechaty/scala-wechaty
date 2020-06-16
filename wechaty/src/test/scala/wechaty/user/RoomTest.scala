@@ -1,5 +1,7 @@
 package wechaty.user
 
+import java.util.concurrent.TimeUnit
+
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Event.EventType
 import io.github.wechaty.grpc.puppet.Message.{MessagePayloadResponse, MessageType}
@@ -52,7 +54,8 @@ class RoomTest extends TestBase{
       reachFlag = true
     })
 
-    instance.puppet.emit(PuppetEventName.MESSAGE,payload)
+//    instance.puppet.emit(PuppetEventName.MESSAGE,payload)
+    awaitEventCompletion(10,TimeUnit.SECONDS)
     Assertions.assertTrue(reachFlag)
   }
   @Test
