@@ -99,6 +99,8 @@ trait GrpcSupport {
 
       //stop grpc client
       this.grpcClient.stop(Base.StopRequest.getDefaultInstance)
+
+      this.channel.shutdownNow()
     }
   }
 

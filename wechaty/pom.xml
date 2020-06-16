@@ -7,14 +7,14 @@
     <version>0.1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>wechaty</artifactId>
+  <artifactId>wechaty_2.12</artifactId>
   <packaging>jar</packaging>
 
 
   <dependencies>
     <dependency>
       <groupId>io.github.wechaty</groupId>
-      <artifactId>wechaty-hostie</artifactId>
+      <artifactId>wechaty-hostie_${scala-binary-version}</artifactId>
     </dependency>
     <dependency>
       <groupId>org.grpcmock</groupId>

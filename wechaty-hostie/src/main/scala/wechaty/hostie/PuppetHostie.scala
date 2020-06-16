@@ -25,6 +25,7 @@ class PuppetHostie(val option:PuppetOptions) extends Puppet
   with RoomRawSupport
   with GrpcEventSupport {
 
+  private var stopped = false
   init()
   private def init(): Unit ={
     if(option.token.isEmpty){
@@ -43,7 +44,10 @@ class PuppetHostie(val option:PuppetOptions) extends Puppet
     startGrpc(option.endPoint.get)
   }
   def stop(): Unit = {
-    stopGrpc()
+    if(!stopped){
+      stopGrpc()
+      stopped = true
+    }
   }
 
   override def selfIdOpt(): Option[String] = this.idOpt
