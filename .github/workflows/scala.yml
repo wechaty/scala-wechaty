@@ -24,7 +24,7 @@ jobs:
     - name: Run build docker image
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin  && mvn -pl wechaty dockerfile:build dockerfile:push
     - name: generate site
-      run: mvn install site
+      run: mvn install site && cp -rp report/target/jacoco-aggregate target/site/
     - name: deploy github pages
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
