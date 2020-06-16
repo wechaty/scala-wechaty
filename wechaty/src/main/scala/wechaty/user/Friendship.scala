@@ -13,7 +13,7 @@ object Friendship{
     puppetResolver.puppet.friendshipAdd(contact.id, hello)
   }
 }
-class Friendship(id:String)(implicit puppetResolver: PuppetResolver) {
+class Friendship(val id:String)(implicit puppetResolver: PuppetResolver) {
   private def puppet= puppetResolver.puppet
   def payload :FriendshipPayload = {
     puppetResolver.puppet.friendshipPayload(id)

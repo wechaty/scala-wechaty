@@ -8,7 +8,7 @@ import wechaty.hostie.PuppetHostie
 import wechaty.puppet.schemas.Event._
 import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
 import wechaty.puppet.{LoggerSupport, Puppet}
-import wechaty.user.{Contact, ContactSelf, Message, Room}
+import wechaty.user.{Contact, ContactSelf, Friendship, Message, Room}
 
 import scala.language.implicitConversions;
 
@@ -71,6 +71,10 @@ class Wechaty(private val options: WechatyOptions) extends LoggerSupport with Pu
   }
   def onLogout(listener:Consumer[Contact]):Wechaty={
     puppet.addListener[EventLogoutPayload](PuppetEventName.LOGOUT,listener)
+    this
+  }
+  def onFriendAdd(listener:Consumer[Friendship]):Wechaty={
+    puppet.addListener[EventFriendshipPayload](PuppetEventName.FRIENDSHIP,listener)
     this
   }
 

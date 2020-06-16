@@ -2,14 +2,16 @@ package wechaty
 
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Base.{LogoutResponse, StartResponse, StopResponse}
-import io.github.wechaty.grpc.puppet.Event.EventResponse
+import io.github.wechaty.grpc.puppet.Event.{EventResponse, EventType}
+import io.github.wechaty.grpc.puppet.Message.{MessagePayloadResponse, MessageType}
 import io.grpc.ManagedChannelBuilder
 import org.grpcmock.GrpcMock
-import org.grpcmock.GrpcMock.{stubFor, unaryMethod}
+import org.grpcmock.GrpcMock.{serverStreamingMethod, stubFor, unaryMethod}
 import org.grpcmock.junit5.GrpcMockExtension
 import org.junit.jupiter.api.{AfterEach, BeforeEach}
 import org.junit.jupiter.api.extension.ExtendWith
 import wechaty.Wechaty.PuppetResolver
+import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.Puppet.PuppetOptions
 
 /**
@@ -50,5 +52,14 @@ class TestBase {
   }
   protected implicit lazy val puppetResolver: PuppetResolver = {
     instance
+  }
+  protected def mockEvent(responses:(EventType,AnyRef)*): Unit ={
+    val eventResponses = responses.map{case (event,payload) =>
+        val eventResponse = EventResponse.newBuilder()
+        eventResponse.setType(event)
+        eventResponse.setPayload(Puppet.objectMapper.writeValueAsString(payload))
+        eventResponse.build()
+    }
+    stubFor(serverStreamingMethod(PuppetGrpc.getEventMethod()).willReturn(eventResponses:_*))
   }
 }

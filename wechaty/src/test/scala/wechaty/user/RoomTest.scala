@@ -1,14 +1,13 @@
 package wechaty.user
 
 import io.github.wechaty.grpc.PuppetGrpc
-import io.github.wechaty.grpc.puppet.Event.{EventResponse, EventType}
+import io.github.wechaty.grpc.puppet.Event.EventType
 import io.github.wechaty.grpc.puppet.Message.{MessagePayloadResponse, MessageType}
 import io.github.wechaty.grpc.puppet.Room.RoomPayloadResponse
 import org.grpcmock.GrpcMock._
 import org.junit.jupiter.api.{Assertions, BeforeEach, Test}
 import wechaty.TestBase
 import wechaty.puppet.schemas.Event.{EventMessagePayload, EventRoomJoinPayload, EventRoomLeavePayload, EventRoomTopicPayload}
-import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.Puppet.PuppetEventName
 
 /**
@@ -44,11 +43,8 @@ class RoomTest extends TestBase{
 
     val payload = new EventMessagePayload
     payload.messageId=messageId
-    val eventResponse = EventResponse.newBuilder()
-    eventResponse.setType(EventType.EVENT_TYPE_MESSAGE)
-    eventResponse.setPayload(Puppet.objectMapper.writeValueAsString(payload))
-    //mock event
-    stubFor(serverStreamingMethod(PuppetGrpc.getEventMethod()).willReturn(Array(eventResponse.build()):_*))
+
+    mockEvent(EventType.EVENT_TYPE_MESSAGE->payload)
 
 
     var reachFlag = false
