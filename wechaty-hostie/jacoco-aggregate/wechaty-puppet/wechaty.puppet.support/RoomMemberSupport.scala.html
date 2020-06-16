@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>RoomMemberSupport.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">wechaty-hostie</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet</a> &gt; <a href="index.source.html" class="el_package">wechaty.puppet.support</a> &gt; <span class="el_source">RoomMemberSupport.scala</span></div><h1>RoomMemberSupport.scala</h1><pre class="source lang-java linenums">package wechaty.puppet.support
+
+import com.github.benmanes.caffeine.cache.Cache
+import wechaty.puppet.Puppet
+import wechaty.puppet.schemas.Puppet.isBlank
+import wechaty.puppet.schemas.Room.RoomMemberPayload
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-06
+  */
+<span class="nc" id="L13">trait RoomMemberSupport {</span>
+  self:Puppet =&gt;
+<span class="nc" id="L15">  private val cacheRoomMemberPayload = createCache().asInstanceOf[Cache[String, RoomMemberPayload]]</span>
+
+  /**
+    *
+    * RoomMember
+    *
+    */
+  def roomAnnounce(roomId: String): String
+
+  def roomAnnounce(roomId: String, text: String): Unit
+
+  def roomMemberList(roomId: String): Array[String]
+
+  protected def roomMemberRawPayload(roomId: String, contactId: String): RoomMemberPayload
+
+  /**
+    * Concat roomId &amp; contactId to one string
+    */
+  private def cacheKeyRoomMember (roomId    : String, contactId : String): String ={
+<span class="nc" id="L34">    contactId + &quot;@@@&quot; + roomId</span>
+  }
+
+  def roomMemberPayloadDirty (roomId: String): Unit =  {
+<span class="nc" id="L38">    val contactIdList = this.roomMemberList(roomId)</span>
+<span class="nc" id="L39">    contactIdList.foreach(contactId =&gt; {</span>
+<span class="nc" id="L40">      val cacheKey = this.cacheKeyRoomMember(roomId, contactId)</span>
+<span class="nc" id="L41">      this.cacheRoomMemberPayload.invalidate(cacheKey)</span>
+    })
+  }
+
+  def roomMemberPayload ( roomId    : String, memberId : String): RoomMemberPayload = {
+
+<span class="nc bnc" id="L47" title="All 4 branches missed.">    if (isBlank(roomId)|| isBlank(memberId)) {</span>
+<span class="nc" id="L48">      throw new Error(&quot;roomId or memberId is blank&quot;)</span>
+    }
+
+    /**
+      * 1. Try to get from cache
+      */
+<span class="nc" id="L54">    val CACHE_KEY     = this.cacheKeyRoomMember(roomId, memberId)</span>
+<span class="nc" id="L55">    val cachedPayload = this.cacheRoomMemberPayload.getIfPresent(CACHE_KEY)</span>
+
+<span class="nc bnc" id="L57" title="All 2 branches missed.">    if (cachedPayload != null) {</span>
+<span class="nc" id="L58">      return cachedPayload</span>
+    }
+
+    /**
+      * 2. Cache not found
+      */
+<span class="nc" id="L64">    val rawPayload = this.roomMemberRawPayload(roomId, memberId)</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">    if (rawPayload == null) {</span>
+<span class="nc" id="L66">      throw new Error(&quot;contact(&quot; + memberId + &quot;) is not in the Room(&quot; + roomId + &quot;)&quot;)</span>
+    }
+<span class="nc" id="L68">    this.cacheRoomMemberPayload.put(CACHE_KEY, rawPayload)</span>
+<span class="nc" id="L69">    rawPayload</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RoomSupport.scala</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">wechaty-puppet</a> &gt; <a href="index.source.html" class="el_package">wechaty.puppet.support</a> &gt; <span class="el_source">RoomSupport.scala</span></div><h1>RoomSupport.scala</h1><pre class="source lang-java linenums">package wechaty.puppet.support
+
+import com.github.benmanes.caffeine.cache.Cache
+import wechaty.puppet.{Puppet, ResourceBox}
+import wechaty.puppet.schemas.Puppet
+import wechaty.puppet.schemas.Room.RoomPayload
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-06
+  */
+<span class="nc" id="L13">trait RoomSupport {</span>
+  self:Puppet =&gt;
+<span class="nc" id="L15">  private val cacheRoomPayload = createCache().asInstanceOf[Cache[String, RoomPayload]]</span>
+
+  def roomAdd(roomId: String, contactId: String): Unit
+
+  def roomAvatar (roomId: String):ResourceBox
+
+  def roomCreate(contactIdList: Array[String], topic: String): String
+
+  def roomDel(roomId: String, contactId: String): Unit
+
+  def roomList(): Array[String]
+
+  def roomQRCode(roomId: String): String
+
+  def roomQuit(roomId: String): Unit
+
+  def roomTopic(roomId: String): String
+
+  def roomTopic(roomId: String, topic: String): Unit
+
+  protected def roomRawPayload(roomId: String): RoomPayload
+  def roomPayload ( roomId: String): RoomPayload =  {
+
+<span class="nc bnc" id="L38" title="All 2 branches missed.">    if (Puppet.isBlank(roomId)) {</span>
+<span class="nc" id="L39">      throw new Error(&quot;no room id&quot;)</span>
+    }
+
+    /**
+      * 1. Try to get from cache first
+      */
+<span class="nc" id="L45">    val cachedPayload = cacheRoomPayload.getIfPresent(roomId)</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">    if (cachedPayload != null) {</span>
+<span class="nc" id="L47">      return cachedPayload</span>
+    }
+
+    /**
+      * 2. Cache not found
+      */
+<span class="nc" id="L53">    val rawPayload = this.roomRawPayload(roomId)</span>
+
+<span class="nc" id="L55">    this.cacheRoomPayload.put(roomId, rawPayload)</span>
+<span class="nc" id="L56">    rawPayload</span>
+  }
+  def roomPayloadDirty (roomId: String): Unit ={
+<span class="nc" id="L59">    this.cacheRoomPayload.invalidate(roomId)</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
