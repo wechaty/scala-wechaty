@@ -48,17 +48,20 @@
         <artifactId>maven-dependency-plugin</artifactId>
       </plugin>
       <plugin>
-      <groupId>com.spotify</groupId>
-      <artifactId>dockerfile-maven-plugin</artifactId>
+        <groupId>com.spotify</groupId>
+        <artifactId>dockerfile-maven-plugin</artifactId>
+        <!--
         <executions>
           <execution>
             <id>default</id>
+            <phase>verify</phase>
             <goals>
               <goal>build</goal>
               <goal>push</goal>
             </goals>
           </execution>
         </executions>
+        -->
         <configuration>
           <repository>docker.pkg.github.com/wechaty/scala-wechaty/ding-dong-bot</repository>
           <tag>${project.version}</tag>

@@ -1,12 +1,14 @@
 package wechaty.user
 
 import io.github.wechaty.grpc.PuppetGrpc
+import io.github.wechaty.grpc.puppet.Event.{EventResponse, EventType}
 import io.github.wechaty.grpc.puppet.Message.{MessagePayloadResponse, MessageType}
 import io.github.wechaty.grpc.puppet.Room.RoomPayloadResponse
-import org.grpcmock.GrpcMock.{stubFor, unaryMethod}
+import org.grpcmock.GrpcMock._
 import org.junit.jupiter.api.{Assertions, BeforeEach, Test}
 import wechaty.TestBase
 import wechaty.puppet.schemas.Event.{EventMessagePayload, EventRoomJoinPayload, EventRoomLeavePayload, EventRoomTopicPayload}
+import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.Puppet.PuppetEventName
 
 /**
@@ -37,22 +39,23 @@ class RoomTest extends TestBase{
       .setType(MessageType.MESSAGE_TYPE_TEXT)
       .setRoomId(roomId)
       .build()
-    val response2 = MessagePayloadResponse.newBuilder()
-      .setText("testMessage")
-      .setType(MessageType.MESSAGE_TYPE_TEXT)
-      .setRoomId("roomId2")
-      .build()
     stubFor(unaryMethod(PuppetGrpc.getMessagePayloadMethod)
-      .willReturn(response)
-      .nextWillReturn(response2) )
+      .willReturn(response))
+
+    val payload = new EventMessagePayload
+    payload.messageId=messageId
+    val eventResponse = EventResponse.newBuilder()
+    eventResponse.setType(EventType.EVENT_TYPE_MESSAGE)
+    eventResponse.setPayload(Puppet.objectMapper.writeValueAsString(payload))
+    //mock event
+    stubFor(serverStreamingMethod(PuppetGrpc.getEventMethod()).willReturn(Array(eventResponse.build()):_*))
+
 
     var reachFlag = false
     room.onMessage(message=>{
       reachFlag = true
     })
 
-    val payload = new EventMessagePayload
-    payload.messageId=messageId
     instance.puppet.emit(PuppetEventName.MESSAGE,payload)
     Assertions.assertTrue(reachFlag)
   }
