@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ContactSelfRawSupport.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty-hostie_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.hostie.support</a> &gt; <span class="el_source">ContactSelfRawSupport.scala</span></div><h1>ContactSelfRawSupport.scala</h1><pre class="source lang-java linenums">package wechaty.hostie.support
+
+import io.github.wechaty.grpc.puppet.Contact
+import wechaty.puppet.Puppet
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-06
+  */
+<span class="fc" id="L11">trait ContactSelfRawSupport {</span>
+  self: Puppet with GrpcSupport =&gt;
+  /**
+    *
+    * ContactSelf
+    *
+    */
+  override def contactSelfName(name: String): Unit = {
+<span class="nc" id="L19">    val request = Contact.ContactSelfNameRequest.newBuilder()</span>
+<span class="nc" id="L20">      .setName(name)</span>
+      .build()
+<span class="nc" id="L22">    grpcClient.contactSelfName(request)</span>
+  }
+
+  override def contactSelfQRCode(): String = {
+<span class="nc" id="L26">    val request = Contact.ContactSelfQRCodeRequest.newBuilder().build()</span>
+
+<span class="nc" id="L28">    val contactSelfQRCode = grpcClient.contactSelfQRCode(request)</span>
+<span class="nc" id="L29">    contactSelfQRCode.getQrcode</span>
+  }
+
+  override def contactSelfSignature(signature: String): Unit = {
+<span class="nc" id="L33">    val request = Contact.ContactSelfSignatureRequest.newBuilder()</span>
+<span class="nc" id="L34">      .setSignature(signature)</span>
+      .build()
+
+<span class="nc" id="L37">    grpcClient.contactSelfSignature(request)</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

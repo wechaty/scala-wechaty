@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContactSupport.scala</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">wechaty-puppet_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.puppet.support</a> &gt; <span class="el_source">ContactSupport.scala</span></div><h1>ContactSupport.scala</h1><pre class="source lang-java linenums">package wechaty.puppet.support
+
+import com.github.benmanes.caffeine.cache.Cache
+import wechaty.puppet.schemas.Contact.ContactPayload
+import wechaty.puppet.schemas.Puppet
+import wechaty.puppet.{LoggerSupport, Puppet, ResourceBox}
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-03
+  */
+<span class="nc" id="L13">trait ContactSupport {</span>
+  self: Puppet with LoggerSupport =&gt;
+<span class="nc" id="L15">  private val cacheContactPayload = createCache().asInstanceOf[Cache[String, ContactPayload]]</span>
+
+  /**
+    *
+    * Contact
+    *
+    */
+  def contactAlias(contactId: String): String
+
+  def contactAlias(contactId: String, alias: String): Unit
+
+  def contactAvatar (contactId: String)                : ResourceBox
+  def contactAvatar (contactId: String, file: ResourceBox) : ResourceBox
+
+  def contactList(): Array[String]
+
+  def contactPayload(contactId: String): ContactPayload = {
+<span class="nc bnc" id="L32" title="All 2 branches missed.">    if (Puppet.isBlank(contactId)) {</span>
+<span class="nc" id="L33">      throw new IllegalArgumentException(&quot;contact id is blank!&quot;)</span>
+    }
+
+    /**
+      * 1. Try to get from cache first
+      */
+<span class="nc" id="L39">    val cachedPayload = this.cacheContactPayload.getIfPresent(contactId)</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">    if (cachedPayload != null) {</span>
+<span class="nc" id="L41">      return cachedPayload</span>
+    }
+
+    /**
+      * 2. Cache not found
+      */
+<span class="nc" id="L47">    val payload = this.contactRawPayload(contactId)</span>
+
+<span class="nc" id="L49">    cacheContactPayload.put(contactId, payload)</span>
+<span class="nc" id="L50">    info(&quot;Puppet contactPayload({}) cache SET&quot;, contactId)</span>
+
+<span class="nc" id="L52">    payload</span>
+  }
+  def contactPayloadDirty (contactId: String): Unit ={
+<span class="nc" id="L55">    debug(&quot;Puppet contactPayloadDirty({})&quot;, contactId)</span>
+<span class="nc" id="L56">    this.cacheContactPayload.invalidate(contactId)</span>
+  }
+
+  /**
+    * contact
+    */
+  protected def contactRawPayload(contactId: String): ContactPayload
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

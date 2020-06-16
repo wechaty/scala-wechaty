@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>SchemaGenerator.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.puppet.schemas</a> &gt; <span class="el_source">SchemaGenerator.scala</span></div><h1>SchemaGenerator.scala</h1><pre class="source lang-java linenums">package wechaty.puppet.schemas
+
+import java.io.{File, FileFilter, PrintWriter}
+
+import scala.io.Source
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-05
+  */
+<span class="nc" id="L12">object SchemaGenerator {</span>
+<span class="nc" id="L13">  val fileNameReg=&quot;(\\w+)\\-*(\\w*)\\.ts&quot;.r</span>
+<span class="nc" id="L14">  val classReg = &quot;(export)\\s+(interface)\\s+(\\w+)\\s*\\{&quot;.r</span>
+<span class="nc" id="L15">  val typeReg = &quot;(export)\\s+(type)\\s+(\\w+)\\s*=\\s*([^$]+)&quot;.r</span>
+<span class="nc" id="L16">  val enumReg = &quot;(export)\\s+(enum)\\s+(\\w+)\\s*\\{&quot;.r</span>
+<span class="nc" id="L17">  val enumFieldReg= &quot;(\\s*)(\\w+)\\s*=\\s*([^,]+),*([^$]*)&quot;.r</span>
+<span class="nc" id="L18">  val fieldReg= &quot;(\\s*)(\\w+)\\?*\\s*:\\s*([^,]+),*([^$]*)&quot;.r</span>
+<span class="nc" id="L19">  val jsTypeReg=&quot;(\\w+)([\\s\\|\\w]*)&quot;.r</span>
+  def main(args: Array[String]): Unit = {
+<span class="nc" id="L21">    println(args(0))</span>
+<span class="nc" id="L22">    val dir = new File(args(0))</span>
+<span class="nc" id="L23">    dir.listFiles(new FileFilter {</span>
+      override def accept(pathname: File): Boolean = {
+<span class="nc bnc" id="L25" title="All 8 branches missed.">        pathname.isFile &amp;&amp; pathname.getName != &quot;puppet.ts&quot;</span>
+      }
+<span class="nc" id="L27">    }).foreach(f=&gt;{</span>
+<span class="nc" id="L28">      println(f.getName)</span>
+<span class="nc" id="L29">      val filename = f.getName match{</span>
+<span class="nc bnc" id="L30" title="All 6 branches missed.">        case fileNameReg(firstName,secondName) =&gt;</span>
+<span class="nc" id="L31">          val prefix=firstName.toCharArray</span>
+<span class="nc" id="L32">          prefix(0)=prefix(0).toUpper</span>
+<span class="nc" id="L33">          val suffix=secondName.toCharArray</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">          if(suffix.length &gt; 0)</span>
+<span class="nc" id="L35">            suffix(0)=suffix(0).toUpper</span>
+<span class="nc" id="L36">          new String(prefix)+new String(suffix)</span>
+        case other =&gt;
+<span class="nc" id="L38">          throw new IllegalStateException(&quot;wrong filename&quot;)</span>
+      }
+
+<span class="nc" id="L41">      val fileWriter = new PrintWriter(new File(&quot;wechaty-puppet/src/main/scala/wechaty/puppet/schemas/&quot;+filename+&quot;.scala&quot;))</span>
+//      val fileWriter = new PrintWriter(new File(filename+&quot;.scala&quot;))
+
+<span class="nc" id="L44">      fileWriter.println(&quot;package wechaty.puppet.schemas&quot;)</span>
+<span class="nc" id="L45">      fileWriter.print(&quot;object &quot;)</span>
+<span class="nc" id="L46">      fileWriter.print(filename)</span>
+<span class="nc" id="L47">      fileWriter.println(&quot; {&quot;)</span>
+
+<span class="nc" id="L49">      Source.fromFile(f).getLines().foreach {</span>
+<span class="nc bnc" id="L50" title="All 6 branches missed.">        case classReg(_, _, className) =&gt;</span>
+<span class="nc" id="L51">          fileWriter.print(&quot;class &quot;)</span>
+<span class="nc" id="L52">          fileWriter.print(className)</span>
+<span class="nc" id="L53">          fileWriter.println(&quot; {&quot;)</span>
+//          println(className)
+<span class="nc bnc" id="L55" title="All 6 branches missed.">        case typeReg(_, _, typeName,func) =&gt;</span>
+<span class="nc" id="L56">          fileWriter.print(&quot;type &quot;)</span>
+<span class="nc" id="L57">          fileWriter.print(typeName)</span>
+<span class="nc" id="L58">          fileWriter.print(&quot; = &quot;)</span>
+<span class="nc" id="L59">          fileWriter.println(func)</span>
+<span class="nc" id="L60">          println(typeName,func)</span>
+<span class="nc bnc" id="L61" title="All 6 branches missed.">        case enumReg(_, _, enumName) =&gt;</span>
+<span class="nc" id="L62">          fileWriter.print(&quot;object &quot;)</span>
+<span class="nc" id="L63">          fileWriter.print(enumName)</span>
+<span class="nc" id="L64">          fileWriter.println(&quot; extends Enumeration {&quot;)</span>
+<span class="nc" id="L65">          fileWriter.println(&quot; type Type = Value&quot;)</span>
+<span class="nc" id="L66">          println(enumName)</span>
+<span class="nc bnc" id="L67" title="All 6 branches missed.">        case enumFieldReg(space,fieldName,value,comment) =&gt;</span>
+<span class="nc" id="L68">          fileWriter.print(space)</span>
+<span class="nc" id="L69">          fileWriter.print(&quot;val &quot;)</span>
+<span class="nc" id="L70">          fileWriter.print(fieldName)</span>
+<span class="nc" id="L71">          fileWriter.print(&quot;:Type&quot;)</span>
+<span class="nc" id="L72">          fileWriter.print(&quot; =  Value(&quot;)</span>
+<span class="nc" id="L73">          fileWriter.print(value)</span>
+<span class="nc" id="L74">          fileWriter.print(&quot;)&quot;)</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">          if(comment.length &gt; 0) {</span>
+<span class="nc" id="L76">            fileWriter.print(&quot; // &quot;)</span>
+<span class="nc" id="L77">            fileWriter.print(comment)</span>
+          }
+<span class="nc" id="L79">          fileWriter.println()</span>
+<span class="nc bnc" id="L80" title="All 6 branches missed.">        case fieldReg(space,name, jsType,comment) =&gt;</span>
+<span class="nc" id="L81">          fileWriter.print(space)</span>
+<span class="nc" id="L82">          fileWriter.print(&quot;var &quot;)</span>
+<span class="nc" id="L83">          fileWriter.print(name)</span>
+<span class="nc" id="L84">          fileWriter.print(&quot;:&quot;)</span>
+<span class="nc" id="L85">          jsType match{</span>
+<span class="nc bnc" id="L86" title="All 6 branches missed.">            case jsTypeReg(firstType,_) =&gt;</span>
+<span class="nc" id="L87">              val arr = firstType.toCharArray</span>
+<span class="nc" id="L88">              arr(0)=arr(0).toUpper</span>
+<span class="nc" id="L89">              fileWriter.print(new String(arr))</span>
+            case other=&gt;
+<span class="nc" id="L91">              fileWriter.print(other.replaceAll(&quot;string\\[\\]&quot;,&quot;Array[String]&quot;))</span>
+          }
+<span class="nc" id="L93">          fileWriter.print(&quot; = _&quot;)</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">          if(comment.length &gt; 0) {</span>
+<span class="nc" id="L95">            fileWriter.print(&quot; // &quot;)</span>
+<span class="nc" id="L96">            fileWriter.print(comment)</span>
+          }
+<span class="nc" id="L98">          fileWriter.println()</span>
+<span class="nc" id="L99">          println(name,jsType,comment)</span>
+        case other =&gt;
+<span class="nc" id="L101">          fileWriter.println(other)</span>
+      }
+
+<span class="nc" id="L104">      fileWriter.println(&quot; } &quot;)</span>
+<span class="nc" id="L105">      fileWriter.flush()</span>
+<span class="nc" id="L106">      fileWriter.close()</span>
+    })
+  }
+<span class="nc" id="L109">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

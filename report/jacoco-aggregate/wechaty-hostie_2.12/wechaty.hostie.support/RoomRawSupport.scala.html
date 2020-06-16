@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>RoomRawSupport.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty-hostie_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.hostie.support</a> &gt; <span class="el_source">RoomRawSupport.scala</span></div><h1>RoomRawSupport.scala</h1><pre class="source lang-java linenums">package wechaty.hostie.support
+
+import java.util
+
+import com.google.protobuf.StringValue
+import io.github.wechaty.grpc.puppet.Room
+import io.github.wechaty.grpc.puppet.Room.RoomAvatarRequest
+import wechaty.puppet.ResourceBox
+import wechaty.puppet.schemas.Room.RoomPayload
+import wechaty.puppet.support.RoomSupport
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-06
+  */
+<span class="fc" id="L17">trait RoomRawSupport {</span>
+  self: RoomSupport with GrpcSupport =&gt;
+  override def roomAdd(roomId: String, contactId: String): Unit = {
+<span class="nc" id="L20">    val request = Room.RoomAddRequest.newBuilder()</span>
+<span class="nc" id="L21">      .setContactId(contactId)</span>
+<span class="nc" id="L22">      .setId(roomId)</span>
+      .build()
+
+<span class="nc" id="L25">    grpcClient.roomAdd(request)</span>
+  }
+
+  override def roomAvatar(roomId: String): ResourceBox = {
+<span class="nc" id="L29">    val request = RoomAvatarRequest.newBuilder()</span>
+<span class="nc" id="L30">    request.setId(roomId)</span>
+<span class="nc" id="L31">    val response = this.grpcClient.roomAvatar(request.build())</span>
+<span class="nc" id="L32">    val jsonText = response.getFilebox</span>
+<span class="nc" id="L33">    ResourceBox.fromJson(jsonText)</span>
+  }
+
+  override def roomCreate(contactIdList: Array[String], topic: String): String = {
+<span class="nc" id="L37">    val request = Room.RoomCreateRequest.newBuilder()</span>
+<span class="nc" id="L38">      .setTopic(topic)</span>
+<span class="nc" id="L39">      .addAllContactIds(util.Arrays.asList(contactIdList: _*))</span>
+      .build()
+
+<span class="nc" id="L42">    val response = grpcClient.roomCreate(request)</span>
+<span class="nc" id="L43">    response.getId</span>
+  }
+
+  override def roomDel(roomId: String, contactId: String): Unit = {
+<span class="nc" id="L47">    val request = Room.RoomDelRequest.newBuilder()</span>
+<span class="nc" id="L48">      .setId(roomId)</span>
+<span class="nc" id="L49">      .setContactId(contactId)</span>
+      .build()
+
+<span class="nc" id="L52">    grpcClient.roomDel(request)</span>
+  }
+
+  override def roomList(): Array[String] = {
+<span class="nc" id="L56">    val request = Room.RoomListRequest.newBuilder().build()</span>
+
+<span class="nc" id="L58">    val response = grpcClient.roomList(request)</span>
+<span class="nc" id="L59">    response.getIdsList.toArray(Array[String]())</span>
+  }
+
+  override def roomQRCode(roomId: String): String = {
+<span class="nc" id="L63">    val request = Room.RoomQRCodeRequest.newBuilder()</span>
+<span class="nc" id="L64">      .setId(roomId)</span>
+      .build()
+
+<span class="nc" id="L67">    val response = grpcClient.roomQRCode(request)</span>
+<span class="nc" id="L68">    response.getQrcode</span>
+  }
+
+  override def roomQuit(roomId: String): Unit = {
+<span class="nc" id="L72">    val request = Room.RoomQuitRequest.newBuilder()</span>
+<span class="nc" id="L73">      .setId(roomId)</span>
+      .build()
+
+<span class="nc" id="L76">    grpcClient.roomQuit(request)</span>
+  }
+
+  override def roomTopic(roomId: String): String = {
+<span class="nc" id="L80">    val request = Room.RoomTopicRequest.newBuilder()</span>
+<span class="nc" id="L81">      .setId(roomId)</span>
+      .build()
+
+<span class="nc" id="L84">    val response = grpcClient.roomTopic(request)</span>
+<span class="nc" id="L85">    response.getTopic.getValue</span>
+  }
+
+  override def roomTopic(roomId: String, topic: String): Unit = {
+<span class="nc" id="L89">    val value = StringValue.newBuilder().setValue(topic)</span>
+
+<span class="nc" id="L91">    val request = Room.RoomTopicRequest.newBuilder()</span>
+<span class="nc" id="L92">      .setId(roomId)</span>
+<span class="nc" id="L93">      .setTopic(value)</span>
+      .build()
+
+<span class="nc" id="L96">    grpcClient.roomTopic(request)</span>
+  }
+
+  override protected def roomRawPayload(roomId: String): RoomPayload = {
+<span class="fc" id="L100">    val request = Room.RoomPayloadRequest.newBuilder()</span>
+<span class="fc" id="L101">      .setId(roomId)</span>
+      .build()
+
+<span class="fc" id="L104">    val response = grpcClient.roomPayload(request)</span>
+<span class="fc" id="L105">    val payload = new RoomPayload</span>
+
+<span class="fc" id="L107">    payload.id = response.getId</span>
+<span class="fc" id="L108">    payload.adminIdList = response.getAdminIdsList.toArray(Array[String]())</span>
+<span class="fc" id="L109">    payload.avatar = response.getAvatar</span>
+<span class="fc" id="L110">    payload.memberIdList = response.getMemberIdsList().toArray(Array[String]())</span>
+<span class="fc" id="L111">    payload.ownerId = response.getOwnerId</span>
+<span class="fc" id="L112">    payload.topic = response.getTopic</span>
+<span class="fc" id="L113">    payload</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

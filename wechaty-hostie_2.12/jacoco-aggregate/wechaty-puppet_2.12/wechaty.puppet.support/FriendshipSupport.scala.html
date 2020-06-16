@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>FriendshipSupport.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">wechaty-hostie_2.12</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.puppet.support</a> &gt; <span class="el_source">FriendshipSupport.scala</span></div><h1>FriendshipSupport.scala</h1><pre class="source lang-java linenums">package wechaty.puppet.support
+
+import com.github.benmanes.caffeine.cache.Cache
+import wechaty.puppet.Puppet
+import wechaty.puppet.schemas.Friendship.FriendshipPayload
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-06
+  */
+<span class="nc" id="L12">trait FriendshipSupport {</span>
+  self : Puppet =&gt;
+<span class="nc" id="L14">  private val cacheFriendshipPayload = createCache().asInstanceOf[Cache[String, FriendshipPayload]]</span>
+
+  /**
+    *
+    * Friendship
+    *
+    */
+  def friendshipAccept(friendshipId: String): Unit
+
+  def friendshipAdd(contactId: String, hello: String): Unit
+
+  def friendshipSearchPhone(phone: String): String
+
+  def friendshipSearchWeixin(weixin: String): String
+
+  protected def friendshipRawPayload(friendshipId: String): FriendshipPayload
+
+<span class="nc" id="L31">  def friendshipPayload (friendshipId : String, newPayloadOpt  : Option[FriendshipPayload] = None): FriendshipPayload = {</span>
+<span class="nc" id="L32">    newPayloadOpt match {</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">      case Some(newPayload) =&gt;</span>
+<span class="nc" id="L34">        cacheFriendshipPayload.put(friendshipId, newPayload)</span>
+<span class="nc" id="L35">        newPayload</span>
+      case _ =&gt;
+
+        /**
+          * 1. Try to get from cache first
+          */
+<span class="nc" id="L41">        val cachedPayload = this.cacheFriendshipPayload.getIfPresent(friendshipId)</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (cachedPayload != null) {</span>
+<span class="nc" id="L43">          cachedPayload</span>
+        }
+        else {
+          /**
+            * 2. Cache not found
+            */
+<span class="nc" id="L49">          val rawPayload = friendshipRawPayload(friendshipId)</span>
+<span class="nc" id="L50">          this.cacheFriendshipPayload.put(friendshipId, rawPayload)</span>
+<span class="nc" id="L51">          rawPayload</span>
+        }
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

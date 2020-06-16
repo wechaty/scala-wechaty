@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Message.scala</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">wechaty_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.user</a> &gt; <span class="el_source">Message.scala</span></div><h1>Message.scala</h1><pre class="source lang-java linenums">package wechaty.user
+
+import java.util.Date
+
+import wechaty.Wechaty.PuppetResolver
+import wechaty.helper.ImplicitHelper._
+import wechaty.puppet.schemas.Message.MessageType
+import wechaty.puppet.schemas.Puppet._
+import wechaty.puppet.schemas.Puppet
+import wechaty.puppet.{ResourceBox, schemas}
+
+
+/**
+  * wrap MessagePayload
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-02
+  */
+<span class="fc" id="L18">class Message(messageId:String)(implicit resolver: PuppetResolver) {</span>
+<span class="fc" id="L19">  private val MENTION_MEMBER_PATTERN= (&quot;@([^\u2005^\u0020^$]+)&quot;)</span>
+<span class="pc bpc" id="L20" title="1 of 4 branches missed.">  lazy val payload: schemas.Message.MessagePayload = {</span>
+<span class="fc" id="L21">    resolver</span>
+      .puppet
+<span class="fc" id="L23">      .messagePayload(messageId)</span>
+  }
+  private def sayId: String ={
+<span class="nc bnc" id="L26" title="All 2 branches missed.">    if(!Puppet.isBlank(payload.roomId)) payload.roomId</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">    else if(!Puppet.isBlank(payload.fromId)) payload.fromId</span>
+<span class="nc" id="L28">    else throw new IllegalStateException(&quot;roomid and fromid both is null&quot;)</span>
+  }
+
+  override def toString: String = {
+<span class="nc bnc" id="L32" title="All 2 branches missed.">    if(payload != null) payload.text</span>
+<span class="nc" id="L33">    else &quot;Message&quot;</span>
+  }
+  def talker:Contact ={
+<span class="nc" id="L36">    this.from</span>
+  }
+
+  def conversation : Conversation = {
+<span class="nc" id="L40">    room match{</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">      case Some(r) =&gt; r</span>
+<span class="nc" id="L42">      case _ =&gt; this.from</span>
+    }
+  }
+  private def assertPayload(): Unit ={
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">    if (this.payload == null) {</span>
+<span class="nc" id="L47">      throw new Error(&quot;no payload&quot;)</span>
+    }
+  }
+
+  def from: Contact ={
+<span class="nc" id="L52">    assertPayload()</span>
+<span class="nc" id="L53">    val fromId = this.payload.fromId</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">    if (Puppet.isBlank(fromId)) null</span>
+<span class="nc" id="L55">    else new Contact(fromId)</span>
+  }
+
+  def to : Contact ={
+<span class="nc" id="L59">    assertPayload()</span>
+
+<span class="nc" id="L61">    val toId = this.payload.toId</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">    if (Puppet.isBlank(toId)) null</span>
+<span class="nc" id="L63">    else new Contact(toId)</span>
+  }
+
+  def room:Option[Room] ={
+<span class="fc" id="L67">    assertPayload()</span>
+<span class="fc" id="L68">    val roomId = this.payload.roomId</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">    if (isBlank(roomId)) None</span>
+<span class="fc" id="L70">    else Room.load(roomId)</span>
+  }
+
+
+  def text : String ={
+<span class="fc" id="L75">    assertPayload()</span>
+<span class="fc" id="L76">    this.payload.text</span>
+  }
+
+  def toRecalled: Message= {
+<span class="nc bnc" id="L80" title="All 6 branches missed.">    if (this.`type` != MessageType.Recalled) {</span>
+<span class="nc" id="L81">      throw new Error(&quot;Can not call toRecalled() on message which is not recalled type.&quot;)</span>
+    }
+<span class="nc" id="L83">    val originalMessageId = this.text</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">    if (originalMessageId == null) {</span>
+<span class="nc" id="L85">      throw new Error(&quot;Can not find recalled message&quot;)</span>
+    }
+<span class="nc" id="L87">    new Message(originalMessageId)</span>
+  }
+
+  def say(text:String): Message = {
+<span class="nc" id="L91">    resolver.puppet.messageSendText(sayId,text)</span>
+  }
+  def say(contact: Contact): Message = {
+<span class="nc" id="L94">    resolver.puppet.messageSendContact(sayId,contact.id)</span>
+  }
+  def say(resourceBox:ResourceBox): Message ={
+<span class="nc" id="L97">    resolver.puppet.messageSendFile(sayId,resourceBox)</span>
+  }
+  def say(urlLink: UrlLink) :Message = {
+<span class="nc" id="L100">    resolver.puppet.messageSendUrl(sayId,urlLink.payload)</span>
+  }
+  def say(mp:MiniProgram) :Message = {
+<span class="nc" id="L103">    resolver.puppet.messageSendMiniProgram(</span>
+<span class="nc" id="L104">      sayId,</span>
+<span class="nc" id="L105">      mp.payload,</span>
+    )
+  }
+
+  def recall (): Boolean = {
+<span class="nc" id="L110">    resolver.puppet.messageRecall(messageId)</span>
+  }
+  def `type`: MessageType.Type={
+<span class="fc" id="L113">    assertPayload()</span>
+<span class="fc" id="L114">    this.payload.`type`</span>
+  }
+
+  def self (): Boolean = {
+<span class="nc" id="L118">    val userIdOpt = resolver.puppet.selfIdOpt()</span>
+<span class="nc" id="L119">    userIdOpt match{</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">      case Some(userId) =&gt;</span>
+<span class="nc" id="L121">        val from = this.from</span>
+<span class="nc bnc" id="L122" title="All 8 branches missed.">        from != null &amp;&amp; from.id == userId</span>
+      case _ =&gt;
+<span class="nc" id="L124">        false</span>
+    }
+  }
+
+  def mentionList: Array[Contact]= {
+<span class="fc" id="L129">    val room = this.room</span>
+<span class="pc bpc" id="L130" title="5 of 8 branches missed.">    if (this.`type` != MessageType.Text || room == null) {</span>
+<span class="nc" id="L131">      return Array()</span>
+    }
+
+    /**
+      * Use mention list if mention list is available
+      * otherwise, process the message and get the mention list
+      */
+<span class="pc bpc" id="L138" title="3 of 6 branches missed.">    if (this.payload != null &amp;&amp; this.payload.mentionIdList != null &amp;&amp; this.payload.mentionIdList.length &gt; 0) {</span>
+<span class="nc" id="L139">      this.payload.mentionIdList.map(new Contact(_))</span>
+    } else {
+<span class="fc" id="L141">      val reg = MENTION_MEMBER_PATTERN.r</span>
+<span class="fc" id="L142">      val it = reg.findAllMatchIn(text)</span>
+<span class="fc" id="L143">      it.map(_.group(1)).map(new Contact(_)).toArray</span>
+
+    }
+  }
+
+  def mentionText (): String= {
+<span class="fc" id="L149">    val text = this.text</span>
+<span class="fc" id="L150">    val room = this.room</span>
+
+<span class="fc" id="L152">    val list = this.mentionList</span>
+
+<span class="pc bpc" id="L154" title="3 of 6 branches missed.">    if (room.isEmpty || list == null || list.length == 0) {</span>
+<span class="nc" id="L155">      return text</span>
+    }
+
+<span class="fc" id="L158">    val toAliasName = (member: Contact) =&gt; {</span>
+<span class="fc" id="L159">      room.get.alias(member).getOrElse(member.name)</span>
+    }
+
+<span class="fc" id="L162">    val mentionNameList = list.map(toAliasName)</span>
+
+<span class="fc" id="L164">    val textWithoutMention = mentionNameList.foldLeft(text)((prev, cur) =&gt; {</span>
+<span class="fc" id="L165">      val escapedCur = cur</span>
+<span class="fc" id="L166">      val regex = &quot;@\\Q&quot;+escapedCur+&quot;\\E(\\u2005|\\u0020|$)&quot;</span>
+<span class="fc" id="L167">      prev.replaceFirst(regex,&quot;&quot;)</span>
+    })
+
+<span class="fc" id="L170">    textWithoutMention.trim()</span>
+  }
+  def mentionSelf (): Boolean =  {
+<span class="nc" id="L173">    resolver.puppet.selfIdOpt() match{</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">      case Some(selfId) =&gt;</span>
+<span class="nc bnc" id="L175" title="All 6 branches missed.">        mentionList.exists(_.id == selfId)</span>
+<span class="nc" id="L176">      case _ =&gt;  false</span>
+    }
+  }
+  def forward (to: Conversation): Unit = {
+<span class="nc" id="L180">    resolver.puppet.messageForward(to.id, this.messageId)</span>
+  }
+  /**
+    * Message sent date
+    */
+  def date: Date ={
+<span class="nc" id="L186">    assertPayload()</span>
+<span class="nc" id="L187">    val timestamp = this.payload.timestamp</span>
+<span class="nc" id="L188">    timestampToDate(timestamp)</span>
+  }
+
+  /**
+    * Returns the message age in seconds. &lt;br&gt;
+    *
+    * For example, the message is sent at time `8:43:01`,
+    * and when we received it in Wechaty, the time is `8:43:15`,
+    * then the age() will return `8:43:15 - 8:43:01 = 14 (seconds)`
+    * @returns {number}
+    */
+  def age:Long={
+<span class="nc" id="L200">    val ageMilliseconds = System.currentTimeMillis() - this.date.getTime()</span>
+<span class="nc" id="L201">    val ageSeconds = Math.floor(ageMilliseconds / 1000)</span>
+<span class="nc" id="L202">    ageSeconds.longValue()</span>
+  }
+
+
+  /**
+    * Extract the Media File from the Message, and put it into the FileBox.
+    * &gt; Tips:
+    * This function is depending on the Puppet Implementation, see [puppet-compatible-table](https://github.com/wechaty/wechaty/wiki/Puppet#3-puppet-compatible-table)
+    *
+    * @returns {Promise&lt;FileBox&gt;}
+    *
+    * @example &lt;caption&gt;Save media file from a message&lt;/caption&gt;
+    * const fileBox = await message.toFileBox()
+    * const fileName = fileBox.name
+    * fileBox.toFile(fileName)
+    */
+  def toResourceBox (): ResourceBox= {
+<span class="nc bnc" id="L219" title="All 6 branches missed.">    if (this.`type` == MessageType.Text) {</span>
+<span class="nc" id="L220">    throw new Error(&quot;text message no file&quot;)</span>
+    }
+<span class="nc" id="L222">    resolver.puppet.messageFile(this.messageId)</span>
+  }
+  def toImage (): Image ={
+<span class="nc bnc" id="L225" title="All 6 branches missed.">    if (this.`type` != MessageType.Image) {</span>
+<span class="nc" id="L226">      throw new Error(&quot;not a image type message. type: &quot;+this.`type`)</span>
+    }
+<span class="nc" id="L228">    new Image(this.messageId)</span>
+  }
+
+  /**
+    * Get Share Card of the Message
+    * Extract the Contact Card from the Message, and encapsulate it into Contact class
+    * &gt; Tips:
+    * This function is depending on the Puppet Implementation, see [puppet-compatible-table](https://github.com/wechaty/wechaty/wiki/Puppet#3-puppet-compatible-table)
+    * @returns {Promise&lt;Contact&gt;}
+    */
+  def toContact (): Contact ={
+<span class="nc bnc" id="L239" title="All 6 branches missed.">    if (this.`type` != MessageType.Contact) {</span>
+<span class="nc" id="L240">      throw new Error(&quot;message not a ShareCard&quot;)</span>
+    }
+
+<span class="nc" id="L243">    val contactId = resolver.puppet.messageContact(this.messageId)</span>
+
+<span class="nc bnc" id="L245" title="All 2 branches missed.">    if (Puppet.isBlank(contactId)) {</span>
+<span class="nc" id="L246">    throw new Error(s&quot;can not get Contact id by message: ${contactId}&quot;)</span>
+    }
+
+<span class="nc" id="L249">    new Contact(contactId)</span>
+  }
+
+  def toUrlLink (): UrlLink= {
+<span class="nc" id="L253">    assertPayload()</span>
+<span class="nc bnc" id="L254" title="All 6 branches missed.">    if (this.`type` != MessageType.Url) {</span>
+<span class="nc" id="L255">      throw new Error(&quot;message not a Url Link&quot;)</span>
+    }
+
+<span class="nc" id="L258">    val urlPayload = resolver.puppet.messageUrl(this.messageId)</span>
+<span class="nc bnc" id="L259" title="All 2 branches missed.">    if (urlPayload == null) {</span>
+<span class="nc" id="L260">    throw new Error(s&quot;no url payload for message ${this.messageId}&quot;)</span>
+    }
+
+<span class="nc" id="L263">    new UrlLink(urlPayload)</span>
+  }
+
+  def toMiniProgram (): MiniProgram= {
+<span class="nc" id="L267">    assertPayload()</span>
+
+<span class="nc bnc" id="L269" title="All 6 branches missed.">    if (this.`type` != MessageType.MiniProgram) {</span>
+<span class="nc" id="L270">      throw new Error(&quot;message not a MiniProgram&quot;)</span>
+    }
+
+<span class="nc" id="L273">    val miniProgramPayload = resolver.puppet.messageMiniProgram(this.messageId)</span>
+
+<span class="nc bnc" id="L275" title="All 2 branches missed.">    if (miniProgramPayload == null) {</span>
+<span class="nc" id="L276">      throw new Error(s&quot;no miniProgram payload for message ${this.messageId}&quot;)</span>
+    }
+
+<span class="nc" id="L279">    new MiniProgram(miniProgramPayload)</span>
+  }
+<span class="fc" id="L281">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Image.scala</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">wechaty_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.user</a> &gt; <span class="el_source">Image.scala</span></div><h1>Image.scala</h1><pre class="source lang-java linenums">package wechaty.user
+
+import wechaty.Wechaty.PuppetResolver
+import wechaty.puppet.schemas.Image.ImageType
+import wechaty.puppet.{LoggerSupport, ResourceBox}
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-15
+  */
+<span class="nc" id="L12">class Image(imageId:String)(implicit resolver:PuppetResolver) extends LoggerSupport{</span>
+  def thumbnail : ResourceBox = {
+<span class="nc" id="L14">    resolver.puppet.messageImage(this.imageId, ImageType.Thumbnail)</span>
+  }
+  def hd: ResourceBox= {
+<span class="nc" id="L17">    resolver.puppet.messageImage(this.imageId, ImageType.HD)</span>
+  }
+  def artwork : ResourceBox =  {
+<span class="nc" id="L20">    resolver.puppet.messageImage(this.imageId, ImageType.Artwork)</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
