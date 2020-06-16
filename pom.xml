@@ -24,17 +24,17 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.ganshane.wechaty</groupId>
+        <groupId>io.github.wechaty</groupId>
         <artifactId>wechaty</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.ganshane.wechaty</groupId>
+        <groupId>io.github.wechaty</groupId>
         <artifactId>wechaty-puppet</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.ganshane.wechaty</groupId>
+        <groupId>io.github.wechaty</groupId>
         <artifactId>wechaty-hostie</artifactId>
         <version>${project.version}</version>
       </dependency>
