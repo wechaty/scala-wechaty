@@ -3,6 +3,7 @@ package wechaty
 import io.github.wechaty.grpc.puppet.Event.EventType
 import org.junit.jupiter.api.{Assertions, Test}
 import wechaty.puppet.schemas.Event.EventFriendshipPayload
+import wechaty.puppet.schemas.Puppet.PuppetEventName
 
 /**
   *
@@ -21,6 +22,9 @@ class WechatyTest extends TestBase {
       reach = true
       Assertions.assertEquals(payload.friendshipId,f.id)
     })
+
+    instance.puppet.emit(PuppetEventName.FRIENDSHIP,payload)
+
     Assertions.assertTrue(reach)
   }
 }
