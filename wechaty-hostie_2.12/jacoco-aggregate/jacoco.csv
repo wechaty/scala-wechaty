@@ -43,6 +43,7 @@ wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.,8,0,0,0,
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.BaseEventPayload,10,0,0,0,2,0,3,0,3,0
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.WechatMessageType.,192,0,0,0,24,0,25,0,25,0
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.MessagePayload,66,0,0,0,11,0,19,0,19,0
+wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.ScalaEnumerationSerializer,8,0,0,0,2,0,2,0,2,0
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Friendship.FriendshipSearchCondition,17,0,0,0,4,0,5,0,5,0
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Room.,8,0,0,0,2,0,2,0,2,0
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventFriendshipPayload,10,0,0,0,2,0,3,0,3,0

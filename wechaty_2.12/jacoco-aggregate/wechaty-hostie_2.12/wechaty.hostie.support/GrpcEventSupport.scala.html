@@ -25,12 +25,12 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
 <span class="fc" id="L25">        emit(PuppetEventName.HEARTBEAT, hearbeat)</span>
       }
 <span class="pc" id="L27">      v.getType match {</span>
-<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        case EventType.EVENT_TYPE_UNSPECIFIED =&gt;</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        case EventType.EVENT_TYPE_UNSPECIFIED =&gt;</span>
 <span class="fc" id="L29">          error(&quot;PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_UNSPECIFIED &quot;)</span>
         case other =&gt;
-<span class="nc" id="L31">          val payload = processEvent(other, v.getPayload)</span>
-<span class="nc" id="L32">          val eventName = Puppet.pbEventType2PuppetEventName.getOrElse(other, throw new IllegalAccessException(&quot;unsupport event &quot; + other))</span>
-<span class="nc" id="L33">          emit(eventName, payload)</span>
+<span class="fc" id="L31">          val payload = processEvent(other, v.getPayload)</span>
+<span class="pc" id="L32">          val eventName = Puppet.pbEventType2PuppetEventName.getOrElse(other, throw new IllegalAccessException(&quot;unsupport event &quot; + other))</span>
+<span class="fc" id="L33">          emit(eventName, payload)</span>
       }
     } catch {
       case e: Throwable =&gt;
@@ -39,40 +39,40 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
   }
 
   private def processEvent(eventType: EventType, data: String): EventPayload = {
-<span class="nc" id="L42">    debug(&quot;receive event:{},data:{}&quot;, eventType, data)</span>
-<span class="nc" id="L43">    eventType match {</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">      case EventType.EVENT_TYPE_SCAN =&gt;</span>
-<span class="nc" id="L45">        Puppet.objectMapper.readValue(data, classOf[EventScanPayload])</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">      case EventType.EVENT_TYPE_DONG =&gt;</span>
+<span class="fc" id="L42">    debug(&quot;receive event:{},data:{}&quot;, eventType, data)</span>
+<span class="fc" id="L43">    eventType match {</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">      case EventType.EVENT_TYPE_SCAN =&gt;</span>
+<span class="fc" id="L45">        Puppet.objectMapper.readValue(data, classOf[EventScanPayload])</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_DONG =&gt;</span>
 <span class="nc" id="L47">        Puppet.objectMapper.readValue(data, classOf[EventDongPayload])</span>
-<span class="nc bnc" id="L48" title="All 2 branches missed.">      case EventType.EVENT_TYPE_ERROR =&gt;</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_ERROR =&gt;</span>
 <span class="nc" id="L49">        Puppet.objectMapper.readValue(data, classOf[EventErrorPayload])</span>
-<span class="nc bnc" id="L50" title="All 2 branches missed.">      case EventType.EVENT_TYPE_HEARTBEAT =&gt;</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_HEARTBEAT =&gt;</span>
 <span class="nc" id="L51">        Puppet.objectMapper.readValue(data, classOf[EventHeartbeatPayload])</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">      case EventType.EVENT_TYPE_FRIENDSHIP =&gt;</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_FRIENDSHIP =&gt;</span>
 <span class="nc" id="L53">        Puppet.objectMapper.readValue(data, classOf[EventFriendshipPayload])</span>
-<span class="nc bnc" id="L54" title="All 2 branches missed.">      case EventType.EVENT_TYPE_LOGIN =&gt;</span>
-<span class="nc" id="L55">        val value = Puppet.objectMapper.readValue(data, classOf[EventLoginPayload])</span>
-<span class="nc" id="L56">        idOpt = Some(value.contactId)</span>
-<span class="nc" id="L57">        value</span>
-<span class="nc bnc" id="L58" title="All 2 branches missed.">      case EventType.EVENT_TYPE_LOGOUT =&gt;</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">      case EventType.EVENT_TYPE_LOGIN =&gt;</span>
+<span class="fc" id="L55">        val value = Puppet.objectMapper.readValue(data, classOf[EventLoginPayload])</span>
+<span class="fc" id="L56">        idOpt = Some(value.contactId)</span>
+<span class="fc" id="L57">        value</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_LOGOUT =&gt;</span>
 <span class="nc" id="L59">        idOpt = None</span>
 <span class="nc" id="L60">        Puppet.objectMapper.readValue(data, classOf[EventLogoutPayload])</span>
-<span class="nc bnc" id="L61" title="All 2 branches missed.">      case EventType.EVENT_TYPE_MESSAGE =&gt;</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_MESSAGE =&gt;</span>
 <span class="nc" id="L62">        Puppet.objectMapper.readValue(data, classOf[EventMessagePayload])</span>
-<span class="nc bnc" id="L63" title="All 2 branches missed.">      case EventType.EVENT_TYPE_READY =&gt;</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_READY =&gt;</span>
 <span class="nc" id="L64">        Puppet.objectMapper.readValue(data, classOf[EventReadyPayload])</span>
-<span class="nc bnc" id="L65" title="All 2 branches missed.">      case EventType.EVENT_TYPE_ROOM_INVITE =&gt;</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_ROOM_INVITE =&gt;</span>
 <span class="nc" id="L66">        Puppet.objectMapper.readValue(data, classOf[EventRoomInvitePayload])</span>
-<span class="nc bnc" id="L67" title="All 2 branches missed.">      case EventType.EVENT_TYPE_ROOM_JOIN =&gt;</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_ROOM_JOIN =&gt;</span>
 <span class="nc" id="L68">        Puppet.objectMapper.readValue(data, classOf[EventRoomJoinPayload])</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">      case EventType.EVENT_TYPE_ROOM_LEAVE =&gt;</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_ROOM_LEAVE =&gt;</span>
 <span class="nc" id="L70">        Puppet.objectMapper.readValue(data, classOf[EventRoomLeavePayload])</span>
-<span class="nc bnc" id="L71" title="All 2 branches missed.">      case EventType.EVENT_TYPE_ROOM_TOPIC =&gt;</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_ROOM_TOPIC =&gt;</span>
 <span class="nc" id="L72">        Puppet.objectMapper.readValue(data, classOf[EventRoomTopicPayload])</span>
-<span class="nc bnc" id="L73" title="All 2 branches missed.">      case EventType.EVENT_TYPE_RESET =&gt;</span>
-<span class="nc" id="L74">        warn(&quot;PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_RESET ?&quot;)</span>
-<span class="nc" id="L75">        Puppet.objectMapper.readValue(data, classOf[EventResetPayload])</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_RESET =&gt;</span>
+<span class="fc" id="L74">        warn(&quot;PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_RESET ?&quot;)</span>
+<span class="fc" id="L75">        Puppet.objectMapper.readValue(data, classOf[EventResetPayload])</span>
       case other =&gt;
 <span class="nc" id="L77">        throw new IllegalAccessException(&quot;event not supported ,event:&quot; + other)</span>
     }

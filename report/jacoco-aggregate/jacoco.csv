@@ -1,9 +1,9 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Friendship.,8,0,0,0,2,0,2,0,2,0
-report/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.ScanStatus.,56,0,0,0,7,0,8,0,8,0
+report/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.ScanStatus.,15,41,0,0,0,7,5,3,5,3
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Puppet.PuppetOptions,14,39,0,0,0,7,4,7,4,7
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Friendship.FriendshipSceneType.,104,0,0,0,13,0,14,0,14,0
-report/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventLoginPayload,10,0,0,0,2,0,3,0,3,0
+report/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventLoginPayload,0,10,0,0,0,2,0,3,0,3
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Contact.ContactPayload,33,61,0,0,0,15,11,16,11,16
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,RoomInvitation.,8,0,0,0,2,0,2,0,2,0
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Puppet,14,0,0,0,0,0,4,0,4,0
@@ -19,7 +19,7 @@ report/wechaty-puppet_2.12,wechaty.puppet.schemas,MiniProgram.MiniProgramPayload
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Room.RoomPayload,15,30,0,0,0,8,5,8,5,8
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Contact.ContactGender.,9,23,0,0,0,4,3,2,3,2
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,SchemaGenerator,25,0,0,0,0,0,8,0,8,0
-report/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventScanPayload,30,0,0,0,5,0,8,0,8,0
+report/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventScanPayload,0,30,0,0,0,5,0,8,0,8
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.MessageType.,39,75,0,0,0,16,13,4,13,4
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Friendship.FriendshipPayloadVerify,3,0,0,0,1,0,1,0,1,0
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Friendship.FriendshipType.,40,0,0,0,5,0,6,0,6,0
@@ -38,11 +38,12 @@ report/wechaty-puppet_2.12,wechaty.puppet.schemas,Room.RoomMemberQueryFilter,24,
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.,8,0,0,0,2,0,2,0,2,0
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Image.ImageType.,40,0,0,0,5,0,6,0,6,0
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventRoomTopicPayload,14,24,0,0,1,5,4,7,4,7
-report/wechaty-puppet_2.12,wechaty.puppet.schemas,Puppet.,5,233,4,6,0,27,5,7,1,6
+report/wechaty-puppet_2.12,wechaty.puppet.schemas,Puppet.,0,238,3,7,0,27,3,9,0,7
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.,8,0,0,0,2,0,2,0,2,0
-report/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.BaseEventPayload,3,7,0,0,0,2,1,2,1,2
+report/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.BaseEventPayload,0,10,0,0,0,2,0,3,0,3
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.WechatMessageType.,192,0,0,0,24,0,25,0,25,0
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.MessagePayload,15,51,0,0,0,11,5,14,5,14
+report/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.ScalaEnumerationSerializer,0,8,0,0,0,2,0,2,0,2
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Friendship.FriendshipSearchCondition,17,0,0,0,4,0,5,0,5,0
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Room.,8,0,0,0,2,0,2,0,2,0
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventFriendshipPayload,0,10,0,0,0,2,0,3,0,3
@@ -64,9 +65,9 @@ report/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.AbstractResourceBox,0,65,1
 report/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.ResourceBoxType.,18,46,0,0,0,8,6,3,6,3
 report/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.UrlResourceBox,33,46,0,0,5,7,1,5,1,5
 report/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.,81,23,12,0,9,5,7,5,1,5
-report/wechaty-puppet_2.12,wechaty.puppet,LoggerSupport,39,82,7,3,4,8,9,6,4,6
+report/wechaty-puppet_2.12,wechaty.puppet,LoggerSupport,15,106,6,4,2,10,8,7,3,7
 report/wechaty-puppet_2.12,wechaty.puppet.events,EventEmitter,0,100,0,4,0,10,0,7,0,5
-report/wechaty-hostie_2.12,wechaty.hostie,PuppetHostie,369,290,6,6,21,13,66,57,61,56
+report/wechaty-hostie_2.12,wechaty.hostie,PuppetHostie,364,295,6,6,21,13,65,58,60,57
 report/wechaty-hostie_2.12,wechaty.hostie,Configuration.,54,62,8,4,4,6,7,5,2,4
 report/wechaty-hostie_2.12,wechaty.hostie,Configuration,6,0,0,0,0,0,2,0,2,0
 report/wechaty-hostie_2.12,wechaty.hostie.support,MessageRawSupport,259,92,1,1,63,16,14,2,13,2
@@ -78,16 +79,16 @@ report/wechaty-hostie_2.12,wechaty.hostie.support,TagRawSupport,89,1,0,0,20,1,5,
 report/wechaty-hostie_2.12,wechaty.hostie.support,RoomInvitationRawSupport,78,1,0,0,17,1,2,1,2,1
 report/wechaty-hostie_2.12,wechaty.hostie.support,RoomMemberRawSupport,56,40,0,0,13,12,3,2,3,2
 report/wechaty-hostie_2.12,wechaty.hostie.support,ContactRawSupport,148,91,12,0,26,22,10,3,4,3
-report/wechaty-hostie_2.12,wechaty.hostie.support,GrpcEventSupport,306,71,33,3,42,11,22,3,4,3
+report/wechaty-hostie_2.12,wechaty.hostie.support,GrpcEventSupport,153,224,16,20,17,36,18,7,3,4
 report/wechaty-hostie_2.12,wechaty.hostie.support,RoomRawSupport,146,60,0,0,37,12,9,2,9,2
 report/wechaty_2.12,wechaty,Wechaty..anon.new Runnable() {...},2,21,1,1,0,3,1,2,0,2
 report/wechaty_2.12,wechaty,Wechaty.,5,33,3,3,0,6,3,5,0,5
 report/wechaty_2.12,wechaty,JavaDingDongBot,83,0,2,0,16,0,6,0,5,0
 report/wechaty_2.12,wechaty,DingDongBot.,125,0,12,0,18,0,12,0,6,0
 report/wechaty_2.12,wechaty,DingDongBot,4,0,0,0,0,0,1,0,1,0
-report/wechaty_2.12,wechaty,Wechaty,86,168,1,1,11,17,11,20,10,20
+report/wechaty_2.12,wechaty,Wechaty,54,203,1,1,5,24,8,24,7,24
 report/wechaty_2.12,wechaty,WechatyOptions,21,22,0,0,0,6,6,3,6,3
-report/wechaty_2.12,wechaty.helper,ImplicitHelper.,114,27,0,0,7,3,19,5,19,5
+report/wechaty_2.12,wechaty.helper,ImplicitHelper.,83,58,0,0,5,5,13,11,13,11
 report/wechaty_2.12,wechaty.user,Contact,273,49,44,2,42,9,46,5,23,5
 report/wechaty_2.12,wechaty.user,Image,70,0,0,0,4,0,11,0,11,0
 report/wechaty_2.12,wechaty.user,Conversation,56,12,0,0,4,2,4,2,4,2
@@ -99,4 +100,4 @@ report/wechaty_2.12,wechaty.user,Room.,95,254,11,3,8,30,10,14,4,13
 report/wechaty_2.12,wechaty.user,Room,476,75,30,2,40,8,50,11,34,11
 report/wechaty_2.12,wechaty.user,UrlLink,9,0,0,0,2,0,2,0,2,0
 report/wechaty_2.12,wechaty.user,Friendship.,15,0,0,0,3,0,3,0,3,0
-report/wechaty_2.12,wechaty.user,ContactSelf,5,0,0,0,1,0,1,0,1,0
+report/wechaty_2.12,wechaty.user,ContactSelf,0,5,0,0,0,1,0,1,0,1

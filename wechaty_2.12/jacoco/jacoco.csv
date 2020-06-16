@@ -4,9 +4,9 @@ wechaty_2.12,wechaty,Wechaty.,5,33,3,3,0,6,3,5,0,5
 wechaty_2.12,wechaty,JavaDingDongBot,83,0,2,0,16,0,6,0,5,0
 wechaty_2.12,wechaty,DingDongBot.,125,0,12,0,18,0,12,0,6,0
 wechaty_2.12,wechaty,DingDongBot,4,0,0,0,0,0,1,0,1,0
-wechaty_2.12,wechaty,Wechaty,86,168,1,1,11,17,11,20,10,20
+wechaty_2.12,wechaty,Wechaty,54,203,1,1,5,24,8,24,7,24
 wechaty_2.12,wechaty,WechatyOptions,21,22,0,0,0,6,6,3,6,3
-wechaty_2.12,wechaty.helper,ImplicitHelper.,114,27,0,0,7,3,19,5,19,5
+wechaty_2.12,wechaty.helper,ImplicitHelper.,83,58,0,0,5,5,13,11,13,11
 wechaty_2.12,wechaty.user,Contact,273,49,44,2,42,9,46,5,23,5
 wechaty_2.12,wechaty.user,Image,70,0,0,0,4,0,11,0,11,0
 wechaty_2.12,wechaty.user,Conversation,56,12,0,0,4,2,4,2,4,2
@@ -18,4 +18,4 @@ wechaty_2.12,wechaty.user,Room.,95,254,11,3,8,30,10,14,4,13
 wechaty_2.12,wechaty.user,Room,476,75,30,2,40,8,50,11,34,11
 wechaty_2.12,wechaty.user,UrlLink,9,0,0,0,2,0,2,0,2,0
 wechaty_2.12,wechaty.user,Friendship.,15,0,0,0,3,0,3,0,3,0
-wechaty_2.12,wechaty.user,ContactSelf,5,0,0,0,1,0,1,0,1,0
+wechaty_2.12,wechaty.user,ContactSelf,0,5,0,0,0,1,0,1,0,1

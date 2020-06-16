@@ -20,7 +20,7 @@ import io.grpc.ManagedChannel
 <span class="fc" id="L20">    var channelOpt:Option[ManagedChannel] = None</span>
 <span class="pc" id="L21">    var puppetOptionKey: Option[String] = None</span>
   }
-<span class="pc bpc" id="L23" title="2 of 4 branches missed.">  lazy val objectMapper = {</span>
+<span class="pc bpc" id="L23" title="1 of 4 branches missed.">  lazy val objectMapper = {</span>
 <span class="fc" id="L24">    val om = new ObjectMapper()</span>
     import com.fasterxml.jackson.databind.DeserializationFeature
 <span class="fc" id="L26">    om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)</span>
@@ -48,7 +48,7 @@ import io.grpc.ManagedChannel
   }
 
 
-<span class="pc" id="L51">  val pbEventType2PuppetEventName = Map[EventType,PuppetEventName.Type](</span>
+<span class="fc" id="L51">  val pbEventType2PuppetEventName = Map[EventType,PuppetEventName.Type](</span>
 <span class="fc" id="L52">    EventType.EVENT_TYPE_DONG-&gt;        PuppetEventName.DONG,</span>
 <span class="fc" id="L53">    EventType.EVENT_TYPE_ERROR-&gt;       PuppetEventName.ERROR,</span>
 <span class="fc" id="L54">    EventType.EVENT_TYPE_HEARTBEAT-&gt;   PuppetEventName.HEARTBEAT,</span>

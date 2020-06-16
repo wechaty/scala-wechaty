@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory
   }
 
   protected def warn(message: String, args: Any*): Unit = {
-<span class="nc bnc" id="L20" title="All 2 branches missed.">    if (logger.isWarnEnabled) {</span>
-<span class="nc" id="L21">      logger.warn(message, args.map(_.asInstanceOf[AnyRef]).toArray)</span>
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">    if (logger.isWarnEnabled) {</span>
+<span class="pc" id="L21">      logger.warn(message, args.map(_.asInstanceOf[AnyRef]).toArray)</span>
     }
   }
 
