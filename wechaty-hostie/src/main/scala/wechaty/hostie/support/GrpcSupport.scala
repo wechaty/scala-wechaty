@@ -1,7 +1,7 @@
 package wechaty.hostie.support
 
 import java.util.concurrent.atomic.AtomicLong
-import java.util.concurrent.{Executors, TimeUnit}
+import java.util.concurrent.{CountDownLatch, Executors, TimeUnit}
 
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Base
@@ -93,7 +93,7 @@ trait GrpcSupport {
   }
 
   protected def stopGrpc(): Unit = {
-    if(option.channelOpt.isEmpty) {  //if no test!
+//    if(option.channelOpt.isEmpty) {  //if no test!
       //stop stream
       stopStream()
 
@@ -101,18 +101,20 @@ trait GrpcSupport {
       this.grpcClient.stop(Base.StopRequest.getDefaultInstance)
 
       this.channel.shutdownNow()
-    }
+//    }
   }
 
   private def stopStream(): Unit = {
     try {
+      val countDownLatch = new CountDownLatch(1)
       this.eventStream.stop(Base.StopRequest.getDefaultInstance, new StreamObserver[Base.StopResponse] {
         override def onNext(v: Base.StopResponse): Unit = {}
 
         override def onError(throwable: Throwable): Unit = {}
 
-        override def onCompleted(): Unit = {}
+        override def onCompleted(): Unit = {countDownLatch.countDown()}
       })
+      countDownLatch.await()
     } catch {
       case e: Throwable =>
         warn("fail to stop stream {}", e.getMessage)
