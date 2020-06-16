@@ -93,7 +93,7 @@ trait GrpcSupport {
   }
 
   protected def stopGrpc(): Unit = {
-//    if(option.channelOpt.isEmpty) {  //if no test!
+    if(option.channelOpt.isEmpty) {  //if no test!
       //stop stream
       stopStream()
 
@@ -101,7 +101,7 @@ trait GrpcSupport {
       this.grpcClient.stop(Base.StopRequest.getDefaultInstance)
 
       this.channel.shutdownNow()
-//    }
+    }
   }
 
   private def stopStream(): Unit = {
