@@ -85,7 +85,7 @@ import scala.language.implicitConversions;
 
 <span class="fc" id="L86">  override def puppet: Puppet = this.hostie</span>
 
-  def initHostie(): Unit = {
+  private def initHostie(): Unit = {
 <span class="fc" id="L89">    val option = options.puppetOptions match {</span>
 <span class="pc bpc" id="L90" title="1 of 2 branches missed.">      case Some(o) =&gt; o</span>
 <span class="nc" id="L91">      case _ =&gt; new PuppetOptions</span>
