@@ -33,7 +33,7 @@ jobs:
       - name: Perform release
         uses: samuelmeuli/action-maven-publish@v1
         with:
-#          gpg_private_key: ${{ secrets.gpg_private_key }}
-#          gpg_passphrase: ${{ secrets.gpg_passphrase }}
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
           nexus_username: ${{ secrets.OSSRH_USERNAME }}
           nexus_password: ${{ secrets.OSSRH_TOKEN }}
