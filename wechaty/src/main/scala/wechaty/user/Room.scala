@@ -6,7 +6,7 @@ import wechaty.Wechaty.PuppetResolver
 import wechaty.puppet.events.EventEmitter
 import wechaty.puppet.schemas.Event.{EventMessagePayload, EventRoomJoinPayload, EventRoomLeavePayload, EventRoomTopicPayload}
 import wechaty.puppet.schemas.Puppet._
-import wechaty.puppet.schemas.Room.RoomPayload
+import wechaty.puppet.schemas.Room.{RoomPayload, RoomQueryFilter}
 import wechaty.puppet.{LoggerSupport, ResourceBox}
 import wechaty.user.Room.{RoomJoinEvent, RoomLeaveEvent, RoomTopicEvent}
 
@@ -76,6 +76,16 @@ object Room {
     val changer = new Contact(payload.changerId)
     val date = timestampToDate(payload.timestamp)
     room.emit(PuppetEventName.ROOM_TOPIC,(changer,date))
+  }
+  def findAll(query : Option[RoomQueryFilter])(implicit resolver: PuppetResolver): Array[Room]= {
+    val roomIdList = resolver.puppet.roomSearch(query)
+    roomIdList.flatMap(id => load(id))
+  }
+  def find(query : Option[RoomQueryFilter])(implicit resolver: PuppetResolver): Option[Room] = {
+    findAll(query).headOption
+  }
+  def find(query : RoomQueryFilter)(implicit resolver: PuppetResolver): Option[Room] = {
+    find(Some(query))
   }
 }
 

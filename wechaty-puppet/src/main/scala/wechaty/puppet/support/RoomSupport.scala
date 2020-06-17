@@ -1,9 +1,9 @@
 package wechaty.puppet.support
 
 import com.github.benmanes.caffeine.cache.Cache
-import wechaty.puppet.{Puppet, ResourceBox}
+import wechaty.puppet.{LoggerSupport, Puppet, ResourceBox}
 import wechaty.puppet.schemas.Puppet
-import wechaty.puppet.schemas.Room.RoomPayload
+import wechaty.puppet.schemas.Room.{RoomPayload, RoomQueryFilter}
 
 /**
   *
@@ -11,7 +11,7 @@ import wechaty.puppet.schemas.Room.RoomPayload
   * @since 2020-06-06
   */
 trait RoomSupport {
-  self:Puppet =>
+  self:Puppet with LoggerSupport =>
   private val cacheRoomPayload = createCache().asInstanceOf[Cache[String, RoomPayload]]
 
   def roomAdd(roomId: String, contactId: String): Unit
@@ -57,5 +57,29 @@ trait RoomSupport {
   }
   def roomPayloadDirty (roomId: String): Unit ={
     this.cacheRoomPayload.invalidate(roomId)
+  }
+  def roomSearch (queryOpt: Option[RoomQueryFilter]): Array[String] ={
+
+    val allRoomIdList = this.roomList()
+
+    queryOpt match{
+      case Some(query) =>
+        allRoomIdList.toStream.flatMap(roomId=>{
+          try{
+            Some(roomPayload(roomId))
+          }catch {
+            case e:Throwable=>
+              error(e.getMessage,e)
+              roomPayloadDirty(roomId)
+              roomMemberPayloadDirty(roomId)
+              None
+          }
+        }).filter(x=>{
+          val flag = query(x)
+          flag
+        }).map(_.id).toArray
+      case _ =>
+        allRoomIdList
+    }
   }
 }

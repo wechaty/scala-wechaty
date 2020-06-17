@@ -8,10 +8,10 @@ object Room {
     var contactAlias: String = _
   }
 
-  class RoomQueryFilter {
-    var id: String = _
-    var topic: String = _
-  }
+  /**
+    * select room function
+    */
+  type RoomQueryFilter = RoomPayload => Boolean
 
   class RoomPayload {
     var id: String = _

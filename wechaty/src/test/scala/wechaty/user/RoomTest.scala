@@ -2,7 +2,7 @@ package wechaty.user
 
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Message.{MessagePayloadResponse, MessageType}
-import io.github.wechaty.grpc.puppet.Room.RoomPayloadResponse
+import io.github.wechaty.grpc.puppet.Room.{RoomListResponse, RoomPayloadRequest, RoomPayloadResponse}
 import org.grpcmock.GrpcMock._
 import org.junit.jupiter.api.{Assertions, BeforeEach, Test}
 import wechaty.TestBase
@@ -23,9 +23,12 @@ class RoomTest extends TestBase{
   var room:Room = _
   @BeforeEach
   def constructTestCase: Unit ={
+    val request = RoomPayloadRequest.newBuilder()
+    request.setId(roomId)
     val response = RoomPayloadResponse.newBuilder()
     response.setId(roomId)
     stubFor(unaryMethod(PuppetGrpc.getRoomPayloadMethod)
+        .withRequest(request.build())
       .willReturn(response.build())
     )
     room = Room.load(roomId)(instance).get
@@ -122,5 +125,29 @@ class RoomTest extends TestBase{
     instance.puppet.emit(PuppetEventName.ROOM_TOPIC,payload)
 
     Assertions.assertTrue(reachFlag)
+  }
+  @Test
+  def testRoomSearch: Unit ={
+    val roomId2 = "roomId2"
+    val response = RoomListResponse.newBuilder()
+    response.addIds(roomId)
+    response.addIds(roomId2)
+
+    stubFor(unaryMethod(PuppetGrpc.getRoomListMethod)
+      .willReturn(response.build()))
+
+    val roomPayloadRequest = RoomPayloadRequest.newBuilder()
+    roomPayloadRequest.setId(roomId2)
+    val roomPayloadResponse= RoomPayloadResponse.newBuilder()
+    roomPayloadResponse.setId(roomId2)
+    stubFor(unaryMethod(PuppetGrpc.getRoomPayloadMethod)
+      .withRequest(roomPayloadRequest.build())
+      .willReturn(roomPayloadResponse.build())
+    )
+
+
+
+    Assertions.assertEquals(roomId,Room.find(None).get.id)
+    Assertions.assertEquals(roomId2,Room.find(_.id == roomId2).get.id)
   }
 }
