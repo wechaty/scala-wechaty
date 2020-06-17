@@ -6,7 +6,7 @@ import wechaty.Wechaty.PuppetResolver
 import wechaty.puppet.events.EventEmitter
 import wechaty.puppet.schemas.Event.{EventMessagePayload, EventRoomJoinPayload, EventRoomLeavePayload, EventRoomTopicPayload}
 import wechaty.puppet.schemas.Puppet._
-import wechaty.puppet.schemas.Room.RoomPayload
+import wechaty.puppet.schemas.Room.{RoomPayload, RoomQueryFilter}
 import wechaty.puppet.{LoggerSupport, ResourceBox}
 import wechaty.user.Room.{RoomJoinEvent, RoomLeaveEvent, RoomTopicEvent}
 
@@ -77,114 +77,124 @@ import wechaty.user.Room.{RoomJoinEvent, RoomLeaveEvent, RoomTopicEvent}
 <span class="fc" id="L77">    val date = timestampToDate(payload.timestamp)</span>
 <span class="fc" id="L78">    room.emit(PuppetEventName.ROOM_TOPIC,(changer,date))</span>
   }
+  def findAll(query : Option[RoomQueryFilter])(implicit resolver: PuppetResolver): Array[Room]= {
+<span class="fc" id="L81">    val roomIdList = resolver.puppet.roomSearch(query)</span>
+<span class="fc" id="L82">    roomIdList.flatMap(id =&gt; load(id))</span>
+  }
+  def find(query : Option[RoomQueryFilter])(implicit resolver: PuppetResolver): Option[Room] = {
+<span class="fc" id="L85">    findAll(query).headOption</span>
+  }
+  def find(query : RoomQueryFilter)(implicit resolver: PuppetResolver): Option[Room] = {
+<span class="fc" id="L88">    find(Some(query))</span>
+  }
 }
 
-<span class="pc" id="L82">class Room private(roomId: String)(implicit resolver: PuppetResolver) extends Conversation(roomId) with EventEmitter with LoggerSupport {</span>
+<span class="pc" id="L92">class Room private(roomId: String)(implicit resolver: PuppetResolver) extends Conversation(roomId) with EventEmitter with LoggerSupport {</span>
   def payload: RoomPayload = {
-<span class="nc" id="L84">    resolver.puppet.roomPayload(roomId)</span>
+<span class="nc" id="L94">    resolver.puppet.roomPayload(roomId)</span>
   }
 
   def alias(contact: Contact): Option[String] = {
-<span class="fc" id="L88">    val memberPayload = resolver.puppet.roomMemberPayload(this.id, contact.id)</span>
+<span class="fc" id="L98">    val memberPayload = resolver.puppet.roomMemberPayload(this.id, contact.id)</span>
 
-<span class="pc bpc" id="L90" title="2 of 4 branches missed.">    if (memberPayload != null &amp;&amp; !isBlank(memberPayload.roomAlias)) {</span>
-<span class="nc" id="L91">      Some(memberPayload.roomAlias)</span>
-<span class="fc" id="L92">    } else None</span>
+<span class="pc bpc" id="L100" title="2 of 4 branches missed.">    if (memberPayload != null &amp;&amp; !isBlank(memberPayload.roomAlias)) {</span>
+<span class="nc" id="L101">      Some(memberPayload.roomAlias)</span>
+<span class="fc" id="L102">    } else None</span>
   }
 
   def memberList(): Array[Contact] = {
-<span class="nc" id="L96">    val memberIdList = resolver.puppet.roomMemberList(this.roomId)</span>
-<span class="nc" id="L97">    memberIdList.map(new Contact(_))</span>
+<span class="nc" id="L106">    val memberIdList = resolver.puppet.roomMemberList(this.roomId)</span>
+<span class="nc" id="L107">    memberIdList.map(new Contact(_))</span>
   }
 
   def sync(): Unit = {
-<span class="nc" id="L101">    resolver.puppet.roomPayloadDirty(this.roomId)</span>
+<span class="nc" id="L111">    resolver.puppet.roomPayloadDirty(this.roomId)</span>
   }
 
   def say(something: String, mentionList: Array[Contact]): Message = {
-<span class="nc" id="L105">    val mentionText = mentionList.map(x =&gt; {</span>
-<span class="nc" id="L106">      val aliasOpt = this.alias(x)</span>
-<span class="nc" id="L107">      aliasOpt match {</span>
-<span class="nc bnc" id="L108" title="All 2 branches missed.">        case Some(alias) =&gt; '@' + alias</span>
-<span class="nc" id="L109">        case _ =&gt; '@' + x.name</span>
+<span class="nc" id="L115">    val mentionText = mentionList.map(x =&gt; {</span>
+<span class="nc" id="L116">      val aliasOpt = this.alias(x)</span>
+<span class="nc" id="L117">      aliasOpt match {</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        case Some(alias) =&gt; '@' + alias</span>
+<span class="nc" id="L119">        case _ =&gt; '@' + x.name</span>
       }
-<span class="nc" id="L111">    }).mkString(&quot;\u2005&quot;)</span>
-<span class="nc" id="L112">    this.say(something + mentionText)</span>
+<span class="nc" id="L121">    }).mkString(&quot;\u2005&quot;)</span>
+<span class="nc" id="L122">    this.say(something + mentionText)</span>
   }
 
   def add(contact: Contact): Unit = {
-<span class="nc" id="L116">    resolver.puppet.roomAdd(this.id, contact.id)</span>
+<span class="nc" id="L126">    resolver.puppet.roomAdd(this.id, contact.id)</span>
   }
 
   def del(contact: Contact): Unit = {
-<span class="nc" id="L120">    resolver.puppet.roomDel(this.id, contact.id)</span>
+<span class="nc" id="L130">    resolver.puppet.roomDel(this.id, contact.id)</span>
   }
 
   def quit(): Unit = {
-<span class="nc" id="L124">    resolver.puppet.roomQuit(this.id)</span>
+<span class="nc" id="L134">    resolver.puppet.roomQuit(this.id)</span>
   }
 
-<span class="nc" id="L127">  def topic(newTopicOpt: Option[String] = None): String = {</span>
-<span class="nc" id="L128">    newTopicOpt match {</span>
-<span class="nc bnc" id="L129" title="All 2 branches missed.">      case Some(newTopic) =&gt;</span>
-<span class="nc" id="L130">        resolver.puppet.roomTopic(this.id, newTopic)</span>
-<span class="nc" id="L131">        newTopic</span>
+<span class="nc" id="L137">  def topic(newTopicOpt: Option[String] = None): String = {</span>
+<span class="nc" id="L138">    newTopicOpt match {</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">      case Some(newTopic) =&gt;</span>
+<span class="nc" id="L140">        resolver.puppet.roomTopic(this.id, newTopic)</span>
+<span class="nc" id="L141">        newTopic</span>
       case _ =&gt;
-<span class="nc bnc" id="L133" title="All 4 branches missed.">        if (this.payload != null &amp;&amp; !isBlank(this.payload.topic)) {</span>
-<span class="nc" id="L134">          this.payload.topic</span>
+<span class="nc bnc" id="L143" title="All 4 branches missed.">        if (this.payload != null &amp;&amp; !isBlank(this.payload.topic)) {</span>
+<span class="nc" id="L144">          this.payload.topic</span>
         } else {
-<span class="nc" id="L136">          val memberIdList = resolver.puppet.roomMemberList(this.id)</span>
-<span class="nc" id="L137">          val memberList = memberIdList</span>
-<span class="nc" id="L138">            .filter(id =&gt; resolver.puppet.selfIdOpt() match {</span>
-<span class="nc bnc" id="L139" title="All 8 branches missed.">              case Some(userId) =&gt; id != userId</span>
-<span class="nc" id="L140">              case _ =&gt; true</span>
+<span class="nc" id="L146">          val memberIdList = resolver.puppet.roomMemberList(this.id)</span>
+<span class="nc" id="L147">          val memberList = memberIdList</span>
+<span class="nc" id="L148">            .filter(id =&gt; resolver.puppet.selfIdOpt() match {</span>
+<span class="nc bnc" id="L149" title="All 8 branches missed.">              case Some(userId) =&gt; id != userId</span>
+<span class="nc" id="L150">              case _ =&gt; true</span>
             })
-<span class="nc" id="L142">            .map(id =&gt; new Contact(id))</span>
+<span class="nc" id="L152">            .map(id =&gt; new Contact(id))</span>
 
-<span class="nc" id="L144">          memberList.take(3).map(_.name).mkString(&quot;,&quot;)</span>
+<span class="nc" id="L154">          memberList.take(3).map(_.name).mkString(&quot;,&quot;)</span>
         }
     }
   }
 
   def onMessage(messageListener:Message=&gt;Unit): Unit ={
-<span class="fc" id="L150">    this.addListener(PuppetEventName.MESSAGE,messageListener)</span>
+<span class="fc" id="L160">    this.addListener(PuppetEventName.MESSAGE,messageListener)</span>
   }
   def onJoin(joinListener:RoomJoinEvent =&gt;Unit): Unit ={
-<span class="fc" id="L153">    this.addListener(PuppetEventName.ROOM_JOIN,joinListener)</span>
+<span class="fc" id="L163">    this.addListener(PuppetEventName.ROOM_JOIN,joinListener)</span>
   }
   def onLeave(leaveListener:RoomLeaveEvent =&gt;Unit): Unit ={
-<span class="fc" id="L156">    this.addListener(PuppetEventName.ROOM_LEAVE,leaveListener)</span>
+<span class="fc" id="L166">    this.addListener(PuppetEventName.ROOM_LEAVE,leaveListener)</span>
   }
   def onTopic(topicListener:RoomTopicEvent =&gt;Unit): Unit ={
-<span class="fc" id="L159">    this.addListener(PuppetEventName.ROOM_TOPIC,topicListener)</span>
+<span class="fc" id="L169">    this.addListener(PuppetEventName.ROOM_TOPIC,topicListener)</span>
   }
 
   def announce(textOpt: Option[String]): String = {
-<span class="nc" id="L163">    textOpt match {</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">      case Some(text) =&gt;</span>
-<span class="nc" id="L165">        resolver.puppet.roomAnnounce(this.id, text)</span>
-<span class="nc" id="L166">        text</span>
+<span class="nc" id="L173">    textOpt match {</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">      case Some(text) =&gt;</span>
+<span class="nc" id="L175">        resolver.puppet.roomAnnounce(this.id, text)</span>
+<span class="nc" id="L176">        text</span>
       case _ =&gt;
-<span class="nc" id="L168">        resolver.puppet.roomAnnounce(this.id)</span>
+<span class="nc" id="L178">        resolver.puppet.roomAnnounce(this.id)</span>
     }
   }
 
   def qrCode(): String = {
-<span class="nc" id="L173">    resolver.puppet.roomQRCode(this.id)</span>
+<span class="nc" id="L183">    resolver.puppet.roomQRCode(this.id)</span>
   }
 
   def has(contact: Contact): Boolean = {
-<span class="nc bnc" id="L177" title="All 6 branches missed.">    this.memberList().exists(_.id == contact.id)</span>
+<span class="nc bnc" id="L187" title="All 6 branches missed.">    this.memberList().exists(_.id == contact.id)</span>
   }
 
   def owner(): Option[Contact] = {
-<span class="nc bnc" id="L181" title="All 4 branches missed.">    if (this.payload != null &amp;&amp; !isBlank(this.payload.ownerId)) {</span>
-<span class="nc" id="L182">      Some(new Contact(this.payload.ownerId))</span>
-<span class="nc" id="L183">    } else None</span>
+<span class="nc bnc" id="L191" title="All 4 branches missed.">    if (this.payload != null &amp;&amp; !isBlank(this.payload.ownerId)) {</span>
+<span class="nc" id="L192">      Some(new Contact(this.payload.ownerId))</span>
+<span class="nc" id="L193">    } else None</span>
   }
 
   def avatar(): ResourceBox = {
-<span class="nc" id="L187">    resolver.puppet.roomAvatar(this.id)</span>
+<span class="nc" id="L197">    resolver.puppet.roomAvatar(this.id)</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

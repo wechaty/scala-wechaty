@@ -8,10 +8,10 @@
 <span class="nc" id="L8">    var contactAlias: String = _</span>
   }
 
-<span class="nc" id="L11">  class RoomQueryFilter {</span>
-<span class="nc" id="L12">    var id: String = _</span>
-<span class="nc" id="L13">    var topic: String = _</span>
-  }
+  /**
+    * select room function
+    */
+<span class="nc" id="L14">  type RoomQueryFilter = RoomPayload =&gt; Boolean</span>
 
 <span class="nc" id="L16">  class RoomPayload {</span>
 <span class="nc" id="L17">    var id: String = _</span>

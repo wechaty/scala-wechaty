@@ -53,10 +53,10 @@ import wechaty.puppet.support.RoomSupport
   }
 
   override def roomList(): Array[String] = {
-<span class="nc" id="L56">    val request = Room.RoomListRequest.newBuilder().build()</span>
+<span class="fc" id="L56">    val request = Room.RoomListRequest.newBuilder().build()</span>
 
-<span class="nc" id="L58">    val response = grpcClient.roomList(request)</span>
-<span class="nc" id="L59">    response.getIdsList.toArray(Array[String]())</span>
+<span class="fc" id="L58">    val response = grpcClient.roomList(request)</span>
+<span class="fc" id="L59">    response.getIdsList.toArray(Array[String]())</span>
   }
 
   override def roomQRCode(roomId: String): String = {
