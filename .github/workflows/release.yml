@@ -11,29 +11,22 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v1
-
-      - name: Set up JDK 8
+      - uses: actions/checkout@v2
+      - name: Set up Java for publishing to Maven Central Repository
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-
-      - name: Restore Maven repository
-        uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
       - name: Set version
         run: |
           export GITHUB_TAG=${GITHUB_REF##*/}
           mvn versions:set -DnewVersion=$GITHUB_TAG
           sed -i 's/<tag>HEAD<\/tag>/<tag>$GITHUB_TAG<\/tag>/' pom.xml
-      - name: Perform release
-        uses: samuelmeuli/action-maven-publish@v1
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          nexus_username: ${{ secrets.OSSRH_USERNAME }}
-          nexus_password: ${{ secrets.OSSRH_TOKEN }}
+      - name: Publish to the Maven Central Repository
+        run: mvn deploy --batch-mode --activate-profiles deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+
