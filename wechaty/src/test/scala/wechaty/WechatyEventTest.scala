@@ -16,13 +16,13 @@ class WechatyEventTest extends TestEventBase {
   def test_event: Unit ={
     val payload = new EventScanPayload
     payload.status= ScanStatus.Waiting
-    mockEvent( EventType.EVENT_TYPE_SCAN->payload)
 
     var reach = false
     instance.onScan(f=>{
       reach = true
       Assertions.assertEquals(payload.status,f.status)
     })
+    mockEvent( EventType.EVENT_TYPE_SCAN->payload)
     awaitEventCompletion(10,TimeUnit.SECONDS)
     Assertions.assertTrue(reach)
   }
