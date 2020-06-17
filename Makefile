@@ -34,6 +34,14 @@ version:
 	@newVersion=$$(awk -F. '{print $$1"."$$2"."$$3+1}' < VERSION) \
 		&& echo $${newVersion} > VERSION \
 		&& git add VERSION \
-		&& git commit -m "$${newVersion}" > /dev/null \
-		&& git tag "v$${newVersion}" \
-		&& echo "Bumped version to $${newVersion}"
+    && mvn versions:set -DnewVersion=$${newVersion} \
+    && mvn versions:commit \
+    && sed -i '' 's/<tag>HEAD<\/tag>/<tag>$${newVersion}<\/tag>/' pom.xml \
+		&& git commit -a -m "$${newVersion}" > /dev/null \
+		&& git tag "$${newVersion}" \
+		&& echo "Bumped version to $${newVersion}" \
+		&& newVersion=$$(awk -F. '{print $$1"."$$2"."$$3+1}' < VERSION) \
+    && mvn versions:set -DnewVersion=$${newVersion}-SNAPSHOT \
+    && mvn versions:commit \
+		&& git commit -a -m "prepare next development $${newVersion}-SNAPSHOT" > /dev/null \
+		&& echo "next version to $${newVersion}-SNAPSHOT"
