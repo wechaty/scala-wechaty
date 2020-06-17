@@ -38,6 +38,7 @@ class MessageTest extends TestBase{
             .build()
           n.nextWillReturn(response)
         }}
+      case Nil =>
     }
     stubFor(method)
 

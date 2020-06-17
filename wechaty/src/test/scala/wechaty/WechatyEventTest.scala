@@ -42,4 +42,20 @@ class WechatyEventTest extends TestEventBase {
     awaitEventCompletion(10,TimeUnit.SECONDS)
     Assertions.assertTrue(reach)
   }
+  @Test
+  def test_friendship: Unit ={
+    val payload = new EventLoginPayload
+    payload.contactId= "contactId"
+
+    var reach = false
+    instance.onLogin(f=>{
+      reach = true
+      Assertions.assertEquals(payload.contactId,f.id)
+    })
+
+    mockEvent( EventType.EVENT_TYPE_LOGIN->payload)
+
+    awaitEventCompletion(10,TimeUnit.SECONDS)
+    Assertions.assertTrue(reach)
+  }
 }
