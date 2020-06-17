@@ -5,7 +5,7 @@
   <groupId>io.github.wechaty</groupId>
   <artifactId>wechaty-project_2.12</artifactId>
   <packaging>pom</packaging>
-  <version>0.0.3-SNAPSHOT</version>
+  <version>0.0.3</version>
   <name>wechaty-project</name>
 
   <description>
@@ -412,7 +412,7 @@
     <url>https://github.com/wechaty/scala-wechaty</url>
     <connection>scm:git:ssh://github.com/wechaty/scala-wechaty.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/wechaty/scala-wechaty.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>${newVersion}</tag>
   </scm>
   <properties>
     <encoding>UTF-8</encoding>
