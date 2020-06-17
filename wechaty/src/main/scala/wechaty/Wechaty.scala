@@ -85,7 +85,7 @@ class Wechaty(private val options: WechatyOptions) extends LoggerSupport with Pu
 
   override def puppet: Puppet = this.hostie
 
-  def initHostie(): Unit = {
+  private def initHostie(): Unit = {
     val option = options.puppetOptions match {
       case Some(o) => o
       case _ => new PuppetOptions

@@ -354,9 +354,9 @@
   </distributionManagement>
 
   <scm>
-    <url>https://github.com/jcai/scala-wechaty</url>
-    <connection>scm:git:ssh://github.com/jcai/scala-wechaty.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/jcai/scala-wechaty.git</developerConnection>
+    <url>https://github.com/wechaty/scala-wechaty</url>
+    <connection>scm:git:ssh://github.com/wechaty/scala-wechaty.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/wechaty/scala-wechaty.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
   <properties>
