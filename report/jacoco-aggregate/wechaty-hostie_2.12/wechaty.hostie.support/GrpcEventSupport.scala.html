@@ -49,8 +49,8 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
 <span class="nc" id="L49">        Puppet.objectMapper.readValue(data, classOf[EventErrorPayload])</span>
 <span class="pc bpc" id="L50" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_HEARTBEAT =&gt;</span>
 <span class="nc" id="L51">        Puppet.objectMapper.readValue(data, classOf[EventHeartbeatPayload])</span>
-<span class="pc bpc" id="L52" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_FRIENDSHIP =&gt;</span>
-<span class="nc" id="L53">        Puppet.objectMapper.readValue(data, classOf[EventFriendshipPayload])</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">      case EventType.EVENT_TYPE_FRIENDSHIP =&gt;</span>
+<span class="fc" id="L53">        Puppet.objectMapper.readValue(data, classOf[EventFriendshipPayload])</span>
 <span class="fc bfc" id="L54" title="All 2 branches covered.">      case EventType.EVENT_TYPE_LOGIN =&gt;</span>
 <span class="fc" id="L55">        val value = Puppet.objectMapper.readValue(data, classOf[EventLoginPayload])</span>
 <span class="fc" id="L56">        idOpt = Some(value.contactId)</span>

@@ -214,7 +214,7 @@ import scala.language.implicitConversions
     * await contact.sync()
     */
   def sync(): Unit = {
-<span class="nc" id="L217">    this.ready(true)</span>
+<span class="fc" id="L217">    this.ready(true)</span>
   }
 
   /**
@@ -227,13 +227,13 @@ import scala.language.implicitConversions
     */
 <span class="nc" id="L228">  def ready(forceSync: Boolean = false): Unit = {</span>
 
-<span class="nc bnc" id="L230" title="All 4 branches missed.">    if (!forceSync &amp;&amp; this.isReady()) { // already ready</span>
+<span class="pc bpc" id="L230" title="3 of 4 branches missed.">    if (!forceSync &amp;&amp; this.isReady()) { // already ready</span>
 <span class="nc" id="L231">      debug(&quot;Contact ready() isReady() true&quot;)</span>
 <span class="nc" id="L232">      return</span>
     }
 
-<span class="nc bnc" id="L235" title="All 2 branches missed.">    if (forceSync) {</span>
-<span class="nc" id="L236">      resolver.puppet.contactPayloadDirty(this.id)</span>
+<span class="pc bpc" id="L235" title="1 of 2 branches missed.">    if (forceSync) {</span>
+<span class="fc" id="L236">      resolver.puppet.contactPayloadDirty(this.id)</span>
     }
   }
 

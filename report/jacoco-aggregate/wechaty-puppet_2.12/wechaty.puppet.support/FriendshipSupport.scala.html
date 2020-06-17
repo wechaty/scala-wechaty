@@ -28,9 +28,9 @@ import wechaty.puppet.schemas.Friendship.FriendshipPayload
 
   protected def friendshipRawPayload(friendshipId: String): FriendshipPayload
 
-<span class="nc" id="L31">  def friendshipPayload (friendshipId : String, newPayloadOpt  : Option[FriendshipPayload] = None): FriendshipPayload = {</span>
-<span class="nc" id="L32">    newPayloadOpt match {</span>
-<span class="nc bnc" id="L33" title="All 2 branches missed.">      case Some(newPayload) =&gt;</span>
+<span class="fc" id="L31">  def friendshipPayload (friendshipId : String, newPayloadOpt  : Option[FriendshipPayload] = None): FriendshipPayload = {</span>
+<span class="fc" id="L32">    newPayloadOpt match {</span>
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">      case Some(newPayload) =&gt;</span>
 <span class="nc" id="L34">        cacheFriendshipPayload.put(friendshipId, newPayload)</span>
 <span class="nc" id="L35">        newPayload</span>
       case _ =&gt;
@@ -38,17 +38,17 @@ import wechaty.puppet.schemas.Friendship.FriendshipPayload
         /**
           * 1. Try to get from cache first
           */
-<span class="nc" id="L41">        val cachedPayload = this.cacheFriendshipPayload.getIfPresent(friendshipId)</span>
-<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (cachedPayload != null) {</span>
-<span class="nc" id="L43">          cachedPayload</span>
+<span class="fc" id="L41">        val cachedPayload = this.cacheFriendshipPayload.getIfPresent(friendshipId)</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (cachedPayload != null) {</span>
+<span class="fc" id="L43">          cachedPayload</span>
         }
         else {
           /**
             * 2. Cache not found
             */
-<span class="nc" id="L49">          val rawPayload = friendshipRawPayload(friendshipId)</span>
-<span class="nc" id="L50">          this.cacheFriendshipPayload.put(friendshipId, rawPayload)</span>
-<span class="nc" id="L51">          rawPayload</span>
+<span class="fc" id="L49">          val rawPayload = friendshipRawPayload(friendshipId)</span>
+<span class="fc" id="L50">          this.cacheFriendshipPayload.put(friendshipId, rawPayload)</span>
+<span class="fc" id="L51">          rawPayload</span>
         }
     }
   }

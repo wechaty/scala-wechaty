@@ -2,53 +2,53 @@
 
 <span class="nc" id="L3">object Friendship {</span>
 
-<span class="nc" id="L5">  object FriendshipType extends Enumeration {</span>
+<span class="fc" id="L5">  object FriendshipType extends Enumeration {</span>
     type Type = Value
-<span class="nc" id="L7">    val Unknown: Type = Value(0)</span>
-<span class="nc" id="L8">    val Confirm: Type = Value(1)</span>
-<span class="nc" id="L9">    val Receive: Type = Value(2)</span>
-<span class="nc" id="L10">    val Verify: Type = Value(3)</span>
+<span class="pc" id="L7">    val Unknown: Type = Value(0)</span>
+<span class="pc" id="L8">    val Confirm: Type = Value(1)</span>
+<span class="pc" id="L9">    val Receive: Type = Value(2)</span>
+<span class="pc" id="L10">    val Verify: Type = Value(3)</span>
   }
 
   /**
     * Huan(202002): Does those numbers are the underlying Wechat Protocol Data Values?
     */
-<span class="nc" id="L16">  object FriendshipSceneType extends Enumeration {</span>
+<span class="fc" id="L16">  object FriendshipSceneType extends Enumeration {</span>
     type Type = Value
-<span class="nc" id="L18">    val Unknown: Type = Value(0) //    // Huan(202003) added by myself</span>
-<span class="nc" id="L19">    val QQ: Type = Value(1) //     // FIXME: Huan(202002) in Wechat PC, QQ = 12.</span>
-<span class="nc" id="L20">    val Email: Type = Value(2)</span>
-<span class="nc" id="L21">    val Weixin: Type = Value(3)</span>
-<span class="nc" id="L22">    val QQtbd: Type = Value(12) //    // FIXME: confirm the two QQ number QQ号搜索</span>
-<span class="nc" id="L23">    val Room: Type = Value(14)</span>
-<span class="nc" id="L24">    val Phone: Type = Value(15)</span>
-<span class="nc" id="L25">    val Card: Type = Value(17) //    // 名片分享</span>
-<span class="nc" id="L26">    val Location: Type = Value(18)</span>
-<span class="nc" id="L27">    val Bottle: Type = Value(25)</span>
-<span class="nc" id="L28">    val Shaking: Type = Value(29)</span>
-<span class="nc" id="L29">    val QRCode: Type = Value(30)</span>
+<span class="pc" id="L18">    val Unknown: Type = Value(0) //    // Huan(202003) added by myself</span>
+<span class="pc" id="L19">    val QQ: Type = Value(1) //     // FIXME: Huan(202002) in Wechat PC, QQ = 12.</span>
+<span class="pc" id="L20">    val Email: Type = Value(2)</span>
+<span class="pc" id="L21">    val Weixin: Type = Value(3)</span>
+<span class="pc" id="L22">    val QQtbd: Type = Value(12) //    // FIXME: confirm the two QQ number QQ号搜索</span>
+<span class="pc" id="L23">    val Room: Type = Value(14)</span>
+<span class="pc" id="L24">    val Phone: Type = Value(15)</span>
+<span class="pc" id="L25">    val Card: Type = Value(17) //    // 名片分享</span>
+<span class="pc" id="L26">    val Location: Type = Value(18)</span>
+<span class="pc" id="L27">    val Bottle: Type = Value(25)</span>
+<span class="pc" id="L28">    val Shaking: Type = Value(29)</span>
+<span class="pc" id="L29">    val QRCode: Type = Value(30)</span>
   }
 
   /** @hidden */
-<span class="nc" id="L33">  class FriendshipPayload {</span>
-<span class="nc" id="L34">    var id: String = _</span>
+<span class="fc" id="L33">  class FriendshipPayload {</span>
+<span class="pc" id="L34">    var id: String = _</span>
 
-<span class="nc" id="L36">    var contactId: String = _</span>
+<span class="fc" id="L36">    var contactId: String = _</span>
 <span class="nc" id="L37">    var hello: String = _</span>
 <span class="nc" id="L38">    var timestamp: Number = _ //  // Unix Timestamp, in seconds or milliseconds</span>
-<span class="nc" id="L39">    var `type`:FriendshipType.Type = _</span>
+<span class="pc" id="L39">    var `type`:FriendshipType.Type = _</span>
   }
 
   /** @hidden */
-<span class="nc" id="L43">  class FriendshipPayloadConfirm extends FriendshipPayload {</span>
+<span class="pc" id="L43">  class FriendshipPayloadConfirm extends FriendshipPayload {</span>
 //    override var `type` = FriendshipType.Confirm
   }
 
   /** @hidden */
-<span class="nc" id="L48">  class FriendshipPayloadReceive extends FriendshipPayload {</span>
-<span class="nc" id="L49">    var scene: FriendshipSceneType.Type = _</span>
-<span class="nc" id="L50">    var stranger: String = _</span>
-<span class="nc" id="L51">    var ticket: String = _</span>
+<span class="fc" id="L48">  class FriendshipPayloadReceive extends FriendshipPayload {</span>
+<span class="pc" id="L49">    var scene: FriendshipSceneType.Type = _</span>
+<span class="pc" id="L50">    var stranger: String = _</span>
+<span class="pc" id="L51">    var ticket: String = _</span>
 //    override var `type` = FriendshipType.Receive
   }
 

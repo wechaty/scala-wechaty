@@ -7,13 +7,13 @@ wechaty_2.12,wechaty,DingDongBot,4,0,0,0,0,0,1,0,1,0
 wechaty_2.12,wechaty,Wechaty,54,203,1,1,5,24,8,24,7,24
 wechaty_2.12,wechaty,WechatyOptions,21,22,0,0,0,6,6,3,6,3
 wechaty_2.12,wechaty.helper,ImplicitHelper.,83,58,0,0,5,5,13,11,13,11
-wechaty_2.12,wechaty.user,Contact,273,49,44,2,42,9,46,5,23,5
+wechaty_2.12,wechaty.user,Contact,257,65,42,4,38,13,44,7,21,7
 wechaty_2.12,wechaty.user,Image,70,0,0,0,4,0,11,0,11,0
 wechaty_2.12,wechaty.user,Conversation,56,12,0,0,4,2,4,2,4,2
 wechaty_2.12,wechaty.user,MiniProgram,37,0,0,0,9,0,9,0,9,0
 wechaty_2.12,wechaty.user,Tag,3,0,0,0,2,0,1,0,1,0
 wechaty_2.12,wechaty.user,Message,606,231,88,14,78,33,76,16,26,15
-wechaty_2.12,wechaty.user,Friendship,89,12,4,0,16,2,10,2,8,2
+wechaty_2.12,wechaty.user,Friendship,38,63,2,2,6,12,5,7,3,7
 wechaty_2.12,wechaty.user,Room.,95,254,11,3,8,30,10,14,4,13
 wechaty_2.12,wechaty.user,Room,476,75,30,2,40,8,50,11,34,11
 wechaty_2.12,wechaty.user,UrlLink,9,0,0,0,2,0,2,0,2,0

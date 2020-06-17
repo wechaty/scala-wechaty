@@ -14,29 +14,29 @@ import wechaty.puppet.schemas.Friendship.{FriendshipPayload, FriendshipPayloadRe
   }
 }
 <span class="pc" id="L16">class Friendship(val id:String)(implicit puppetResolver: PuppetResolver) {</span>
-<span class="nc" id="L17">  private def puppet= puppetResolver.puppet</span>
+<span class="fc" id="L17">  private def puppet= puppetResolver.puppet</span>
   def payload :FriendshipPayload = {
-<span class="nc" id="L19">    puppetResolver.puppet.friendshipPayload(id)</span>
+<span class="fc" id="L19">    puppetResolver.puppet.friendshipPayload(id)</span>
   }
   private def assertPayload(): Unit ={
-<span class="nc bnc" id="L22" title="All 2 branches missed.">    if (this.payload == null) {</span>
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">    if (this.payload == null) {</span>
 <span class="nc" id="L23">      throw new Error(&quot;no payload&quot;)</span>
     }
   }
   def contact(): Contact ={
-<span class="nc" id="L27">    assertPayload()</span>
-<span class="nc" id="L28">    new Contact(this.payload.contactId)</span>
+<span class="fc" id="L27">    assertPayload()</span>
+<span class="fc" id="L28">    new Contact(this.payload.contactId)</span>
   }
   def accept (): Unit =  {
-<span class="nc" id="L31">    assertPayload()</span>
-<span class="nc bnc" id="L32" title="All 2 branches missed.">    if (!this.payload.isInstanceOf[FriendshipPayloadReceive]) {</span>
+<span class="fc" id="L31">    assertPayload()</span>
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">    if (!this.payload.isInstanceOf[FriendshipPayloadReceive]) {</span>
 <span class="nc" id="L33">    throw new Error(&quot;accept() need type to be FriendshipType.Receive, but it got a &quot; + this.payload.`type`)</span>
   }
 
-<span class="nc" id="L36">    puppet.friendshipAccept(this.id)</span>
+<span class="fc" id="L36">    puppet.friendshipAccept(this.id)</span>
 
-<span class="nc" id="L38">    val contact = this.contact()</span>
-<span class="nc" id="L39">    contact.sync()</span>
+<span class="fc" id="L38">    val contact = this.contact()</span>
+<span class="fc" id="L39">    contact.sync()</span>
   }
 
   def hello (): String = {

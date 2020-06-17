@@ -17,10 +17,10 @@ import wechaty.puppet.schemas.Friendship._
     *
     */
   override def friendshipAccept(friendshipId: String): Unit = {
-<span class="nc" id="L20">    val request = Friendship.FriendshipAcceptRequest.newBuilder()</span>
-<span class="nc" id="L21">      .setId(friendshipId)</span>
+<span class="fc" id="L20">    val request = Friendship.FriendshipAcceptRequest.newBuilder()</span>
+<span class="fc" id="L21">      .setId(friendshipId)</span>
       .build()
-<span class="nc" id="L23">    grpcClient.frendshipAccept(request)</span>
+<span class="fc" id="L23">    grpcClient.friendshipAccept(request)</span>
   }
 
   override def friendshipAdd(contactId: String, hello: String): Unit = {
@@ -50,33 +50,33 @@ import wechaty.puppet.schemas.Friendship._
   }
 
   override protected def friendshipRawPayload(friendshipId: String): wechaty.puppet.schemas.Friendship.FriendshipPayload = {
-<span class="nc" id="L53">    val request = Friendship.FriendshipPayloadRequest.newBuilder()</span>
-<span class="nc" id="L54">      .setId(friendshipId)</span>
+<span class="fc" id="L53">    val request = Friendship.FriendshipPayloadRequest.newBuilder()</span>
+<span class="fc" id="L54">      .setId(friendshipId)</span>
       .build()
 
-<span class="nc" id="L57">    val response = grpcClient.friendshipPayload(request)</span>
+<span class="fc" id="L57">    val response = grpcClient.friendshipPayload(request)</span>
     val payload =
-<span class="nc" id="L59">    response.getType match {</span>
-<span class="nc bnc" id="L60" title="All 2 branches missed.">      case Friendship.FriendshipType.FRIENDSHIP_TYPE_CONFIRM =&gt;</span>
+<span class="fc" id="L59">    response.getType match {</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">      case Friendship.FriendshipType.FRIENDSHIP_TYPE_CONFIRM =&gt;</span>
 <span class="nc" id="L61">        val confirm = new FriendshipPayloadConfirm()</span>
 <span class="nc" id="L62">        confirm</span>
-<span class="nc bnc" id="L63" title="All 2 branches missed.">      case Friendship.FriendshipType.FRIENDSHIP_TYPE_RECEIVE=&gt;</span>
-<span class="nc" id="L64">        val receive = new FriendshipPayloadReceive()</span>
-<span class="nc" id="L65">        receive.scene = FriendshipSceneType.apply(response.getSceneValue)</span>
-<span class="nc" id="L66">        receive.stranger = response.getStranger</span>
-<span class="nc" id="L67">        receive.ticket = response.getTicket</span>
-<span class="nc" id="L68">        receive</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">      case Friendship.FriendshipType.FRIENDSHIP_TYPE_RECEIVE=&gt;</span>
+<span class="fc" id="L64">        val receive = new FriendshipPayloadReceive()</span>
+<span class="fc" id="L65">        receive.scene = FriendshipSceneType.apply(response.getSceneValue)</span>
+<span class="fc" id="L66">        receive.stranger = response.getStranger</span>
+<span class="fc" id="L67">        receive.ticket = response.getTicket</span>
+<span class="fc" id="L68">        receive</span>
 <span class="nc bnc" id="L69" title="All 2 branches missed.">      case Friendship.FriendshipType.FRIENDSHIP_TYPE_VERIFY=&gt;</span>
 <span class="nc" id="L70">        new FriendshipPayloadVerify()</span>
       case other =&gt;
 <span class="nc" id="L72">        new FriendshipPayload()</span>
     }
 
-<span class="nc" id="L75">    payload.`type` = FriendshipType.apply(response.getTypeValue)</span>
-<span class="nc" id="L76">    payload.contactId = response.getContactId</span>
-<span class="nc" id="L77">    payload.id = response.getId</span>
+<span class="fc" id="L75">    payload.`type` = FriendshipType.apply(response.getTypeValue)</span>
+<span class="fc" id="L76">    payload.contactId = response.getContactId</span>
+<span class="fc" id="L77">    payload.id = response.getId</span>
 
-<span class="nc" id="L79">    payload</span>
+<span class="fc" id="L79">    payload</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
