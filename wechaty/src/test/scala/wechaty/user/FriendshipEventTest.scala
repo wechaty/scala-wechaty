@@ -30,7 +30,7 @@ class FriendshipEventTest extends TestEventBase{
 
     val friendshipAccept= FriendshipAcceptResponse.newBuilder()
       .build()
-    stubFor(unaryMethod(PuppetGrpc.getFrendshipAcceptMethod)
+    stubFor(unaryMethod(PuppetGrpc.getFriendshipAcceptMethod)
       .willReturn(friendshipAccept))
 
 

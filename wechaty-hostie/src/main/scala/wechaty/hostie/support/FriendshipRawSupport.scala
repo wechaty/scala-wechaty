@@ -20,7 +20,7 @@ trait FriendshipRawSupport {
     val request = Friendship.FriendshipAcceptRequest.newBuilder()
       .setId(friendshipId)
       .build()
-    grpcClient.frendshipAccept(request)
+    grpcClient.friendshipAccept(request)
   }
 
   override def friendshipAdd(contactId: String, hello: String): Unit = {

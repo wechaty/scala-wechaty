@@ -45,7 +45,7 @@
       </dependency>
       <dependency>
         <groupId>io.github.wechaty</groupId>
-        <version>0.11.25</version>
+        <version>0.16.1</version>
         <artifactId>grpc</artifactId>
         <exclusions>
           <exclusion>
