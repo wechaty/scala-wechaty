@@ -19,7 +19,7 @@ class MessageTest extends TestBase{
     val roomId = "roomId"
     val response = MessagePayloadResponse.newBuilder()
       .setText(message)
-      .setType(MessageType.MESSAGE_TYPE_TEXT)
+      .setType(MessageType.MESSAGE_TYPE_VIDEO) //TODO because RPC return wrong messageType
       .setRoomId(roomId)
       .build()
     stubFor(unaryMethod(PuppetGrpc.getMessagePayloadMethod)
