@@ -20,8 +20,8 @@ object ResourceBox {
   def fromUrl(url: String): ResourceBox={
     new UrlResourceBox(url)
   }
-  def fromBase64(base64: String): ResourceBox={
-    new Base64ResourceBox(base64)
+  def fromBase64(name:String,base64: String): ResourceBox={
+    new Base64ResourceBox(name,base64)
   }
   def fromJson(json: String): ResourceBox={
     val root = objectMapper.readTree(json)
@@ -29,7 +29,7 @@ object ResourceBox {
     val boxType = ResourceBoxType.apply(boxTypeInt)
     boxType match{
       case ResourceBoxType.Base64 =>
-        fromBase64(root.get("base64").asText)
+        fromBase64(root.get("name").asText,root.get("base64").asText)
       case ResourceBoxType.Url =>
         fromUrl(root.get("remoteUrl").asText)
       case _ =>
@@ -67,14 +67,16 @@ object ResourceBox {
 
     override def toJson(): String = {
       val objectNode = objectMapper.createObjectNode
-      objectNode.put("name",url.substring(url.lastIndexOf("/")+1))
+      objectNode.put("name",name)
       objectNode.put("boxType",ResourceBoxType.Url.id)
       objectNode.put("remoteUrl",url)
       objectNode.toString
 
     }
+
+    override def name: String = url.substring(url.lastIndexOf("/")+1)
   }
-  private class Base64ResourceBox(base64:String) extends AbstractResourceBox{
+  private class Base64ResourceBox(override val name:String,base64:String) extends AbstractResourceBox{
     override def toStream: InputStream = {
       //decode base64 as byte array input stream
       new ByteArrayInputStream(Base64.getDecoder.decode(base64))
@@ -84,20 +86,23 @@ object ResourceBox {
 
     override def toJson(): String = {
       val objectNode = objectMapper.createObjectNode
-      objectNode.put("boxType",ResourceBoxType.Url.id)
+      objectNode.put("name",name)
+      objectNode.put("boxType",ResourceBoxType.Base64.id)
       objectNode.put("base64",base64)
       objectNode.toString
     }
+
   }
-  private class StreamResourceBox(stream:InputStream) extends AbstractResourceBox{
+  private class StreamResourceBox(override val name:String,stream:InputStream) extends AbstractResourceBox{
     override def toStream: InputStream = stream
     override protected def using[T <: Closeable, R](resource: T)(block: T => R): R = {
       block(resource) //don't close the stream.must be closed by creator
     }
-
   }
   private class FileResourceBox(file:File) extends AbstractResourceBox{
     override def toStream: InputStream = new FileInputStream(file)
+
+    override def name: String = file.getName
   }
   private trait AbstractResourceBox extends ResourceBox {
     override def toBase64: String = {
@@ -125,6 +130,7 @@ object ResourceBox {
   }
 }
 trait ResourceBox {
+  def name:String
   def toStream:InputStream
   def toBase64:String
   def toDataURL(mimeType: MimeType):String

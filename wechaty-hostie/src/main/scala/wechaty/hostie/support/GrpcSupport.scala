@@ -59,7 +59,9 @@ trait GrpcSupport {
       .enableRetry()
       .usePlaintext().build()
       */
-        this.channel = ManagedChannelBuilder.forTarget(endpoint).usePlaintext().build()
+        this.channel = ManagedChannelBuilder.forTarget(endpoint)
+          .maxInboundMessageSize(1024 * 1024 * 150)
+          .usePlaintext().build()
     }
   }
 
@@ -85,7 +87,7 @@ trait GrpcSupport {
 
     try{
       //sometime the grpc can't work well,so logout before start bot
-      this.grpcClient.logout(Base.LogoutRequest.newBuilder().build())
+//      this.grpcClient.logout(Base.LogoutRequest.newBuilder().build())
     }catch{
       case e:Throwable=>
         warn(e.getMessage)

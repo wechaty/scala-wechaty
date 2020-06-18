@@ -29,7 +29,7 @@ class ResourceBoxTest {
   def test_base64: Unit ={
     val originString = "base64String"
     val base64String = Base64.getEncoder.encodeToString(originString.getBytes())
-    val box = ResourceBox.fromBase64(base64String)
+    val box = ResourceBox.fromBase64("name",base64String)
     Assertions.assertEquals(base64String,box.toBase64)
     Assertions.assertTrue(box.toJson().indexOf(base64String)>0)
     val byteArrayOutputStream = new ByteArrayOutputStream()

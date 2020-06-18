@@ -59,7 +59,7 @@ trait ContactRawSupport {
       case ResourceBox.ResourceBoxType.Url =>
         ResourceBox.fromUrl(root.get("remoteUrl").asText())
       case ResourceBox.ResourceBoxType.Base64 =>
-        ResourceBox.fromBase64(root.get("base64").asText())
+        ResourceBox.fromBase64(root.get("name").asText(),root.get("base64").asText())
       case other =>
         throw new UnsupportedOperationException(s"other ${other} type not supported!")
     }

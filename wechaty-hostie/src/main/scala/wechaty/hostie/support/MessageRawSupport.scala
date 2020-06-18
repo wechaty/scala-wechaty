@@ -30,10 +30,10 @@ trait MessageRawSupport {
     response.getId
   }
 
+  var count = 0
   override def messageFile(messageId: String): ResourceBox = {
     val request = Message.MessageFileRequest.newBuilder().setId(messageId).build()
     val response = grpcClient.messageFile(request)
-    response.getFilebox
     ResourceBox.fromJson(response.getFilebox)
   }
 

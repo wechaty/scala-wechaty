@@ -2,12 +2,14 @@ package wechaty.user
 
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Contact.ContactPayloadResponse
-import io.github.wechaty.grpc.puppet.Message.{MessagePayloadResponse, MessageType}
+import io.github.wechaty.grpc.puppet.Message.{MessageFileResponse, MessagePayloadResponse, MessageSendFileResponse, MessageType}
 import io.github.wechaty.grpc.puppet.Room.RoomPayloadResponse
 import io.github.wechaty.grpc.puppet.RoomMember.RoomMemberPayloadResponse
 import org.grpcmock.GrpcMock.{stubFor, unaryMethod}
 import org.junit.jupiter.api.{Assertions, Test}
 import wechaty.TestBase
+
+import scala.io.Source
 
 /**
   *
@@ -94,5 +96,39 @@ class MessageTest extends TestBase{
     Assertions.assertEquals("member2",mentionList(1).id)
     Assertions.assertEquals("member3",mentionList(2).id)
     Assertions.assertEquals("中文中文测试",message.mentionText())
+  }
+  @Test
+  def testForward: Unit ={
+    val roomId = "roomId"
+    val response = MessagePayloadResponse.newBuilder()
+      .setType(MessageType.MESSAGE_TYPE_TEXT) //TODO because RPC return wrong messageType
+      .setRoomId(roomId)
+      .build()
+    stubFor(unaryMethod(PuppetGrpc.getMessagePayloadMethod)
+      .willReturn(response))
+
+    val roomPayloadResponse = RoomPayloadResponse.newBuilder()
+    roomPayloadResponse.setId(roomId)
+    stubFor(unaryMethod(PuppetGrpc.getRoomPayloadMethod)
+      .willReturn(roomPayloadResponse.build())
+    )
+
+    val json = Source.fromInputStream(getClass.getResourceAsStream("/filebox1.json")).mkString
+    val messageFileResponse = MessageFileResponse.newBuilder()
+      .setFilebox(json)
+    stubFor(unaryMethod(PuppetGrpc.getMessageFileMethod)
+      .willReturn(messageFileResponse.build())
+    )
+
+    val messageSendFileResponse = MessageSendFileResponse.newBuilder()
+    stubFor(unaryMethod(PuppetGrpc.getMessageSendFileMethod)
+      .willReturn(messageSendFileResponse.build())
+    )
+
+    val resourceBox = instance.puppet.messageFile("messageId")
+    Assertions.assertEquals(" f2ebcd57ccf602d7a15f480100855974.jpg",resourceBox.name.trim)
+    val message = new Message("messageId")
+    val room = Room.load("roomId").get
+    message.forward(room)
   }
 }
