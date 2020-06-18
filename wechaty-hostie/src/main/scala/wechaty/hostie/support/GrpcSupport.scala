@@ -82,7 +82,14 @@ trait GrpcSupport {
     startStream()
 
     this.grpcClient.start(Base.StartRequest.newBuilder().build())
-    this.grpcClient.logout(Base.LogoutRequest.newBuilder().build())
+
+    try{
+      //sometime the grpc can't work well,so logout before start bot
+      this.grpcClient.logout(Base.LogoutRequest.newBuilder().build())
+    }catch{
+      case e:Throwable=>
+        warn(e.getMessage)
+    }
     info("start grpc client done")
   }
 
