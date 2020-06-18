@@ -27,7 +27,7 @@ test:
 bot:
 	mvn \
 		-DWECHATY_PUPPET_HOSTIE_TOKEN=$$WECHATY_PUPPET_HOSTIE_TOKEN \
-		-Dexec.mainClass=wechaty.DingDongBot verify
+		-P run verify
 
 .PHONY: version
 version:

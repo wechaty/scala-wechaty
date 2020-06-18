@@ -35,16 +35,6 @@
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
       </plugin>
-      <!--
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <configuration>
-          <skip>false</skip>
-          <mainClass>wechaty.DingDongBot</mainClass>
-        </configuration>
-      </plugin>
-      -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -74,5 +64,22 @@
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <id>run</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <configuration>
+              <skip>false</skip>
+              <mainClass>wechaty.DingDongBot</mainClass>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
