@@ -260,6 +260,17 @@ Only one day! This is the fastest record in the world for translating the TypeSc
 [![Wechaty in Scala](https://img.shields.io/badge/Wechaty-Scala-890)](https://github.com/wechaty/scala-wechaty)
 ```
 
+## Contributors
+
+[![contributor](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/images/0)](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/links/0)
+[![contributor](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/images/1)](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/links/1)
+[![contributor](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/images/2)](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/links/2)
+[![contributor](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/images/3)](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/links/3)
+[![contributor](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/images/4)](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/links/4)
+[![contributor](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/images/5)](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/links/5)
+[![contributor](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/images/6)](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/links/6)
+[![contributor](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/images/7)](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/links/7)
+
 ## Author
 
 [@jcai](https://github.com/jcai/) Jun Tsai <jcai@ganshane.com>
