@@ -53,11 +53,13 @@ class PuppetHostie(val option:PuppetOptions) extends Puppet
   override def selfIdOpt(): Option[String] = this.idOpt
 
   private def discoverHostieEndPoint(): Option[String] = {
+    if(option.token.isEmpty)
+      throw new IllegalAccessError("token is empty,you should set token!")
     val hostieEndpoint = "https://api.chatie.io/v0/hosties/%s"
-//    val content = scala.io.Source.fromURL(hostieEndpoint.format(option.token.get)).mkString
     try {
       val content = get(hostieEndpoint.format(option.token.get)).mkString
       val json = Puppet.objectMapper.readTree(content)
+      info("grpc server found:{}",content)
       Some(json.get("ip").asText() + ":" + json.get("port"))
     }catch{
       case e:Throwable=>

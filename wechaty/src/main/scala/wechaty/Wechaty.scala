@@ -8,7 +8,7 @@ import wechaty.hostie.PuppetHostie
 import wechaty.puppet.schemas.Event._
 import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
 import wechaty.puppet.{LoggerSupport, Puppet}
-import wechaty.user.{Contact, ContactSelf, Friendship, Message, Room}
+import wechaty.user._
 
 import scala.language.implicitConversions;
 

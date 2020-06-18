@@ -77,11 +77,11 @@ object Room {
     val date = timestampToDate(payload.timestamp)
     room.emit(PuppetEventName.ROOM_TOPIC,(changer,date))
   }
-  def findAll(query : Option[RoomQueryFilter])(implicit resolver: PuppetResolver): Array[Room]= {
+  def findAll(query : Option[RoomQueryFilter] = None)(implicit resolver: PuppetResolver): Array[Room]= {
     val roomIdList = resolver.puppet.roomSearch(query)
     roomIdList.flatMap(id => load(id))
   }
-  def find(query : Option[RoomQueryFilter])(implicit resolver: PuppetResolver): Option[Room] = {
+  def find(query : Option[RoomQueryFilter] = None)(implicit resolver: PuppetResolver): Option[Room] = {
     findAll(query).headOption
   }
   def find(query : RoomQueryFilter)(implicit resolver: PuppetResolver): Option[Room] = {
