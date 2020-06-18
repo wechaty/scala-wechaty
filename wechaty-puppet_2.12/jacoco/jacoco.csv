@@ -18,7 +18,7 @@ wechaty-puppet_2.12,wechaty.puppet.schemas,MiniProgram.MiniProgramPayload,66,0,0
 wechaty-puppet_2.12,wechaty.puppet.schemas,Room.RoomPayload,45,0,0,0,8,0,13,0,13,0
 wechaty-puppet_2.12,wechaty.puppet.schemas,Contact.ContactGender.,32,0,0,0,4,0,5,0,5,0
 wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventScanPayload,30,0,0,0,5,0,8,0,8,0
-wechaty-puppet_2.12,wechaty.puppet.schemas,Message.MessageType.,114,0,0,0,16,0,17,0,17,0
+wechaty-puppet_2.12,wechaty.puppet.schemas,Message.MessageType.,121,0,0,0,17,0,18,0,18,0
 wechaty-puppet_2.12,wechaty.puppet.schemas,Friendship.FriendshipPayloadVerify,3,0,0,0,1,0,1,0,1,0
 wechaty-puppet_2.12,wechaty.puppet.schemas,Friendship.FriendshipType.,40,0,0,0,5,0,6,0,6,0
 wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventRoomInvitePayload,10,0,0,0,2,0,3,0,3,0

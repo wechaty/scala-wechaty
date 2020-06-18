@@ -6,99 +6,100 @@
     type Type = Value
 <span class="nc" id="L7">    val Unknown: Type = Value(0)</span>
 
-<span class="nc" id="L9">    val Attachment = Value // Attach(6),</span>
-<span class="nc" id="L10">    val Audio = Value // Audio(1), Voice(34)</span>
-<span class="nc" id="L11">    val Contact = Value // ShareCard(42)</span>
-<span class="nc" id="L12">    val Emoticon = Value // Sticker: Emoticon(15), Emoticon(47)</span>
-<span class="nc" id="L13">    val Image = Value // Img(2), Image(3)</span>
-<span class="nc" id="L14">    val Text = Value // Text(1)</span>
-<span class="nc" id="L15">    val Video = Value // Video(4), Video(43)</span>
-<span class="nc" id="L16">    val ChatHistory = Value // ChatHistory(19)</span>
-<span class="nc" id="L17">    val Location = Value // Location(48)</span>
-<span class="nc" id="L18">    val MiniProgram = Value // MiniProgram(33)</span>
-<span class="nc" id="L19">    val Transfer = Value // Transfers(2000)</span>
-<span class="nc" id="L20">    val RedEnvelope = Value // RedEnvelopes(2001)</span>
-<span class="nc" id="L21">    val Recalled = Value // Recalled(10002)</span>
-<span class="nc" id="L22">    val Url = Value // Url(5)</span>
-    //    val GroupNote = Value // GroupNote(53)
+    //from messsage.ts#message
+<span class="nc" id="L10">    val Attachment: Type = Value // Attach(6),</span>
+<span class="nc" id="L11">    val Audio: Type = Value // Audio(1), Voice(34)</span>
+<span class="nc" id="L12">    val Contact: Type = Value // ShareCard(42)</span>
+<span class="nc" id="L13">    val ChatHistory: Type = Value // ChatHistory(19)</span>
+<span class="nc" id="L14">    val Emoticon: Type = Value // Sticker: Emoticon(15), Emoticon(47)</span>
+<span class="nc" id="L15">    val Image: Type = Value // Img(2), Image(3)</span>
+<span class="nc" id="L16">    val Text: Type = Value // Text(1)</span>
+<span class="nc" id="L17">    val Location: Type = Value // Location(48)</span>
+<span class="nc" id="L18">    val MiniProgram: Type = Value // MiniProgram(33)</span>
+<span class="nc" id="L19">    val GroupNote: Type = Value // GroupNote(53)</span>
+<span class="nc" id="L20">    val Transfer: Type = Value // Transfers(2000)</span>
+<span class="nc" id="L21">    val RedEnvelope: Type = Value // RedEnvelopes(2001)</span>
+<span class="nc" id="L22">    val Recalled: Type = Value // Recalled(10002)</span>
+<span class="nc" id="L23">    val Url: Type = Value // Url(5)</span>
+<span class="nc" id="L24">    val Video: Type = Value // Video(4), Video(43)  }</span>
   }
 
   /**
     * Huan(202001): Wechat Server Message Type Value (to be confirmed.)
     */
-<span class="nc" id="L29">  object WechatAppMessageType extends Enumeration {</span>
+<span class="nc" id="L30">  object WechatAppMessageType extends Enumeration {</span>
     type Type = Value
-<span class="nc" id="L31">    val Text: Type = Value(1)</span>
-<span class="nc" id="L32">    val Img: Type = Value(2)</span>
-<span class="nc" id="L33">    val Audio: Type = Value(3)</span>
-<span class="nc" id="L34">    val Video: Type = Value(4)</span>
-<span class="nc" id="L35">    val Url: Type = Value(5)</span>
-<span class="nc" id="L36">    val Attach: Type = Value(6)</span>
-<span class="nc" id="L37">    val Open: Type = Value(7)</span>
-<span class="nc" id="L38">    val Emoji: Type = Value(8)</span>
-<span class="nc" id="L39">    val VoiceRemind: Type = Value(9)</span>
-<span class="nc" id="L40">    val ScanGood: Type = Value(10)</span>
-<span class="nc" id="L41">    val Good: Type = Value(13)</span>
-<span class="nc" id="L42">    val Emotion: Type = Value(15)</span>
-<span class="nc" id="L43">    val CardTicket: Type = Value(16)</span>
-<span class="nc" id="L44">    val RealtimeShareLocation: Type = Value(17)</span>
-<span class="nc" id="L45">    val ChatHistory: Type = Value(19)</span>
-<span class="nc" id="L46">    val MiniProgram: Type = Value(33)</span>
-<span class="nc" id="L47">    val Transfers: Type = Value(2000)</span>
-<span class="nc" id="L48">    val RedEnvelopes: Type = Value(2001)</span>
-<span class="nc" id="L49">    val ReaderType: Type = Value(100001)</span>
+<span class="nc" id="L32">    val Text: Type = Value(1)</span>
+<span class="nc" id="L33">    val Img: Type = Value(2)</span>
+<span class="nc" id="L34">    val Audio: Type = Value(3)</span>
+<span class="nc" id="L35">    val Video: Type = Value(4)</span>
+<span class="nc" id="L36">    val Url: Type = Value(5)</span>
+<span class="nc" id="L37">    val Attach: Type = Value(6)</span>
+<span class="nc" id="L38">    val Open: Type = Value(7)</span>
+<span class="nc" id="L39">    val Emoji: Type = Value(8)</span>
+<span class="nc" id="L40">    val VoiceRemind: Type = Value(9)</span>
+<span class="nc" id="L41">    val ScanGood: Type = Value(10)</span>
+<span class="nc" id="L42">    val Good: Type = Value(13)</span>
+<span class="nc" id="L43">    val Emotion: Type = Value(15)</span>
+<span class="nc" id="L44">    val CardTicket: Type = Value(16)</span>
+<span class="nc" id="L45">    val RealtimeShareLocation: Type = Value(17)</span>
+<span class="nc" id="L46">    val ChatHistory: Type = Value(19)</span>
+<span class="nc" id="L47">    val MiniProgram: Type = Value(33)</span>
+<span class="nc" id="L48">    val Transfers: Type = Value(2000)</span>
+<span class="nc" id="L49">    val RedEnvelopes: Type = Value(2001)</span>
+<span class="nc" id="L50">    val ReaderType: Type = Value(100001)</span>
   }
 
   /**
     * Wechat Server Message Type Value (to be confirmed)
     * Huan(202001): The Windows(PC) DLL match the following numbers.
     */
-<span class="nc" id="L56">  object WechatMessageType extends Enumeration {</span>
+<span class="nc" id="L57">  object WechatMessageType extends Enumeration {</span>
     type Type = Value
-<span class="nc" id="L58">    val Text: Type = Value(1)</span>
-<span class="nc" id="L59">    val Image: Type = Value(3)</span>
-<span class="nc" id="L60">    val Voice: Type = Value(34)</span>
-<span class="nc" id="L61">    val VerifyMsg: Type = Value(37)</span>
-<span class="nc" id="L62">    val PossibleFriendMsg: Type = Value(40)</span>
-<span class="nc" id="L63">    val ShareCard: Type = Value(42)</span>
-<span class="nc" id="L64">    val Video: Type = Value(43)</span>
-<span class="nc" id="L65">    val Emoticon: Type = Value(47)</span>
-<span class="nc" id="L66">    val Location: Type = Value(48)</span>
-<span class="nc" id="L67">    val App: Type = Value(49)</span>
-<span class="nc" id="L68">    val VoipMsg: Type = Value(50)</span>
-<span class="nc" id="L69">    val StatusNotify: Type = Value(51)</span>
-<span class="nc" id="L70">    val VoipNotify: Type = Value(52)</span>
-<span class="nc" id="L71">    val VoipInvite: Type = Value(53)</span>
-<span class="nc" id="L72">    val MicroVideo: Type = Value(62)</span>
-<span class="nc" id="L73">    val Transfer: Type = Value(2000) //  // 转账</span>
-<span class="nc" id="L74">    val RedEnvelope: Type = Value(2001) //  // 红包</span>
-<span class="nc" id="L75">    val MiniProgram: Type = Value(2002) //  // 小程序</span>
-<span class="nc" id="L76">    val GroupInvite: Type = Value(2003) //  // 群邀请</span>
-<span class="nc" id="L77">    val File: Type = Value(2004) //  // 文件消息</span>
-<span class="nc" id="L78">    val SysNotice: Type = Value(9999)</span>
-<span class="nc" id="L79">    val Sys: Type = Value(10000)</span>
-<span class="nc" id="L80">    val Recalled: Type = Value(10002) //   // NOTIFY 服务通知</span>
+<span class="nc" id="L59">    val Text: Type = Value(1)</span>
+<span class="nc" id="L60">    val Image: Type = Value(3)</span>
+<span class="nc" id="L61">    val Voice: Type = Value(34)</span>
+<span class="nc" id="L62">    val VerifyMsg: Type = Value(37)</span>
+<span class="nc" id="L63">    val PossibleFriendMsg: Type = Value(40)</span>
+<span class="nc" id="L64">    val ShareCard: Type = Value(42)</span>
+<span class="nc" id="L65">    val Video: Type = Value(43)</span>
+<span class="nc" id="L66">    val Emoticon: Type = Value(47)</span>
+<span class="nc" id="L67">    val Location: Type = Value(48)</span>
+<span class="nc" id="L68">    val App: Type = Value(49)</span>
+<span class="nc" id="L69">    val VoipMsg: Type = Value(50)</span>
+<span class="nc" id="L70">    val StatusNotify: Type = Value(51)</span>
+<span class="nc" id="L71">    val VoipNotify: Type = Value(52)</span>
+<span class="nc" id="L72">    val VoipInvite: Type = Value(53)</span>
+<span class="nc" id="L73">    val MicroVideo: Type = Value(62)</span>
+<span class="nc" id="L74">    val Transfer: Type = Value(2000) //  // 转账</span>
+<span class="nc" id="L75">    val RedEnvelope: Type = Value(2001) //  // 红包</span>
+<span class="nc" id="L76">    val MiniProgram: Type = Value(2002) //  // 小程序</span>
+<span class="nc" id="L77">    val GroupInvite: Type = Value(2003) //  // 群邀请</span>
+<span class="nc" id="L78">    val File: Type = Value(2004) //  // 文件消息</span>
+<span class="nc" id="L79">    val SysNotice: Type = Value(9999)</span>
+<span class="nc" id="L80">    val Sys: Type = Value(10000)</span>
+<span class="nc" id="L81">    val Recalled: Type = Value(10002) //   // NOTIFY 服务通知</span>
   }
 
   /** @hidden */
-<span class="nc" id="L84">  class MessagePayload {</span>
-<span class="nc" id="L85">    var id: String = _</span>
+<span class="nc" id="L85">  class MessagePayload {</span>
+<span class="nc" id="L86">    var id: String = _</span>
 
     // use message id to get rawPayload to get those informations when needed
     // contactId?    : string,        // Contact ShareCard
-<span class="nc" id="L89">    var mentionIdList: Array[String] = _ //      // Mentioned Contacts' Ids</span>
+<span class="nc" id="L90">    var mentionIdList: Array[String] = _ //      // Mentioned Contacts' Ids</span>
 
-<span class="nc" id="L91">    var filename: String = _</span>
-<span class="nc" id="L92">    var text: String = _</span>
-<span class="nc" id="L93">    var timestamp: Long = _ //        // Huan(202001): we support both seconds &amp; milliseconds in Wechaty now.</span>
-<span class="nc" id="L94">    var `type`: MessageType.Type = _</span>
+<span class="nc" id="L92">    var filename: String = _</span>
+<span class="nc" id="L93">    var text: String = _</span>
+<span class="nc" id="L94">    var timestamp: Long = _ //        // Huan(202001): we support both seconds &amp; milliseconds in Wechaty now.</span>
+<span class="nc" id="L95">    var `type`: MessageType.Type = _</span>
 //  }
 
 //  /** @hidden */
 //  class MessagePayloadRoom extends MessagePayload {
-<span class="nc" id="L99">    var fromId: String = _</span>
-<span class="nc" id="L100">    var roomId: String = _</span>
-<span class="nc" id="L101">    var toId: String = _ //    // if to is not set, then room must be set</span>
+<span class="nc" id="L100">    var fromId: String = _</span>
+<span class="nc" id="L101">    var roomId: String = _</span>
+<span class="nc" id="L102">    var toId: String = _ //    // if to is not set, then room must be set</span>
 //  }
 //
 //  /** @hidden */
@@ -109,19 +110,19 @@
   }
 
 
-<span class="nc" id="L112">  class MessageQueryFilter {</span>
-<span class="nc" id="L113">    var fromId: String = _</span>
-<span class="nc" id="L114">    var id: String = _</span>
-<span class="nc" id="L115">    var roomId: String = _</span>
-<span class="nc" id="L116">    var text: String = _</span>
-<span class="nc" id="L117">    var toId: String = _</span>
-<span class="nc" id="L118">    var `type`: MessageType.Type = _</span>
+<span class="nc" id="L113">  class MessageQueryFilter {</span>
+<span class="nc" id="L114">    var fromId: String = _</span>
+<span class="nc" id="L115">    var id: String = _</span>
+<span class="nc" id="L116">    var roomId: String = _</span>
+<span class="nc" id="L117">    var text: String = _</span>
+<span class="nc" id="L118">    var toId: String = _</span>
+<span class="nc" id="L119">    var `type`: MessageType.Type = _</span>
   }
 
   /** @hidden */
-<span class="nc" id="L122">  type MessagePayloadFilterFunction = MessagePayload =&gt; Boolean</span>
+<span class="nc" id="L123">  type MessagePayloadFilterFunction = MessagePayload =&gt; Boolean</span>
 
   /** @hidden */
   type MessagePayloadFilterFactory = MessageQueryFilter =&gt; MessagePayloadFilterFunction
-<span class="nc" id="L126">}</span>
+<span class="nc" id="L127">}</span>
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -18,7 +18,7 @@ report/wechaty-puppet_2.12,wechaty.puppet.schemas,MiniProgram.MiniProgramPayload
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Room.RoomPayload,15,30,0,0,0,8,5,8,5,8
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Contact.ContactGender.,9,23,0,0,0,4,3,2,3,2
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventScanPayload,0,30,0,0,0,5,0,8,0,8
-report/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.MessageType.,39,75,0,0,0,16,13,4,13,4
+report/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.MessageType.,42,79,0,0,0,17,14,4,14,4
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Friendship.FriendshipPayloadVerify,3,0,0,0,1,0,1,0,1,0
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Friendship.FriendshipType.,12,28,0,0,0,5,4,2,4,2
 report/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventRoomInvitePayload,10,0,0,0,2,0,3,0,3,0
@@ -63,7 +63,7 @@ report/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.UrlResourceBox,33,46,0,0,5
 report/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.,81,23,12,0,9,5,7,5,1,5
 report/wechaty-puppet_2.12,wechaty.puppet,LoggerSupport,15,106,6,4,2,10,8,7,3,7
 report/wechaty-puppet_2.12,wechaty.puppet.events,EventEmitter,0,100,0,4,0,10,0,7,0,5
-report/wechaty-hostie_2.12,wechaty.hostie,PuppetHostie,342,321,6,6,21,13,59,65,54,64
+report/wechaty-hostie_2.12,wechaty.hostie,PuppetHostie,363,321,8,6,24,13,60,65,54,64
 report/wechaty-hostie_2.12,wechaty.hostie,Configuration.,54,62,8,4,4,6,7,5,2,4
 report/wechaty-hostie_2.12,wechaty.hostie,Configuration,6,0,0,0,0,0,2,0,2,0
 report/wechaty-hostie_2.12,wechaty.hostie.support,MessageRawSupport,259,92,1,1,63,16,14,2,13,2
@@ -92,8 +92,8 @@ report/wechaty_2.12,wechaty.user,MiniProgram,37,0,0,0,9,0,9,0,9,0
 report/wechaty_2.12,wechaty.user,Tag,3,0,0,0,2,0,1,0,1,0
 report/wechaty_2.12,wechaty.user,Message,606,231,88,14,78,33,76,16,26,15
 report/wechaty_2.12,wechaty.user,Friendship,38,63,2,2,6,12,5,7,3,7
-report/wechaty_2.12,wechaty.user,Room.,95,303,11,3,8,34,10,18,4,17
-report/wechaty_2.12,wechaty.user,Room,491,75,30,2,40,8,53,11,37,11
+report/wechaty_2.12,wechaty.user,Room.,99,303,11,3,10,34,12,18,6,17
+report/wechaty_2.12,wechaty.user,Room,497,75,30,2,40,8,55,11,39,11
 report/wechaty_2.12,wechaty.user,UrlLink,9,0,0,0,2,0,2,0,2,0
 report/wechaty_2.12,wechaty.user,Friendship.,15,0,0,0,3,0,3,0,3,0
 report/wechaty_2.12,wechaty.user,ContactSelf,0,5,0,0,0,1,0,1,0,1

@@ -77,11 +77,11 @@ import wechaty.user.Room.{RoomJoinEvent, RoomLeaveEvent, RoomTopicEvent}
 <span class="fc" id="L77">    val date = timestampToDate(payload.timestamp)</span>
 <span class="fc" id="L78">    room.emit(PuppetEventName.ROOM_TOPIC,(changer,date))</span>
   }
-  def findAll(query : Option[RoomQueryFilter])(implicit resolver: PuppetResolver): Array[Room]= {
+<span class="nc" id="L80">  def findAll(query : Option[RoomQueryFilter] = None)(implicit resolver: PuppetResolver): Array[Room]= {</span>
 <span class="fc" id="L81">    val roomIdList = resolver.puppet.roomSearch(query)</span>
 <span class="fc" id="L82">    roomIdList.flatMap(id =&gt; load(id))</span>
   }
-  def find(query : Option[RoomQueryFilter])(implicit resolver: PuppetResolver): Option[Room] = {
+<span class="nc" id="L84">  def find(query : Option[RoomQueryFilter] = None)(implicit resolver: PuppetResolver): Option[Room] = {</span>
 <span class="fc" id="L85">    findAll(query).headOption</span>
   }
   def find(query : RoomQueryFilter)(implicit resolver: PuppetResolver): Option[Room] = {
