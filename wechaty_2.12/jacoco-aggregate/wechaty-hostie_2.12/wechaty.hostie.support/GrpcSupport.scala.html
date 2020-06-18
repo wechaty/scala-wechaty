@@ -59,72 +59,74 @@ import wechaty.puppet.LoggerSupport
       .enableRetry()
       .usePlaintext().build()
       */
-<span class="nc" id="L62">        this.channel = ManagedChannelBuilder.forTarget(endpoint).usePlaintext().build()</span>
+<span class="nc" id="L62">        this.channel = ManagedChannelBuilder.forTarget(endpoint)</span>
+<span class="nc" id="L63">          .maxInboundMessageSize(1024 * 1024 * 150)</span>
+          .usePlaintext().build()
     }
   }
 
   protected def reconnectStream() {
-<span class="nc" id="L67">    info(&quot;reconnect stream stream...&quot;)</span>
+<span class="nc" id="L69">    info(&quot;reconnect stream stream...&quot;)</span>
     try {
-<span class="nc" id="L69">      stopGrpc()</span>
+<span class="nc" id="L71">      stopGrpc()</span>
     } catch {
       case e: Throwable =&gt;
-<span class="nc" id="L72">        warn(&quot;fail to stop grpc {}&quot;, e.getMessage)</span>
+<span class="nc" id="L74">        warn(&quot;fail to stop grpc {}&quot;, e.getMessage)</span>
     }
-<span class="nc" id="L74">    internalStartGrpc()</span>
-<span class="nc" id="L75">    info(&quot;reconnect stream stream done&quot;)</span>
+<span class="nc" id="L76">    internalStartGrpc()</span>
+<span class="nc" id="L77">    info(&quot;reconnect stream stream done&quot;)</span>
 
   }
 
   private def internalStartGrpc() {
-<span class="fc" id="L80">    info(&quot;start grpc client ....&quot;)</span>
-<span class="fc" id="L81">    this.grpcClient = PuppetGrpc.newBlockingStub(channel)</span>
-<span class="fc" id="L82">    startStream()</span>
+<span class="fc" id="L82">    info(&quot;start grpc client ....&quot;)</span>
+<span class="fc" id="L83">    this.grpcClient = PuppetGrpc.newBlockingStub(channel)</span>
+<span class="fc" id="L84">    startStream()</span>
 
-<span class="fc" id="L84">    this.grpcClient.start(Base.StartRequest.newBuilder().build())</span>
+<span class="fc" id="L86">    this.grpcClient.start(Base.StartRequest.newBuilder().build())</span>
 
-    try{
+<span class="fc" id="L88">    try{</span>
       //sometime the grpc can't work well,so logout before start bot
-<span class="pc" id="L88">      this.grpcClient.logout(Base.LogoutRequest.newBuilder().build())</span>
+//      this.grpcClient.logout(Base.LogoutRequest.newBuilder().build())
     }catch{
       case e:Throwable=&gt;
-<span class="pc" id="L91">        warn(e.getMessage)</span>
+        warn(e.getMessage)
     }
-<span class="fc" id="L93">    info(&quot;start grpc client done&quot;)</span>
+<span class="fc" id="L95">    info(&quot;start grpc client done&quot;)</span>
   }
 
   private def startStream() {
-<span class="fc" id="L97">    this.eventStream = PuppetGrpc.newStub(channel)</span>
-<span class="fc" id="L98">    val startRequest = EventRequest.newBuilder().build()</span>
-<span class="fc" id="L99">    this.eventStream.event(startRequest, this)</span>
+<span class="fc" id="L99">    this.eventStream = PuppetGrpc.newStub(channel)</span>
+<span class="fc" id="L100">    val startRequest = EventRequest.newBuilder().build()</span>
+<span class="fc" id="L101">    this.eventStream.event(startRequest, this)</span>
   }
 
   protected def stopGrpc(): Unit = {
-<span class="pc bpc" id="L103" title="1 of 2 branches missed.">    if(option.channelOpt.isEmpty) {  //if no test!</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">    if(option.channelOpt.isEmpty) {  //if no test!</span>
       //stop stream
-<span class="nc" id="L105">      stopStream()</span>
+<span class="nc" id="L107">      stopStream()</span>
 
       //stop grpc client
-<span class="nc" id="L108">      this.grpcClient.stop(Base.StopRequest.getDefaultInstance)</span>
+<span class="nc" id="L110">      this.grpcClient.stop(Base.StopRequest.getDefaultInstance)</span>
 
-<span class="nc" id="L110">      this.channel.shutdownNow()</span>
+<span class="nc" id="L112">      this.channel.shutdownNow()</span>
     }
   }
 
   private def stopStream(): Unit = {
     try {
-<span class="nc" id="L116">      val countDownLatch = new CountDownLatch(1)</span>
-<span class="nc" id="L117">      this.eventStream.stop(Base.StopRequest.getDefaultInstance, new StreamObserver[Base.StopResponse] {</span>
-<span class="nc" id="L118">        override def onNext(v: Base.StopResponse): Unit = {}</span>
+<span class="nc" id="L118">      val countDownLatch = new CountDownLatch(1)</span>
+<span class="nc" id="L119">      this.eventStream.stop(Base.StopRequest.getDefaultInstance, new StreamObserver[Base.StopResponse] {</span>
+<span class="nc" id="L120">        override def onNext(v: Base.StopResponse): Unit = {}</span>
 
-<span class="nc" id="L120">        override def onError(throwable: Throwable): Unit = {}</span>
+<span class="nc" id="L122">        override def onError(throwable: Throwable): Unit = {}</span>
 
-<span class="nc" id="L122">        override def onCompleted(): Unit = {countDownLatch.countDown()}</span>
+<span class="nc" id="L124">        override def onCompleted(): Unit = {countDownLatch.countDown()}</span>
       })
-<span class="nc" id="L124">      countDownLatch.await()</span>
+<span class="nc" id="L126">      countDownLatch.await()</span>
     } catch {
       case e: Throwable =&gt;
-<span class="nc" id="L127">        warn(&quot;fail to stop stream {}&quot;, e.getMessage)</span>
+<span class="nc" id="L129">        warn(&quot;fail to stop stream {}&quot;, e.getMessage)</span>
     }
   }
 }

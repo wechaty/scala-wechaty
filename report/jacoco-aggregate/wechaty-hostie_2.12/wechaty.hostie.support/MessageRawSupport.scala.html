@@ -30,11 +30,11 @@ import wechaty.puppet.{LoggerSupport, ResourceBox}
 <span class="nc" id="L30">    response.getId</span>
   }
 
+<span class="fc" id="L33">  var count = 0</span>
   override def messageFile(messageId: String): ResourceBox = {
-<span class="nc" id="L34">    val request = Message.MessageFileRequest.newBuilder().setId(messageId).build()</span>
-<span class="nc" id="L35">    val response = grpcClient.messageFile(request)</span>
-<span class="nc" id="L36">    response.getFilebox</span>
-<span class="nc" id="L37">    ResourceBox.fromJson(response.getFilebox)</span>
+<span class="fc" id="L35">    val request = Message.MessageFileRequest.newBuilder().setId(messageId).build()</span>
+<span class="fc" id="L36">    val response = grpcClient.messageFile(request)</span>
+<span class="fc" id="L37">    ResourceBox.fromJson(response.getFilebox)</span>
   }
 
   override def messageMiniProgram(messageId: String): MiniProgramPayload = {
@@ -70,15 +70,15 @@ import wechaty.puppet.{LoggerSupport, ResourceBox}
   }
 
   override def messageSendFile(conversationId: String, file: ResourceBox): String = {
-<span class="nc" id="L73">    val fileJson = file.toJson()</span>
+<span class="fc" id="L73">    val fileJson = file.toJson()</span>
 
-<span class="nc" id="L75">    val request = Message.MessageSendFileRequest.newBuilder()</span>
-<span class="nc" id="L76">      .setConversationId(conversationId)</span>
-<span class="nc" id="L77">      .setFilebox(fileJson)</span>
+<span class="fc" id="L75">    val request = Message.MessageSendFileRequest.newBuilder()</span>
+<span class="fc" id="L76">      .setConversationId(conversationId)</span>
+<span class="fc" id="L77">      .setFilebox(fileJson)</span>
       .build()
 
-<span class="nc" id="L80">    val response = grpcClient.messageSendFile(request)</span>
-<span class="nc" id="L81">    response.getId.getValue</span>
+<span class="fc" id="L80">    val response = grpcClient.messageSendFile(request)</span>
+<span class="fc" id="L81">    response.getId.getValue</span>
   }
 
   override def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgramPayload): String = {

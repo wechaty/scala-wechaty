@@ -67,10 +67,10 @@ import wechaty.puppet.{LoggerSupport, Puppet, ResourceBox}
 <span class="fc" id="L67">    payload</span>
   }
   def messageForward (conversationId: String, messageId: String): String= {
-<span class="nc" id="L70">    val payload = this.messagePayload(messageId)</span>
-<span class="nc" id="L71">    payload.`type` match{</span>
-<span class="nc bnc" id="L72" title="All 26 branches missed.">      case MessageType.Attachment |  MessageType.Audio | MessageType.Image | MessageType.Video =&gt;</span>
-<span class="nc" id="L73">        messageSendFile(conversationId,messageFile(messageId))</span>
+<span class="fc" id="L70">    val payload = this.messagePayload(messageId)</span>
+<span class="pc" id="L71">    payload.`type` match{</span>
+<span class="pc bpc" id="L72" title="19 of 26 branches missed.">      case MessageType.Attachment |  MessageType.Audio | MessageType.Image | MessageType.Video =&gt;</span>
+<span class="fc" id="L73">        messageSendFile(conversationId,messageFile(messageId))</span>
 <span class="nc bnc" id="L74" title="All 6 branches missed.">      case MessageType.Text =&gt;</span>
 <span class="nc bnc" id="L75" title="All 2 branches missed.">        if(!Puppet.isBlank(payload.text)){</span>
 <span class="nc" id="L76">          this.messageSendText(</span>
