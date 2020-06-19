@@ -133,6 +133,14 @@
                         <span class="separator"></span>
                         <a class="class" href="FriendshipAcceptorConfig.html" title=""></a>
                         <a href="FriendshipAcceptorConfig.html" title="">FriendshipAcceptorConfig</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="RoomConnector.html" title=""></a>
+                        <a href="RoomConnector.html" title="">RoomConnector</a>
+                      </li><li class="current-entities indented2">
+                        <span class="separator"></span>
+                        <a class="class" href="RoomConnectorConfig.html" title=""></a>
+                        <a href="RoomConnectorConfig.html" title="">RoomConnectorConfig</a>
                       </li><li name="wechaty.user" visbl="pub" class="indented2 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="user"></a><a id="user:user"></a>
       <span class="permalink">
@@ -249,6 +257,38 @@
       </span>
       <span class="symbol">
         <a title="" href="FriendshipAcceptorConfig.html"><span class="name">FriendshipAcceptorConfig</span></a><span class="params">(<span name="greeting">greeting: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;we are friends now!&quot;</span></span>, <span name="keywordOpt">keywordOpt: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Since</dt><dd><p>2020-06-19</p></dd></dl></div>
+    </li><li name="wechaty.plugins.RoomConnector" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RoomConnectorextendsWechatyPluginwithLazyLogging"></a><a id="RoomConnector:RoomConnector"></a>
+      <span class="permalink">
+      <a href="../../wechaty/plugins/RoomConnector.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="RoomConnector.html"><span class="name">RoomConnector</span></a><span class="result"> extends <a href="../WechatyPlugin.html" class="extype" name="wechaty.WechatyPlugin">WechatyPlugin</a> with <span class="extype" name="com.typesafe.scalalogging.LazyLogging">LazyLogging</span></span>
+      </span>
+      
+      
+    </li><li name="wechaty.plugins.RoomConnectorConfig" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="RoomConnectorConfigextendsProductwithSerializable"></a><a id="RoomConnectorConfig:RoomConnectorConfig"></a>
+      <span class="permalink">
+      <a href="../../wechaty/plugins/RoomConnectorConfig.html" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="RoomConnectorConfig.html"><span class="name">RoomConnectorConfig</span></a><span class="params">(<span name="from">from: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="to">to: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="blacklist">blacklist: (<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">_ =&gt; false</span></span>, <span name="whitelist">whitelist: (<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">_ =&gt; true</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Since</dt><dd><p>2020-06-19</p></dd></dl></div>

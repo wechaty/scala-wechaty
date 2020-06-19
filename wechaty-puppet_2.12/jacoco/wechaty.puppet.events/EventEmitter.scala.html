@@ -10,22 +10,25 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
   */
 <span class="nc" id="L11">trait EventEmitter {</span>
   type Listener[T] = T =&gt; Unit
-<span class="nc" id="L13">  private var listeners: Map[PuppetEventName.Type, List[Listener[_]]] = Map()</span>
+<span class="nc" id="L13">  private var listeners: Map[PuppetEventName.Type, List[(Listener[_],Boolean)]] = Map()</span>
 
   def emit[T](event: PuppetEventName.Type, data: T):Unit={
 <span class="nc" id="L16">    val eventListenerOpts = listeners.get(event)</span>
 <span class="nc" id="L17">    eventListenerOpts match {</span>
 <span class="nc bnc" id="L18" title="All 2 branches missed.">      case Some(eventListeners) =&gt;</span>
-<span class="nc" id="L19">          eventListeners.foreach(x =&gt; x.asInstanceOf[Listener[T]](data))</span>
-<span class="nc" id="L20">      case _ =&gt;</span>
+<span class="nc" id="L19">          eventListeners.foreach{x =&gt;</span>
+<span class="nc" id="L20">            x._1.asInstanceOf[Listener[T]](data)</span>
+          }
+<span class="nc" id="L22">          listeners += event-&gt; eventListeners.filterNot(x=&gt;x._2)</span>
+<span class="nc" id="L23">      case _ =&gt;</span>
       //donothing
     }
   }
 
-  def addListener[T](event: PuppetEventName.Type, listener: Listener[T]): Unit = {
-<span class="nc" id="L26">    listeners.get(event) match {</span>
-<span class="nc bnc" id="L27" title="All 2 branches missed.">      case Some(eventListeners) =&gt; listeners += event -&gt; (eventListeners :+ listener)</span>
-<span class="nc" id="L28">      case _ =&gt; listeners += event -&gt; List(listener)</span>
+<span class="nc" id="L28">  def addListener[T](event: PuppetEventName.Type, listener: Listener[T],once:Boolean=false): Unit = {</span>
+<span class="nc" id="L29">    listeners.get(event) match {</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">      case Some(eventListeners) =&gt; listeners += event -&gt; (eventListeners :+ (listener,once))</span>
+<span class="nc" id="L31">      case _ =&gt; listeners += event -&gt; List((listener,once))</span>
     }
   }
 }

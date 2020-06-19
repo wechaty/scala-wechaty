@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>RoomConnector.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.plugins</a> &gt; <span class="el_source">RoomConnector.scala</span></div><h1>RoomConnector.scala</h1><pre class="source lang-java linenums">package wechaty.plugins
+
+import java.util.concurrent.TimeUnit
+
+import com.typesafe.scalalogging.LazyLogging
+import wechaty.Wechaty.PuppetResolver
+import wechaty.user.{Message, Room}
+import wechaty.{Wechaty, WechatyPlugin}
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-19
+  */
+<span class="pc bnc" id="L15" title="All 33 branches missed.">case class RoomConnectorConfig(</span>
+<span class="pc" id="L16">                                var from:Array[String],</span>
+<span class="pc" id="L17">                                var to:Array[String],</span>
+<span class="pc" id="L18">                                var blacklist:Message =&gt;Boolean = _ =&gt; false,</span>
+<span class="pc" id="L19">                                var whitelist:Message =&gt; Boolean = _ =&gt; true</span>
+                              )
+<span class="pc bnc" id="L21" title="All 4 branches missed.">class RoomConnector(config:RoomConnectorConfig) extends WechatyPlugin with LazyLogging{</span>
+  override def install(wechaty: Wechaty): Unit = {
+<span class="fc" id="L23">    implicit val resolver = wechaty</span>
+<span class="fc" id="L24">    wechaty.onOnceMessage(message=&gt;{</span>
+<span class="fc" id="L25">      val fromRooms = findRooms(config.from)</span>
+<span class="fc" id="L26">      val toRooms = findRooms(config.to)</span>
+<span class="fc" id="L27">      val roomMessageListener=(roomMessage:Message)=&gt;{</span>
+<span class="pc bpc" id="L28" title="1 of 4 branches missed.">        if (config.whitelist(roomMessage) &amp;&amp; !config.blacklist(roomMessage)) {</span>
+<span class="fc" id="L29">          toRooms.foreach(roomMessage.forward)</span>
+        }
+      }
+      //process current message
+<span class="fc" id="L33">      message.room match{</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        case Some(r) =&gt;</span>
+<span class="pc bpc" id="L35" title="5 of 8 branches missed.">          if(fromRooms.exists(_.id == r.id)) {</span>
+<span class="fc" id="L36">            roomMessageListener(message)</span>
+          }
+<span class="nc" id="L38">        case _ =&gt;</span>
+      }
+
+<span class="fc" id="L41">      fromRooms.foreach(room =&gt; {</span>
+<span class="fc" id="L42">        room.onMessage(roomMessage =&gt; {</span>
+<span class="fc" id="L43">          roomMessageListener(roomMessage)</span>
+        })
+      })
+    })
+  }
+  private def findRooms(roomIds:Array[String])(implicit resolver:PuppetResolver): Array[Room]={
+    try {
+<span class="pc" id="L50">      roomIds.flatMap(Room.load(_)) //avoid timeout ?</span>
+    }catch{
+      case e:Throwable=&gt;
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        logger.warn(&quot;load room occurs exception,so loop load&quot;,e)</span>
+<span class="nc" id="L54">        Thread.sleep(TimeUnit.SECONDS.toMillis(5))//sleep 5s to wait</span>
+<span class="pc" id="L55">        findRooms(roomIds)</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
