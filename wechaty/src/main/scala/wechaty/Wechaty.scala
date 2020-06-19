@@ -76,6 +76,10 @@ class Wechaty(private val options: WechatyOptions) extends LazyLogging with Pupp
     puppet.addListener[EventMessagePayload](PuppetEventName.MESSAGE,listener)
     this
   }
+  def onOnceMessage(listener:Consumer[Message]):Wechaty={
+    puppet.addListener[EventMessagePayload](PuppetEventName.MESSAGE,listener,once=true)
+    this
+  }
   def onLogout(listener:Consumer[Contact]):Wechaty={
     puppet.addListener[EventLogoutPayload](PuppetEventName.LOGOUT,listener)
     this

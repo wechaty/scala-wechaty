@@ -37,7 +37,7 @@ class DingDongTest extends TestBase{
     config.room=true
     config.self=true
     mockRoomMessage("#ding @me","newMessage1",Array("me"))
-    mockMessagePayloadEvent("newMessage1")
+    emitMessagePayloadEvent("newMessage1")
     verifyThat(
       calledMethod(PuppetGrpc.getMessageSendTextMethod),
       times(1));
@@ -45,7 +45,7 @@ class DingDongTest extends TestBase{
     //test wrong message
     resetGrpcMock()
     mockRoomMessage("hello @me",roomId="newMessage2",Array("me"))
-    mockMessagePayloadEvent("newMessage2")
+    emitMessagePayloadEvent("newMessage2")
     mockMessageSendText()
     verifyThat(
       calledMethod(PuppetGrpc.getMessageSendTextMethod),
@@ -58,7 +58,7 @@ class DingDongTest extends TestBase{
     config.at = false
     mockRoomMessage("#ding @me",roomId="newMessage3",Array("me"))
     mockMessageSendText()
-    mockMessagePayloadEvent("newMessage3")
+    emitMessagePayloadEvent("newMessage3")
     verifyThat(
       calledMethod(PuppetGrpc.getMessageSendTextMethod),
       times(1));

@@ -11,6 +11,24 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
   */
 class WechatyTest extends TestBase {
   @Test
+  def test_once: Unit ={
+    var reach = 0
+    var reach2 = 0
+    instance.onOnceMessage(f=>{
+      reach += 1
+    })
+    instance.onMessage(f=>{
+      reach2 += 1
+    })
+    mockRoomMessage()
+
+    emitMessagePayloadEvent()
+    emitMessagePayloadEvent()
+    Assertions.assertEquals(1,reach)
+    Assertions.assertEquals(2,reach2)
+  }
+
+  @Test
   def test_friendship: Unit ={
     val payload = new EventFriendshipPayload
     payload.friendshipId="fid"

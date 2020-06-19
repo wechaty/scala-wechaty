@@ -115,7 +115,7 @@ class TestBase {
     payload.friendshipId =friendshipId
     instance.puppet.emit(PuppetEventName.FRIENDSHIP,payload)
   }
-  protected def mockMessagePayloadEvent(messageId:String="messageId"): Unit ={
+  protected def emitMessagePayloadEvent(messageId:String="messageId"): Unit ={
     val payload=new EventMessagePayload
     payload.messageId=messageId
     instance.puppet.emit(PuppetEventName.MESSAGE,payload)
