@@ -4,8 +4,11 @@ import java.util.concurrent.{CountDownLatch, TimeUnit}
 
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Base.{LogoutResponse, StartResponse, StopResponse}
+import io.github.wechaty.grpc.puppet.Contact.ContactPayloadResponse
 import io.github.wechaty.grpc.puppet.Event.{EventResponse, EventType}
-import io.github.wechaty.grpc.puppet.Message.{MessagePayloadResponse, MessageType}
+import io.github.wechaty.grpc.puppet.Message.{MessagePayloadResponse, MessageSendTextResponse, MessageType}
+import io.github.wechaty.grpc.puppet.Room.RoomPayloadResponse
+import io.github.wechaty.grpc.puppet.RoomMember.RoomMemberPayloadResponse
 import io.grpc.ManagedChannelBuilder
 import org.grpcmock.GrpcMock
 import org.grpcmock.GrpcMock.{serverStreamingMethod, stubFor, unaryMethod}
@@ -13,9 +16,10 @@ import org.grpcmock.junit5.GrpcMockExtension
 import org.junit.jupiter.api.{AfterEach, BeforeEach}
 import org.junit.jupiter.api.extension.ExtendWith
 import wechaty.Wechaty.PuppetResolver
-import wechaty.puppet.schemas.Event.EventResetPayload
+import wechaty.hostie.PuppetHostie
+import wechaty.puppet.schemas.Event.{EventMessagePayload, EventResetPayload}
 import wechaty.puppet.schemas.Puppet
-import wechaty.puppet.schemas.Puppet.PuppetOptions
+import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
 
 /**
   *
@@ -48,6 +52,7 @@ class TestBase {
     options.channelOpt = Some(serverChannel) //using test channel
     wechatyOptions.puppetOptions = Some(options)
     instance = Wechaty.instance(wechatyOptions)
+    instance.puppet.asInstanceOf[PuppetHostie].idOpt=Some("me")
     instance.start()
   }
   @AfterEach
@@ -85,5 +90,58 @@ class TestBase {
 
     startWithEvent()
     isMockEvented = true
+  }
+  protected def mockRoomMessage(message:String="message",roomId:String="roomId",memberIds:Array[String]=Array()): Unit ={
+    val response = MessagePayloadResponse.newBuilder()
+      .setText(message)
+      .setType(MessageType.MESSAGE_TYPE_VIDEO) //TODO because RPC return wrong messageType
+      .setRoomId(roomId)
+      .build()
+    stubFor(unaryMethod(PuppetGrpc.getMessagePayloadMethod)
+      .willReturn(response))
+
+    val roomPayloadResponse = RoomPayloadResponse.newBuilder()
+    roomPayloadResponse.setId(roomId)
+    stubFor(unaryMethod(PuppetGrpc.getRoomPayloadMethod)
+      .willReturn(roomPayloadResponse.build()))
+
+    val roomMemberPayloadResponse = RoomMemberPayloadResponse.newBuilder().build()
+    stubFor(unaryMethod(PuppetGrpc.getRoomMemberPayloadMethod)
+      .willReturn(roomMemberPayloadResponse)
+    )
+
+    memberIds.toList match{
+      case head::remain=>
+        val method = unaryMethod(PuppetGrpc.getContactPayloadMethod)
+        val response = ContactPayloadResponse.newBuilder()
+          .setName(head)
+          .build()
+        val next = method.willReturn(response)
+        remain.foldLeft(next){(n,id)=>{
+          val response = ContactPayloadResponse.newBuilder()
+            .setName(id)
+            .build()
+          n.nextWillReturn(response)
+        }}
+        stubFor(method)
+      case Nil =>
+    }
+
+
+
+  }
+  protected def mockMessageSendText(): Unit ={
+    val response = MessageSendTextResponse.newBuilder()
+      .build()
+    stubFor(unaryMethod(PuppetGrpc.getMessageSendTextMethod)
+      .willReturn(response))
+  }
+  protected def mockMessagePayloadEvent(messageId:String="messageId"): Unit ={
+    val payload=new EventMessagePayload
+    payload.messageId=messageId
+    instance.puppet.emit(PuppetEventName.MESSAGE,payload)
+  }
+  protected def resetGrpcMock(): Unit ={
+    GrpcMock.resetMappings()
   }
 }

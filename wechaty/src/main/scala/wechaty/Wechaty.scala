@@ -56,8 +56,13 @@ class WechatyOptions {
 class Wechaty(private val options: WechatyOptions) extends LoggerSupport with PuppetResolver{
   private var hostie:PuppetHostie = _
   private implicit val puppetResolver: PuppetResolver = this
+
   initHostie()
 
+  def use(plugin:WechatyPlugin): Wechaty ={
+    plugin.install(this)
+    this
+  }
   def onScan(listener: Consumer[EventScanPayload]): Wechaty = {
     puppet.addListener[EventScanPayload](PuppetEventName.SCAN,listener)
     this

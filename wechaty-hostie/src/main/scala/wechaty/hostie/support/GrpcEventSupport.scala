@@ -15,7 +15,7 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
   */
 trait GrpcEventSupport extends StreamObserver[EventResponse] {
   self: LoggerSupport with EventEmitter with GrpcSupport with ContactRawSupport with MessageRawSupport =>
-  protected var idOpt: Option[String] = None
+  private[wechaty] var idOpt: Option[String] = None
 
   override def onNext(v: EventResponse): Unit = {
     try {
