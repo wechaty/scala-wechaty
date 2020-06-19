@@ -92,6 +92,9 @@ class Wechaty(private val options: WechatyOptions) extends LazyLogging with Pupp
     puppet.addListener[EventResetPayload](PuppetEventName.RESET,listener)
     this
   }
+  def logout(): Unit ={
+    puppet.logout()
+  }
 
   override def puppet: Puppet = this.hostie
 

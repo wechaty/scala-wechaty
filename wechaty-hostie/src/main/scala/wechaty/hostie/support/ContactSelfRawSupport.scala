@@ -1,7 +1,7 @@
 package wechaty.hostie.support
 
-import io.github.wechaty.grpc.puppet.Contact
-import wechaty.puppet.Puppet
+import io.github.wechaty.grpc.puppet.{Base, Contact}
+import wechaty.puppet.support.ContactSelfSupport
 
 /**
   *
@@ -9,7 +9,7 @@ import wechaty.puppet.Puppet
   * @since 2020-06-06
   */
 trait ContactSelfRawSupport {
-  self: Puppet with GrpcSupport =>
+  self: ContactSelfSupport with GrpcSupport =>
   /**
     *
     * ContactSelf
@@ -37,4 +37,7 @@ trait ContactSelfRawSupport {
     grpcClient.contactSelfSignature(request)
   }
 
+  override def logout(): Unit = {
+    this.grpcClient.logout(Base.LogoutRequest.newBuilder().build())
+  }
 }

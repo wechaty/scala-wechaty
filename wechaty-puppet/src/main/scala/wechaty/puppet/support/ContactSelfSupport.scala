@@ -18,4 +18,6 @@ trait ContactSelfSupport {
   /* QR Code Value */
   def contactSelfSignature(signature: String): Unit
 
+  def logout(): Unit
+
 }
