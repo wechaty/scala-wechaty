@@ -36,7 +36,7 @@ trait LoggerSupport {
 
   protected def debug(message: String, args: Any*): Unit = {
     if (logger.isDebugEnabled) {
-      logger.debug(message, args.map(_.asInstanceOf[AnyRef]).toArray)
+      logger.debug(message, args:_*) //.toList:_*) //args.map(_.asInstanceOf[AnyRef]).toArray)
     }
   }
 }
