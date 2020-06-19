@@ -5,11 +5,11 @@
 #
 
 .PHONY: all
-all : clean lint
+all : clean test
 
 .PHONY: clean
 clean:
-	echo clean
+	mvn clean
 
 .PHONY: lint
 lint:
@@ -17,11 +17,11 @@ lint:
 
 .PHONY: install
 install:
-	echo install
+	mvn install
 
 .PHONY: test
 test:
-	echo test
+	mvn test
 
 .PHONY: bot
 bot:
