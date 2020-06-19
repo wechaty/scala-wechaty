@@ -23,9 +23,9 @@ import wechaty.puppet.{ResourceBox, schemas}
 <span class="fc" id="L23">      .messagePayload(messageId)</span>
   }
   private def sayId: String ={
-<span class="nc bnc" id="L26" title="All 2 branches missed.">    if(!Puppet.isBlank(payload.roomId)) payload.roomId</span>
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">    if(!Puppet.isBlank(payload.roomId)) payload.roomId</span>
 <span class="nc bnc" id="L27" title="All 2 branches missed.">    else if(!Puppet.isBlank(payload.fromId)) payload.fromId</span>
-<span class="nc" id="L28">    else throw new IllegalStateException(&quot;roomid and fromid both is null&quot;)</span>
+<span class="pc" id="L28">    else throw new IllegalStateException(&quot;roomid and fromid both is null&quot;)</span>
   }
 
   override def toString: String = {
@@ -49,10 +49,10 @@ import wechaty.puppet.{ResourceBox, schemas}
   }
 
   def from: Contact ={
-<span class="nc" id="L52">    assertPayload()</span>
-<span class="nc" id="L53">    val fromId = this.payload.fromId</span>
-<span class="nc bnc" id="L54" title="All 2 branches missed.">    if (Puppet.isBlank(fromId)) null</span>
-<span class="nc" id="L55">    else new Contact(fromId)</span>
+<span class="fc" id="L52">    assertPayload()</span>
+<span class="fc" id="L53">    val fromId = this.payload.fromId</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">    if (Puppet.isBlank(fromId)) null</span>
+<span class="pc" id="L55">    else new Contact(fromId)</span>
   }
 
   def to : Contact ={
@@ -88,7 +88,7 @@ import wechaty.puppet.{ResourceBox, schemas}
   }
 
   def say(text:String): Message = {
-<span class="nc" id="L91">    resolver.puppet.messageSendText(sayId,text)</span>
+<span class="fc" id="L91">    resolver.puppet.messageSendText(sayId,text)</span>
   }
   def say(contact: Contact): Message = {
 <span class="nc" id="L94">    resolver.puppet.messageSendContact(sayId,contact.id)</span>
@@ -115,11 +115,11 @@ import wechaty.puppet.{ResourceBox, schemas}
   }
 
   def self (): Boolean = {
-<span class="nc" id="L118">    val userIdOpt = resolver.puppet.selfIdOpt()</span>
-<span class="nc" id="L119">    userIdOpt match{</span>
-<span class="nc bnc" id="L120" title="All 2 branches missed.">      case Some(userId) =&gt;</span>
-<span class="nc" id="L121">        val from = this.from</span>
-<span class="nc bnc" id="L122" title="All 8 branches missed.">        from != null &amp;&amp; from.id == userId</span>
+<span class="fc" id="L118">    val userIdOpt = resolver.puppet.selfIdOpt()</span>
+<span class="fc" id="L119">    userIdOpt match{</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">      case Some(userId) =&gt;</span>
+<span class="fc" id="L121">        val from = this.from</span>
+<span class="pc bpc" id="L122" title="7 of 8 branches missed.">        from != null &amp;&amp; from.id == userId</span>
       case _ =&gt;
 <span class="nc" id="L124">        false</span>
     }
@@ -151,8 +151,8 @@ import wechaty.puppet.{ResourceBox, schemas}
 
 <span class="fc" id="L152">    val list = this.mentionList</span>
 
-<span class="pc bpc" id="L154" title="3 of 6 branches missed.">    if (room.isEmpty || list == null || list.length == 0) {</span>
-<span class="nc" id="L155">      return text</span>
+<span class="pc bpc" id="L154" title="2 of 6 branches missed.">    if (room.isEmpty || list == null || list.length == 0) {</span>
+<span class="fc" id="L155">      return text</span>
     }
 
 <span class="fc" id="L158">    val toAliasName = (member: Contact) =&gt; {</span>

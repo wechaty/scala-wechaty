@@ -64,11 +64,11 @@ import wechaty.user.Room.{RoomJoinEvent, RoomLeaveEvent, RoomTopicEvent}
 <span class="fc" id="L64">    val userIdOpt = resolver.puppet.selfIdOpt()</span>
 <span class="fc" id="L65">    userIdOpt match{</span>
 <span class="pc bpc" id="L66" title="1 of 2 branches missed.">      case Some(userId) =&gt;</span>
-<span class="nc bnc" id="L67" title="All 8 branches missed.">        if(leaverList.exists(_.id == userId)){</span>
+<span class="pc bpc" id="L67" title="5 of 8 branches missed.">        if(leaverList.exists(_.id == userId)){</span>
 <span class="nc" id="L68">          resolver.puppet.roomPayloadDirty(payload.roomId)</span>
 <span class="nc" id="L69">          resolver.puppet.roomMemberPayloadDirty(payload.roomId)</span>
         }
-<span class="fc" id="L71">      case _ =&gt;</span>
+<span class="nc" id="L71">      case _ =&gt;</span>
     }
 }
   def roomTopicEvent(payload:EventRoomTopicPayload)(implicit resolver: PuppetResolver): Unit ={

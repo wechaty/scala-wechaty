@@ -121,13 +121,13 @@ import wechaty.puppet.{LoggerSupport, ResourceBox}
   }
 
   override def messageSendText(conversationID: String, text: String, mentionIDList: String*): String = {
-<span class="nc" id="L124">    info(&quot;PuppetHostie messageSendText({}, {})&quot;, conversationID, text)</span>
+<span class="fc" id="L124">    info(&quot;PuppetHostie messageSendText({}, {})&quot;, conversationID, text)</span>
     val request = MessageSendTextRequest
-<span class="nc" id="L126">      .newBuilder()</span>
-<span class="nc" id="L127">      .setConversationId(conversationID)</span>
-<span class="nc" id="L128">      .setText(text).build()</span>
-<span class="nc" id="L129">    val response = grpcClient.messageSendText(request)</span>
-<span class="nc" id="L130">    response.getId.getValue</span>
+<span class="fc" id="L126">      .newBuilder()</span>
+<span class="fc" id="L127">      .setConversationId(conversationID)</span>
+<span class="fc" id="L128">      .setText(text).build()</span>
+<span class="fc" id="L129">    val response = grpcClient.messageSendText(request)</span>
+<span class="fc" id="L130">    response.getId.getValue</span>
   }
 
   override protected def messageRawPayload(id: String): MessagePayload = {

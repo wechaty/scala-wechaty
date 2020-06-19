@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DingDongBot.scala</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">wechaty_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty</a> &gt; <span class="el_source">DingDongBot.scala</span></div><h1>DingDongBot.scala</h1><pre class="source lang-java linenums">package wechaty
 
-import wechaty.puppet.schemas.Message.MessageType
+import wechaty.plugins.{DingDongPlugin, DingDongPluginConfig}
 
 /**
   *
@@ -11,28 +11,18 @@ import wechaty.puppet.schemas.Message.MessageType
   def main(args: Array[String]): Unit = {
 <span class="nc" id="L12">    val option = new WechatyOptions</span>
 <span class="nc" id="L13">    val bot = Wechaty.instance(option)</span>
-<span class="nc" id="L14">    bot</span>
-<span class="nc" id="L15">      .onScan(payload =&gt; {</span>
-<span class="nc" id="L16">        println(&quot;Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n&quot;.format(payload.status, payload.qrcode))</span>
+
+<span class="nc" id="L15">    bot.use(new DingDongPlugin(DingDongPluginConfig(self = false,dm = false,at = false)))</span>
+<span class="nc" id="L16">      .onScan(payload =&gt; {</span>
+<span class="nc" id="L17">        println(&quot;Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n&quot;.format(payload.status, payload.qrcode))</span>
       })
-<span class="nc" id="L18">      .onLogin(payload =&gt; {</span>
-<span class="nc" id="L19">        println(&quot;User %s logined\n&quot;.format(payload.id))</span>
-      })
-<span class="nc" id="L21">      .onMessage(message=&gt;{</span>
-<span class="nc" id="L22">        println(message)</span>
-<span class="nc bnc" id="L23" title="All 12 branches missed.">        if(message.payload.`type` != MessageType.Text || message.payload.text != &quot;#ding&quot; ){</span>
-<span class="nc" id="L24">          println(&quot;Message discarded because it does not match #ding&quot;)</span>
-        }else {
-<span class="nc" id="L26">          println(&quot;send message to &quot;,message.payload.fromId)</span>
-<span class="nc" id="L27">          message.say(&quot;dong&quot;)</span>
-<span class="nc" id="L28">          println(&quot;dong&quot;)</span>
-        }
+<span class="nc" id="L19">      .onLogin(payload =&gt; {</span>
+<span class="nc" id="L20">        println(&quot;User %s logined\n&quot;.format(payload.id))</span>
       })
 
+<span class="nc" id="L23">    bot.start()</span>
 
-<span class="nc" id="L33">    bot.start()</span>
-
-<span class="nc" id="L35">    Thread.currentThread().join()</span>
+<span class="nc" id="L25">    Thread.currentThread().join()</span>
   }
-<span class="nc" id="L37">}</span>
+<span class="nc" id="L27">}</span>
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

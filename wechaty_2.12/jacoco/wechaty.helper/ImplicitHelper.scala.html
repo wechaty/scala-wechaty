@@ -19,13 +19,13 @@ import scala.language.implicitConversions
   }
 
   private[wechaty] implicit def toMessage(messageListener: Consumer[Message])(implicit puppet: PuppetResolver): EventMessagePayload =&gt; Unit = {
-<span class="nc" id="L22">    messagePayload: EventMessagePayload =&gt; { messageListener.accept(new Message(messagePayload.messageId)) }</span>
+<span class="fc" id="L22">    messagePayload: EventMessagePayload =&gt; { messageListener.accept(new Message(messagePayload.messageId)) }</span>
   }
   private[wechaty] implicit def toMessage(messageListener: Message =&gt; Unit)(implicit puppet: PuppetResolver): EventMessagePayload =&gt; Unit = {
 <span class="nc" id="L25">    messagePayload: EventMessagePayload =&gt; { messageListener(new Message(messagePayload.messageId)) }</span>
   }
 
-<span class="nc" id="L28">  private [wechaty] implicit def toMessage(messageId: String)(implicit puppetResolver: PuppetResolver) = new Message(messageId)</span>
+<span class="fc" id="L28">  private [wechaty] implicit def toMessage(messageId: String)(implicit puppetResolver: PuppetResolver) = new Message(messageId)</span>
 
   private[wechaty] implicit def toContactSelf(contactListener: Consumer[ContactSelf])(implicit puppet: PuppetResolver): EventLoginPayload =&gt; Unit = {
 <span class="fc" id="L31">    payload: EventLoginPayload =&gt; { contactListener.accept(new ContactSelf(payload.contactId)) }</span>
