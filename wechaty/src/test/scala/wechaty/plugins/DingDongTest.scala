@@ -13,10 +13,10 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-19
   */
-class DingDongPluginTest extends TestBase{
+class DingDongTest extends TestBase{
   @Test
   def test_no_call: Unit ={
-    val config = new DingDongPluginConfig
+    val config = new DingDongConfig
     config.room = false
     config.dm = false
     config.at = false
@@ -66,7 +66,7 @@ class DingDongPluginTest extends TestBase{
   }
   @Test
   def test_plugin: Unit ={
-    val config = new DingDongPluginConfig
+    val config = new DingDongConfig
     config.room = true
     instance.use(new DingDongPlugin(config))
     mockRoomMessage("#ding")

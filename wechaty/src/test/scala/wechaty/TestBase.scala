@@ -6,6 +6,7 @@ import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Base.{LogoutResponse, StartResponse, StopResponse}
 import io.github.wechaty.grpc.puppet.Contact.ContactPayloadResponse
 import io.github.wechaty.grpc.puppet.Event.{EventResponse, EventType}
+import io.github.wechaty.grpc.puppet.Friendship.{FriendshipAcceptResponse, FriendshipPayloadResponse, FriendshipType}
 import io.github.wechaty.grpc.puppet.Message.{MessagePayloadResponse, MessageSendTextResponse, MessageType}
 import io.github.wechaty.grpc.puppet.Room.RoomPayloadResponse
 import io.github.wechaty.grpc.puppet.RoomMember.RoomMemberPayloadResponse
@@ -17,7 +18,7 @@ import org.junit.jupiter.api.{AfterEach, BeforeEach}
 import org.junit.jupiter.api.extension.ExtendWith
 import wechaty.Wechaty.PuppetResolver
 import wechaty.hostie.PuppetHostie
-import wechaty.puppet.schemas.Event.{EventMessagePayload, EventResetPayload}
+import wechaty.puppet.schemas.Event.{EventFriendshipPayload, EventMessagePayload, EventResetPayload}
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
 
@@ -33,7 +34,6 @@ class TestBase {
   @BeforeEach
   def setupChannel(): Unit = {
     GrpcMock.resetMappings()
-    countDownLatch = new CountDownLatch(1)
     val serverChannel = ManagedChannelBuilder.forAddress("localhost", GrpcMock.getGlobalPort).usePlaintext.build
     //for server stub
     val eventResponse = EventResponse.newBuilder().build()
@@ -61,35 +61,6 @@ class TestBase {
   }
   protected implicit lazy val puppetResolver: PuppetResolver = {
     instance
-  }
-  protected def startWithEvent(): Unit ={
-    instance.start()
-    instance.onReset(payload=>{
-      countDownLatch.countDown()
-    })
-  }
-
-  var countDownLatch = new CountDownLatch(1)
-  protected def awaitEventCompletion(time:Long,unit:TimeUnit): Unit ={
-    countDownLatch.await(time,unit)
-    countDownLatch = new CountDownLatch(1)
-  }
-  private var isMockEvented = false
-  protected def mockEvent(responses:(EventType,AnyRef)*): Unit ={
-    if(isMockEvented) throw new IllegalStateException("mock event must be called only one time!")
-    val resetPayload = new EventResetPayload
-    val tmpResponses = responses.toList :+ (EventType.EVENT_TYPE_RESET ->resetPayload)
-    val eventResponses = tmpResponses.map{case (event,payload) =>
-        val eventResponse = EventResponse.newBuilder()
-        eventResponse.setType(event)
-        eventResponse.setPayload(Puppet.objectMapper.writeValueAsString(payload))
-        eventResponse.build()
-    }
-
-    stubFor(serverStreamingMethod(PuppetGrpc.getEventMethod()).willReturn(eventResponses:_*))
-
-    startWithEvent()
-    isMockEvented = true
   }
   protected def mockRoomMessage(message:String="message",roomId:String="roomId",memberIds:Array[String]=Array()): Unit ={
     val response = MessagePayloadResponse.newBuilder()
@@ -136,6 +107,14 @@ class TestBase {
     stubFor(unaryMethod(PuppetGrpc.getMessageSendTextMethod)
       .willReturn(response))
   }
+  protected def emitEvent[T](puppetEventName: PuppetEventName.Type,payload:T): Unit ={
+    instance.puppet.emit(puppetEventName,payload)
+  }
+  protected def emitFriendshipAddPayloadEvent(friendshipId:String="friendshipId"): Unit ={
+    val payload=new EventFriendshipPayload
+    payload.friendshipId =friendshipId
+    instance.puppet.emit(PuppetEventName.FRIENDSHIP,payload)
+  }
   protected def mockMessagePayloadEvent(messageId:String="messageId"): Unit ={
     val payload=new EventMessagePayload
     payload.messageId=messageId
@@ -143,5 +122,21 @@ class TestBase {
   }
   protected def resetGrpcMock(): Unit ={
     GrpcMock.resetMappings()
+    //clear all cache
+    puppetResolver.puppet.clearAllCache()
+  }
+  protected def mockFriendshipAdd(hello:String="hello",payloadType:FriendshipType=FriendshipType.FRIENDSHIP_TYPE_RECEIVE): Unit ={
+    val response = FriendshipPayloadResponse.newBuilder()
+      .setContactId("contactId")
+      .setHello(hello)
+      .setType(payloadType)
+      .build()
+    stubFor(unaryMethod(PuppetGrpc.getFriendshipPayloadMethod)
+      .willReturn(response))
+
+    val friendshipAccept= FriendshipAcceptResponse.newBuilder()
+      .build()
+    stubFor(unaryMethod(PuppetGrpc.getFriendshipAcceptMethod)
+      .willReturn(friendshipAccept))
   }
 }

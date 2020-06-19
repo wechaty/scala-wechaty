@@ -11,7 +11,7 @@ import wechaty.puppet.schemas.Friendship.FriendshipPayload
   */
 trait FriendshipSupport {
   self : Puppet =>
-  private val cacheFriendshipPayload = createCache().asInstanceOf[Cache[String, FriendshipPayload]]
+  private[puppet] val cacheFriendshipPayload = createCache().asInstanceOf[Cache[String, FriendshipPayload]]
 
   /**
     *

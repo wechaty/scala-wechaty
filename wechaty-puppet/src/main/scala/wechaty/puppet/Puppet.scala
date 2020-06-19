@@ -22,9 +22,18 @@ trait Puppet extends MessageSupport
 {
   self:LoggerSupport =>
 
+
   protected def createCache()= {
     //TODO optimize lru cache
     Caffeine.newBuilder().maximumSize(100).build()
+  }
+  //only for test
+  private[wechaty] def clearAllCache(): Unit = {
+    cacheContactPayload.cleanUp()
+    cacheFriendshipPayload.cleanUp()
+    cacheMessagePayload.cleanUp()
+    cacheRoomMemberPayload.cleanUp()
+    cacheRoomPayload.cleanUp()
   }
 
   def selfIdOpt():Option[String]

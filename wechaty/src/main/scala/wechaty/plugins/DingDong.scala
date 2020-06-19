@@ -8,7 +8,7 @@ import wechaty.{Wechaty, WechatyPlugin}
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-19
   */
-case class DingDongPluginConfig(
+case class DingDongConfig(
   /**
     * Whether response to the self message
     */
@@ -34,7 +34,7 @@ case class DingDongPluginConfig(
     */
   var dingReg:String="^#ding$"
 )
-class DingDongPlugin(config:DingDongPluginConfig) extends WechatyPlugin{
+class DingDongPlugin(config:DingDongConfig) extends WechatyPlugin{
   private val DONG="dong"
   private val DING_REGEXP=("("+config.dingReg+")").r
   private def isMatch(message: Message): Boolean ={
@@ -73,7 +73,6 @@ class DingDongPlugin(config:DingDongPluginConfig) extends WechatyPlugin{
 
       text match{
         case DING_REGEXP(o) if isMatch(message)=>
-          println(text,o)
           message.say(DONG)
         case _ =>
       }

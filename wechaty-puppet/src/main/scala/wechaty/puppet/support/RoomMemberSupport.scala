@@ -12,7 +12,7 @@ import wechaty.puppet.schemas.Room.RoomMemberPayload
   */
 trait RoomMemberSupport {
   self:Puppet =>
-  private val cacheRoomMemberPayload = createCache().asInstanceOf[Cache[String, RoomMemberPayload]]
+  private[puppet] val cacheRoomMemberPayload = createCache().asInstanceOf[Cache[String, RoomMemberPayload]]
 
   /**
     *

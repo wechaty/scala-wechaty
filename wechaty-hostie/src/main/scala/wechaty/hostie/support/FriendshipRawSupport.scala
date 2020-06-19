@@ -72,6 +72,7 @@ trait FriendshipRawSupport {
         new FriendshipPayload()
     }
 
+    payload.hello = response.getHello
     payload.`type` = FriendshipType.apply(response.getTypeValue)
     payload.contactId = response.getContactId
     payload.id = response.getId

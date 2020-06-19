@@ -15,7 +15,7 @@ import wechaty.puppet.{LoggerSupport, Puppet, ResourceBox}
   */
 trait MessageSupport {
   self: LoggerSupport with Puppet =>
-  private val cacheMessagePayload = createCache().asInstanceOf[Cache[String, MessagePayload]]
+  private[puppet] val cacheMessagePayload = createCache().asInstanceOf[Cache[String, MessagePayload]]
 
   /**
     * message

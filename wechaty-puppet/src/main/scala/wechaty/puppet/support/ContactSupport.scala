@@ -12,7 +12,7 @@ import wechaty.puppet.{LoggerSupport, Puppet, ResourceBox}
   */
 trait ContactSupport {
   self: Puppet with LoggerSupport =>
-  private val cacheContactPayload = createCache().asInstanceOf[Cache[String, ContactPayload]]
+  private[puppet] val cacheContactPayload = createCache().asInstanceOf[Cache[String, ContactPayload]]
 
   /**
     *
