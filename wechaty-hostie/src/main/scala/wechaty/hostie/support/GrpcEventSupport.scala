@@ -1,8 +1,8 @@
 package wechaty.hostie.support
 
+import com.typesafe.scalalogging.LazyLogging
 import io.github.wechaty.grpc.puppet.Event.{EventResponse, EventType}
 import io.grpc.stub.StreamObserver
-import wechaty.puppet.LoggerSupport
 import wechaty.puppet.events.EventEmitter
 import wechaty.puppet.schemas.Event._
 import wechaty.puppet.schemas.Puppet
@@ -14,7 +14,7 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
   * @since 2020-06-02
   */
 trait GrpcEventSupport extends StreamObserver[EventResponse] {
-  self: LoggerSupport with EventEmitter with GrpcSupport with ContactRawSupport with MessageRawSupport =>
+  self: LazyLogging with EventEmitter with GrpcSupport with ContactRawSupport with MessageRawSupport =>
   private[wechaty] var idOpt: Option[String] = None
 
   override def onNext(v: EventResponse): Unit = {
@@ -26,7 +26,7 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
       }
       v.getType match {
         case EventType.EVENT_TYPE_UNSPECIFIED =>
-          error("PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_UNSPECIFIED ")
+          logger.error("PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_UNSPECIFIED ")
         case other =>
           val payload = processEvent(other, v.getPayload)
           val eventName = Puppet.pbEventType2PuppetEventName.getOrElse(other, throw new IllegalAccessException("unsupport event " + other))
@@ -34,12 +34,12 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
       }
     } catch {
       case e: Throwable =>
-        error("Grpc onNext", e)
+        logger.error("Grpc onNext", e)
     }
   }
 
   private def processEvent(eventType: EventType, data: String): EventPayload = {
-    debug("receive event:{},data:{}", eventType, data)
+    logger.debug("receive event:{},data:{}", eventType, data)
     eventType match {
       case EventType.EVENT_TYPE_SCAN =>
         Puppet.objectMapper.readValue(data, classOf[EventScanPayload])
@@ -71,7 +71,7 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
       case EventType.EVENT_TYPE_ROOM_TOPIC =>
         Puppet.objectMapper.readValue(data, classOf[EventRoomTopicPayload])
       case EventType.EVENT_TYPE_RESET =>
-        warn("PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_RESET ?")
+        logger.warn("PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_RESET ?")
         Puppet.objectMapper.readValue(data, classOf[EventResetPayload])
       case other =>
         throw new IllegalAccessException("event not supported ,event:" + other)
@@ -80,14 +80,14 @@ trait GrpcEventSupport extends StreamObserver[EventResponse] {
   }
 
   override def onError(throwable: Throwable): Unit = {
-    error("Grpc onError", throwable)
-    info("reconnect.....")
+    logger.error("Grpc onError", throwable)
+    logger.info("reconnect.....")
     new Thread(() => {
       reconnectStream()
     }).run()
   }
 
   override def onCompleted(): Unit = {
-    info("completed")
+    logger.info("completed")
   }
 }

@@ -1,12 +1,13 @@
 package wechaty.puppet.support
 
 import com.github.benmanes.caffeine.cache.Cache
+import com.typesafe.scalalogging.LazyLogging
 import wechaty.puppet.schemas.Image.ImageType
 import wechaty.puppet.schemas.Message.{MessagePayload, MessageType}
 import wechaty.puppet.schemas.MiniProgram.MiniProgramPayload
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.UrlLink.UrlLinkPayload
-import wechaty.puppet.{LoggerSupport, Puppet, ResourceBox}
+import wechaty.puppet.{Puppet, ResourceBox}
 
 /**
   *
@@ -14,7 +15,7 @@ import wechaty.puppet.{LoggerSupport, Puppet, ResourceBox}
   * @since 2020-06-03
   */
 trait MessageSupport {
-  self: LoggerSupport with Puppet =>
+  self: LazyLogging with Puppet =>
   private[puppet] val cacheMessagePayload = createCache().asInstanceOf[Cache[String, MessagePayload]]
 
   /**
@@ -43,7 +44,7 @@ trait MessageSupport {
   def messageSendText(conversationID: String, text: String, mentionIDList: String*): String
 
   def messagePayload(messageId: String): MessagePayload = {
-    debug("Puppet messagePayload({})", messageId)
+    logger.debug("Puppet messagePayload({})", messageId)
     if (Puppet.isBlank(messageId)) {
       throw new IllegalArgumentException("message id is blank!")
     }
@@ -62,7 +63,7 @@ trait MessageSupport {
     val payload = messageRawPayload(messageId)
 
     this.cacheMessagePayload.put(messageId, payload)
-    info("Puppet messagePayload({}) cache SET", messageId)
+    logger.info("Puppet messagePayload({}) cache SET", messageId)
 
     payload
   }

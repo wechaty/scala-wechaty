@@ -3,13 +3,13 @@ package wechaty.hostie.support
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.{CountDownLatch, Executors, TimeUnit}
 
+import com.typesafe.scalalogging.LazyLogging
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Base
 import io.github.wechaty.grpc.puppet.Event.EventRequest
 import io.grpc.stub.StreamObserver
 import io.grpc.{ManagedChannel, ManagedChannelBuilder}
 import wechaty.hostie.PuppetHostie
-import wechaty.puppet.LoggerSupport
 
 /**
   *
@@ -17,7 +17,7 @@ import wechaty.puppet.LoggerSupport
   * @since 2020-06-02
   */
 trait GrpcSupport {
-  self: PuppetHostie with ContactRawSupport with MessageRawSupport with LoggerSupport =>
+  self: PuppetHostie with ContactRawSupport with MessageRawSupport with LazyLogging =>
   private val executorService = Executors.newSingleThreadScheduledExecutor()
   //from https://github.com/wechaty/java-wechaty/blob/master/wechaty-puppet/src/main/kotlin/Puppet.kt
   private val HEARTBEAT_COUNTER = new AtomicLong()
@@ -37,7 +37,7 @@ trait GrpcSupport {
         ding(s"heartbeat ...${seq}")
       } catch {
         case e: Throwable =>
-          warn("ding exception:{}", e.getMessage)
+          logger.warn("ding exception:{}", e.getMessage)
         //ignore any exception
       }
     }, HOSTIE_KEEPALIVE_TIMEOUT, HOSTIE_KEEPALIVE_TIMEOUT, TimeUnit.MILLISECONDS)
@@ -66,20 +66,20 @@ trait GrpcSupport {
   }
 
   protected def reconnectStream() {
-    info("reconnect stream stream...")
+    logger.info("reconnect stream stream...")
     try {
       stopGrpc()
     } catch {
       case e: Throwable =>
-        warn("fail to stop grpc {}", e.getMessage)
+        logger.warn("fail to stop grpc {}", e.getMessage)
     }
     internalStartGrpc()
-    info("reconnect stream stream done")
+    logger.info("reconnect stream stream done")
 
   }
 
   private def internalStartGrpc() {
-    info("start grpc client ....")
+    logger.info("start grpc client ....")
     this.grpcClient = PuppetGrpc.newBlockingStub(channel)
     startStream()
 
@@ -90,9 +90,9 @@ trait GrpcSupport {
 //      this.grpcClient.logout(Base.LogoutRequest.newBuilder().build())
     }catch{
       case e:Throwable=>
-        warn(e.getMessage)
+        logger.warn(e.getMessage)
     }
-    info("start grpc client done")
+    logger.info("start grpc client done")
   }
 
   private def startStream() {
@@ -126,7 +126,7 @@ trait GrpcSupport {
       countDownLatch.await()
     } catch {
       case e: Throwable =>
-        warn("fail to stop stream {}", e.getMessage)
+        logger.warn("fail to stop stream {}", e.getMessage)
     }
   }
 }

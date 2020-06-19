@@ -1,7 +1,8 @@
 package wechaty.puppet.support
 
 import com.github.benmanes.caffeine.cache.Cache
-import wechaty.puppet.{LoggerSupport, Puppet, ResourceBox}
+import com.typesafe.scalalogging.LazyLogging
+import wechaty.puppet.{Puppet, ResourceBox}
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.Room.{RoomPayload, RoomQueryFilter}
 
@@ -11,7 +12,7 @@ import wechaty.puppet.schemas.Room.{RoomPayload, RoomQueryFilter}
   * @since 2020-06-06
   */
 trait RoomSupport {
-  self:Puppet with LoggerSupport =>
+  self:Puppet with LazyLogging =>
   private[puppet] val cacheRoomPayload = createCache().asInstanceOf[Cache[String, RoomPayload]]
 
   def roomAdd(roomId: String, contactId: String): Unit
@@ -69,7 +70,7 @@ trait RoomSupport {
             Some(roomPayload(roomId))
           }catch {
             case e:Throwable=>
-              error(e.getMessage,e)
+              logger.error(e.getMessage,e)
               roomPayloadDirty(roomId)
               roomMemberPayloadDirty(roomId)
               None

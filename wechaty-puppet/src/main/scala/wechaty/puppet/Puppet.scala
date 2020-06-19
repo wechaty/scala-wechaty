@@ -1,6 +1,7 @@
 package wechaty.puppet
 
 import com.github.benmanes.caffeine.cache.Caffeine
+import com.typesafe.scalalogging.LazyLogging
 import wechaty.puppet.events.EventEmitter
 import wechaty.puppet.support._
 
@@ -20,7 +21,7 @@ trait Puppet extends MessageSupport
   with RoomSupport
   with RoomMemberSupport
 {
-  self:LoggerSupport =>
+  self:LazyLogging =>
 
 
   protected def createCache()= {

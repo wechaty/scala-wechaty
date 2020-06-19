@@ -2,12 +2,13 @@ package wechaty.user
 
 import java.util.Date
 
+import com.typesafe.scalalogging.LazyLogging
 import wechaty.Wechaty.PuppetResolver
+import wechaty.puppet.ResourceBox
 import wechaty.puppet.events.EventEmitter
 import wechaty.puppet.schemas.Event.{EventMessagePayload, EventRoomJoinPayload, EventRoomLeavePayload, EventRoomTopicPayload}
 import wechaty.puppet.schemas.Puppet._
 import wechaty.puppet.schemas.Room.{RoomPayload, RoomQueryFilter}
-import wechaty.puppet.{LoggerSupport, ResourceBox}
 import wechaty.user.Room.{RoomJoinEvent, RoomLeaveEvent, RoomTopicEvent}
 
 /**
@@ -89,7 +90,7 @@ object Room {
   }
 }
 
-class Room private(roomId: String)(implicit resolver: PuppetResolver) extends Conversation(roomId) with EventEmitter with LoggerSupport {
+class Room private(roomId: String)(implicit resolver: PuppetResolver) extends Conversation(roomId) with EventEmitter with LazyLogging {
   def payload: RoomPayload = {
     resolver.puppet.roomPayload(roomId)
   }

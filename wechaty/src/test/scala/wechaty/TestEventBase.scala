@@ -2,6 +2,7 @@ package wechaty
 
 import java.util.concurrent.{CountDownLatch, TimeUnit}
 
+import com.typesafe.scalalogging.LazyLogging
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Base.{LogoutResponse, StartResponse, StopResponse}
 import io.github.wechaty.grpc.puppet.Event.{EventResponse, EventType}
@@ -12,7 +13,6 @@ import org.grpcmock.junit5.GrpcMockExtension
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.{AfterEach, BeforeEach}
 import wechaty.Wechaty.PuppetResolver
-import wechaty.puppet.LoggerSupport
 import wechaty.puppet.schemas.Event.EventResetPayload
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.Puppet.PuppetOptions
@@ -23,7 +23,7 @@ import wechaty.puppet.schemas.Puppet.PuppetOptions
   * @since 2020-06-07
   */
 @ExtendWith(Array(classOf[GrpcMockExtension]))
-class TestEventBase extends LoggerSupport{
+class TestEventBase extends LazyLogging{
   protected var instance:Wechaty = null
 
   private var serverChannel:ManagedChannel = _
@@ -60,7 +60,7 @@ class TestEventBase extends LoggerSupport{
   }
   protected def startWithEvent(): Unit ={
     instance.onReset(payload=>{
-      debug("on reset")
+      logger.debug("on reset")
       countDownLatch.countDown()
     })
 

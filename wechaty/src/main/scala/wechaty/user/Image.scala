@@ -1,15 +1,16 @@
 package wechaty.user
 
+import com.typesafe.scalalogging.LazyLogging
 import wechaty.Wechaty.PuppetResolver
+import wechaty.puppet.ResourceBox
 import wechaty.puppet.schemas.Image.ImageType
-import wechaty.puppet.{LoggerSupport, ResourceBox}
 
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-15
   */
-class Image(imageId:String)(implicit resolver:PuppetResolver) extends LoggerSupport{
+class Image(imageId:String)(implicit resolver:PuppetResolver) extends LazyLogging{
   def thumbnail : ResourceBox = {
     resolver.puppet.messageImage(this.imageId, ImageType.Thumbnail)
   }

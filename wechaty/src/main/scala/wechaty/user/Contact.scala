@@ -1,7 +1,8 @@
 package wechaty.user
 
+import com.typesafe.scalalogging.LazyLogging
 import wechaty.Wechaty.PuppetResolver
-import wechaty.puppet.{LoggerSupport, ResourceBox}
+import wechaty.puppet.ResourceBox
 import wechaty.puppet.schemas.Contact.{ContactGender, ContactPayload, ContactType}
 import wechaty.puppet.schemas.Puppet
 
@@ -17,7 +18,7 @@ import scala.language.implicitConversions
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-03
   */
-class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Conversation(contactId) with LoggerSupport {
+class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Conversation(contactId) with LazyLogging {
   //  lazy val payload: schemas.Contact.ContactPayload = resolver.puppet.contactPayload(contactId)
   def payload: ContactPayload = {
     resolver.puppet.contactPayload(contactId)
@@ -228,7 +229,7 @@ class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Conv
   def ready(forceSync: Boolean = false): Unit = {
 
     if (!forceSync && this.isReady()) { // already ready
-      debug("Contact ready() isReady() true")
+      logger.debug("Contact ready() isReady() true")
       return
     }
 

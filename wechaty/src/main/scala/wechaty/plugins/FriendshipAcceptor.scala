@@ -1,6 +1,6 @@
 package wechaty.plugins
 
-import wechaty.puppet.LoggerSupport
+import com.typesafe.scalalogging.StrictLogging
 import wechaty.puppet.schemas.Friendship.{FriendshipPayloadConfirm, FriendshipPayloadReceive, FriendshipPayloadVerify}
 import wechaty.puppet.schemas.Puppet._
 import wechaty.user.Contact
@@ -12,9 +12,9 @@ import wechaty.{Wechaty, WechatyPlugin}
   * @since 2020-06-19
   */
 case class FriendshipAcceptorConfig( var greeting:String = "we are friends now!", var keywordOpt:Option[String]=None)
-class FriendshipAcceptor(config:FriendshipAcceptorConfig) extends WechatyPlugin with LoggerSupport{
+class FriendshipAcceptor(config:FriendshipAcceptorConfig) extends WechatyPlugin with StrictLogging{
   private def isMatchKeyword(str: String): Boolean ={
-    debug("keyword:{} hello:{} ",config.keywordOpt,str)
+    logger.debug("keyword:{} hello:{} ",config.keywordOpt,str)
     config.keywordOpt match{
         //use contains simply
         //TODO use complex function or regexp to match string

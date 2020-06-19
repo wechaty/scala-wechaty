@@ -1,9 +1,10 @@
 package wechaty.hostie
 
+import com.typesafe.scalalogging.LazyLogging
 import wechaty.hostie.support._
+import wechaty.puppet.Puppet
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.Puppet.PuppetOptions
-import wechaty.puppet.{LoggerSupport, Puppet}
 
 import scala.io.Source
 
@@ -14,7 +15,7 @@ import scala.io.Source
   */
 class PuppetHostie(val option:PuppetOptions) extends Puppet
   with GrpcSupport
-  with LoggerSupport
+  with LazyLogging
   with ContactRawSupport
   with MessageRawSupport
   with ContactSelfRawSupport
@@ -59,11 +60,11 @@ class PuppetHostie(val option:PuppetOptions) extends Puppet
     try {
       val content = get(hostieEndpoint.format(option.token.get)).mkString
       val json = Puppet.objectMapper.readTree(content)
-      info("grpc server found:{}",content)
+      logger.info("grpc server found:{}",content)
       Some(json.get("ip").asText() + ":" + json.get("port"))
     }catch{
       case e:Throwable=>
-        error(e.getMessage,e)
+        logger.error(e.getMessage,e)
         Some("23.97.48.212:8788")
     }
   }

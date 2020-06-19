@@ -2,12 +2,13 @@ package wechaty
 
 import java.util.function.Consumer
 
+import com.typesafe.scalalogging.LazyLogging
 import wechaty.Wechaty.PuppetResolver
 import wechaty.helper.ImplicitHelper._
 import wechaty.hostie.PuppetHostie
 import wechaty.puppet.schemas.Event._
 import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
-import wechaty.puppet.{LoggerSupport, Puppet}
+import wechaty.puppet.Puppet
 import wechaty.user._
 
 import scala.language.implicitConversions;
@@ -53,7 +54,7 @@ class WechatyOptions {
   var ioToken: Option[String] = None
 }
 
-class Wechaty(private val options: WechatyOptions) extends LoggerSupport with PuppetResolver{
+class Wechaty(private val options: WechatyOptions) extends LazyLogging with PuppetResolver{
   private var hostie:PuppetHostie = _
   private implicit val puppetResolver: PuppetResolver = this
 
@@ -106,7 +107,7 @@ class Wechaty(private val options: WechatyOptions) extends LoggerSupport with Pu
     this.hostie.start()
     Runtime.getRuntime.addShutdownHook(new Thread(new Runnable {
       override def run(): Unit ={
-        info("stop puppet...")
+        logger.info("stop puppet...")
         Wechaty.this.hostie.stop()
       }
     }))

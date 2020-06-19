@@ -1,8 +1,10 @@
 package wechaty.hostie.support
 
+import com.typesafe.scalalogging.LazyLogging
 import io.github.wechaty.grpc.puppet.Base.DingRequest
 import io.github.wechaty.grpc.puppet.Message
 import io.github.wechaty.grpc.puppet.Message.{MessagePayloadRequest, MessageSendTextRequest}
+import wechaty.puppet.ResourceBox
 import wechaty.puppet.schemas.Image.ImageType.Type
 import wechaty.puppet.schemas.Message.{MessagePayload, MessageType}
 import wechaty.puppet.schemas.MiniProgram.MiniProgramPayload
@@ -10,7 +12,6 @@ import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.Puppet.objectMapper
 import wechaty.puppet.schemas.UrlLink.UrlLinkPayload
 import wechaty.puppet.support.MessageSupport
-import wechaty.puppet.{LoggerSupport, ResourceBox}
 
 /**
   *
@@ -18,7 +19,7 @@ import wechaty.puppet.{LoggerSupport, ResourceBox}
   * @since 2020-06-02
   */
 trait MessageRawSupport {
-  self: LoggerSupport with GrpcSupport with MessageSupport =>
+  self: LazyLogging with GrpcSupport with MessageSupport =>
   /**
     * message
     */
@@ -121,7 +122,7 @@ trait MessageRawSupport {
   }
 
   override def messageSendText(conversationID: String, text: String, mentionIDList: String*): String = {
-    info("PuppetHostie messageSendText({}, {})", conversationID, text)
+    logger.info("PuppetHostie messageSendText({}, {})", conversationID, text)
     val request = MessageSendTextRequest
       .newBuilder()
       .setConversationId(conversationID)
@@ -131,7 +132,7 @@ trait MessageRawSupport {
   }
 
   override protected def messageRawPayload(id: String): MessagePayload = {
-    info("PuppetHostie MessagePayload({})", id)
+    logger.info("PuppetHostie MessagePayload({})", id)
     val response = grpcClient.messagePayload(MessagePayloadRequest.newBuilder().setId(id).build())
     val messagePayload = new MessagePayload
     messagePayload.id = response.getId
