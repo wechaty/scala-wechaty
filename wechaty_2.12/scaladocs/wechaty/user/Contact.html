@@ -3,9 +3,9 @@
         <head>
           <meta http-equiv="X-UA-Compatible" content="IE=edge" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-          <title>wechaty_2.12 0.0.7-SNAPSHOT API  - wechaty.user.Contact</title>
-          <meta name="description" content="wechaty 2.12 0.0.7 - SNAPSHOT API - wechaty.user.Contact" />
-          <meta name="keywords" content="wechaty 2.12 0.0.7 SNAPSHOT API wechaty.user.Contact" />
+          <title>wechaty_2.12 0.0.8-SNAPSHOT API  - wechaty.user.Contact</title>
+          <meta name="description" content="wechaty 2.12 0.0.8 - SNAPSHOT API - wechaty.user.Contact" />
+          <meta name="keywords" content="wechaty 2.12 0.0.8 SNAPSHOT API wechaty.user.Contact" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       
@@ -28,7 +28,7 @@
         </head>
         <body>
       <div id="search">
-        <span id="doc-title">wechaty_2.12 0.0.7-SNAPSHOT API<span id="doc-version"></span></span>
+        <span id="doc-title">wechaty_2.12 0.0.8-SNAPSHOT API<span id="doc-version"></span></span>
         <span class="close-results"><span class="left">&lt;</span> Back</span>
         <div id="textfilter">
           <span class="input">
@@ -164,7 +164,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">Contact</span><span class="result"> extends <a href="Conversation.html" class="extype" name="wechaty.user.Conversation">Conversation</a> with <span class="extype" name="wechaty.puppet.LoggerSupport">LoggerSupport</span></span>
+        <span class="name">Contact</span><span class="result"> extends <a href="Conversation.html" class="extype" name="wechaty.user.Conversation">Conversation</a> with <span class="extype" name="com.typesafe.scalalogging.LazyLogging">LazyLogging</span></span>
       </span>
       </h4>
 
@@ -175,7 +175,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><span class="extype" name="wechaty.puppet.LoggerSupport">LoggerSupport</span>, <a href="Conversation.html" class="extype" name="wechaty.user.Conversation">Conversation</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="com.typesafe.scalalogging.LazyLogging">LazyLogging</span>, <a href="Conversation.html" class="extype" name="wechaty.user.Conversation">Conversation</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
@@ -206,7 +206,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="wechaty.user.Contact"><span>Contact</span></li><li class="in" name="wechaty.puppet.LoggerSupport"><span>LoggerSupport</span></li><li class="in" name="wechaty.user.Conversation"><span>Conversation</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="wechaty.user.Contact"><span>Contact</span></li><li class="in" name="com.typesafe.scalalogging.LazyLogging"><span>LazyLogging</span></li><li class="in" name="wechaty.user.Conversation"><span>Conversation</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -415,22 +415,6 @@ const city = contact.city()</p></li></ol>
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="wechaty.puppet.LoggerSupport#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="debug(message:String,args:Any*):Unit"></a><a id="debug(String,Any*):Unit"></a>
-      <span class="permalink">
-      <a href="../../wechaty/user/Contact.html#debug(message:String,args:Any*):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">debug</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="args">args: <span class="extype" name="scala.Any">Any</span>*</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>LoggerSupport</dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -463,38 +447,6 @@ const city = contact.city()</p></li></ol>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="wechaty.puppet.LoggerSupport#error" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="error(message:String,e:Throwable):Unit"></a><a id="error(String,Throwable):Unit"></a>
-      <span class="permalink">
-      <a href="../../wechaty/user/Contact.html#error(message:String,e:Throwable):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">error</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="e">e: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>LoggerSupport</dd></dl></div>
-    </li><li name="wechaty.puppet.LoggerSupport#error" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="error(message:String,args:Any*):Unit"></a><a id="error(String,Any*):Unit"></a>
-      <span class="permalink">
-      <a href="../../wechaty/user/Contact.html#error(message:String,args:Any*):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">error</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="args">args: <span class="extype" name="scala.Any">Any</span>*</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>LoggerSupport</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
@@ -614,22 +566,6 @@ const gender = contact.gender() === bot.Contact.Gender.Male</p></li></ol>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Conversation.html" class="extype" name="wechaty.user.Conversation">Conversation</a></dd></dl></div>
-    </li><li name="wechaty.puppet.LoggerSupport#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="info(message:String,args:Any*):Unit"></a><a id="info(String,Any*):Unit"></a>
-      <span class="permalink">
-      <a href="../../wechaty/user/Contact.html#info(message:String,args:Any*):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">info</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="args">args: <span class="extype" name="scala.Any">Any</span>*</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>LoggerSupport</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
@@ -662,22 +598,25 @@ const gender = contact.gender() === bot.Contact.Gender.Male</p></li></ol>
       </span>
       
       <p class="shortcomment cmt"></p>
-    </li><li name="wechaty.puppet.LoggerSupport#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="logger:org.slf4j.Logger"></a><a id="logger:Logger"></a>
+    </li><li name="com.typesafe.scalalogging.LazyLogging#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logger:com.typesafe.scalalogging.Logger"></a><a id="logger:Logger"></a>
       <span class="permalink">
-      <a href="../../wechaty/user/Contact.html#logger:org.slf4j.Logger" title="Permalink">
+      <a href="../../wechaty/user/Contact.html#logger:com.typesafe.scalalogging.Logger" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
-        <span class="name">logger</span><span class="result">: <span class="extype" name="org.slf4j.Logger">Logger</span></span>
+        <span class="name">logger</span><span class="result">: <span class="extype" name="com.typesafe.scalalogging.Logger">Logger</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>LoggerSupport</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>LazyLogging</dd><dt>Annotations</dt><dd>
+                <span class="name">@transient</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="wechaty.user.Contact#name" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="name:String"></a>
       <span class="permalink">
@@ -1078,22 +1017,6 @@ const isOfficial = contact.type() === bot.Contact.Type.Official</p></li></ol>
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="wechaty.puppet.LoggerSupport#warn" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="warn(message:String,args:Any*):Unit"></a><a id="warn(String,Any*):Unit"></a>
-      <span class="permalink">
-      <a href="../../wechaty/user/Contact.html#warn(message:String,args:Any*):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">warn</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="args">args: <span class="extype" name="scala.Any">Any</span>*</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>LoggerSupport</dd></dl></div>
     </li><li name="wechaty.user.Contact#weixin" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="weixin():String"></a>
       <span class="permalink">
@@ -1143,8 +1066,8 @@ const weixin = contact.weixin()</p></li></ol>
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="wechaty.puppet.LoggerSupport">
-              <h3>Inherited from <span class="extype" name="wechaty.puppet.LoggerSupport">LoggerSupport</span></h3>
+        <div class="parent" name="com.typesafe.scalalogging.LazyLogging">
+              <h3>Inherited from <span class="extype" name="com.typesafe.scalalogging.LazyLogging">LazyLogging</span></h3>
             </div><div class="parent" name="wechaty.user.Conversation">
               <h3>Inherited from <a href="Conversation.html" class="extype" name="wechaty.user.Conversation">Conversation</a></h3>
             </div><div class="parent" name="scala.AnyRef">

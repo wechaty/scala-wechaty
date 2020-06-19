@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>GrpcEventSupport.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty-hostie_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.hostie.support</a> &gt; <span class="el_source">GrpcEventSupport.scala</span></div><h1>GrpcEventSupport.scala</h1><pre class="source lang-java linenums">package wechaty.hostie.support
 
+import com.typesafe.scalalogging.LazyLogging
 import io.github.wechaty.grpc.puppet.Event.{EventResponse, EventType}
 import io.grpc.stub.StreamObserver
-import wechaty.puppet.LoggerSupport
 import wechaty.puppet.events.EventEmitter
 import wechaty.puppet.schemas.Event._
 import wechaty.puppet.schemas.Puppet
@@ -14,7 +14,7 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
   * @since 2020-06-02
   */
 <span class="fc" id="L16">trait GrpcEventSupport extends StreamObserver[EventResponse] {</span>
-  self: LoggerSupport with EventEmitter with GrpcSupport with ContactRawSupport with MessageRawSupport =&gt;
+  self: LazyLogging with EventEmitter with GrpcSupport with ContactRawSupport with MessageRawSupport =&gt;
 <span class="fc" id="L18">  private[wechaty] var idOpt: Option[String] = None</span>
 
   override def onNext(v: EventResponse): Unit = {
@@ -26,7 +26,7 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
       }
 <span class="pc" id="L27">      v.getType match {</span>
 <span class="fc bfc" id="L28" title="All 2 branches covered.">        case EventType.EVENT_TYPE_UNSPECIFIED =&gt;</span>
-<span class="fc" id="L29">          error(&quot;PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_UNSPECIFIED &quot;)</span>
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">          logger.error(&quot;PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_UNSPECIFIED &quot;)</span>
         case other =&gt;
 <span class="fc" id="L31">          val payload = processEvent(other, v.getPayload)</span>
 <span class="pc" id="L32">          val eventName = Puppet.pbEventType2PuppetEventName.getOrElse(other, throw new IllegalAccessException(&quot;unsupport event &quot; + other))</span>
@@ -34,12 +34,12 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
       }
     } catch {
       case e: Throwable =&gt;
-<span class="pc" id="L37">        error(&quot;Grpc onNext&quot;, e)</span>
+<span class="pc bnc" id="L37" title="All 2 branches missed.">        logger.error(&quot;Grpc onNext&quot;, e)</span>
     }
   }
 
   private def processEvent(eventType: EventType, data: String): EventPayload = {
-<span class="fc" id="L42">    debug(&quot;receive event:{},data:{}&quot;, eventType, data)</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">    logger.debug(&quot;receive event:{},data:{}&quot;, eventType, data)</span>
 <span class="fc" id="L43">    eventType match {</span>
 <span class="fc bfc" id="L44" title="All 2 branches covered.">      case EventType.EVENT_TYPE_SCAN =&gt;</span>
 <span class="fc" id="L45">        Puppet.objectMapper.readValue(data, classOf[EventScanPayload])</span>
@@ -71,7 +71,7 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
 <span class="pc bpc" id="L71" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_ROOM_TOPIC =&gt;</span>
 <span class="nc" id="L72">        Puppet.objectMapper.readValue(data, classOf[EventRoomTopicPayload])</span>
 <span class="pc bpc" id="L73" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_RESET =&gt;</span>
-<span class="fc" id="L74">        warn(&quot;PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_RESET ?&quot;)</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        logger.warn(&quot;PuppetHostie onGrpcStreamEvent() got an EventType.EVENT_TYPE_RESET ?&quot;)</span>
 <span class="fc" id="L75">        Puppet.objectMapper.readValue(data, classOf[EventResetPayload])</span>
       case other =&gt;
 <span class="nc" id="L77">        throw new IllegalAccessException(&quot;event not supported ,event:&quot; + other)</span>
@@ -80,15 +80,15 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
   }
 
   override def onError(throwable: Throwable): Unit = {
-<span class="nc" id="L83">    error(&quot;Grpc onError&quot;, throwable)</span>
-<span class="nc" id="L84">    info(&quot;reconnect.....&quot;)</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">    logger.error(&quot;Grpc onError&quot;, throwable)</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">    logger.info(&quot;reconnect.....&quot;)</span>
 <span class="nc" id="L85">    new Thread(() =&gt; {</span>
 <span class="nc" id="L86">      reconnectStream()</span>
     }).run()
   }
 
   override def onCompleted(): Unit = {
-<span class="fc" id="L91">    info(&quot;completed&quot;)</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">    logger.info(&quot;completed&quot;)</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

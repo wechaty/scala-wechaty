@@ -2,12 +2,13 @@
 
 import java.util.function.Consumer
 
+import com.typesafe.scalalogging.LazyLogging
 import wechaty.Wechaty.PuppetResolver
 import wechaty.helper.ImplicitHelper._
 import wechaty.hostie.PuppetHostie
 import wechaty.puppet.schemas.Event._
 import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
-import wechaty.puppet.{LoggerSupport, Puppet}
+import wechaty.puppet.Puppet
 import wechaty.user._
 
 import scala.language.implicitConversions;
@@ -34,87 +35,87 @@ import scala.language.implicitConversions;
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-01
   */
-<span class="fc" id="L37">object Wechaty {</span>
-<span class="fc" id="L38">  private var globalInstance:Wechaty = _</span>
+<span class="fc" id="L38">object Wechaty {</span>
+<span class="fc" id="L39">  private var globalInstance:Wechaty = _</span>
   def instance(options: WechatyOptions): Wechaty = {
-<span class="pc bpc" id="L40" title="2 of 4 branches missed.">    if (options != null &amp;&amp; globalInstance != null) throw new Error(&quot;instance can be only initialized once by options !&quot;)</span>
-<span class="pc bpc" id="L41" title="1 of 2 branches missed.">    if (globalInstance == null) globalInstance = new Wechaty(options)</span>
-<span class="fc" id="L42">    globalInstance</span>
+<span class="pc bpc" id="L41" title="2 of 4 branches missed.">    if (options != null &amp;&amp; globalInstance != null) throw new Error(&quot;instance can be only initialized once by options !&quot;)</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">    if (globalInstance == null) globalInstance = new Wechaty(options)</span>
+<span class="fc" id="L43">    globalInstance</span>
   }
   trait PuppetResolver{
     def puppet:Puppet
   }
 }
 
-<span class="fc" id="L49">class WechatyOptions {</span>
-<span class="pc" id="L50">  var name: String = &quot;Wechaty&quot;</span>
-<span class="pc" id="L51">  var puppet: String = &quot;wechaty-puppet-hostie&quot;</span>
-<span class="fc" id="L52">  var puppetOptions: Option[PuppetOptions] = None</span>
-<span class="pc" id="L53">  var ioToken: Option[String] = None</span>
+<span class="fc" id="L50">class WechatyOptions {</span>
+<span class="pc" id="L51">  var name: String = &quot;Wechaty&quot;</span>
+<span class="pc" id="L52">  var puppet: String = &quot;wechaty-puppet-hostie&quot;</span>
+<span class="fc" id="L53">  var puppetOptions: Option[PuppetOptions] = None</span>
+<span class="pc" id="L54">  var ioToken: Option[String] = None</span>
 }
 
-<span class="pc" id="L56">class Wechaty(private val options: WechatyOptions) extends LoggerSupport with PuppetResolver{</span>
-<span class="fc" id="L57">  private var hostie:PuppetHostie = _</span>
-<span class="fc" id="L58">  private implicit val puppetResolver: PuppetResolver = this</span>
+<span class="pc bpc" id="L57" title="1 of 4 branches missed.">class Wechaty(private val options: WechatyOptions) extends LazyLogging with PuppetResolver{</span>
+<span class="fc" id="L58">  private var hostie:PuppetHostie = _</span>
+<span class="fc" id="L59">  private implicit val puppetResolver: PuppetResolver = this</span>
 
-<span class="fc" id="L60">  initHostie()</span>
+<span class="fc" id="L61">  initHostie()</span>
 
   def use(plugin:WechatyPlugin): Wechaty ={
-<span class="fc" id="L63">    plugin.install(this)</span>
-<span class="fc" id="L64">    this</span>
+<span class="fc" id="L64">    plugin.install(this)</span>
+<span class="fc" id="L65">    this</span>
   }
   def onScan(listener: Consumer[EventScanPayload]): Wechaty = {
-<span class="fc" id="L67">    puppet.addListener[EventScanPayload](PuppetEventName.SCAN,listener)</span>
-<span class="fc" id="L68">    this</span>
+<span class="fc" id="L68">    puppet.addListener[EventScanPayload](PuppetEventName.SCAN,listener)</span>
+<span class="fc" id="L69">    this</span>
   }
   def onLogin(listener:Consumer[ContactSelf]):Wechaty={
-<span class="fc" id="L71">    puppet.addListener[EventLoginPayload](PuppetEventName.LOGIN,listener)</span>
-<span class="fc" id="L72">    this</span>
+<span class="fc" id="L72">    puppet.addListener[EventLoginPayload](PuppetEventName.LOGIN,listener)</span>
+<span class="fc" id="L73">    this</span>
   }
   def onMessage(listener:Consumer[Message]):Wechaty={
-<span class="fc" id="L75">    puppet.addListener[EventMessagePayload](PuppetEventName.MESSAGE,listener)</span>
-<span class="fc" id="L76">    this</span>
+<span class="fc" id="L76">    puppet.addListener[EventMessagePayload](PuppetEventName.MESSAGE,listener)</span>
+<span class="fc" id="L77">    this</span>
   }
   def onLogout(listener:Consumer[Contact]):Wechaty={
-<span class="nc" id="L79">    puppet.addListener[EventLogoutPayload](PuppetEventName.LOGOUT,listener)</span>
-<span class="nc" id="L80">    this</span>
+<span class="nc" id="L80">    puppet.addListener[EventLogoutPayload](PuppetEventName.LOGOUT,listener)</span>
+<span class="nc" id="L81">    this</span>
   }
   def onFriendAdd(listener:Consumer[Friendship]):Wechaty={
-<span class="fc" id="L83">    puppet.addListener[EventFriendshipPayload](PuppetEventName.FRIENDSHIP,listener)</span>
-<span class="fc" id="L84">    this</span>
+<span class="fc" id="L84">    puppet.addListener[EventFriendshipPayload](PuppetEventName.FRIENDSHIP,listener)</span>
+<span class="fc" id="L85">    this</span>
   }
   def onReset(listener:EventResetPayload =&gt; Unit):Wechaty={
-<span class="fc" id="L87">    puppet.addListener[EventResetPayload](PuppetEventName.RESET,listener)</span>
-<span class="fc" id="L88">    this</span>
+<span class="fc" id="L88">    puppet.addListener[EventResetPayload](PuppetEventName.RESET,listener)</span>
+<span class="fc" id="L89">    this</span>
   }
 
-<span class="fc" id="L91">  override def puppet: Puppet = this.hostie</span>
+<span class="fc" id="L92">  override def puppet: Puppet = this.hostie</span>
 
   private def initHostie(): Unit = {
-<span class="fc" id="L94">    val option = options.puppetOptions match {</span>
-<span class="pc bpc" id="L95" title="1 of 2 branches missed.">      case Some(o) =&gt; o</span>
-<span class="nc" id="L96">      case _ =&gt; new PuppetOptions</span>
+<span class="fc" id="L95">    val option = options.puppetOptions match {</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">      case Some(o) =&gt; o</span>
+<span class="nc" id="L97">      case _ =&gt; new PuppetOptions</span>
     }
-<span class="fc" id="L98">    this.hostie = new PuppetHostie(option)</span>
+<span class="fc" id="L99">    this.hostie = new PuppetHostie(option)</span>
     //room message
-<span class="fc" id="L100">    this.hostie.addListener[EventMessagePayload](PuppetEventName.MESSAGE, Room.messageEvent)</span>
-<span class="fc" id="L101">    this.hostie.addListener[EventRoomJoinPayload](PuppetEventName.ROOM_JOIN, Room.roomJoinEvent)</span>
-<span class="fc" id="L102">    this.hostie.addListener[EventRoomLeavePayload](PuppetEventName.ROOM_LEAVE, Room.roomLeaveEvent)</span>
-<span class="fc" id="L103">    this.hostie.addListener[EventRoomTopicPayload](PuppetEventName.ROOM_TOPIC, Room.roomTopicEvent)</span>
+<span class="fc" id="L101">    this.hostie.addListener[EventMessagePayload](PuppetEventName.MESSAGE, Room.messageEvent)</span>
+<span class="fc" id="L102">    this.hostie.addListener[EventRoomJoinPayload](PuppetEventName.ROOM_JOIN, Room.roomJoinEvent)</span>
+<span class="fc" id="L103">    this.hostie.addListener[EventRoomLeavePayload](PuppetEventName.ROOM_LEAVE, Room.roomLeaveEvent)</span>
+<span class="fc" id="L104">    this.hostie.addListener[EventRoomTopicPayload](PuppetEventName.ROOM_TOPIC, Room.roomTopicEvent)</span>
   }
   def start():Unit= {
-<span class="fc" id="L106">    this.hostie.start()</span>
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">    Runtime.getRuntime.addShutdownHook(new Thread(new Runnable {</span>
+<span class="fc" id="L107">    this.hostie.start()</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">    Runtime.getRuntime.addShutdownHook(new Thread(new Runnable {</span>
       override def run(): Unit ={
-<span class="fc" id="L109">        info(&quot;stop puppet...&quot;)</span>
-<span class="fc" id="L110">        Wechaty.this.hostie.stop()</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        logger.info(&quot;stop puppet...&quot;)</span>
+<span class="fc" id="L111">        Wechaty.this.hostie.stop()</span>
       }
     }))
 
   }
   def stop(): Unit ={
-<span class="fc" id="L116">    this.hostie.stop()</span>
-<span class="fc" id="L117">    Wechaty.globalInstance = null</span>
+<span class="fc" id="L117">    this.hostie.stop()</span>
+<span class="fc" id="L118">    Wechaty.globalInstance = null</span>
   }
 }
 

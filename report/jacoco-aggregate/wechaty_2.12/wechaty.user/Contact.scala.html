@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>Contact.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.user</a> &gt; <span class="el_source">Contact.scala</span></div><h1>Contact.scala</h1><pre class="source lang-java linenums">package wechaty.user
 
+import com.typesafe.scalalogging.LazyLogging
 import wechaty.Wechaty.PuppetResolver
-import wechaty.puppet.{LoggerSupport, ResourceBox}
+import wechaty.puppet.ResourceBox
 import wechaty.puppet.schemas.Contact.{ContactGender, ContactPayload, ContactType}
 import wechaty.puppet.schemas.Puppet
 
@@ -17,10 +18,10 @@ import scala.language.implicitConversions
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-03
   */
-<span class="pc" id="L20">class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Conversation(contactId) with LoggerSupport {</span>
+<span class="pc bnc" id="L21" title="All 4 branches missed.">class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Conversation(contactId) with LazyLogging {</span>
   //  lazy val payload: schemas.Contact.ContactPayload = resolver.puppet.contactPayload(contactId)
   def payload: ContactPayload = {
-<span class="fc" id="L23">    resolver.puppet.contactPayload(contactId)</span>
+<span class="fc" id="L24">    resolver.puppet.contactPayload(contactId)</span>
   }
 
 
@@ -32,9 +33,9 @@ import scala.language.implicitConversions
     * const name = contact.name()
     */
   def name: String = {
-<span class="pc bpc" id="L35" title="1 of 2 branches missed.">    if (this.payload != null)</span>
-<span class="fc" id="L36">      this.payload.name</span>
-<span class="pc" id="L37">    else null</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">    if (this.payload != null)</span>
+<span class="fc" id="L37">      this.payload.name</span>
+<span class="pc" id="L38">    else null</span>
   }
 
 
@@ -71,14 +72,14 @@ import scala.language.implicitConversions
     **/
   def alias(newAlias: String): String = {
 
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">    if (this.payload == null) {</span>
-<span class="nc" id="L75">      throw new Error(&quot;no payload&quot;)</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">    if (this.payload == null) {</span>
+<span class="nc" id="L76">      throw new Error(&quot;no payload&quot;)</span>
     }
 
 
-<span class="fc" id="L79">    resolver.puppet.contactAlias(this.id, newAlias)</span>
-<span class="fc" id="L80">    resolver.puppet.contactPayloadDirty(this.id)</span>
-<span class="fc" id="L81">    this.payload.alias</span>
+<span class="fc" id="L80">    resolver.puppet.contactAlias(this.id, newAlias)</span>
+<span class="fc" id="L81">    resolver.puppet.contactPayloadDirty(this.id)</span>
+<span class="fc" id="L82">    this.payload.alias</span>
   }
 
   /**
@@ -89,8 +90,8 @@ import scala.language.implicitConversions
     * @ignore
     */
   def stranger(): Boolean = {
-<span class="nc bnc" id="L92" title="All 2 branches missed.">    if (this.payload == null) return false</span>
-<span class="nc bnc" id="L93" title="All 2 branches missed.">    else !this.friend()</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">    if (this.payload == null) return false</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">    else !this.friend()</span>
   }
 
   /**
@@ -107,8 +108,8 @@ import scala.language.implicitConversions
     * const isFriend = contact.friend()
     */
   def friend(): Boolean = {
-<span class="nc bnc" id="L110" title="All 2 branches missed.">    if (this.payload == null) false</span>
-<span class="nc" id="L111">    else this.payload.friend</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">    if (this.payload == null) false</span>
+<span class="nc" id="L112">    else this.payload.friend</span>
   }
 
 
@@ -132,10 +133,10 @@ import scala.language.implicitConversions
     * const isOfficial = contact.type() === bot.Contact.Type.Official
     */
   def `type`(): ContactType.Type = {
-<span class="nc bnc" id="L135" title="All 2 branches missed.">    if (this.payload == null) {</span>
-<span class="nc" id="L136">      throw new Error(&quot;no payload&quot;)</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">    if (this.payload == null) {</span>
+<span class="nc" id="L137">      throw new Error(&quot;no payload&quot;)</span>
     }
-<span class="nc" id="L138">    this.payload.`type`</span>
+<span class="nc" id="L139">    this.payload.`type`</span>
   }
 
   /**
@@ -147,8 +148,8 @@ import scala.language.implicitConversions
     * const isStar = contact.star()
     */
   def star(): Boolean = {
-<span class="nc bnc" id="L150" title="All 2 branches missed.">    if (this.payload == null) false</span>
-<span class="nc" id="L151">    else this.payload.star</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">    if (this.payload == null) false</span>
+<span class="nc" id="L152">    else this.payload.star</span>
   }
 
   /**
@@ -160,8 +161,8 @@ import scala.language.implicitConversions
     * const gender = contact.gender() === bot.Contact.Gender.Male
     */
   def gender(): ContactGender.Type = {
-<span class="nc bnc" id="L163" title="All 2 branches missed.">    if (this.payload == null) ContactGender.Unknown</span>
-<span class="nc" id="L164">    else payload.gender</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">    if (this.payload == null) ContactGender.Unknown</span>
+<span class="nc" id="L165">    else payload.gender</span>
   }
 
   /**
@@ -172,8 +173,8 @@ import scala.language.implicitConversions
     * const province = contact.province()
     */
   def province(): String = {
-<span class="nc bnc" id="L175" title="All 2 branches missed.">    if (this.payload == null) null</span>
-<span class="nc" id="L176">    else this.payload.province</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">    if (this.payload == null) null</span>
+<span class="nc" id="L177">    else this.payload.province</span>
   }
 
   /**
@@ -184,12 +185,12 @@ import scala.language.implicitConversions
     * const city = contact.city()
     */
   def city(): String = {
-<span class="nc bnc" id="L187" title="All 2 branches missed.">    if (this.payload == null) null</span>
-<span class="nc" id="L188">    else this.payload.city</span>
+<span class="nc bnc" id="L188" title="All 2 branches missed.">    if (this.payload == null) null</span>
+<span class="nc" id="L189">    else this.payload.city</span>
   }
 
   def avatar: ResourceBox =  {
-<span class="nc" id="L192">    resolver.puppet.contactAvatar(this.id)</span>
+<span class="nc" id="L193">    resolver.puppet.contactAvatar(this.id)</span>
   }
 
   /**
@@ -201,8 +202,8 @@ import scala.language.implicitConversions
     */
   def tags(): Array[Tag] = {
 
-<span class="nc" id="L204">    val tagIdList = resolver.puppet.tagContactList(this.id)</span>
-<span class="nc" id="L205">    tagIdList.map(id =&gt; new Tag(id))</span>
+<span class="nc" id="L205">    val tagIdList = resolver.puppet.tagContactList(this.id)</span>
+<span class="nc" id="L206">    tagIdList.map(id =&gt; new Tag(id))</span>
   }
 
 
@@ -214,7 +215,7 @@ import scala.language.implicitConversions
     * await contact.sync()
     */
   def sync(): Unit = {
-<span class="fc" id="L217">    this.ready(true)</span>
+<span class="fc" id="L218">    this.ready(true)</span>
   }
 
   /**
@@ -225,15 +226,15 @@ import scala.language.implicitConversions
     *
     * @ignore
     */
-<span class="nc" id="L228">  def ready(forceSync: Boolean = false): Unit = {</span>
+<span class="nc" id="L229">  def ready(forceSync: Boolean = false): Unit = {</span>
 
-<span class="pc bpc" id="L230" title="3 of 4 branches missed.">    if (!forceSync &amp;&amp; this.isReady()) { // already ready</span>
-<span class="nc" id="L231">      debug(&quot;Contact ready() isReady() true&quot;)</span>
-<span class="nc" id="L232">      return</span>
+<span class="pc bpc" id="L231" title="3 of 4 branches missed.">    if (!forceSync &amp;&amp; this.isReady()) { // already ready</span>
+<span class="nc bnc" id="L232" title="All 2 branches missed.">      logger.debug(&quot;Contact ready() isReady() true&quot;)</span>
+<span class="nc" id="L233">      return</span>
     }
 
-<span class="pc bpc" id="L235" title="1 of 2 branches missed.">    if (forceSync) {</span>
-<span class="fc" id="L236">      resolver.puppet.contactPayloadDirty(this.id)</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">    if (forceSync) {</span>
+<span class="fc" id="L237">      resolver.puppet.contactPayloadDirty(this.id)</span>
     }
   }
 
@@ -241,7 +242,7 @@ import scala.language.implicitConversions
     * @ignore
     */
   def isReady(): Boolean = {
-<span class="nc bnc" id="L244" title="All 4 branches missed.">    this.payload != null &amp;&amp; !Puppet.isBlank(this.payload.name)</span>
+<span class="nc bnc" id="L245" title="All 4 branches missed.">    this.payload != null &amp;&amp; !Puppet.isBlank(this.payload.name)</span>
   }
 
   /**
@@ -252,11 +253,11 @@ import scala.language.implicitConversions
     * const isSelf = contact.self()
     */
   def self(): Boolean = {
-<span class="nc" id="L255">    val userIdOpt = resolver.puppet.selfIdOpt()</span>
-<span class="nc" id="L256">    userIdOpt match {</span>
-<span class="nc bnc" id="L257" title="All 2 branches missed.">      case Some(userId) =&gt;</span>
-<span class="nc bnc" id="L258" title="All 6 branches missed.">        this.id == userId</span>
-<span class="nc" id="L259">      case _ =&gt; false</span>
+<span class="nc" id="L256">    val userIdOpt = resolver.puppet.selfIdOpt()</span>
+<span class="nc" id="L257">    userIdOpt match {</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">      case Some(userId) =&gt;</span>
+<span class="nc bnc" id="L259" title="All 6 branches missed.">        this.id == userId</span>
+<span class="nc" id="L260">      case _ =&gt; false</span>
     }
   }
 
@@ -271,22 +272,22 @@ import scala.language.implicitConversions
     * const weixin = contact.weixin()
     */
   def weixin(): String = {
-<span class="nc bnc" id="L274" title="All 2 branches missed.">    if (this.payload == null) null</span>
-<span class="nc" id="L275">    else payload.weixin</span>
+<span class="nc bnc" id="L275" title="All 2 branches missed.">    if (this.payload == null) null</span>
+<span class="nc" id="L276">    else payload.weixin</span>
   }
 
   override def toString: String = {
 
     val identity =
-<span class="nc bnc" id="L281" title="All 2 branches missed.">      if (!Puppet.isBlank(payload.alias))</span>
-<span class="nc" id="L282">        this.payload.alias</span>
-<span class="nc bnc" id="L283" title="All 2 branches missed.">      else if (!Puppet.isBlank(payload.name))</span>
-<span class="nc" id="L284">        payload.name</span>
-<span class="nc bnc" id="L285" title="All 2 branches missed.">      else if (!Puppet.isBlank(this.id))</span>
-<span class="nc" id="L286">        id</span>
-<span class="nc" id="L287">      else &quot;loading...&quot;</span>
+<span class="nc bnc" id="L282" title="All 2 branches missed.">      if (!Puppet.isBlank(payload.alias))</span>
+<span class="nc" id="L283">        this.payload.alias</span>
+<span class="nc bnc" id="L284" title="All 2 branches missed.">      else if (!Puppet.isBlank(payload.name))</span>
+<span class="nc" id="L285">        payload.name</span>
+<span class="nc bnc" id="L286" title="All 2 branches missed.">      else if (!Puppet.isBlank(this.id))</span>
+<span class="nc" id="L287">        id</span>
+<span class="nc" id="L288">      else &quot;loading...&quot;</span>
 
-<span class="nc" id="L289">    s&quot;Contact&lt;${identity}&gt;&quot;</span>
+<span class="nc" id="L290">    s&quot;Contact&lt;${identity}&gt;&quot;</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

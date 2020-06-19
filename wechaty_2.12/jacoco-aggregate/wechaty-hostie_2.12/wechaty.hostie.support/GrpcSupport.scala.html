@@ -3,13 +3,13 @@
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.{CountDownLatch, Executors, TimeUnit}
 
+import com.typesafe.scalalogging.LazyLogging
 import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Base
 import io.github.wechaty.grpc.puppet.Event.EventRequest
 import io.grpc.stub.StreamObserver
 import io.grpc.{ManagedChannel, ManagedChannelBuilder}
 import wechaty.hostie.PuppetHostie
-import wechaty.puppet.LoggerSupport
 
 /**
   *
@@ -17,7 +17,7 @@ import wechaty.puppet.LoggerSupport
   * @since 2020-06-02
   */
 <span class="fc" id="L19">trait GrpcSupport {</span>
-  self: PuppetHostie with ContactRawSupport with MessageRawSupport with LoggerSupport =&gt;
+  self: PuppetHostie with ContactRawSupport with MessageRawSupport with LazyLogging =&gt;
 <span class="fc" id="L21">  private val executorService = Executors.newSingleThreadScheduledExecutor()</span>
   //from https://github.com/wechaty/java-wechaty/blob/master/wechaty-puppet/src/main/kotlin/Puppet.kt
 <span class="fc" id="L23">  private val HEARTBEAT_COUNTER = new AtomicLong()</span>
@@ -37,7 +37,7 @@ import wechaty.puppet.LoggerSupport
 <span class="nc" id="L37">        ding(s&quot;heartbeat ...${seq}&quot;)</span>
       } catch {
         case e: Throwable =&gt;
-<span class="nc" id="L40">          warn(&quot;ding exception:{}&quot;, e.getMessage)</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">          logger.warn(&quot;ding exception:{}&quot;, e.getMessage)</span>
         //ignore any exception
       }
 <span class="fc" id="L43">    }, HOSTIE_KEEPALIVE_TIMEOUT, HOSTIE_KEEPALIVE_TIMEOUT, TimeUnit.MILLISECONDS)</span>
@@ -66,33 +66,33 @@ import wechaty.puppet.LoggerSupport
   }
 
   protected def reconnectStream() {
-<span class="nc" id="L69">    info(&quot;reconnect stream stream...&quot;)</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">    logger.info(&quot;reconnect stream stream...&quot;)</span>
     try {
 <span class="nc" id="L71">      stopGrpc()</span>
     } catch {
       case e: Throwable =&gt;
-<span class="nc" id="L74">        warn(&quot;fail to stop grpc {}&quot;, e.getMessage)</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        logger.warn(&quot;fail to stop grpc {}&quot;, e.getMessage)</span>
     }
 <span class="nc" id="L76">    internalStartGrpc()</span>
-<span class="nc" id="L77">    info(&quot;reconnect stream stream done&quot;)</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">    logger.info(&quot;reconnect stream stream done&quot;)</span>
 
   }
 
   private def internalStartGrpc() {
-<span class="fc" id="L82">    info(&quot;start grpc client ....&quot;)</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">    logger.info(&quot;start grpc client ....&quot;)</span>
 <span class="fc" id="L83">    this.grpcClient = PuppetGrpc.newBlockingStub(channel)</span>
 <span class="fc" id="L84">    startStream()</span>
 
 <span class="fc" id="L86">    this.grpcClient.start(Base.StartRequest.newBuilder().build())</span>
 
-<span class="fc" id="L88">    try{</span>
+<span class="pc" id="L88">    try{</span>
       //sometime the grpc can't work well,so logout before start bot
 //      this.grpcClient.logout(Base.LogoutRequest.newBuilder().build())
     }catch{
       case e:Throwable=&gt;
-        warn(e.getMessage)
+<span class="pc bnc" id="L93" title="All 2 branches missed.">        logger.warn(e.getMessage)</span>
     }
-<span class="fc" id="L95">    info(&quot;start grpc client done&quot;)</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">    logger.info(&quot;start grpc client done&quot;)</span>
   }
 
   private def startStream() {
@@ -126,7 +126,7 @@ import wechaty.puppet.LoggerSupport
 <span class="nc" id="L126">      countDownLatch.await()</span>
     } catch {
       case e: Throwable =&gt;
-<span class="nc" id="L129">        warn(&quot;fail to stop stream {}&quot;, e.getMessage)</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">        logger.warn(&quot;fail to stop stream {}&quot;, e.getMessage)</span>
     }
   }
 }
