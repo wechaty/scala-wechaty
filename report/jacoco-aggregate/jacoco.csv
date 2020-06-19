@@ -62,7 +62,7 @@ report/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.ResourceBoxType.,18,46,0,0
 report/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.UrlResourceBox,36,46,0,0,6,7,2,5,2,5
 report/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.,46,63,10,2,3,11,6,6,0,6
 report/wechaty-puppet_2.12,wechaty.puppet.events,EventEmitter,0,134,0,4,0,13,0,10,0,8
-report/wechaty-hostie_2.12,wechaty.hostie,PuppetHostie,364,354,13,9,24,13,60,69,51,67
+report/wechaty-hostie_2.12,wechaty.hostie,PuppetHostie,341,354,11,9,22,13,59,69,51,67
 report/wechaty-hostie_2.12,wechaty.hostie,Configuration.,54,62,8,4,4,6,7,5,2,4
 report/wechaty-hostie_2.12,wechaty.hostie,Configuration,6,0,0,0,0,0,2,0,2,0
 report/wechaty-hostie_2.12,wechaty.hostie.support,MessageRawSupport,189,184,3,3,47,32,13,5,10,5

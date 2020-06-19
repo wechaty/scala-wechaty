@@ -57,34 +57,28 @@ import scala.io.Source
 <span class="nc bnc" id="L57" title="All 2 branches missed.">    if(option.token.isEmpty)</span>
 <span class="nc" id="L58">      throw new IllegalAccessError(&quot;token is empty,you should set token!&quot;)</span>
 <span class="nc" id="L59">    val hostieEndpoint = &quot;https://api.chatie.io/v0/hosties/%s&quot;</span>
-    try {
-<span class="nc" id="L61">      val content = get(hostieEndpoint.format(option.token.get)).mkString</span>
-<span class="nc" id="L62">      val json = Puppet.objectMapper.readTree(content)</span>
-<span class="nc bnc" id="L63" title="All 2 branches missed.">      logger.info(&quot;grpc server found:{}&quot;,content)</span>
-<span class="nc" id="L64">      Some(json.get(&quot;ip&quot;).asText() + &quot;:&quot; + json.get(&quot;port&quot;))</span>
-    }catch{
-      case e:Throwable=&gt;
-<span class="nc bnc" id="L67" title="All 2 branches missed.">        logger.error(e.getMessage,e)</span>
-<span class="nc" id="L68">        Some(&quot;23.97.48.212:8788&quot;)</span>
-    }
+<span class="nc" id="L60">    val content = get(hostieEndpoint.format(option.token.get)).mkString</span>
+<span class="nc" id="L61">    val json = Puppet.objectMapper.readTree(content)</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">    logger.info(&quot;grpc server found:{}&quot;,content)</span>
+<span class="nc" id="L63">    Some(json.get(&quot;ip&quot;).asText() + &quot;:&quot; + json.get(&quot;port&quot;))</span>
   }
   @throws(classOf[java.io.IOException])
   @throws(classOf[java.net.SocketTimeoutException])
   private def get(url: String,
-<span class="nc" id="L74">          connectTimeout: Int = 10000,</span>
-<span class="nc" id="L75">          readTimeout: Int = 10000,</span>
-<span class="nc" id="L76">          requestMethod: String = &quot;GET&quot;) =</span>
+<span class="nc" id="L68">          connectTimeout: Int = 10000,</span>
+<span class="nc" id="L69">          readTimeout: Int = 10000,</span>
+<span class="nc" id="L70">          requestMethod: String = &quot;GET&quot;) =</span>
   {
     import java.net.{HttpURLConnection, URL}
-<span class="nc" id="L79">    val connection = new URL(url).openConnection.asInstanceOf[HttpURLConnection]</span>
-<span class="nc" id="L80">    connection.setConnectTimeout(connectTimeout)</span>
-<span class="nc" id="L81">    connection.setReadTimeout(readTimeout)</span>
-<span class="nc" id="L82">    connection.setRequestMethod(requestMethod)</span>
-<span class="nc" id="L83">    connection.setRequestProperty(&quot;User-Agent&quot;, &quot;wechaty/scala&quot;)</span>
-<span class="nc" id="L84">    val inputStream = connection.getInputStream</span>
-<span class="nc" id="L85">    val content = Source.fromInputStream(inputStream).mkString</span>
-<span class="nc bnc" id="L86" title="All 2 branches missed.">    if (inputStream != null) inputStream.close()</span>
-<span class="nc" id="L87">    content</span>
+<span class="nc" id="L73">    val connection = new URL(url).openConnection.asInstanceOf[HttpURLConnection]</span>
+<span class="nc" id="L74">    connection.setConnectTimeout(connectTimeout)</span>
+<span class="nc" id="L75">    connection.setReadTimeout(readTimeout)</span>
+<span class="nc" id="L76">    connection.setRequestMethod(requestMethod)</span>
+<span class="nc" id="L77">    connection.setRequestProperty(&quot;User-Agent&quot;, &quot;wechaty/scala&quot;)</span>
+<span class="nc" id="L78">    val inputStream = connection.getInputStream</span>
+<span class="nc" id="L79">    val content = Source.fromInputStream(inputStream).mkString</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">    if (inputStream != null) inputStream.close()</span>
+<span class="nc" id="L81">    content</span>
   }
 
 }

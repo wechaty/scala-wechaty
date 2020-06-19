@@ -1,5 +1,5 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-wechaty_2.12/wechaty-hostie_2.12,wechaty.hostie,PuppetHostie,364,354,13,9,24,13,60,69,51,67
+wechaty_2.12/wechaty-hostie_2.12,wechaty.hostie,PuppetHostie,341,354,11,9,22,13,59,69,51,67
 wechaty_2.12/wechaty-hostie_2.12,wechaty.hostie,Configuration.,54,62,8,4,4,6,7,5,2,4
 wechaty_2.12/wechaty-hostie_2.12,wechaty.hostie,Configuration,6,0,0,0,0,0,2,0,2,0
 wechaty_2.12/wechaty-hostie_2.12,wechaty.hostie.support,MessageRawSupport,189,184,3,3,47,32,13,5,10,5
