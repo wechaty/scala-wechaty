@@ -92,34 +92,37 @@ import scala.language.implicitConversions;
 <span class="fc" id="L92">    puppet.addListener[EventResetPayload](PuppetEventName.RESET,listener)</span>
 <span class="fc" id="L93">    this</span>
   }
+  def logout(): Unit ={
+<span class="nc" id="L96">    puppet.logout()</span>
+  }
 
-<span class="fc" id="L96">  override def puppet: Puppet = this.hostie</span>
+<span class="fc" id="L99">  override def puppet: Puppet = this.hostie</span>
 
   private def initHostie(): Unit = {
-<span class="fc" id="L99">    val option = options.puppetOptions match {</span>
-<span class="pc bpc" id="L100" title="1 of 2 branches missed.">      case Some(o) =&gt; o</span>
-<span class="nc" id="L101">      case _ =&gt; new PuppetOptions</span>
+<span class="fc" id="L102">    val option = options.puppetOptions match {</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">      case Some(o) =&gt; o</span>
+<span class="nc" id="L104">      case _ =&gt; new PuppetOptions</span>
     }
-<span class="fc" id="L103">    this.hostie = new PuppetHostie(option)</span>
+<span class="fc" id="L106">    this.hostie = new PuppetHostie(option)</span>
     //room message
-<span class="fc" id="L105">    this.hostie.addListener[EventMessagePayload](PuppetEventName.MESSAGE, Room.messageEvent)</span>
-<span class="fc" id="L106">    this.hostie.addListener[EventRoomJoinPayload](PuppetEventName.ROOM_JOIN, Room.roomJoinEvent)</span>
-<span class="fc" id="L107">    this.hostie.addListener[EventRoomLeavePayload](PuppetEventName.ROOM_LEAVE, Room.roomLeaveEvent)</span>
-<span class="fc" id="L108">    this.hostie.addListener[EventRoomTopicPayload](PuppetEventName.ROOM_TOPIC, Room.roomTopicEvent)</span>
+<span class="fc" id="L108">    this.hostie.addListener[EventMessagePayload](PuppetEventName.MESSAGE, Room.messageEvent)</span>
+<span class="fc" id="L109">    this.hostie.addListener[EventRoomJoinPayload](PuppetEventName.ROOM_JOIN, Room.roomJoinEvent)</span>
+<span class="fc" id="L110">    this.hostie.addListener[EventRoomLeavePayload](PuppetEventName.ROOM_LEAVE, Room.roomLeaveEvent)</span>
+<span class="fc" id="L111">    this.hostie.addListener[EventRoomTopicPayload](PuppetEventName.ROOM_TOPIC, Room.roomTopicEvent)</span>
   }
   def start():Unit= {
-<span class="fc" id="L111">    this.hostie.start()</span>
-<span class="pc bpc" id="L112" title="1 of 2 branches missed.">    Runtime.getRuntime.addShutdownHook(new Thread(new Runnable {</span>
+<span class="fc" id="L114">    this.hostie.start()</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">    Runtime.getRuntime.addShutdownHook(new Thread(new Runnable {</span>
       override def run(): Unit ={
-<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        logger.info(&quot;stop puppet...&quot;)</span>
-<span class="fc" id="L115">        Wechaty.this.hostie.stop()</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        logger.info(&quot;stop puppet...&quot;)</span>
+<span class="fc" id="L118">        Wechaty.this.hostie.stop()</span>
       }
     }))
 
   }
   def stop(): Unit ={
-<span class="fc" id="L121">    this.hostie.stop()</span>
-<span class="fc" id="L122">    Wechaty.globalInstance = null</span>
+<span class="fc" id="L124">    this.hostie.stop()</span>
+<span class="fc" id="L125">    Wechaty.globalInstance = null</span>
   }
 }
 
