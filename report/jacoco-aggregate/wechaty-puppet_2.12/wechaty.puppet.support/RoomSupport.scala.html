@@ -12,7 +12,7 @@ import wechaty.puppet.schemas.Room.{RoomPayload, RoomQueryFilter}
   */
 <span class="fc" id="L13">trait RoomSupport {</span>
   self:Puppet with LoggerSupport =&gt;
-<span class="fc" id="L15">  private val cacheRoomPayload = createCache().asInstanceOf[Cache[String, RoomPayload]]</span>
+<span class="fc" id="L15">  private[puppet] val cacheRoomPayload = createCache().asInstanceOf[Cache[String, RoomPayload]]</span>
 
   def roomAdd(roomId: String, contactId: String): Unit
 

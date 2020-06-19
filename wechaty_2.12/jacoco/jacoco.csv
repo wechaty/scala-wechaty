@@ -9,10 +9,10 @@ wechaty_2.12,wechaty,JavaDingDongBot,83,0,2,0,16,0,6,0,5,0
 wechaty_2.12,wechaty,DingDongBot.,94,0,0,0,11,0,5,0,5,0
 wechaty_2.12,wechaty,DingDongBot,4,0,0,0,0,0,1,0,1,0
 wechaty_2.12,wechaty.helper,ImplicitHelper.,58,83,0,0,3,7,9,15,9,15
-wechaty_2.12,wechaty.user,Conversation,56,12,0,0,4,2,4,2,4,2
+wechaty_2.12,wechaty.user,Conversation,39,29,0,0,3,3,3,3,3,3
 wechaty_2.12,wechaty.user,Tag,3,0,0,0,2,0,1,0,1,0
 wechaty_2.12,wechaty.user,Message,526,311,83,19,64,47,70,22,21,20
-wechaty_2.12,wechaty.user,Friendship,38,63,2,2,6,12,5,7,3,7
+wechaty_2.12,wechaty.user,Friendship,32,69,2,2,4,14,4,8,2,8
 wechaty_2.12,wechaty.user,Room.,66,336,8,6,10,34,10,20,4,19
 wechaty_2.12,wechaty.user,UrlLink,9,0,0,0,2,0,2,0,2,0
 wechaty_2.12,wechaty.user,Friendship.,15,0,0,0,3,0,3,0,3,0
@@ -21,6 +21,9 @@ wechaty_2.12,wechaty.user,Image,70,0,0,0,4,0,11,0,11,0
 wechaty_2.12,wechaty.user,MiniProgram,37,0,0,0,9,0,9,0,9,0
 wechaty_2.12,wechaty.user,Room,497,75,30,2,40,8,55,11,39,11
 wechaty_2.12,wechaty.user,ContactSelf,0,5,0,0,0,1,0,1,0,1
-wechaty_2.12,wechaty.plugins,DingDongPluginConfig.,48,18,2,0,0,6,10,7,9,7
-wechaty_2.12,wechaty.plugins,DingDongPlugin,25,133,13,15,6,19,10,10,0,6
-wechaty_2.12,wechaty.plugins,DingDongPluginConfig,236,51,38,0,0,6,50,10,29,10
+wechaty_2.12,wechaty.plugins,FriendshipAcceptorConfig.,29,12,2,0,0,1,7,4,6,4
+wechaty_2.12,wechaty.plugins,DingDongConfig.,48,18,2,0,0,6,10,7,9,7
+wechaty_2.12,wechaty.plugins,FriendshipAcceptorConfig,136,25,25,0,0,1,32,5,19,5
+wechaty_2.12,wechaty.plugins,FriendshipAcceptor,44,113,4,8,2,17,7,11,4,8
+wechaty_2.12,wechaty.plugins,DingDongConfig,236,51,38,0,0,6,50,10,29,10
+wechaty_2.12,wechaty.plugins,DingDongPlugin,25,118,13,15,6,18,10,10,0,6

@@ -22,9 +22,18 @@ import wechaty.puppet.support._
 {
   self:LoggerSupport =&gt;
 
+
   protected def createCache()= {
     //TODO optimize lru cache
-<span class="fc" id="L27">    Caffeine.newBuilder().maximumSize(100).build()</span>
+<span class="fc" id="L28">    Caffeine.newBuilder().maximumSize(100).build()</span>
+  }
+  //only for test
+  private[wechaty] def clearAllCache(): Unit = {
+<span class="fc" id="L32">    cacheContactPayload.cleanUp()</span>
+<span class="fc" id="L33">    cacheFriendshipPayload.cleanUp()</span>
+<span class="fc" id="L34">    cacheMessagePayload.cleanUp()</span>
+<span class="fc" id="L35">    cacheRoomMemberPayload.cleanUp()</span>
+<span class="fc" id="L36">    cacheRoomPayload.cleanUp()</span>
   }
 
   def selfIdOpt():Option[String]

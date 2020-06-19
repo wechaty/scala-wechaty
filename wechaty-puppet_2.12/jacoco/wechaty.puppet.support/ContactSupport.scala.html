@@ -12,7 +12,7 @@ import wechaty.puppet.{LoggerSupport, Puppet, ResourceBox}
   */
 <span class="nc" id="L13">trait ContactSupport {</span>
   self: Puppet with LoggerSupport =&gt;
-<span class="nc" id="L15">  private val cacheContactPayload = createCache().asInstanceOf[Cache[String, ContactPayload]]</span>
+<span class="nc" id="L15">  private[puppet] val cacheContactPayload = createCache().asInstanceOf[Cache[String, ContactPayload]]</span>
 
   /**
     *

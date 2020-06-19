@@ -57,9 +57,9 @@ import wechaty.puppet.schemas.Friendship._
 <span class="fc" id="L57">    val response = grpcClient.friendshipPayload(request)</span>
     val payload =
 <span class="fc" id="L59">    response.getType match {</span>
-<span class="pc bpc" id="L60" title="1 of 2 branches missed.">      case Friendship.FriendshipType.FRIENDSHIP_TYPE_CONFIRM =&gt;</span>
-<span class="nc" id="L61">        val confirm = new FriendshipPayloadConfirm()</span>
-<span class="nc" id="L62">        confirm</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">      case Friendship.FriendshipType.FRIENDSHIP_TYPE_CONFIRM =&gt;</span>
+<span class="fc" id="L61">        val confirm = new FriendshipPayloadConfirm()</span>
+<span class="fc" id="L62">        confirm</span>
 <span class="pc bpc" id="L63" title="1 of 2 branches missed.">      case Friendship.FriendshipType.FRIENDSHIP_TYPE_RECEIVE=&gt;</span>
 <span class="fc" id="L64">        val receive = new FriendshipPayloadReceive()</span>
 <span class="fc" id="L65">        receive.scene = FriendshipSceneType.apply(response.getSceneValue)</span>
@@ -72,11 +72,12 @@ import wechaty.puppet.schemas.Friendship._
 <span class="nc" id="L72">        new FriendshipPayload()</span>
     }
 
-<span class="fc" id="L75">    payload.`type` = FriendshipType.apply(response.getTypeValue)</span>
-<span class="fc" id="L76">    payload.contactId = response.getContactId</span>
-<span class="fc" id="L77">    payload.id = response.getId</span>
+<span class="fc" id="L75">    payload.hello = response.getHello</span>
+<span class="fc" id="L76">    payload.`type` = FriendshipType.apply(response.getTypeValue)</span>
+<span class="fc" id="L77">    payload.contactId = response.getContactId</span>
+<span class="fc" id="L78">    payload.id = response.getId</span>
 
-<span class="fc" id="L79">    payload</span>
+<span class="fc" id="L80">    payload</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

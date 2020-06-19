@@ -11,7 +11,7 @@ import wechaty.puppet.schemas.Friendship.FriendshipPayload
   */
 <span class="nc" id="L12">trait FriendshipSupport {</span>
   self : Puppet =&gt;
-<span class="nc" id="L14">  private val cacheFriendshipPayload = createCache().asInstanceOf[Cache[String, FriendshipPayload]]</span>
+<span class="nc" id="L14">  private[puppet] val cacheFriendshipPayload = createCache().asInstanceOf[Cache[String, FriendshipPayload]]</span>
 
   /**
     *

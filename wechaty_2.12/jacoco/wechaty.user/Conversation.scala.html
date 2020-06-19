@@ -11,7 +11,7 @@ import wechaty.Wechaty.PuppetResolver
   */
 <span class="fc" id="L12">class Conversation(val id:String)(implicit resolver:PuppetResolver) {</span>
   def say(something: String): Message = {
-<span class="nc" id="L14">    resolver.puppet.messageSendText(this.id, something)</span>
+<span class="fc" id="L14">    resolver.puppet.messageSendText(this.id, something)</span>
   }
 
   def say(something: Contact): Message = {
