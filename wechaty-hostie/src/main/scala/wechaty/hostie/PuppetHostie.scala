@@ -57,16 +57,10 @@ class PuppetHostie(val option:PuppetOptions) extends Puppet
     if(option.token.isEmpty)
       throw new IllegalAccessError("token is empty,you should set token!")
     val hostieEndpoint = "https://api.chatie.io/v0/hosties/%s"
-    try {
-      val content = get(hostieEndpoint.format(option.token.get)).mkString
-      val json = Puppet.objectMapper.readTree(content)
-      logger.info("grpc server found:{}",content)
-      Some(json.get("ip").asText() + ":" + json.get("port"))
-    }catch{
-      case e:Throwable=>
-        logger.error(e.getMessage,e)
-        Some("23.97.48.212:8788")
-    }
+    val content = get(hostieEndpoint.format(option.token.get)).mkString
+    val json = Puppet.objectMapper.readTree(content)
+    logger.info("grpc server found:{}",content)
+    Some(json.get("ip").asText() + ":" + json.get("port"))
   }
   @throws(classOf[java.io.IOException])
   @throws(classOf[java.net.SocketTimeoutException])
