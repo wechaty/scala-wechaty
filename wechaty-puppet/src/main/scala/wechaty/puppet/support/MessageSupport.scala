@@ -73,7 +73,8 @@ trait MessageSupport {
       case MessageType.Attachment |  MessageType.Audio  | MessageType.Video =>
         messageSendFile(conversationId,messageFile(messageId))
       case MessageType.Image =>
-        messageSendFile(conversationId,messageImage(messageId,ImageType.Thumbnail))
+        messageSendFile(conversationId,messageFile(messageId))
+//        messageSendFile(conversationId,messageImage(messageId,ImageType.Thumbnail))
       case MessageType.Text =>
         if(!Puppet.isBlank(payload.text)){
           this.messageSendText(

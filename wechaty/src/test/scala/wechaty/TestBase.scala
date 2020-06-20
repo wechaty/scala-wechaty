@@ -33,7 +33,8 @@ class TestBase {
 
   @BeforeEach
   def setupChannel(): Unit = {
-    GrpcMock.resetMappings()
+    resetGrpcMock()
+//    GrpcMock.resetMappings()
     val serverChannel = ManagedChannelBuilder.forAddress("localhost", GrpcMock.getGlobalPort).usePlaintext.build
     //for server stub
     val eventResponse = EventResponse.newBuilder().build()
@@ -123,7 +124,8 @@ class TestBase {
   protected def resetGrpcMock(): Unit ={
     GrpcMock.resetMappings()
     //clear all cache
-    puppetResolver.puppet.clearAllCache()
+    if(instance!=null)
+      instance.puppet.clearAllCache()
   }
   protected def mockFriendshipAdd(hello:String="hello",payloadType:FriendshipType=FriendshipType.FRIENDSHIP_TYPE_RECEIVE): Unit ={
     val response = FriendshipPayloadResponse.newBuilder()
