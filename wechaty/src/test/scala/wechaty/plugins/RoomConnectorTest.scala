@@ -4,7 +4,6 @@ import io.github.wechaty.grpc.PuppetGrpc
 import org.grpcmock.GrpcMock.{calledMethod, times, verifyThat}
 import org.junit.jupiter.api.Test
 import wechaty.TestBase
-import wechaty.user.Message
 
 /**
   *
@@ -15,9 +14,7 @@ class RoomConnectorTest extends TestBase{
   @Test
   def test_connector: Unit ={
     val connectorConfig = RoomConnectorConfig(Array("from"),Array("to"))
-    connectorConfig.blacklist = (message:Message)=>{
-      true
-    }
+    connectorConfig.blacklist = _ => true
     instance.use(new RoomConnector(connectorConfig))
 
     mockRoomMessage(roomId = "from")
@@ -28,9 +25,14 @@ class RoomConnectorTest extends TestBase{
       calledMethod(PuppetGrpc.getMessageSendTextMethod),
       times(0));
 
-    connectorConfig.blacklist = (message:Message)=>{
-      false
-    }
+    connectorConfig.blacklist =  _ => false
+    connectorConfig.mapper = _ => None
+    emitMessagePayloadEvent("messageId")
+    verifyThat(
+      calledMethod(PuppetGrpc.getMessageSendTextMethod),
+      times(0));
+
+    connectorConfig.mapper = msg=>Some(msg)
     emitMessagePayloadEvent("messageId")
     verifyThat(
       calledMethod(PuppetGrpc.getMessageSendTextMethod),

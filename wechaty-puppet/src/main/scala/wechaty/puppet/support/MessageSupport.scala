@@ -70,8 +70,10 @@ trait MessageSupport {
   def messageForward (conversationId: String, messageId: String): String= {
     val payload = this.messagePayload(messageId)
     payload.`type` match{
-      case MessageType.Attachment |  MessageType.Audio | MessageType.Image | MessageType.Video =>
+      case MessageType.Attachment |  MessageType.Audio  | MessageType.Video =>
         messageSendFile(conversationId,messageFile(messageId))
+      case MessageType.Image =>
+        messageSendFile(conversationId,messageImage(messageId,ImageType.Thumbnail))
       case MessageType.Text =>
         if(!Puppet.isBlank(payload.text)){
           this.messageSendText(

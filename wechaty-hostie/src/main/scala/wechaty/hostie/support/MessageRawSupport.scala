@@ -24,7 +24,7 @@ trait MessageRawSupport {
     * message
     */
   override def messageContact(messageId: String): String = {
-    val request = Message.MessageContactRequest.newBuilder()
+    val request  = Message.MessageContactRequest.newBuilder()
       .setId(messageId)
       .build()
     val response = grpcClient.messageContact(request)
@@ -32,8 +32,9 @@ trait MessageRawSupport {
   }
 
   var count = 0
+
   override def messageFile(messageId: String): ResourceBox = {
-    val request = Message.MessageFileRequest.newBuilder().setId(messageId).build()
+    val request  = Message.MessageFileRequest.newBuilder().setId(messageId).build()
     val response = grpcClient.messageFile(request)
     ResourceBox.fromJson(response.getFilebox)
   }
@@ -43,8 +44,9 @@ trait MessageRawSupport {
       .setId(messageId)
       .build()
 
-    val response = grpcClient.messageMiniProgram(request)
+    val response    = grpcClient.messageMiniProgram(request)
     val miniProgram = response.getMiniProgram
+    logger.debug("MP json:{}", miniProgram)
     Puppet.objectMapper.readValue(miniProgram, classOf[MiniProgramPayload])
   }
 
@@ -54,7 +56,7 @@ trait MessageRawSupport {
       .build()
 
     val response = grpcClient.messageUrl(request)
-    val urlLink = response.getUrlLink
+    val urlLink  = response.getUrlLink
     Puppet.objectMapper.readValue(urlLink, classOf[UrlLinkPayload])
 
   }
@@ -123,7 +125,7 @@ trait MessageRawSupport {
 
   override def messageSendText(conversationID: String, text: String, mentionIDList: String*): String = {
     logger.info("PuppetHostie messageSendText({}, {})", conversationID, text)
-    val request = MessageSendTextRequest
+    val request  = MessageSendTextRequest
       .newBuilder()
       .setConversationId(conversationID)
       .setText(text).build()
@@ -134,13 +136,13 @@ trait MessageRawSupport {
   override protected def messageRawPayload(id: String): MessagePayload = {
     logger.info("PuppetHostie MessagePayload({})", id)
     val response = grpcClient.messagePayload(MessagePayloadRequest.newBuilder().setId(id).build())
+    logger.info("message payload:{}", response)
     val messagePayload = new MessagePayload
     messagePayload.id = response.getId
     messagePayload.mentionIdList = response.getMentionIdsList.toArray(Array[String]())
     messagePayload.filename = response.getFilename
     messagePayload.text = response.getText
     messagePayload.timestamp = response.getTimestamp
-    println("respon.getTypeValue",response.getTypeValue,response.getType)
     if (response.getTypeValue > MessageType.Video.id)
       messagePayload.`type` = MessageType.Unknown
     else
@@ -161,6 +163,7 @@ trait MessageRawSupport {
 
 
     val response = this.grpcClient.messageImage(request.build())
+    logger.debug("image response:{}", response)
 
     val jsonText = response.getFilebox
     ResourceBox.fromJson(jsonText)

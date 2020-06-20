@@ -13,26 +13,32 @@ import wechaty.{Wechaty, WechatyPlugin}
   * @since 2020-06-19
   */
 case class RoomConnectorConfig(
-                                var from:Array[String],
-                                var to:Array[String],
-                                var blacklist:Message =>Boolean = _ => false,
-                                var whitelist:Message => Boolean = _ => true
+                                var from: Array[String],
+                                var to: Array[String],
+                                var mapper: Message => Option[Message] = msg => Some(msg),
+                                var blacklist: Message => Boolean = _ => false,
+                                var whitelist: Message => Boolean = _ => true
                               )
-class RoomConnector(config:RoomConnectorConfig) extends WechatyPlugin with LazyLogging{
+
+class RoomConnector(config: RoomConnectorConfig) extends WechatyPlugin with LazyLogging {
   override def install(wechaty: Wechaty): Unit = {
     implicit val resolver = wechaty
-    wechaty.onOnceMessage(message=>{
-      val fromRooms = findRooms(config.from)
-      val toRooms = findRooms(config.to)
-      val roomMessageListener=(roomMessage:Message)=>{
+    wechaty.onOnceMessage(message => {
+      val fromRooms           = findRooms(config.from)
+      val toRooms             = findRooms(config.to)
+      val roomMessageListener = (roomMessage: Message) => {
         if (config.whitelist(roomMessage) && !config.blacklist(roomMessage)) {
-          toRooms.foreach(roomMessage.forward)
+          config.mapper(roomMessage) match {
+            case Some(msg) =>
+              toRooms.foreach(msg.forward)
+            case _ => //filtered,so don't forward message
+          }
         }
       }
       //process current message
-      message.room match{
+      message.room match {
         case Some(r) =>
-          if(fromRooms.exists(_.id == r.id)) {
+          if (fromRooms.exists(_.id == r.id)) {
             roomMessageListener(message)
           }
         case _ =>
@@ -45,13 +51,14 @@ class RoomConnector(config:RoomConnectorConfig) extends WechatyPlugin with LazyL
       })
     })
   }
-  private def findRooms(roomIds:Array[String])(implicit resolver:PuppetResolver): Array[Room]={
+
+  private def findRooms(roomIds: Array[String])(implicit resolver: PuppetResolver): Array[Room] = {
     try {
       roomIds.flatMap(Room.load(_)) //avoid timeout ?
-    }catch{
-      case e:Throwable=>
-        logger.warn("load room occurs exception,so loop load",e)
-        Thread.sleep(TimeUnit.SECONDS.toMillis(5))//sleep 5s to wait
+    } catch {
+      case e: Throwable =>
+        logger.warn("load room occurs exception,so loop load", e)
+        Thread.sleep(TimeUnit.SECONDS.toMillis(5)) //sleep 5s to wait
         findRooms(roomIds)
     }
   }
