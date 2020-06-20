@@ -148,7 +148,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">RoomConnectorConfig</span><span class="params">(<span name="from">from: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="to">to: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="blacklist">blacklist: (<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">_ =&gt; false</span></span>, <span name="whitelist">whitelist: (<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">_ =&gt; true</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">RoomConnectorConfig</span><span class="params">(<span name="from">from: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="to">to: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="mapper">mapper: (<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>) ⇒ <span class="extype" name="scala.Option">Option</span>[<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>] = <span class="symbol">msg =&gt; Some(msg)</span></span>, <span name="blacklist">blacklist: (<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">_ =&gt; false</span></span>, <span name="whitelist">whitelist: (<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">_ =&gt; true</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
 
@@ -204,9 +204,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="wechaty.plugins.RoomConnectorConfig#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(from:Array[String],to:Array[String],blacklist:wechaty.user.Message=&gt;Boolean,whitelist:wechaty.user.Message=&gt;Boolean):wechaty.plugins.RoomConnectorConfig"></a><a id="&lt;init&gt;:RoomConnectorConfig"></a>
+      <a id="&lt;init&gt;(from:Array[String],to:Array[String],mapper:wechaty.user.Message=&gt;Option[wechaty.user.Message],blacklist:wechaty.user.Message=&gt;Boolean,whitelist:wechaty.user.Message=&gt;Boolean):wechaty.plugins.RoomConnectorConfig"></a><a id="&lt;init&gt;:RoomConnectorConfig"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnectorConfig.html#&lt;init&gt;(from:Array[String],to:Array[String],blacklist:wechaty.user.Message=&gt;Boolean,whitelist:wechaty.user.Message=&gt;Boolean):wechaty.plugins.RoomConnectorConfig" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnectorConfig.html#&lt;init&gt;(from:Array[String],to:Array[String],mapper:wechaty.user.Message=&gt;Option[wechaty.user.Message],blacklist:wechaty.user.Message=&gt;Boolean,whitelist:wechaty.user.Message=&gt;Boolean):wechaty.plugins.RoomConnectorConfig" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -215,7 +215,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">RoomConnectorConfig</span><span class="params">(<span name="from">from: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="to">to: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="blacklist">blacklist: (<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">_ =&gt; false</span></span>, <span name="whitelist">whitelist: (<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">_ =&gt; true</span></span>)</span>
+        <span class="name">RoomConnectorConfig</span><span class="params">(<span name="from">from: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="to">to: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="mapper">mapper: (<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>) ⇒ <span class="extype" name="scala.Option">Option</span>[<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>] = <span class="symbol">msg =&gt; Some(msg)</span></span>, <span name="blacklist">blacklist: (<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">_ =&gt; false</span></span>, <span name="whitelist">whitelist: (<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>) ⇒ <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">_ =&gt; true</span></span>)</span>
       </span>
       
       
@@ -422,6 +422,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="wechaty.plugins.RoomConnectorConfig#mapper" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="mapper:wechaty.user.Message=&gt;Option[wechaty.user.Message]"></a><a id="mapper:(Message)⇒Option[Message]"></a>
+      <span class="permalink">
+      <a href="../../wechaty/plugins/RoomConnectorConfig.html#mapper:wechaty.user.Message=&gt;Option[wechaty.user.Message]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">mapper</span><span class="result">: (<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>) ⇒ <span class="extype" name="scala.Option">Option</span>[<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>]</span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DingDongBotDebug.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty</a> &gt; <span class="el_source">DingDongBotDebug.scala</span></div><h1>DingDongBotDebug.scala</h1><pre class="source lang-java linenums">package wechaty
 
+import com.typesafe.scalalogging.LazyLogging
 import wechaty.puppet.schemas.Message.MessageType
 import wechaty.puppet.schemas.MiniProgram.MiniProgramPayload
 import wechaty.puppet.schemas.Puppet
@@ -11,39 +12,43 @@ import wechaty.user.{MiniProgram, Room}
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-02
   */
-<span class="nc" id="L14">object DingDongBotDebug {</span>
+<span class="nc bnc" id="L15" title="All 4 branches missed.">object DingDongBotDebug extends LazyLogging {</span>
   def main(args: Array[String]): Unit = {
-<span class="nc" id="L16">    val option = new WechatyOptions</span>
-<span class="nc" id="L17">    implicit val bot = Wechaty.instance(option)</span>
-<span class="nc" id="L18">    bot</span>
-<span class="nc" id="L19">      .onScan(payload =&gt; {</span>
-<span class="nc" id="L20">        println(&quot;Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n&quot;.format(payload.status, payload.qrcode))</span>
-<span class="nc" id="L21">      }).onLogin(payload =&gt; {</span>
-<span class="nc" id="L22">        println(&quot;User %s logined\n&quot;.format(payload.id))</span>
-<span class="nc" id="L23">        Room.findAll().foreach(x=&gt;{</span>
-<span class="nc" id="L24">          println(x.id,x.payload.topic)</span>
-        })
-<span class="nc" id="L26">      }).onMessage(message=&gt;{</span>
-        //only for test
-<span class="nc bnc" id="L28" title="All 6 branches missed.">        if(message.from.id== sys.props.get(&quot;DEBUG_WEIXIN&quot;).get) {</span>
-<span class="nc" id="L29">          message.forward(message.from)</span>
-        }
-<span class="nc bnc" id="L31" title="All 6 branches missed.">        if(message.`type` == MessageType.MiniProgram){</span>
-          //构建
-          //TODO FIXME,How to send MiniProgram
-<span class="nc" id="L34">          val miniProgramPayload = Puppet.objectMapper.readValue(mpJson,classOf[MiniProgramPayload])</span>
-<span class="nc" id="L35">          miniProgramPayload.thumbUrl=&quot;https://avatars0.githubusercontent.com/u/25162437?s=200&amp;v=4&quot;</span>
-<span class="nc" id="L36">          miniProgramPayload.thumbKey=null</span>
-<span class="nc" id="L37">          println(&quot;===&gt;&quot;,objectMapper.writeValueAsString(miniProgramPayload))</span>
-<span class="nc" id="L38">          val miniProgram = new MiniProgram(miniProgramPayload)</span>
-<span class="nc" id="L39">          message.from.say(miniProgram)</span>
-        }
+<span class="nc" id="L17">    val option = new WechatyOptions</span>
+<span class="nc" id="L18">    implicit val bot: Wechaty = Wechaty.instance(option)</span>
+<span class="nc" id="L19">    bot</span>
+<span class="nc" id="L20">      .onScan(payload =&gt; {</span>
+<span class="nc" id="L21">        println(&quot;Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n&quot;.format(payload.status, payload.qrcode))</span>
+<span class="nc" id="L22">      }).onLogin(payload =&gt; {</span>
+<span class="nc" id="L23">      println(&quot;User %s logined\n&quot;.format(payload.id))</span>
+<span class="nc" id="L24">      Room.findAll().foreach(x =&gt; {</span>
+<span class="nc" id="L25">        println(x.id, x.payload.topic)</span>
       })
+<span class="nc" id="L27">    }).onMessage(message =&gt; {</span>
+      //only for test
+<span class="nc bnc" id="L29" title="All 2 branches missed.">      logger.debug(&quot;mssage received:{}&quot;, message)</span>
+<span class="nc bnc" id="L30" title="All 6 branches missed.">      if (message.from.id == sys.props.get(&quot;DEBUG_WEIXIN&quot;).get) {</span>
+<span class="nc" id="L31">        message.forward(message.from)</span>
+      }
+<span class="nc bnc" id="L33" title="All 6 branches missed.">      if (message.`type` == MessageType.MiniProgram) {</span>
+<span class="nc" id="L34">        message.toMiniProgram()</span>
+        //构建
+        //TODO FIXME,How to send MiniProgram
+<span class="nc" id="L37">        val miniProgramPayload = Puppet.objectMapper.readValue(mpJson, classOf[MiniProgramPayload])</span>
+<span class="nc" id="L38">        miniProgramPayload.thumbUrl = &quot;https://avatars0.githubusercontent.com/u/25162437?s=200&amp;v=4&quot;</span>
+<span class="nc" id="L39">        miniProgramPayload.thumbKey = null</span>
+<span class="nc" id="L40">        println(&quot;===&gt;&quot;, objectMapper.writeValueAsString(miniProgramPayload))</span>
+<span class="nc" id="L41">        val miniProgram = new MiniProgram(miniProgramPayload)</span>
+<span class="nc" id="L42">        message.from.say(miniProgram)</span>
+      }
+    })
 
-<span class="nc" id="L43">    bot.start()</span>
+<span class="nc" id="L46">    bot.start()</span>
+    //    bot.logout()
 
-<span class="nc" id="L45">    Thread.currentThread().join()</span>
+<span class="nc" id="L49">    Thread.currentThread().join()</span>
   }
-<span class="nc" id="L47">  val mpJson=&quot;{\&quot;appid\&quot;:\&quot;wx7c54357940c1d76a\&quot;,\&quot;description\&quot;:\&quot;\&quot;,\&quot;iconUrl\&quot;:\&quot;http://mmbiz.qpic.cn/mmbiz_png/lQLdvqlFfCYNMSG6vEPoFNGPvIES1mwEOibI5fCH2p0hS7S9L6xvSOppdQByj3u6764j3nRrMFSfcyyibV9JKouw/640?wx_fmt=pngwxfrom=200\&quot;,\&quot;pagePath\&quot;:\&quot;pages/detail/index.html?item_id=619257404163&amp;pid=65&amp;commerce_type=1\&quot;,\&quot;shareId\&quot;:\&quot;20a3b1336c2807932df41a0193618e04\&quot;,\&quot;thumbKey\&quot;:\&quot;0f13237ce8339c569330119c049e4736\&quot;,\&quot;thumbUrl\&quot;:\&quot;304f02010004483046020100020448529f2302033d0af802046c34feb602045eeb85ab0421777875706c6f61645f66696c6568656c7065723630345f313539323439333438330204010400030201000400\&quot;,\&quot;title\&quot;:\&quot;【IP联名集合】妖精的口袋情侣印花短袖t恤女2020夏新款宽松上衣\&quot;,\&quot;username\&quot;:\&quot;gh_1c0dae5a5b83@app\&quot;}&quot;</span>
-<span class="nc" id="L48">}</span>
+
+<span class="nc" id="L52">  val mpJson = &quot;{\&quot;appid\&quot;:\&quot;wx7c54357940c1d76a\&quot;,\&quot;description\&quot;:\&quot;\&quot;,\&quot;iconUrl\&quot;:\&quot;http://mmbiz.qpic.cn/mmbiz_png/lQLdvqlFfCYNMSG6vEPoFNGPvIES1mwEOibI5fCH2p0hS7S9L6xvSOppdQByj3u6764j3nRrMFSfcyyibV9JKouw/640?wx_fmt=pngwxfrom=200\&quot;,\&quot;pagePath\&quot;:\&quot;pages/detail/index.html?item_id=619257404163&amp;pid=65&amp;commerce_type=1\&quot;,\&quot;shareId\&quot;:\&quot;20a3b1336c2807932df41a0193618e04\&quot;,\&quot;thumbKey\&quot;:\&quot;0f13237ce8339c569330119c049e4736\&quot;,\&quot;thumbUrl\&quot;:\&quot;304f02010004483046020100020448529f2302033d0af802046c34feb602045eeb85ab0421777875706c6f61645f66696c6568656c7065723630345f313539323439333438330204010400030201000400\&quot;,\&quot;title\&quot;:\&quot;【IP联名集合】妖精的口袋情侣印花短袖t恤女2020夏新款宽松上衣\&quot;,\&quot;username\&quot;:\&quot;gh_1c0dae5a5b83@app\&quot;}&quot;</span>
+}
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

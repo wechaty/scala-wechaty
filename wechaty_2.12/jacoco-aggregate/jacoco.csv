@@ -2,7 +2,7 @@ GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_
 wechaty_2.12/wechaty-hostie_2.12,wechaty.hostie,PuppetHostie,341,354,11,9,22,13,59,69,51,67
 wechaty_2.12/wechaty-hostie_2.12,wechaty.hostie,Configuration.,54,62,8,4,4,6,7,5,2,4
 wechaty_2.12/wechaty-hostie_2.12,wechaty.hostie,Configuration,6,0,0,0,0,0,2,0,2,0
-wechaty_2.12/wechaty-hostie_2.12,wechaty.hostie.support,MessageRawSupport,189,184,3,3,47,32,13,5,10,5
+wechaty_2.12/wechaty-hostie_2.12,wechaty.hostie.support,MessageRawSupport,234,194,8,4,49,32,16,5,10,5
 wechaty_2.12/wechaty-hostie_2.12,wechaty.hostie.support,GrpcSupport..anon.new StreamObserver() {...},12,0,0,0,5,0,4,0,4,0
 wechaty_2.12/wechaty-hostie_2.12,wechaty.hostie.support,ContactSelfRawSupport,44,1,0,0,10,1,4,1,4,1
 wechaty_2.12/wechaty-hostie_2.12,wechaty.hostie.support,FriendshipRawSupport,60,86,3,3,15,22,5,4,3,3

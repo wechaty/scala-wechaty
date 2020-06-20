@@ -70,41 +70,44 @@ import wechaty.puppet.{Puppet, ResourceBox}
   def messageForward (conversationId: String, messageId: String): String= {
 <span class="nc" id="L71">    val payload = this.messagePayload(messageId)</span>
 <span class="nc" id="L72">    payload.`type` match{</span>
-<span class="nc bnc" id="L73" title="All 26 branches missed.">      case MessageType.Attachment |  MessageType.Audio | MessageType.Image | MessageType.Video =&gt;</span>
+<span class="nc bnc" id="L73" title="All 20 branches missed.">      case MessageType.Attachment |  MessageType.Audio  | MessageType.Video =&gt;</span>
 <span class="nc" id="L74">        messageSendFile(conversationId,messageFile(messageId))</span>
-<span class="nc bnc" id="L75" title="All 6 branches missed.">      case MessageType.Text =&gt;</span>
-<span class="nc bnc" id="L76" title="All 2 branches missed.">        if(!Puppet.isBlank(payload.text)){</span>
-<span class="nc" id="L77">          this.messageSendText(</span>
-<span class="nc" id="L78">            conversationId,</span>
-<span class="nc" id="L79">            payload.text,</span>
+<span class="nc bnc" id="L75" title="All 6 branches missed.">      case MessageType.Image =&gt;</span>
+<span class="nc" id="L76">        messageSendFile(conversationId,messageFile(messageId))</span>
+//        messageSendFile(conversationId,messageImage(messageId,ImageType.Thumbnail))
+<span class="nc bnc" id="L78" title="All 6 branches missed.">      case MessageType.Text =&gt;</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if(!Puppet.isBlank(payload.text)){</span>
+<span class="nc" id="L80">          this.messageSendText(</span>
+<span class="nc" id="L81">            conversationId,</span>
+<span class="nc" id="L82">            payload.text,</span>
           )
         }
         else {
-<span class="nc" id="L83">          throw new IllegalStateException(&quot;Puppet messageForward() payload.text is undefined.&quot;)</span>
+<span class="nc" id="L86">          throw new IllegalStateException(&quot;Puppet messageForward() payload.text is undefined.&quot;)</span>
         }
-<span class="nc bnc" id="L85" title="All 6 branches missed.">      case MessageType.MiniProgram =&gt;</span>
-<span class="nc" id="L86">        this.messageSendMiniProgram(</span>
-<span class="nc" id="L87">          conversationId,</span>
-<span class="nc" id="L88">          this.messageMiniProgram(messageId) )</span>
+<span class="nc bnc" id="L88" title="All 6 branches missed.">      case MessageType.MiniProgram =&gt;</span>
+<span class="nc" id="L89">        this.messageSendMiniProgram(</span>
+<span class="nc" id="L90">          conversationId,</span>
+<span class="nc" id="L91">          this.messageMiniProgram(messageId) )</span>
 
-<span class="nc bnc" id="L90" title="All 6 branches missed.">      case MessageType.Url =&gt;</span>
-<span class="nc" id="L91">        this.messageSendUrl(</span>
-<span class="nc" id="L92">          conversationId,</span>
-<span class="nc" id="L93">          this.messageUrl(messageId)</span>
+<span class="nc bnc" id="L93" title="All 6 branches missed.">      case MessageType.Url =&gt;</span>
+<span class="nc" id="L94">        this.messageSendUrl(</span>
+<span class="nc" id="L95">          conversationId,</span>
+<span class="nc" id="L96">          this.messageUrl(messageId)</span>
         )
 
-<span class="nc bnc" id="L96" title="All 6 branches missed.">      case MessageType.Contact =&gt;</span>
-<span class="nc" id="L97">        this.messageSendContact(</span>
-<span class="nc" id="L98">          conversationId,</span>
-<span class="nc" id="L99">          this.messageContact(messageId)</span>
+<span class="nc bnc" id="L99" title="All 6 branches missed.">      case MessageType.Contact =&gt;</span>
+<span class="nc" id="L100">        this.messageSendContact(</span>
+<span class="nc" id="L101">          conversationId,</span>
+<span class="nc" id="L102">          this.messageContact(messageId)</span>
         )
 
-<span class="nc bnc" id="L102" title="All 14 branches missed.">      case MessageType.ChatHistory | MessageType.Location</span>
-<span class="nc bnc" id="L103" title="All 12 branches missed.">           | MessageType.Emoticon | MessageType.Transfer</span>
-<span class="nc bnc" id="L104" title="All 12 branches missed.">           | MessageType.RedEnvelope| MessageType.Recalled =&gt;</span>
-<span class="nc" id="L105">        throw new UnsupportedOperationException</span>
-<span class="nc bnc" id="L106" title="All 6 branches missed.">      case MessageType.Unknown =&gt;</span>
-<span class="nc" id="L107">        throw new Error(&quot;Unsupported forward message type:&quot; + payload.`type`)</span>
+<span class="nc bnc" id="L105" title="All 14 branches missed.">      case MessageType.ChatHistory | MessageType.Location</span>
+<span class="nc bnc" id="L106" title="All 12 branches missed.">           | MessageType.Emoticon | MessageType.Transfer</span>
+<span class="nc bnc" id="L107" title="All 12 branches missed.">           | MessageType.RedEnvelope| MessageType.Recalled =&gt;</span>
+<span class="nc" id="L108">        throw new UnsupportedOperationException</span>
+<span class="nc bnc" id="L109" title="All 6 branches missed.">      case MessageType.Unknown =&gt;</span>
+<span class="nc" id="L110">        throw new Error(&quot;Unsupported forward message type:&quot; + payload.`type`)</span>
     }
 
   }
