@@ -118,9 +118,9 @@
                         <a class="class" href="FriendshipAcceptorConfig.html" title=""></a>
                         <a href="FriendshipAcceptorConfig.html" title="">FriendshipAcceptorConfig</a>
                       </li><li class="current-entities indented2">
-                        <a class="object" href="RoomConnector$.html" title=""></a>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">RoomConnector</a>
+                        <a class="object" href="" title=""></a>
+                        <a class="class" href="RoomConnector.html" title=""></a>
+                        <a href="RoomConnector.html" title="">RoomConnector</a>
                       </li><li class="current-entities indented2">
                         <span class="separator"></span>
                         <a class="class" href="RoomConnectorConfig.html" title=""></a>
@@ -130,27 +130,27 @@
             </div>
           </div>
           <div id="content">
-            <body class="class type">
+            <body class="object value">
       <div id="definition">
-        <a href="RoomConnector$.html" title="See companion object"><div class="big-circle class-companion-object">c</div></a>
+        <a href="RoomConnector.html" title="See companion class"><div class="big-circle object-companion-class">o</div></a>
         <p id="owner"><a href="../index.html" class="extype" name="wechaty">wechaty</a>.<a href="index.html" class="extype" name="wechaty.plugins">plugins</a></p>
-        <h1><a href="RoomConnector$.html" title="See companion object">RoomConnector</a><span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html" title="Permalink">
+        <h1><a href="RoomConnector.html" title="See companion class">RoomConnector</a><span class="permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
         <h3><span class="morelinks"><div>
-            Companion <a href="RoomConnector$.html" title="See companion object">object RoomConnector</a>
+            Companion <a href="RoomConnector.html" title="See companion class">class RoomConnector</a>
           </div></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">RoomConnector</span><span class="result"> extends <a href="../WechatyPlugin.html" class="extype" name="wechaty.WechatyPlugin">WechatyPlugin</a> with <span class="extype" name="com.typesafe.scalalogging.LazyLogging">LazyLogging</span></span>
+        <span class="name">RoomConnector</span>
       </span>
       </h4>
 
@@ -159,7 +159,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><span class="extype" name="com.typesafe.scalalogging.LazyLogging">LazyLogging</span>, <a href="../WechatyPlugin.html" class="extype" name="wechaty.WechatyPlugin">WechatyPlugin</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -185,7 +185,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="wechaty.plugins.RoomConnector"><span>RoomConnector</span></li><li class="in" name="com.typesafe.scalalogging.LazyLogging"><span>LazyLogging</span></li><li class="in" name="wechaty.WechatyPlugin"><span>WechatyPlugin</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="wechaty.plugins.RoomConnector"><span>RoomConnector</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -203,28 +203,28 @@
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="wechaty.plugins.RoomConnector#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(config:wechaty.plugins.RoomConnectorConfig):wechaty.plugins.RoomConnector"></a><a id="&lt;init&gt;:RoomConnector"></a>
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="wechaty.plugins.RoomConnector.RoomMessageMapper" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RoomMessageMapper=(wechaty.user.Room,wechaty.user.Message,wechaty.user.Room)=&gt;Option[wechaty.user.Message]"></a><a id="RoomMessageMapper:RoomMessageMapper"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#&lt;init&gt;(config:wechaty.plugins.RoomConnectorConfig):wechaty.plugins.RoomConnector" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#RoomMessageMapper=(wechaty.user.Room,wechaty.user.Message,wechaty.user.Room)=&gt;Option[wechaty.user.Message]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">new</span>
+        <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">RoomConnector</span><span class="params">(<span name="config">config: <a href="RoomConnectorConfig.html" class="extype" name="wechaty.plugins.RoomConnectorConfig">RoomConnectorConfig</a></span>)</span>
+        <span class="name">RoomMessageMapper</span><span class="result alias"> = (<a href="../user/Room.html" class="extype" name="wechaty.user.Room">Room</a>, <a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>, <a href="../user/Room.html" class="extype" name="wechaty.user.Room">Room</a>) ⇒ <span class="extype" name="scala.Option">Option</span>[<a href="../user/Message.html" class="extype" name="wechaty.user.Message">Message</a>]</span>
       </span>
       
       
     </li></ol>
             </div>
-
-        
 
         
 
@@ -234,7 +234,7 @@
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -250,7 +250,7 @@
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html###():Int" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -266,7 +266,7 @@
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -279,10 +279,26 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="wechaty.plugins.RoomConnector#DEFAULT_MESSAGE_SENDER" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DEFAULT_MESSAGE_SENDER:wechaty.plugins.RoomConnector.RoomMessageMapper"></a><a id="DEFAULT_MESSAGE_SENDER:RoomMessageMapper"></a>
+      <span class="permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#DEFAULT_MESSAGE_SENDER:wechaty.plugins.RoomConnector.RoomMessageMapper" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">DEFAULT_MESSAGE_SENDER</span><span class="result">: <a href="#RoomMessageMapper=(wechaty.user.Room,wechaty.user.Message,wechaty.user.Room)=&gt;Option[wechaty.user.Message]" class="extmbr" name="wechaty.plugins.RoomConnector.RoomMessageMapper">RoomMessageMapper</a></span>
+      </span>
+      
+      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -298,7 +314,7 @@
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#clone():Object" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -322,7 +338,7 @@
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -338,7 +354,7 @@
     </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#equals(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -354,7 +370,7 @@
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#finalize():Unit" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -376,7 +392,7 @@
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#getClass():Class[_]" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -395,7 +411,7 @@
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#hashCode():Int" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#hashCode():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -411,26 +427,10 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="wechaty.plugins.RoomConnector#install" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="install(wechaty:wechaty.Wechaty):Unit"></a><a id="install(Wechaty):Unit"></a>
-      <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#install(wechaty:wechaty.Wechaty):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">install</span><span class="params">(<span name="wechaty">wechaty: <a href="../Wechaty.html" class="extype" name="wechaty.Wechaty">Wechaty</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="wechaty.plugins.RoomConnector">RoomConnector</a> → <a href="../WechatyPlugin.html" class="extype" name="wechaty.WechatyPlugin">WechatyPlugin</a></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -443,29 +443,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.typesafe.scalalogging.LazyLogging#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="logger:com.typesafe.scalalogging.Logger"></a><a id="logger:Logger"></a>
-      <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#logger:com.typesafe.scalalogging.Logger" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">logger</span><span class="result">: <span class="extype" name="com.typesafe.scalalogging.Logger">Logger</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>LazyLogging</dd><dt>Annotations</dt><dd>
-                <span class="name">@transient</span><span class="args">()</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -481,7 +462,7 @@
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#notify():Unit" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -500,7 +481,7 @@
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#notifyAll():Unit" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -519,7 +500,7 @@
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -535,7 +516,7 @@
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#toString():String" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#toString():String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -551,7 +532,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#wait():Unit" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -573,7 +554,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -595,7 +576,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/RoomConnector.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../wechaty/plugins/RoomConnector$.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -626,11 +607,7 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.typesafe.scalalogging.LazyLogging">
-              <h3>Inherited from <span class="extype" name="com.typesafe.scalalogging.LazyLogging">LazyLogging</span></h3>
-            </div><div class="parent" name="wechaty.WechatyPlugin">
-              <h3>Inherited from <a href="../WechatyPlugin.html" class="extype" name="wechaty.WechatyPlugin">WechatyPlugin</a></h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

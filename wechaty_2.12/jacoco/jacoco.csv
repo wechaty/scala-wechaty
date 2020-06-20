@@ -23,10 +23,11 @@ wechaty_2.12,wechaty.user,Room,498,83,34,2,40,8,53,11,35,11
 wechaty_2.12,wechaty.user,ContactSelf,0,5,0,0,0,1,0,1,0,1
 wechaty_2.12,wechaty.plugins,FriendshipAcceptorConfig.,29,12,2,0,0,1,7,4,6,4
 wechaty_2.12,wechaty.plugins,DingDongConfig.,48,18,2,0,0,6,10,7,9,7
-wechaty_2.12,wechaty.plugins,RoomConnector,64,205,13,9,3,20,11,17,2,15
+wechaty_2.12,wechaty.plugins,RoomConnector,67,216,13,9,3,21,12,17,3,15
 wechaty_2.12,wechaty.plugins,FriendshipAcceptorConfig,136,25,25,0,0,1,32,5,19,5
 wechaty_2.12,wechaty.plugins,FriendshipAcceptor,25,117,5,9,2,17,4,10,0,7
 wechaty_2.12,wechaty.plugins,DingDongConfig,236,51,38,0,0,6,50,10,29,10
 wechaty_2.12,wechaty.plugins,DingDongPlugin,25,118,13,15,6,18,10,10,0,6
 wechaty_2.12,wechaty.plugins,RoomConnectorConfig,202,43,38,0,0,6,48,8,27,8
-wechaty_2.12,wechaty.plugins,RoomConnectorConfig.,68,20,2,0,0,4,16,7,15,7
+wechaty_2.12,wechaty.plugins,RoomConnector.,5,14,0,0,0,3,1,3,1,3
+wechaty_2.12,wechaty.plugins,RoomConnectorConfig.,59,21,2,0,0,4,14,7,13,7

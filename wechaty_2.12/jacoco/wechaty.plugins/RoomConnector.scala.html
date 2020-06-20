@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit
 
 import com.typesafe.scalalogging.LazyLogging
 import wechaty.Wechaty.PuppetResolver
+import wechaty.plugins.RoomConnector._
 import wechaty.user.{Message, Room}
 import wechaty.{Wechaty, WechatyPlugin}
 
@@ -12,41 +13,47 @@ import wechaty.{Wechaty, WechatyPlugin}
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-19
   */
-<span class="pc bnc" id="L15" title="All 40 branches missed.">case class RoomConnectorConfig(</span>
-<span class="pc" id="L16">                                var from: Array[String],</span>
-<span class="pc" id="L17">                                var to: Array[String],</span>
-<span class="pc" id="L18">                                var mapper: Message =&gt; Option[Message] = msg =&gt; Some(msg),</span>
-<span class="pc" id="L19">                                var blacklist: Message =&gt; Boolean = _ =&gt; false,</span>
-<span class="pc" id="L20">                                var whitelist: Message =&gt; Boolean = _ =&gt; true</span>
+<span class="pc bnc" id="L16" title="All 40 branches missed.">case class RoomConnectorConfig(</span>
+<span class="pc" id="L17">                                var from: Array[String],</span>
+<span class="pc" id="L18">                                var to: Array[String],</span>
+<span class="pc" id="L19">                                var mapper: RoomMessageMapper = DEFAULT_MESSAGE_SENDER ,</span>
+<span class="pc" id="L20">                                var blacklist: Message =&gt; Boolean = _ =&gt; false,</span>
+<span class="pc" id="L21">                                var whitelist: Message =&gt; Boolean = _ =&gt; true</span>
                               )
 
-<span class="pc bnc" id="L23" title="All 4 branches missed.">class RoomConnector(config: RoomConnectorConfig) extends WechatyPlugin with LazyLogging {</span>
+<span class="fc" id="L24">object RoomConnector {</span>
+  type RoomMessageMapper = (/* from room */Room,Message,/* to room */Room) =&gt; Option[Message]
+<span class="pc" id="L26">  val  DEFAULT_MESSAGE_SENDER:RoomMessageMapper=(_,msg,_) =&gt; Some(msg)</span>
+}
+<span class="pc bnc" id="L28" title="All 4 branches missed.">class RoomConnector(config: RoomConnectorConfig) extends WechatyPlugin with LazyLogging {</span>
   override def install(wechaty: Wechaty): Unit = {
-<span class="fc" id="L25">    implicit val resolver = wechaty</span>
-<span class="fc" id="L26">    wechaty.onOnceMessage(message =&gt; {</span>
-<span class="fc" id="L27">      val fromRooms           = findRooms(config.from)</span>
-<span class="fc" id="L28">      val toRooms             = findRooms(config.to)</span>
-<span class="fc" id="L29">      val roomMessageListener = (roomMessage: Message) =&gt; {</span>
-<span class="pc bpc" id="L30" title="1 of 4 branches missed.">        if (config.whitelist(roomMessage) &amp;&amp; !config.blacklist(roomMessage)) {</span>
-<span class="fc" id="L31">          config.mapper(roomMessage) match {</span>
-<span class="fc bfc" id="L32" title="All 2 branches covered.">            case Some(msg) =&gt;</span>
-<span class="fc" id="L33">              toRooms.foreach(msg.forward)</span>
-<span class="fc" id="L34">            case _ =&gt; //filtered,so don't forward message</span>
+<span class="fc" id="L30">    implicit val resolver = wechaty</span>
+<span class="fc" id="L31">    wechaty.onOnceMessage(message =&gt; {</span>
+<span class="fc" id="L32">      val fromRooms           = findRooms(config.from)</span>
+<span class="fc" id="L33">      val toRooms             = findRooms(config.to)</span>
+<span class="fc" id="L34">      val roomMessageListener = (fromRoom:Room,roomMessage: Message) =&gt; {</span>
+<span class="pc bpc" id="L35" title="1 of 4 branches missed.">        if (config.whitelist(roomMessage) &amp;&amp; !config.blacklist(roomMessage)) {</span>
+<span class="fc" id="L36">          toRooms foreach {toRoom=&gt;</span>
+<span class="fc" id="L37">            config.mapper(fromRoom,roomMessage,toRoom) match {</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">              case Some(msg) =&gt;</span>
+<span class="fc" id="L39">                msg.forward(toRoom)</span>
+<span class="fc" id="L40">              case _ =&gt; //filtered,so don't forward message</span>
+            }
           }
         }
       }
       //process current message
-<span class="fc" id="L39">      message.room match {</span>
-<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        case Some(r) =&gt;</span>
-<span class="pc bpc" id="L41" title="5 of 8 branches missed.">          if (fromRooms.exists(_.id == r.id)) {</span>
-<span class="fc" id="L42">            roomMessageListener(message)</span>
+<span class="fc" id="L46">      message.room match {</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        case Some(r) =&gt;</span>
+<span class="pc bpc" id="L48" title="5 of 8 branches missed.">          if (fromRooms.exists(_.id == r.id)) {</span>
+<span class="fc" id="L49">            roomMessageListener(r,message)</span>
           }
-<span class="nc" id="L44">        case _ =&gt;</span>
+<span class="nc" id="L51">        case _ =&gt;</span>
       }
 
-<span class="fc" id="L47">      fromRooms.foreach(room =&gt; {</span>
-<span class="fc" id="L48">        room.onMessage(roomMessage =&gt; {</span>
-<span class="fc" id="L49">          roomMessageListener(roomMessage)</span>
+<span class="fc" id="L54">      fromRooms.foreach(room =&gt; {</span>
+<span class="fc" id="L55">        room.onMessage(roomMessage =&gt; {</span>
+<span class="fc" id="L56">          roomMessageListener(room,roomMessage)</span>
         })
       })
     })
@@ -54,12 +61,12 @@ import wechaty.{Wechaty, WechatyPlugin}
 
   private def findRooms(roomIds: Array[String])(implicit resolver: PuppetResolver): Array[Room] = {
     try {
-<span class="pc" id="L57">      roomIds.flatMap(Room.load(_)) //avoid timeout ?</span>
+<span class="pc" id="L64">      roomIds.flatMap(Room.load(_)) //avoid timeout ?</span>
     } catch {
       case e: Throwable =&gt;
-<span class="nc bnc" id="L60" title="All 2 branches missed.">        logger.warn(&quot;load room occurs exception,so loop load&quot;, e)</span>
-<span class="nc" id="L61">        Thread.sleep(TimeUnit.SECONDS.toMillis(5)) //sleep 5s to wait</span>
-<span class="pc" id="L62">        findRooms(roomIds)</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        logger.warn(&quot;load room occurs exception,so loop load&quot;, e)</span>
+<span class="nc" id="L68">        Thread.sleep(TimeUnit.SECONDS.toMillis(5)) //sleep 5s to wait</span>
+<span class="pc" id="L69">        findRooms(roomIds)</span>
     }
   }
 }
