@@ -26,13 +26,13 @@ class RoomConnectorTest extends TestBase{
       times(0));
 
     connectorConfig.blacklist =  _ => false
-    connectorConfig.mapper = _ => None
+    connectorConfig.mapper = (_,_,_) => None
     emitMessagePayloadEvent("messageId")
     verifyThat(
       calledMethod(PuppetGrpc.getMessageSendTextMethod),
       times(0));
 
-    connectorConfig.mapper = msg=>Some(msg)
+    connectorConfig.mapper = (_,msg,_)=>Some(msg)
     emitMessagePayloadEvent("messageId")
     verifyThat(
       calledMethod(PuppetGrpc.getMessageSendTextMethod),
