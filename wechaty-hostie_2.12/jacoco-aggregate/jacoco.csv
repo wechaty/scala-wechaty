@@ -47,6 +47,7 @@ wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Contact.ContactTy
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.MessageQueryFilter,45,0,0,0,8,0,13,0,13,0
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventLogoutPayload,17,0,0,0,3,0,5,0,5,0
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Contact.ContactQueryFilter,31,0,0,0,6,0,9,0,9,0
+wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.support,CacheSupport,6,0,0,0,2,0,2,0,2,0
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.support,FriendshipSupport,53,0,4,0,13,0,5,0,3,0
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.support,MessageSupport,424,0,104,0,42,0,55,0,3,0
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.support,RoomMemberSupport,111,0,8,0,18,0,10,0,6,0
@@ -56,7 +57,7 @@ wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.StreamResourc
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet,ResourceBox,20,1,0,0,1,1,5,1,5,1
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.FileResourceBox,7,28,0,0,1,2,2,5,2,5
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.Base64ResourceBox,5,57,0,0,0,8,1,6,1,6
-wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet,Puppet,22,0,0,0,7,0,3,0,3,0
+wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet,Puppet,17,0,0,0,6,0,2,0,2,0
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.AbstractResourceBox,0,65,1,1,0,11,1,5,0,5
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.ResourceBoxType.,18,46,0,0,0,8,6,3,6,3
 wechaty-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.UrlResourceBox,36,46,0,0,6,7,2,5,2,5

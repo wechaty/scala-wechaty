@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>RoomSupport.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">wechaty-puppet-padplus_2.12</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.puppet.support</a> &gt; <span class="el_source">RoomSupport.scala</span></div><h1>RoomSupport.scala</h1><pre class="source lang-java linenums">package wechaty.puppet.support
+
+import com.github.benmanes.caffeine.cache.Cache
+import com.typesafe.scalalogging.LazyLogging
+import wechaty.puppet.{Puppet, ResourceBox}
+import wechaty.puppet.schemas.Puppet
+import wechaty.puppet.schemas.Room.{RoomPayload, RoomQueryFilter}
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-06
+  */
+<span class="nc" id="L14">trait RoomSupport {</span>
+  self:Puppet with LazyLogging =&gt;
+<span class="nc" id="L16">  private[puppet] val cacheRoomPayload = createCache().asInstanceOf[Cache[String, RoomPayload]]</span>
+
+  def roomAdd(roomId: String, contactId: String): Unit
+
+  def roomAvatar (roomId: String):ResourceBox
+
+  def roomCreate(contactIdList: Array[String], topic: String): String
+
+  def roomDel(roomId: String, contactId: String): Unit
+
+  def roomList(): Array[String]
+
+  def roomQRCode(roomId: String): String
+
+  def roomQuit(roomId: String): Unit
+
+  def roomTopic(roomId: String): String
+
+  def roomTopic(roomId: String, topic: String): Unit
+
+  protected def roomRawPayload(roomId: String): RoomPayload
+  def roomPayload ( roomId: String): RoomPayload =  {
+
+<span class="nc bnc" id="L39" title="All 2 branches missed.">    if (Puppet.isBlank(roomId)) {</span>
+<span class="nc" id="L40">      throw new Error(&quot;no room id&quot;)</span>
+    }
+
+    /**
+      * 1. Try to get from cache first
+      */
+<span class="nc" id="L46">    val cachedPayload = cacheRoomPayload.getIfPresent(roomId)</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">    if (cachedPayload != null) {</span>
+<span class="nc" id="L48">      return cachedPayload</span>
+    }
+
+    /**
+      * 2. Cache not found
+      */
+<span class="nc" id="L54">    val rawPayload = this.roomRawPayload(roomId)</span>
+
+<span class="nc" id="L56">    this.cacheRoomPayload.put(roomId, rawPayload)</span>
+<span class="nc" id="L57">    rawPayload</span>
+  }
+  def roomPayloadDirty (roomId: String): Unit ={
+<span class="nc" id="L60">    this.cacheRoomPayload.invalidate(roomId)</span>
+  }
+  def roomSearch (queryOpt: Option[RoomQueryFilter]): Array[String] ={
+
+<span class="nc" id="L64">    val allRoomIdList = this.roomList()</span>
+
+<span class="nc" id="L66">    queryOpt match{</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">      case Some(query) =&gt;</span>
+<span class="nc" id="L68">        allRoomIdList.toStream.flatMap(roomId=&gt;{</span>
+          try{
+<span class="nc" id="L70">            Some(roomPayload(roomId))</span>
+          }catch {
+            case e:Throwable=&gt;
+<span class="nc bnc" id="L73" title="All 2 branches missed.">              logger.error(e.getMessage,e)</span>
+<span class="nc" id="L74">              roomPayloadDirty(roomId)</span>
+<span class="nc" id="L75">              roomMemberPayloadDirty(roomId)</span>
+<span class="nc" id="L76">              None</span>
+          }
+<span class="nc" id="L78">        }).filter(x=&gt;{</span>
+<span class="nc" id="L79">          val flag = query(x)</span>
+<span class="nc" id="L80">          flag</span>
+<span class="nc" id="L81">        }).map(_.id).toArray</span>
+      case _ =&gt;
+<span class="nc" id="L83">        allRoomIdList</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

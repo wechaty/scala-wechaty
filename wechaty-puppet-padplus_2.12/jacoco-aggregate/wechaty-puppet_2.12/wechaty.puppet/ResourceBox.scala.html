@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ResourceBox.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">wechaty-puppet-padplus_2.12</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.puppet</a> &gt; <span class="el_source">ResourceBox.scala</span></div><h1>ResourceBox.scala</h1><pre class="source lang-java linenums">package wechaty.puppet
+
+import java.io._
+import java.net.{HttpURLConnection, URL}
+import java.util.Base64
+
+import javax.activation.MimeType
+import org.apache.commons.io.IOUtils
+import wechaty.puppet.schemas.Puppet.objectMapper
+
+/**
+  * wrap stream,support file stream and url stream
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-08
+  */
+<span class="fc" id="L16">object ResourceBox {</span>
+  def fromFile(file: File): ResourceBox={
+<span class="fc" id="L18">    new FileResourceBox(file)</span>
+  }
+  def fromUrl(url: String): ResourceBox={
+<span class="fc" id="L21">    new UrlResourceBox(url)</span>
+  }
+  def fromBase64(name:String,base64: String): ResourceBox={
+<span class="fc" id="L24">    new Base64ResourceBox(name,base64)</span>
+  }
+  def fromJson(json: String): ResourceBox={
+<span class="nc" id="L27">    val root = objectMapper.readTree(json)</span>
+<span class="nc" id="L28">    val boxTypeInt = root.get(&quot;boxType&quot;).asInt()</span>
+<span class="nc" id="L29">    val boxType = ResourceBoxType.apply(boxTypeInt)</span>
+<span class="nc" id="L30">    boxType match{</span>
+<span class="nc bnc" id="L31" title="All 6 branches missed.">      case ResourceBoxType.Base64 =&gt;</span>
+<span class="nc" id="L32">        fromBase64(root.get(&quot;name&quot;).asText,root.get(&quot;base64&quot;).asText)</span>
+<span class="nc bnc" id="L33" title="All 6 branches missed.">      case ResourceBoxType.Url =&gt;</span>
+<span class="nc" id="L34">        fromUrl(root.get(&quot;remoteUrl&quot;).asText)</span>
+      case _ =&gt;
+<span class="nc" id="L36">        throw  new UnsupportedOperationException(&quot;boxType %s unsupported&quot;.format(boxType))</span>
+    }
+  }
+<span class="fc" id="L39">  object ResourceBoxType extends Enumeration {</span>
+    type Type = Value
+<span class="pc" id="L41">    val Unknown: Type = Value(0)</span>
+
+    /**
+      * Serializable by toJSON()
+      */
+<span class="fc" id="L46">    val Base64  :Type = Value(1)</span>
+<span class="pc" id="L47">    val Url     :Type = Value(2)</span>
+<span class="pc" id="L48">    val QRCode  :Type = Value(3)</span>
+
+    /**
+      * Not serializable by toJSON()
+      * Need to convert to FileBoxType.Base64 before call toJSON()
+      */
+<span class="pc" id="L54">    val Buffer  :Type = Value(4)</span>
+<span class="pc" id="L55">    val File    :Type = Value(5)</span>
+<span class="pc" id="L56">    val Stream  :Type = Value(6)</span>
+  }
+<span class="fc" id="L58">  private class UrlResourceBox(url:String) extends AbstractResourceBox{</span>
+    override def toStream: InputStream = {
+<span class="fc" id="L60">      val connection = new URL(url).openConnection.asInstanceOf[HttpURLConnection]</span>
+<span class="fc" id="L61">      connection.setConnectTimeout(5000)</span>
+<span class="fc" id="L62">      connection.setReadTimeout(5000)</span>
+<span class="fc" id="L63">      connection.setRequestMethod(&quot;GET&quot;)</span>
+<span class="fc" id="L64">      connection.setRequestProperty(&quot;User-Agent&quot;, &quot;wechaty/scala&quot;)</span>
+<span class="fc" id="L65">      connection.getInputStream</span>
+    }
+
+    override def toJson(): String = {
+<span class="nc" id="L69">      val objectNode = objectMapper.createObjectNode</span>
+<span class="nc" id="L70">      objectNode.put(&quot;name&quot;,name)</span>
+<span class="nc" id="L71">      objectNode.put(&quot;boxType&quot;,ResourceBoxType.Url.id)</span>
+<span class="nc" id="L72">      objectNode.put(&quot;remoteUrl&quot;,url)</span>
+<span class="nc" id="L73">      objectNode.toString</span>
+
+    }
+
+<span class="nc" id="L77">    override def name: String = url.substring(url.lastIndexOf(&quot;/&quot;)+1)</span>
+  }
+<span class="pc" id="L79">  private class Base64ResourceBox(override val name:String,base64:String) extends AbstractResourceBox{</span>
+    override def toStream: InputStream = {
+      //decode base64 as byte array input stream
+<span class="fc" id="L82">      new ByteArrayInputStream(Base64.getDecoder.decode(base64))</span>
+    }
+
+<span class="fc" id="L85">    override def toBase64: String = base64</span>
+
+    override def toJson(): String = {
+<span class="fc" id="L88">      val objectNode = objectMapper.createObjectNode</span>
+<span class="fc" id="L89">      objectNode.put(&quot;name&quot;,name)</span>
+<span class="fc" id="L90">      objectNode.put(&quot;boxType&quot;,ResourceBoxType.Base64.id)</span>
+<span class="fc" id="L91">      objectNode.put(&quot;base64&quot;,base64)</span>
+<span class="fc" id="L92">      objectNode.toString</span>
+    }
+
+  }
+<span class="nc" id="L96">  private class StreamResourceBox(override val name:String,stream:InputStream) extends AbstractResourceBox{</span>
+<span class="nc" id="L97">    override def toStream: InputStream = stream</span>
+    override protected def using[T &lt;: Closeable, R](resource: T)(block: T =&gt; R): R = {
+<span class="nc" id="L99">      block(resource) //don't close the stream.must be closed by creator</span>
+    }
+  }
+<span class="pc" id="L102">  private class FileResourceBox(file:File) extends AbstractResourceBox{</span>
+<span class="fc" id="L103">    override def toStream: InputStream = new FileInputStream(file)</span>
+
+<span class="nc" id="L105">    override def name: String = file.getName</span>
+  }
+<span class="fc" id="L107">  private trait AbstractResourceBox extends ResourceBox {</span>
+    override def toBase64: String = {
+<span class="fc" id="L109">      using(toStream) { fi =&gt;</span>
+<span class="fc" id="L110">        val byteArrayOutputStream = new ByteArrayOutputStream()</span>
+<span class="fc" id="L111">        val base64Out = Base64.getEncoder.wrap(byteArrayOutputStream)</span>
+<span class="fc" id="L112">        IOUtils.copy(fi, base64Out)</span>
+<span class="fc" id="L113">        base64Out.close()</span>
+<span class="fc" id="L114">        byteArrayOutputStream.close()</span>
+<span class="fc" id="L115">        byteArrayOutputStream.toString()</span>
+      }
+    }
+
+    override def toDataURL(mimeType: MimeType): String = {
+<span class="fc" id="L120">      Array(&quot;data:&quot;, mimeType, &quot;;base64,&quot;, toBase64).mkString(&quot;&quot;)</span>
+    }
+
+    protected def using[T &lt;: Closeable, R](resource: T)(block: T =&gt; R): R = {
+      try {
+<span class="fc" id="L125">        block(resource)</span>
+      } finally {
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        if (resource != null) resource.close()</span>
+      }
+    }
+  }
+}
+<span class="fc" id="L132">trait ResourceBox {</span>
+  def name:String
+  def toStream:InputStream
+  def toBase64:String
+  def toDataURL(mimeType: MimeType):String
+<span class="nc" id="L137">  def toJson():String = ???</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

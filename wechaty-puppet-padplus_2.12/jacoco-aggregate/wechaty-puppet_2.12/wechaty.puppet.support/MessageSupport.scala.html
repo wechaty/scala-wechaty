@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>MessageSupport.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">wechaty-puppet-padplus_2.12</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.puppet.support</a> &gt; <span class="el_source">MessageSupport.scala</span></div><h1>MessageSupport.scala</h1><pre class="source lang-java linenums">package wechaty.puppet.support
+
+import com.github.benmanes.caffeine.cache.Cache
+import com.typesafe.scalalogging.LazyLogging
+import wechaty.puppet.schemas.Image.ImageType
+import wechaty.puppet.schemas.Message.{MessagePayload, MessageType}
+import wechaty.puppet.schemas.MiniProgram.MiniProgramPayload
+import wechaty.puppet.schemas.Puppet
+import wechaty.puppet.schemas.UrlLink.UrlLinkPayload
+import wechaty.puppet.{Puppet, ResourceBox}
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-03
+  */
+<span class="nc" id="L17">trait MessageSupport {</span>
+  self: LazyLogging with Puppet =&gt;
+<span class="nc" id="L19">  private[puppet] val cacheMessagePayload = createCache().asInstanceOf[Cache[String, MessagePayload]]</span>
+
+  /**
+    * message
+    */
+  def messageContact(messageId: String): String
+
+  def messageFile(messageId: String):ResourceBox
+  def messageImage(messageId: String, imageType: ImageType.Type) : ResourceBox
+  def messageMiniProgram(messageId: String): MiniProgramPayload
+
+  def messageUrl(messageId: String): UrlLinkPayload
+
+  def messageSendContact(conversationId: String, contactId: String): String
+
+  def messageSendFile         (conversationId: String, file: ResourceBox): String
+
+  def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgramPayload): String
+
+  def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]): String
+
+  def messageSendUrl(conversationId: String, urlLinkPayload: UrlLinkPayload): String
+
+  def messageRecall(messageId: String): Boolean
+
+  def messageSendText(conversationID: String, text: String, mentionIDList: String*): String
+
+  def messagePayload(messageId: String): MessagePayload = {
+<span class="nc bnc" id="L47" title="All 2 branches missed.">    logger.debug(&quot;Puppet messagePayload({})&quot;, messageId)</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">    if (Puppet.isBlank(messageId)) {</span>
+<span class="nc" id="L49">      throw new IllegalArgumentException(&quot;message id is blank!&quot;)</span>
+    }
+
+    /**
+      * 1. Try to get from cache first
+      */
+<span class="nc" id="L55">    val cachedPayload = this.cacheMessagePayload.getIfPresent(messageId)</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">    if (cachedPayload != null) {</span>
+<span class="nc" id="L57">      return cachedPayload</span>
+    }
+
+    /**
+      * 2. Cache not found
+      */
+<span class="nc" id="L63">    val payload = messageRawPayload(messageId)</span>
+
+<span class="nc" id="L65">    this.cacheMessagePayload.put(messageId, payload)</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">    logger.info(&quot;Puppet messagePayload({}) cache SET&quot;, messageId)</span>
+
+<span class="nc" id="L68">    payload</span>
+  }
+  def messageForward (conversationId: String, messageId: String): String= {
+<span class="nc" id="L71">    val payload = this.messagePayload(messageId)</span>
+<span class="nc" id="L72">    payload.`type` match{</span>
+<span class="nc bnc" id="L73" title="All 20 branches missed.">      case MessageType.Attachment |  MessageType.Audio  | MessageType.Video =&gt;</span>
+<span class="nc" id="L74">        messageSendFile(conversationId,messageFile(messageId))</span>
+<span class="nc bnc" id="L75" title="All 6 branches missed.">      case MessageType.Image =&gt;</span>
+<span class="nc" id="L76">        messageSendFile(conversationId,messageFile(messageId))</span>
+//        messageSendFile(conversationId,messageImage(messageId,ImageType.Thumbnail))
+<span class="nc bnc" id="L78" title="All 6 branches missed.">      case MessageType.Text =&gt;</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if(!Puppet.isBlank(payload.text)){</span>
+<span class="nc" id="L80">          this.messageSendText(</span>
+<span class="nc" id="L81">            conversationId,</span>
+<span class="nc" id="L82">            payload.text,</span>
+          )
+        }
+        else {
+<span class="nc" id="L86">          throw new IllegalStateException(&quot;Puppet messageForward() payload.text is undefined.&quot;)</span>
+        }
+<span class="nc bnc" id="L88" title="All 6 branches missed.">      case MessageType.MiniProgram =&gt;</span>
+<span class="nc" id="L89">        this.messageSendMiniProgram(</span>
+<span class="nc" id="L90">          conversationId,</span>
+<span class="nc" id="L91">          this.messageMiniProgram(messageId) )</span>
+
+<span class="nc bnc" id="L93" title="All 6 branches missed.">      case MessageType.Url =&gt;</span>
+<span class="nc" id="L94">        this.messageSendUrl(</span>
+<span class="nc" id="L95">          conversationId,</span>
+<span class="nc" id="L96">          this.messageUrl(messageId)</span>
+        )
+
+<span class="nc bnc" id="L99" title="All 6 branches missed.">      case MessageType.Contact =&gt;</span>
+<span class="nc" id="L100">        this.messageSendContact(</span>
+<span class="nc" id="L101">          conversationId,</span>
+<span class="nc" id="L102">          this.messageContact(messageId)</span>
+        )
+
+<span class="nc bnc" id="L105" title="All 14 branches missed.">      case MessageType.ChatHistory | MessageType.Location</span>
+<span class="nc bnc" id="L106" title="All 12 branches missed.">           | MessageType.Emoticon | MessageType.Transfer</span>
+<span class="nc bnc" id="L107" title="All 12 branches missed.">           | MessageType.RedEnvelope| MessageType.Recalled =&gt;</span>
+<span class="nc" id="L108">        throw new UnsupportedOperationException</span>
+<span class="nc bnc" id="L109" title="All 6 branches missed.">      case MessageType.Unknown =&gt;</span>
+<span class="nc" id="L110">        throw new Error(&quot;Unsupported forward message type:&quot; + payload.`type`)</span>
+    }
+
+  }
+
+  protected def messageRawPayload(messageId: String): MessagePayload
+
+  protected def ding(data: String): Unit
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
