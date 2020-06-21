@@ -24,6 +24,9 @@ object DingDongBotDebug extends LazyLogging {
       Room.findAll().foreach(x => {
         println(x.id, x.payload.topic)
       })
+//      Room.load("21822642010@chatroom").get.payload.memberIdList.map(new Contact(_)).foreach(x=>
+//        println(x.name,x.id)
+//      )
     }).onMessage(message => {
       //only for test
       logger.debug("mssage received:{}", message)
@@ -44,7 +47,7 @@ object DingDongBotDebug extends LazyLogging {
     })
 
     bot.start()
-    //    bot.logout()
+//        bot.logout()
 
     Thread.currentThread().join()
   }

@@ -2,9 +2,9 @@ package wechaty.puppet.support
 
 import com.github.benmanes.caffeine.cache.Cache
 import com.typesafe.scalalogging.LazyLogging
+import wechaty.puppet.ResourceBox
 import wechaty.puppet.schemas.Contact.ContactPayload
 import wechaty.puppet.schemas.Puppet
-import wechaty.puppet.{Puppet, ResourceBox}
 
 /**
   *
@@ -12,7 +12,7 @@ import wechaty.puppet.{Puppet, ResourceBox}
   * @since 2020-06-03
   */
 trait ContactSupport {
-  self: Puppet with LazyLogging =>
+  self: CacheSupport with LazyLogging =>
   private[puppet] val cacheContactPayload = createCache().asInstanceOf[Cache[String, ContactPayload]]
 
   /**

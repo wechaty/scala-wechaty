@@ -18,6 +18,7 @@
     <module>wechaty</module>
     <module>wechaty-puppet</module>
     <module>wechaty-hostie</module>
+    <module>wechaty-puppet-padplus</module>
     <module>report</module>
   </modules>
 
@@ -425,7 +426,7 @@
     <url>https://github.com/wechaty/scala-wechaty</url>
     <connection>scm:git:ssh://github.com/wechaty/scala-wechaty.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/wechaty/scala-wechaty.git</developerConnection>
-    <tag>${newVersion}</tag>
+    <tag>HEAD</tag>
   </scm>
   <properties>
     <encoding>UTF-8</encoding>
@@ -434,6 +435,8 @@
     <scala-release-version>2.12.11</scala-release-version>
     <scala-binary-version>2.12</scala-binary-version>
     <spring-release-version>5.2.4.RELEASE</spring-release-version>
+    <grpc.version>1.29.0</grpc.version>
+    <protobuf.version>3.12.0</protobuf.version>
     <PermGen>64m</PermGen>
     <MaxPermGen>512m</MaxPermGen>
     <CodeCacheSize>512m</CodeCacheSize>

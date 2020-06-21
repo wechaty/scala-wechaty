@@ -1,6 +1,5 @@
 package wechaty.puppet
 
-import com.github.benmanes.caffeine.cache.Caffeine
 import com.typesafe.scalalogging.LazyLogging
 import wechaty.puppet.events.EventEmitter
 import wechaty.puppet.support._
@@ -12,6 +11,7 @@ import wechaty.puppet.support._
   * @since 2020-06-03
   */
 trait Puppet extends MessageSupport
+  with CacheSupport
   with EventEmitter
   with ContactSupport
   with ContactSelfSupport
@@ -24,10 +24,6 @@ trait Puppet extends MessageSupport
   self:LazyLogging =>
 
 
-  protected def createCache()= {
-    //TODO optimize lru cache
-    Caffeine.newBuilder().maximumSize(100).build()
-  }
   //only for test
   private[wechaty] def clearAllCache(): Unit = {
     cacheContactPayload.cleanUp()

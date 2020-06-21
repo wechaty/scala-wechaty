@@ -38,10 +38,11 @@ object SchemaGenerator {
           throw new IllegalStateException("wrong filename")
       }
 
-      val fileWriter = new PrintWriter(new File("wechaty-puppet/src/main/scala/wechaty/puppet/schemas/"+filename+".scala"))
-//      val fileWriter = new PrintWriter(new File(filename+".scala"))
+      val fileWriter = new PrintWriter(new File("wechaty-puppet-padplus/src/main/scala/wechaty/padplus/schemas/"+filename+".scala"))
+      fileWriter.println("package wechaty.padplus.schemas")
+//      val fileWriter = new PrintWriter(new File("wechaty-puppet/src/main/scala/wechaty/puppet/schemas/"+filename+".scala"))
+//      fileWriter.println("package wechaty.puppet.schemas")
 
-      fileWriter.println("package wechaty.puppet.schemas")
       fileWriter.print("object ")
       fileWriter.print(filename)
       fileWriter.println(" {")
