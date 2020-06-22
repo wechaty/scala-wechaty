@@ -120,6 +120,37 @@ trait GrpcSupport {
     val response = request(apiType,data)
     Puppet.objectMapper.readValue(response.getResult,classTag.runtimeClass).asInstanceOf[T]
   }
+  protected def requestForCallback[T](apiType: ApiType,data:Option[Any]=None)(callback:T=>Unit)(implicit classTag: ClassTag[T]): ResponseObject ={
+    val request = RequestObject.newBuilder()
+    request.setToken(option.token.get)
+    uinOpt match{
+      case Some(id) =>
+        request.setUin(id)
+      case _ =>
+    }
+    request.setApiType(apiType)
+    data match{
+      case Some(str:String) =>
+        request.setParams(str)
+      case Some(d) =>
+        request.setParams(Puppet.objectMapper.writeValueAsString(d))
+      case _ =>
+    }
+    val requestId = UUID.randomUUID().toString
+    request.setRequestId(requestId)
+    val traceId= UUID.randomUUID().toString
+    request.setTraceId(traceId)
+    logger.debug("request:{}",request.build())
+    val callbackDelegate=(streamResponse:StreamResponse)=>{
+      val obj=Puppet.objectMapper.readValue(streamResponse.getData,classTag.runtimeClass).asInstanceOf[T]
+      callback(obj)
+    }
+    //FIXME response timeout or not successful???
+    callbackPool.put(traceId,callbackDelegate)
+    val response = grpcClient.request(request.build())
+    logger.debug("request->response:{}",response)
+    response
+  }
   protected def request(apiType: ApiType,data:Option[Any]=None): ResponseObject ={
     val request = RequestObject.newBuilder()
     request.setToken(option.token.get)

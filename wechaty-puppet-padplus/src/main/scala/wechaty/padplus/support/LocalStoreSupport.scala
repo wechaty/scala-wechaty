@@ -26,6 +26,9 @@ trait LocalStoreSupport {
   protected def getUin: Option[String]={
     store.get(uinKey).map(_.toStringUtf8)
   }
+  protected def deleteUin():Unit ={
+    store.delete(uinKey)
+  }
   protected def saveRawContactPayload(contactId:String,payload:PadplusContactPayload): Unit ={
     store.put(contactKeyFormat.format(contactId),objectMapper.writeValueAsString(payload))
   }

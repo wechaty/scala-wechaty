@@ -1,7 +1,8 @@
 package wechaty.padplus.support
 
+import wechaty.padplus.grpc.PadPlusServerOuterClass.ApiType
 import wechaty.puppet.ResourceBox
-import wechaty.puppet.schemas.Contact
+import wechaty.puppet.schemas.{Contact, Puppet}
 import wechaty.puppet.support.ContactSupport
 
 /**
@@ -29,5 +30,9 @@ trait ContactRawSupport {
   /**
     * contact
     */
-  override protected def contactRawPayload(contactId: String): Contact.ContactPayload = ???
+  override protected def contactRawPayload(contactId: String): Contact.ContactPayload = {
+    val json = Puppet.objectMapper.createObjectNode()
+    json.put("userName",contactId)
+    val response = request[](ApiType.GET_CONTACT,Some(json.toString))
+  }
 }

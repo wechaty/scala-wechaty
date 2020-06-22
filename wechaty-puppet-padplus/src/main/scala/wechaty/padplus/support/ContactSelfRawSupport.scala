@@ -26,27 +26,28 @@ trait ContactSelfRawSupport {
 
   override def logout(): Unit = ???
 
-  def contactSelfInfo(): PadplusContactPayload ={
-    val contactPayload:GetContactSelfInfoGrpcResponse=requestForObject(ApiType.GET_CONTACT_SELF_INFO)
-    val payload = new PadplusContactPayload
-    payload.alias            = contactPayload.alias;
-    payload.bigHeadUrl       = contactPayload.bigHeadImg;
-    payload.city             = contactPayload.city
-    payload.contactFlag      = 3
-    payload.contactType      = 0
-    payload.country          = contactPayload.country
-    payload.nickName         = contactPayload.nickName
-    payload.province         = contactPayload.province
-    payload.remark           = ""
-    payload.sex              = ContactGender(contactPayload.sex)
-    payload.signature        = contactPayload.signature
-    payload.smallHeadUrl     = contactPayload.smallHeadImg
-    payload.stranger         = ""
-    payload.tagList          = ""
-    payload.ticket           = ""
-    payload.userName         = contactPayload.userName
-    payload.verifyFlag       = 0
-
-    payload
+  def contactSelfInfo(callback:PadplusContactPayload=>Unit):Unit={
+    requestForCallback(ApiType.GET_CONTACT_SELF_INFO) {
+      contactPayload: GetContactSelfInfoGrpcResponse =>
+        val payload = new PadplusContactPayload
+        payload.alias = contactPayload.alias;
+        payload.bigHeadUrl = contactPayload.bigHeadImg;
+        payload.city = contactPayload.city
+        payload.contactFlag = 3
+        payload.contactType = 0
+        payload.country = contactPayload.country
+        payload.nickName = contactPayload.nickName
+        payload.province = contactPayload.province
+        payload.remark = ""
+        payload.sex = ContactGender(contactPayload.sex)
+        payload.signature = contactPayload.signature
+        payload.smallHeadUrl = contactPayload.smallHeadImg
+        payload.stranger = ""
+        payload.tagList = ""
+        payload.ticket = ""
+        payload.userName = contactPayload.userName
+        payload.verifyFlag = 0
+        callback(payload)
+    }
   }
 }

@@ -14,7 +14,7 @@
   <dependencies>
     <dependency>
       <groupId>io.github.wechaty</groupId>
-      <artifactId>wechaty-hostie_${scala-binary-version}</artifactId>
+      <artifactId>wechaty-puppet-hostie_${scala-binary-version}</artifactId>
     </dependency>
     <dependency>
       <groupId>io.github.wechaty</groupId>
