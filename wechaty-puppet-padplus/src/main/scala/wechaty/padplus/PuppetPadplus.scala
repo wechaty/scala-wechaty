@@ -2,7 +2,7 @@ package wechaty.padplus
 
 import com.typesafe.scalalogging.LazyLogging
 import wechaty.padplus.grpc.PadPlusServerOuterClass.ApiType
-import wechaty.padplus.support.{ContactRawSupport, GrpcEventSupport, GrpcSupport}
+import wechaty.padplus.support.{ContactRawSupport, GrpcEventSupport, GrpcSupport, LocalStoreSupport}
 import wechaty.puppet.schemas.Image.ImageType.Type
 import wechaty.puppet.schemas.Puppet.PuppetOptions
 import wechaty.puppet.schemas._
@@ -14,22 +14,36 @@ import wechaty.puppet.{Puppet, ResourceBox}
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-21
   */
-class PuppetPadplus(val option:PuppetOptions)
+class PuppetPadplus(val option:PuppetOptions,val storePath:String="/tmp/padplus")
   extends Puppet
     with ContactRawSupport
     with ContactSupport
     with GrpcSupport
     with GrpcEventSupport
+    with LocalStoreSupport
     with LazyLogging {
+  private var selfUni:Option[String] = None
   def start(): Unit ={
     startGrpc(option.endPoint.get)
-    request(ApiType.GET_QRCODE)
+    //waiting stream start....
+    logger.info("waiting stream start....")
+    awaitStreamStart()
+    startLocalStore()
+    getUin match{
+      case Some(str) =>
+        selfUni = Some(str)
+        logger.debug("found uin in local store:{}",selfUni)
+        request(ApiType.INIT)
+      case _ =>
+        request(ApiType.GET_QRCODE)
+    }
   }
   def stop(): Unit = {
     stopGrpc()
+    stopLocalStore()
   }
 
-  override def selfIdOpt(): Option[String] = None
+  override def selfIdOpt(): Option[String] = selfUni
 
   override def roomAdd(roomId: String, contactId: String): Unit = ???
 

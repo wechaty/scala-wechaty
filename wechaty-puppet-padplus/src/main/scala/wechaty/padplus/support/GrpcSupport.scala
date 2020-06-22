@@ -132,6 +132,8 @@ trait GrpcSupport {
     request.setRequestId(requestId)
     val traceId= UUID.randomUUID().toString
     request.setTraceId(traceId)
-    grpcClient.request(request.build())
+    val response = grpcClient.request(request.build())
+    logger.debug("request->response:{}",response)
+    response
   }
 }

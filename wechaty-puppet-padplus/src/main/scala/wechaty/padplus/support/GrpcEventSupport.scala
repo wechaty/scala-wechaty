@@ -2,6 +2,7 @@ package wechaty.padplus.support
 
 import java.io.{File, FileOutputStream}
 import java.util
+import java.util.concurrent.{CountDownLatch, TimeUnit}
 
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource
 import com.google.zxing.common.HybridBinarizer
@@ -23,11 +24,15 @@ import wechaty.puppet.{Puppet, ResourceBox}
   * @since 2020-06-21
   */
 trait GrpcEventSupport extends StreamObserver[StreamResponse]{
-  self: GrpcSupport with Puppet with LazyLogging=>
+  self: GrpcSupport with LocalStoreSupport with Puppet with LazyLogging=>
+
+  private val countDownLatch = new CountDownLatch(1)
 
 
+  protected def awaitStreamStart()=countDownLatch.await(10,TimeUnit.SECONDS)
   override def onNext(response: StreamResponse): Unit = {
     logger.debug("stream response:{}",response)
+    countDownLatch.countDown()
 
     val traceId = response.getTraceId
     if(!isBlank(traceId)){
@@ -62,7 +67,7 @@ trait GrpcEventSupport extends StreamObserver[StreamResponse]{
           logger.debug("Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n".format(payload.status, payload.qrcode))
           emit(PuppetEventName.SCAN,payload)
         case _ =>
-//          val uin = response.getUin()
+          saveUin(response.getUinBytes)
 //          val user = objectMapper.readTree(response.getData())
 //          val userName = user.get("userName").asText()
 
