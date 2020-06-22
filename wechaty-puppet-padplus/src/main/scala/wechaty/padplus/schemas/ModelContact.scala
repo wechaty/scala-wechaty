@@ -119,7 +119,7 @@ class GetContactSelfInfoGrpcResponse {
   var nickName:String = _
   var province:String = _
   var queueName:String = _
-  var sex:Number = _
+  var sex:Int= _
   var signature:String = _
   var smallHeadImg:String = _
   var snsBGImg:String = _

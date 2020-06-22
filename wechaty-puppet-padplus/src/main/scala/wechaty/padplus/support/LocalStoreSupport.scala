@@ -3,6 +3,9 @@ package wechaty.padplus.support
 import com.google.protobuf.ByteString
 import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.internal.LocalStore
+import wechaty.padplus.schemas.GrpcSchemas.GrpcMessagePayload
+import wechaty.padplus.schemas.ModelContact.PadplusContactPayload
+import wechaty.puppet.schemas.Puppet.objectMapper
 
 /**
   *
@@ -13,6 +16,8 @@ trait LocalStoreSupport {
   self:PuppetPadplus=>
   protected var store:LocalStore =  _
   private val uinKey = ByteString.copyFromUtf8("uin")
+  private val messageKeyFormat="MSG_%s"
+  private val contactKeyFormat="CON_%s"
   protected def saveUin(uin:ByteString): Unit ={
     if(!uin.isEmpty){
       store.put(uinKey,uin)
@@ -21,6 +26,23 @@ trait LocalStoreSupport {
   protected def getUin: Option[String]={
     store.get(uinKey).map(_.toStringUtf8)
   }
+  protected def saveRawContactPayload(contactId:String,payload:PadplusContactPayload): Unit ={
+    store.put(contactKeyFormat.format(contactId),objectMapper.writeValueAsString(payload))
+  }
+  protected def getRawContactPayload(contactId:String):Option[PadplusContactPayload] ={
+    store.get(contactKeyFormat.format(contactId)).map(str=>{
+      objectMapper.readValue(str.toStringUtf8,classOf[PadplusContactPayload])
+    })
+  }
+  protected def saveRawMessagePayload(messageId:String,rawMessage:String): Unit ={
+    store.put(messageKeyFormat.format(messageId),rawMessage)
+  }
+  protected def getGrpcMessagePayload(messageId:String):Option[GrpcMessagePayload] ={
+    store.get(messageKeyFormat.format(messageId)).map(str=>{
+      objectMapper.readValue(str.toStringUtf8,classOf[GrpcMessagePayload])
+    })
+  }
+
   protected def startLocalStore(): Unit ={
     store = new LocalStore(storePath)
     store.start()

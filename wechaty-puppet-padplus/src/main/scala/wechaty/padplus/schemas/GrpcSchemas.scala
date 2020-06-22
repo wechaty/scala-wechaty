@@ -45,7 +45,7 @@ class GrpcMessagePayload {
   var MsgId:String = _
   var MsgSource:String = _
   var msgSourceCd:Number = _
-  var MsgType:Number = _
+  var MsgType:Int= _
   var NewMsgId:Number = _
   var PushContent:String = _
   var Status:Number = _

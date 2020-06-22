@@ -11,6 +11,8 @@ import wechaty.padplus.grpc.PadPlusServerGrpc
 import wechaty.padplus.grpc.PadPlusServerOuterClass.{ApiType, InitConfig, RequestObject, ResponseObject, StreamResponse}
 import wechaty.puppet.schemas.Puppet
 
+import scala.reflect.ClassTag
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
@@ -114,16 +116,22 @@ trait GrpcSupport {
   private def stopStream(): Unit = {
     //do nothing
   }
+  protected def requestForObject[T](apiType:ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]):T={
+    val response = request(apiType,data)
+    Puppet.objectMapper.readValue(response.getResult,classTag.runtimeClass).asInstanceOf[T]
+  }
   protected def request(apiType: ApiType,data:Option[Any]=None): ResponseObject ={
     val request = RequestObject.newBuilder()
     request.setToken(option.token.get)
-    selfIdOpt() match{
+    uinOpt match{
       case Some(id) =>
         request.setUin(id)
       case _ =>
     }
     request.setApiType(apiType)
     data match{
+      case Some(str:String) =>
+        request.setParams(str)
       case Some(d) =>
         request.setParams(Puppet.objectMapper.writeValueAsString(d))
       case _ =>
@@ -132,6 +140,7 @@ trait GrpcSupport {
     request.setRequestId(requestId)
     val traceId= UUID.randomUUID().toString
     request.setTraceId(traceId)
+    logger.debug("request:{}",request.build())
     val response = grpcClient.request(request.build())
     logger.debug("request->response:{}",response)
     response

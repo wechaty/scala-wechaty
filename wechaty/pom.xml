@@ -17,6 +17,10 @@
       <artifactId>wechaty-hostie_${scala-binary-version}</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.github.wechaty</groupId>
+      <artifactId>wechaty-puppet-padplus_${scala-binary-version}</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.grpcmock</groupId>
       <artifactId>grpcmock-junit5</artifactId>
     </dependency>
@@ -75,6 +79,21 @@
             <configuration>
               <skip>false</skip>
               <mainClass>wechaty.DingDongBot</mainClass>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>run-pad</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <configuration>
+              <skip>false</skip>
+              <mainClass>wechaty.DingDongPadplusBot</mainClass>
             </configuration>
           </plugin>
         </plugins>

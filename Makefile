@@ -27,7 +27,14 @@ test:
 bot:
 	mvn \
 		-DWECHATY_PUPPET_HOSTIE_TOKEN=$$WECHATY_PUPPET_HOSTIE_TOKEN \
+		-Dmaven.test.skip=true \
 		-P run verify
+.PHONY: padbot
+padbot:
+	mvn \
+		-DWECHATY_PUPPET_PADPLUS_TOKEN=$$WECHATY_PUPPET_PADPLUS_TOKEN \
+		-Dmaven.test.skip=true \
+		-P run-pad verify
 
 .PHONY: version
 version:

@@ -6,6 +6,7 @@ import com.typesafe.scalalogging.LazyLogging
 import wechaty.Wechaty.PuppetResolver
 import wechaty.helper.ImplicitHelper._
 import wechaty.hostie.PuppetHostie
+import wechaty.padplus.PuppetPadplus
 import wechaty.puppet.schemas.Event._
 import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
 import wechaty.puppet.Puppet
@@ -55,7 +56,7 @@ class WechatyOptions {
 }
 
 class Wechaty(private val options: WechatyOptions) extends LazyLogging with PuppetResolver{
-  private var hostie:PuppetHostie = _
+  private var hostie:Puppet= _
   private implicit val puppetResolver: PuppetResolver = this
 
   initHostie()
@@ -103,7 +104,13 @@ class Wechaty(private val options: WechatyOptions) extends LazyLogging with Pupp
       case Some(o) => o
       case _ => new PuppetOptions
     }
-    this.hostie = new PuppetHostie(option)
+    this.hostie=
+      options.puppet match{
+        case "wechaty-puppet-hostie" => new PuppetHostie(option)
+        case "wechaty-puppet-padplus" => new PuppetPadplus(option)
+        case _ => throw new UnsupportedOperationException
+      }
+//    this.hostie = new PuppetHostie(option)
     //room message
     this.hostie.addListener[EventMessagePayload](PuppetEventName.MESSAGE, Room.messageEvent)
     this.hostie.addListener[EventRoomJoinPayload](PuppetEventName.ROOM_JOIN, Room.roomJoinEvent)

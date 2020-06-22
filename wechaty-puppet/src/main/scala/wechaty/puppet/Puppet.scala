@@ -23,6 +23,9 @@ trait Puppet extends MessageSupport
 {
   self:LazyLogging =>
 
+  def start():Unit
+  def stop():Unit
+
 
   //only for test
   private[wechaty] def clearAllCache(): Unit = {

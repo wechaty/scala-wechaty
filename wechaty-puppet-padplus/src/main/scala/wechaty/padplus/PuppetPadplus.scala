@@ -2,8 +2,7 @@ package wechaty.padplus
 
 import com.typesafe.scalalogging.LazyLogging
 import wechaty.padplus.grpc.PadPlusServerOuterClass.ApiType
-import wechaty.padplus.support.{ContactRawSupport, GrpcEventSupport, GrpcSupport, LocalStoreSupport}
-import wechaty.puppet.schemas.Image.ImageType.Type
+import wechaty.padplus.support._
 import wechaty.puppet.schemas.Puppet.PuppetOptions
 import wechaty.puppet.schemas._
 import wechaty.puppet.support.ContactSupport
@@ -17,12 +16,15 @@ import wechaty.puppet.{Puppet, ResourceBox}
 class PuppetPadplus(val option:PuppetOptions,val storePath:String="/tmp/padplus")
   extends Puppet
     with ContactRawSupport
+    with ContactSelfRawSupport
     with ContactSupport
+    with MessageRawSupport
+    with PadplusHelper
     with GrpcSupport
     with GrpcEventSupport
     with LocalStoreSupport
     with LazyLogging {
-  private var selfUni:Option[String] = None
+  protected var uinOpt:Option[String]=None
   def start(): Unit ={
     startGrpc(option.endPoint.get)
     //waiting stream start....
@@ -31,8 +33,8 @@ class PuppetPadplus(val option:PuppetOptions,val storePath:String="/tmp/padplus"
     startLocalStore()
     getUin match{
       case Some(str) =>
-        selfUni = Some(str)
-        logger.debug("found uin in local store:{}",selfUni)
+        uinOpt = Some(str)
+        logger.debug("found uin in local store:{}",str)
         request(ApiType.INIT)
       case _ =>
         request(ApiType.GET_QRCODE)
@@ -43,7 +45,7 @@ class PuppetPadplus(val option:PuppetOptions,val storePath:String="/tmp/padplus"
     stopLocalStore()
   }
 
-  override def selfIdOpt(): Option[String] = selfUni
+  override def selfIdOpt(): Option[String] = selfId
 
   override def roomAdd(roomId: String, contactId: String): Unit = ???
 
@@ -63,7 +65,12 @@ class PuppetPadplus(val option:PuppetOptions,val storePath:String="/tmp/padplus"
 
   override def roomTopic(roomId: String, topic: String): Unit = ???
 
-  override protected def roomRawPayload(roomId: String): Room.RoomPayload = ???
+  override protected def roomRawPayload(roomId: String): Room.RoomPayload = {
+    val payload=new Room.RoomPayload
+    payload.id = roomId
+    //TODO
+    payload
+  }
 
   /**
     *
@@ -91,38 +98,12 @@ class PuppetPadplus(val option:PuppetOptions,val storePath:String="/tmp/padplus"
 
   override def roomMemberList(roomId: String): Array[String] = ???
 
-  override protected def roomMemberRawPayload(roomId: String, contactId: String): Room.RoomMemberPayload = ???
+  override protected def roomMemberRawPayload(roomId: String, contactId: String): Room.RoomMemberPayload = {
+    //TODO
+    null
+  }
 
-  /**
-    * message
-    */
-  override def messageContact(messageId: String): String = ???
 
-  override def messageFile(messageId: String): ResourceBox = ???
-
-  override def messageImage(messageId: String, imageType: Type): ResourceBox = ???
-
-  override def messageMiniProgram(messageId: String): MiniProgram.MiniProgramPayload = ???
-
-  override def messageUrl(messageId: String): UrlLink.UrlLinkPayload = ???
-
-  override def messageSendContact(conversationId: String, contactId: String): String = ???
-
-  override def messageSendFile(conversationId: String, file: ResourceBox): String = ???
-
-  override def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgram.MiniProgramPayload): String = ???
-
-  override def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]): String = ???
-
-  override def messageSendUrl(conversationId: String, urlLinkPayload: UrlLink.UrlLinkPayload): String = ???
-
-  override def messageRecall(messageId: String): Boolean = ???
-
-  override def messageSendText(conversationID: String, text: String, mentionIDList: String*): String = ???
-
-  override protected def messageRawPayload(messageId: String): Message.MessagePayload = ???
-
-  override protected def ding(data: String): Unit = ???
 
   override def roomInvitationAccept(roomInvitationId: String): Unit = ???
 
@@ -137,18 +118,5 @@ class PuppetPadplus(val option:PuppetOptions,val storePath:String="/tmp/padplus"
   override def tagContactList(): Array[String] = ???
 
   override def tagContactRemove(tagId: String, contactId: String): Unit = ???
-
-  /**
-    *
-    * ContactSelf
-    *
-    */
-  override def contactSelfName(name: String): Unit = ???
-
-  override def contactSelfQRCode(): String = ???
-
-  override def contactSelfSignature(signature: String): Unit = ???
-
-  override def logout(): Unit = ???
 
 }
