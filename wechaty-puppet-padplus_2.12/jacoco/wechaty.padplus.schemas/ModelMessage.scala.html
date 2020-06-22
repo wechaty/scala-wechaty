@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ModelMessage.scala</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.schemas</a> &gt; <span class="el_source">ModelMessage.scala</span></div><h1>ModelMessage.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.schemas
+
+import wechaty.padplus.schemas.PadplusEnums.{GrpcVoiceFormat, PadplusEmojiType, PadplusMessageType, WechatAppMessageType}
+
+<span class="nc" id="L5">object ModelMessage {</span>
+
+<span class="nc" id="L7">class PadplusRichMediaData {</span>
+<span class="nc" id="L8">  var content:String = _</span>
+<span class="nc" id="L9">  var msgType:Number = _</span>
+<span class="nc" id="L10">  var contentType:String = _</span>
+<span class="nc" id="L11">  var src:String = _</span>
+<span class="nc" id="L12">  var appMsgType:Number = _</span>
+<span class="nc" id="L13">  var fileName:String = _</span>
+<span class="nc" id="L14">  var msgId:String = _</span>
+<span class="nc" id="L15">  var createTime:Number = _</span>
+<span class="nc" id="L16">  var fromUserName:String = _</span>
+<span class="nc" id="L17">  var toUserName:String = _</span>
+}
+
+<span class="nc" id="L20">class PadplusMessageSource {</span>
+<span class="nc" id="L21">  var silence:Boolean = _</span>
+<span class="nc" id="L22">  var memberCount:Number = _</span>
+<span class="nc" id="L23">  var imageFileName:String = _</span>
+<span class="nc" id="L24">  var atUserList:Array[String] = _</span>
+}
+
+<span class="nc" id="L27">class GrpcResponseMessageData {</span>
+<span class="nc" id="L28">  var msgId:String = _</span>
+<span class="nc" id="L29">  var timestamp:Number = _</span>
+<span class="nc" id="L30">  var success:Boolean = _</span>
+}
+
+<span class="nc" id="L33">class PadplusMessagePayload {</span>
+<span class="nc" id="L34">  var appMsgType:Number = _</span>
+<span class="nc" id="L35">  var content:String = _</span>
+<span class="nc" id="L36">  var createTime:Number = _</span>
+<span class="nc" id="L37">  var fileName:String = _</span>
+<span class="nc" id="L38">  var fromMemberNickName:String = _</span>
+<span class="nc" id="L39">  var fromMemberUserName:String = _</span>
+<span class="nc" id="L40">  var fromUserName:String = _</span>
+<span class="nc" id="L41">  var imgBuf:String = _</span>
+<span class="nc" id="L42">  var imgStatus:Number = _</span>
+<span class="nc" id="L43">  var l1MsgType:Number = _</span>
+<span class="nc" id="L44">  var msgId:String = _</span>
+<span class="nc" id="L45">  var msgSource:String = _</span>
+<span class="nc" id="L46">  var msgSourceCd:Number = _</span>
+<span class="nc" id="L47">  var msgType:PadplusMessageType.Type = _</span>
+<span class="nc" id="L48">  var newMsgId:Number = _</span>
+<span class="nc" id="L49">  var pushContent:String = _</span>
+<span class="nc" id="L50">  var status:Number = _</span>
+<span class="nc" id="L51">  var toUserName:String = _</span>
+<span class="nc" id="L52">  var uin:String = _</span>
+<span class="nc" id="L53">  var url:String = _</span>
+<span class="nc" id="L54">  var wechatUserName:String = _</span>
+}
+
+<span class="nc" id="L57">class PadplusAppMessagePayload {</span>
+<span class="nc" id="L58">  var des:String = _</span>
+<span class="nc" id="L59">  var thumburl:String = _</span>
+<span class="nc" id="L60">  var title:String = _</span>
+<span class="nc" id="L61">  var url:String = _</span>
+<span class="nc" id="L62">  var appattach:PadplusAppAttachPayload = _</span>
+<span class="nc" id="L63">  var `type`:WechatAppMessageType.Type = _</span>
+<span class="nc" id="L64">  var md5:String = _</span>
+<span class="nc" id="L65">  var fromusername:String = _</span>
+<span class="nc" id="L66">  var recorditem:String = _</span>
+}
+
+<span class="nc" id="L69">class PadplusAppAttachPayload {</span>
+<span class="nc" id="L70">  var totallen:Number = _</span>
+<span class="nc" id="L71">  var attachid:String = _</span>
+<span class="nc" id="L72">  var emoticonmd5:String = _</span>
+<span class="nc" id="L73">  var fileext:String = _</span>
+<span class="nc" id="L74">  var cdnattachurl:String = _</span>
+<span class="nc" id="L75">  var aeskey:String = _</span>
+<span class="nc" id="L76">  var cdnthumbaeskey:String = _</span>
+<span class="nc" id="L77">  var encryver:Number = _</span>
+<span class="nc" id="L78">  var islargefilemsg:Number = _</span>
+}
+
+<span class="nc" id="L81">class PadplusEmojiMessagePayload {</span>
+<span class="nc" id="L82">  var cdnurl:String = _</span>
+<span class="nc" id="L83">  var `type`:PadplusEmojiType.Type = _</span>
+<span class="nc" id="L84">  var len:Number = _</span>
+<span class="nc" id="L85">  var width:Number = _</span>
+<span class="nc" id="L86">  var height:Number = _</span>
+}
+
+<span class="nc" id="L89">class PadplusImageMessagePayload {</span>
+<span class="nc" id="L90">  var aesKey:String = _</span>
+<span class="nc" id="L91">  var encryVer:Number = _</span>
+<span class="nc" id="L92">  var cdnThumbAesKey:String = _</span>
+<span class="nc" id="L93">  var cdnThumbUrl:String = _</span>
+<span class="nc" id="L94">  var cdnThumbLength:Number = _</span>
+<span class="nc" id="L95">  var cdnThumbHeight:Number = _</span>
+<span class="nc" id="L96">  var cdnThumbWidth:Number = _</span>
+<span class="nc" id="L97">  var cdnMidHeight:Number = _</span>
+<span class="nc" id="L98">  var cdnMidWidth:Number = _</span>
+<span class="nc" id="L99">  var cdnHdHeight:Number = _</span>
+<span class="nc" id="L100">  var cdnHdWidth:Number = _</span>
+<span class="nc" id="L101">  var cdnMidImgUrl:String = _</span>
+<span class="nc" id="L102">  var length:Number = _</span>
+<span class="nc" id="L103">  var cdnBigImgUrl:String = _</span>
+<span class="nc" id="L104">  var hdLength:Number = _</span>
+<span class="nc" id="L105">  var md5:String = _</span>
+}
+
+<span class="nc" id="L108">class PadplusRecalledMessagePayload {</span>
+<span class="nc" id="L109">  var session:String = _</span>
+<span class="nc" id="L110">  var msgId:String = _</span>
+<span class="nc" id="L111">  var newMsgId:String = _</span>
+<span class="nc" id="L112">  var replaceMsg:String = _</span>
+}
+
+<span class="nc" id="L115">class PadplusVoiceMessagePayload {</span>
+<span class="nc" id="L116">  var endFlag:Number = _</span>
+<span class="nc" id="L117">  var length:Number = _</span>
+<span class="nc" id="L118">  var voiceLength:Number = _</span>
+<span class="nc" id="L119">  var clientMsgId:String = _</span>
+<span class="nc" id="L120">  var fromUsername:String = _</span>
+<span class="nc" id="L121">  var downCount:Number = _</span>
+<span class="nc" id="L122">  var cancelFlag:Number = _</span>
+<span class="nc" id="L123">  var voiceFormat:GrpcVoiceFormat.Type = _</span>
+<span class="nc" id="L124">  var forwardFlag:Number = _</span>
+<span class="nc" id="L125">  var bufId:Number = _</span>
+}
+
+<span class="nc" id="L128">class PadplusLocationMessagePayload {</span>
+<span class="nc" id="L129">  var x:Number = _</span>
+<span class="nc" id="L130">  var y:Number = _</span>
+<span class="nc" id="L131">  var scale:Number = _</span>
+<span class="nc" id="L132">  var mapType:String = _</span>
+<span class="nc" id="L133">  var label:String = _</span>
+<span class="nc" id="L134">  var poiId:String = _</span>
+<span class="nc" id="L135">  var poiName:String = _</span>
+<span class="nc" id="L136">  var fromUsername:String = _</span>
+}
+
+<span class="nc" id="L139">class PadplusVideoMessagePayload {</span>
+<span class="nc" id="L140">  var aesKey:String = _</span>
+<span class="nc" id="L141">  var cdnThumbAesKey:String = _</span>
+<span class="nc" id="L142">  var cdnVideoUrl:String = _</span>
+<span class="nc" id="L143">  var cdnThumbUrl:String = _</span>
+<span class="nc" id="L144">  var length:Number = _</span>
+<span class="nc" id="L145">  var playLength:Number = _</span>
+<span class="nc" id="L146">  var cdnThumbLength:Number = _</span>
+<span class="nc" id="L147">  var cdnThumbWidth:Number = _</span>
+<span class="nc" id="L148">  var cdnThumbHeight:Number = _</span>
+<span class="nc" id="L149">  var fromUsername:String = _</span>
+<span class="nc" id="L150">  var md5:String = _</span>
+<span class="nc" id="L151">  var newMd5:String = _</span>
+<span class="nc" id="L152">  var isAd:Boolean = _</span>
+}
+
+<span class="nc" id="L155">class PadplusUrlLink {</span>
+<span class="nc" id="L156">  var description:String = _</span>
+<span class="nc" id="L157">  var thumbnailUrl:String = _</span>
+<span class="nc" id="L158">  var title:String = _</span>
+<span class="nc" id="L159">  var url:String = _</span>
+}
+
+<span class="nc" id="L162">class PadplusMediaData {</span>
+<span class="nc" id="L163">  var content:String = _</span>
+<span class="nc" id="L164">  var msgId:String = _</span>
+<span class="nc" id="L165">  var src:String = _</span>
+<span class="nc" id="L166">  var status:String = _</span>
+<span class="nc" id="L167">  var thumb:String = _</span>
+}
+
+<span class="nc" id="L170">class PadplusRecallData {</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">  class BaseResponse{</span>
+<span class="nc" id="L172">    var Ret:Number = _</span>
+<span class="nc" id="L173">    var ErrMsg:String = _</span>
+  }
+<span class="nc" id="L175">}</span>
+
+<span class="nc" id="L177">class VideoContent {</span>
+<span class="nc" id="L178">  var cdnthumbheight:Number = _</span>
+<span class="nc" id="L179">  var cdnthumbwidth:Number = _</span>
+<span class="nc" id="L180">  var playlength:Number = _</span>
+<span class="nc" id="L181">  var thumb:String = _</span>
+<span class="nc" id="L182">  var url:String = _</span>
+}
+
+<span class="nc" id="L185">class MiniProgramParamsPayload {</span>
+<span class="nc" id="L186">  var aeskey:String = _</span>
+<span class="nc" id="L187">  var appid:String = _</span>
+<span class="nc" id="L188">  var cdnthumbaeskey:String = _</span>
+<span class="nc" id="L189">  var cdnthumbheight:Number = _</span>
+<span class="nc" id="L190">  var cdnthumblength:Number = _</span>
+<span class="nc" id="L191">  var cdnthumburl:String = _</span>
+<span class="nc" id="L192">  var cdnthumbwidth:Number = _</span>
+<span class="nc" id="L193">  var description:String = _</span>
+<span class="nc" id="L194">  var pagepath:String = _</span>
+<span class="nc" id="L195">  var sourcedisplayname:String = _</span>
+<span class="nc" id="L196">  var sourceusername:String = _</span>
+<span class="nc" id="L197">  var title:String = _</span>
+<span class="nc" id="L198">  var `type`:Number = _</span>
+<span class="nc" id="L199">  var url:String = _</span>
+<span class="nc" id="L200">  var username:String = _</span>
+<span class="nc" id="L201">  var version:String = _</span>
+<span class="nc" id="L202">  var weappiconurl:String = _</span>
+}
+<span class="nc" id="L204"> }</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

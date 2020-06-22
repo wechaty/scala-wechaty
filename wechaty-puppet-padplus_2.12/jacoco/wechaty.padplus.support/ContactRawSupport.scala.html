@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContactRawSupport.scala</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.support</a> &gt; <span class="el_source">ContactRawSupport.scala</span></div><h1>ContactRawSupport.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.support
+
+import wechaty.puppet.ResourceBox
+import wechaty.puppet.schemas.Contact
+import wechaty.puppet.support.ContactSupport
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-21
+  */
+<span class="nc" id="L12">trait ContactRawSupport {</span>
+  self: GrpcSupport with ContactSupport =&gt;
+  /**
+    *
+    * Contact
+    *
+    */
+<span class="nc" id="L19">  override def contactAlias(contactId: String): String = ???</span>
+
+<span class="nc" id="L21">  override def contactAlias(contactId: String, alias: String): Unit = ???</span>
+
+<span class="nc" id="L23">  override def contactAvatar(contactId: String): ResourceBox = ???</span>
+
+<span class="nc" id="L25">  override def contactAvatar(contactId: String, file: ResourceBox): ResourceBox = ???</span>
+
+<span class="nc" id="L27">  override def contactList(): Array[String] = ???</span>
+
+  /**
+    * contact
+    */
+<span class="nc" id="L32">  override protected def contactRawPayload(contactId: String): Contact.ContactPayload = ???</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
