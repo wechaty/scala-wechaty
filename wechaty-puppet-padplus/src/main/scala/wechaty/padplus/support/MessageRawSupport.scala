@@ -1,11 +1,15 @@
 package wechaty.padplus.support
 
 import com.typesafe.scalalogging.LazyLogging
-import wechaty.padplus.grpc.PadPlusServerOuterClass.ApiType
+import wechaty.padplus.grpc.PadPlusServerOuterClass.{ApiType, ResponseType, StreamResponse}
+import wechaty.padplus.schemas.GrpcSchemas.GrpcMessagePayload
 import wechaty.padplus.schemas.PadplusEnums.PadplusMessageType
 import wechaty.puppet.ResourceBox
+import wechaty.puppet.events.EventEmitter
+import wechaty.puppet.schemas.Event.EventMessagePayload
 import wechaty.puppet.schemas.Image.ImageType.Type
 import wechaty.puppet.schemas.Message.{MessagePayload, MessageType}
+import wechaty.puppet.schemas.Puppet.{PuppetEventName, objectMapper}
 import wechaty.puppet.schemas.{Message, MiniProgram, Puppet, UrlLink}
 import wechaty.puppet.support.MessageSupport
 
@@ -15,7 +19,7 @@ import wechaty.puppet.support.MessageSupport
   * @since 2020-06-22
   */
 trait MessageRawSupport {
-  self:GrpcSupport with GrpcEventSupport with PadplusHelper with LazyLogging with MessageSupport with LocalStoreSupport =>
+  self:GrpcSupport with EventEmitter with GrpcEventSupport with PadplusHelper with LazyLogging with MessageSupport with LocalStoreSupport =>
   /**
     * message
     */
@@ -140,4 +144,13 @@ trait MessageRawSupport {
   }
 
   override protected def ding(data: String): Unit = ???
+  def messagePartialFunction(response:StreamResponse):PartialFunction[ResponseType,Unit] = {
+    case ResponseType.MESSAGE_RECEIVE =>
+      val rawMessageStr                            = response.getData()
+      val payload                                  = objectMapper.readValue(rawMessageStr, classOf[GrpcMessagePayload])
+      val eventMessagePayload                      = new EventMessagePayload
+      eventMessagePayload.messageId = payload.MsgId
+      saveRawMessagePayload(payload.MsgId, rawMessageStr)
+      emit(PuppetEventName.MESSAGE, eventMessagePayload)
+  }
 }

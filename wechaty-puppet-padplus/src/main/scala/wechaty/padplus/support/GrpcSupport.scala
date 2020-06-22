@@ -4,6 +4,7 @@ import java.util.UUID
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.{ConcurrentHashMap, ConcurrentMap, Executors, TimeUnit}
 
+import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
 import com.typesafe.scalalogging.LazyLogging
 import io.grpc.{ManagedChannel, ManagedChannelBuilder}
 import wechaty.padplus.PuppetPadplus
@@ -11,6 +12,7 @@ import wechaty.padplus.grpc.PadPlusServerGrpc
 import wechaty.padplus.grpc.PadPlusServerOuterClass.{ApiType, InitConfig, RequestObject, ResponseObject, StreamResponse}
 import wechaty.puppet.schemas.Puppet
 
+import scala.concurrent.ExecutionContext
 import scala.reflect.ClassTag
 
 /**
@@ -28,7 +30,11 @@ trait GrpcSupport {
   protected var grpcClient: PadPlusServerGrpc.PadPlusServerBlockingStub= _
   private var eventStream: PadPlusServerGrpc.PadPlusServerStub = _
   protected var channel: ManagedChannel = _
-  protected val callbackPool = new ConcurrentHashMap[String,StreamResponse=>Unit]()
+  protected implicit val executionContext: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
+  protected lazy val callbackPool                           = {
+    Caffeine.newBuilder().maximumSize(1000).expireAfterWrite(1,TimeUnit.MINUTES).build().asInstanceOf[Cache[String,StreamResponse=>Unit]]
+  }
+
 
   protected def startGrpc(endpoint: String): Unit = {
     initChannel(endpoint)
@@ -145,7 +151,6 @@ trait GrpcSupport {
       val obj=Puppet.objectMapper.readValue(streamResponse.getData,classTag.runtimeClass).asInstanceOf[T]
       callback(obj)
     }
-    //FIXME response timeout or not successful???
     callbackPool.put(traceId,callbackDelegate)
     val response = grpcClient.request(request.build())
     logger.debug("request->response:{}",response)

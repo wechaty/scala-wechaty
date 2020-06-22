@@ -5,6 +5,7 @@ import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.internal.LocalStore
 import wechaty.padplus.schemas.GrpcSchemas.GrpcMessagePayload
 import wechaty.padplus.schemas.ModelContact.PadplusContactPayload
+import wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload
 import wechaty.puppet.schemas.Puppet.objectMapper
 
 /**
@@ -39,6 +40,9 @@ trait LocalStoreSupport {
   }
   protected def saveRawMessagePayload(messageId:String,rawMessage:String): Unit ={
     store.put(messageKeyFormat.format(messageId),rawMessage)
+  }
+  protected def saveRoom(roomPayload:PadplusRoomPayload): Unit ={
+    store.put(roomPayload.chatroomId,objectMapper.writeValueAsString(roomPayload))
   }
   protected def getGrpcMessagePayload(messageId:String):Option[GrpcMessagePayload] ={
     store.get(messageKeyFormat.format(messageId)).map(str=>{

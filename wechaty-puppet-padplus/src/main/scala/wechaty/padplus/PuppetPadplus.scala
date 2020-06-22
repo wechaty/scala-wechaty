@@ -3,10 +3,10 @@ package wechaty.padplus
 import com.typesafe.scalalogging.LazyLogging
 import wechaty.padplus.grpc.PadPlusServerOuterClass.ApiType
 import wechaty.padplus.support._
+import wechaty.puppet.Puppet
 import wechaty.puppet.schemas.Puppet.PuppetOptions
 import wechaty.puppet.schemas._
 import wechaty.puppet.support.ContactSupport
-import wechaty.puppet.{Puppet, ResourceBox}
 
 /**
   *
@@ -19,6 +19,7 @@ class PuppetPadplus(val option:PuppetOptions,val storePath:String="/tmp/padplus"
     with ContactSelfRawSupport
     with ContactSupport
     with MessageRawSupport
+    with RoomRawSupport
     with PadplusHelper
     with GrpcSupport
     with GrpcEventSupport
@@ -46,31 +47,6 @@ class PuppetPadplus(val option:PuppetOptions,val storePath:String="/tmp/padplus"
   }
 
   override def selfIdOpt(): Option[String] = selfId
-
-  override def roomAdd(roomId: String, contactId: String): Unit = ???
-
-  override def roomAvatar(roomId: String): ResourceBox = ???
-
-  override def roomCreate(contactIdList: Array[String], topic: String): String = ???
-
-  override def roomDel(roomId: String, contactId: String): Unit = ???
-
-  override def roomList(): Array[String] = ???
-
-  override def roomQRCode(roomId: String): String = ???
-
-  override def roomQuit(roomId: String): Unit = ???
-
-  override def roomTopic(roomId: String): String = ???
-
-  override def roomTopic(roomId: String, topic: String): Unit = ???
-
-  override protected def roomRawPayload(roomId: String): Room.RoomPayload = {
-    val payload=new Room.RoomPayload
-    payload.id = roomId
-    //TODO
-    payload
-  }
 
   /**
     *
