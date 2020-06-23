@@ -2,154 +2,98 @@
 
 import com.typesafe.scalalogging.LazyLogging
 import wechaty.padplus.grpc.PadPlusServerOuterClass.ApiType
-import wechaty.padplus.support.{ContactRawSupport, GrpcEventSupport, GrpcSupport, LocalStoreSupport}
-import wechaty.puppet.schemas.Image.ImageType.Type
+import wechaty.padplus.support._
+import wechaty.puppet.Puppet
 import wechaty.puppet.schemas.Puppet.PuppetOptions
 import wechaty.puppet.schemas._
 import wechaty.puppet.support.ContactSupport
-import wechaty.puppet.{Puppet, ResourceBox}
 
 /**
   *
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-21
   */
-<span class="nc bnc" id="L17" title="All 4 branches missed.">class PuppetPadplus(val option:PuppetOptions,val storePath:String=&quot;/tmp/padplus&quot;)</span>
-<span class="nc" id="L18">  extends Puppet</span>
+<span class="nc bnc" id="L16" title="All 16 branches missed.">class PuppetPadplus(val option:PuppetOptions,val storePath:String=&quot;/tmp/padplus&quot;)</span>
+<span class="nc" id="L17">  extends Puppet</span>
     with ContactRawSupport
+    with ContactSelfRawSupport
     with ContactSupport
+    with MessageRawSupport
+    with RoomRawSupport
+    with PadplusHelper
     with GrpcSupport
     with GrpcEventSupport
     with LocalStoreSupport
     with LazyLogging {
-<span class="nc" id="L25">  private var selfUni:Option[String] = None</span>
+<span class="nc" id="L28">  protected var uinOpt:Option[String]=None</span>
   def start(): Unit ={
-<span class="nc" id="L27">    startGrpc(option.endPoint.get)</span>
+<span class="nc" id="L30">    startGrpc(option.endPoint.get)</span>
     //waiting stream start....
-<span class="nc bnc" id="L29" title="All 2 branches missed.">    logger.info(&quot;waiting stream start....&quot;)</span>
-<span class="nc" id="L30">    awaitStreamStart()</span>
-<span class="nc" id="L31">    startLocalStore()</span>
-<span class="nc" id="L32">    getUin match{</span>
-<span class="nc bnc" id="L33" title="All 2 branches missed.">      case Some(str) =&gt;</span>
-<span class="nc" id="L34">        selfUni = Some(str)</span>
-<span class="nc bnc" id="L35" title="All 2 branches missed.">        logger.debug(&quot;found uin in local store:{}&quot;,selfUni)</span>
-<span class="nc" id="L36">        request(ApiType.INIT)</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">    logger.info(&quot;waiting stream start....&quot;)</span>
+<span class="nc" id="L33">    awaitStreamStart()</span>
+<span class="nc" id="L34">    startLocalStore()</span>
+<span class="nc" id="L35">    getUin match{</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">      case Some(str) =&gt;</span>
+<span class="nc" id="L37">        uinOpt = Some(str)</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        logger.debug(&quot;found uin in local store:{}&quot;,str)</span>
+<span class="nc" id="L39">        request(ApiType.INIT)</span>
       case _ =&gt;
-<span class="nc" id="L38">        request(ApiType.GET_QRCODE)</span>
+<span class="nc" id="L41">        request(ApiType.GET_QRCODE)</span>
     }
   }
   def stop(): Unit = {
-<span class="nc" id="L42">    stopGrpc()</span>
-<span class="nc" id="L43">    stopLocalStore()</span>
+<span class="nc" id="L45">    stopGrpc()</span>
+<span class="nc" id="L46">    stopLocalStore()</span>
   }
 
-<span class="nc" id="L46">  override def selfIdOpt(): Option[String] = selfUni</span>
-
-<span class="nc" id="L48">  override def roomAdd(roomId: String, contactId: String): Unit = ???</span>
-
-<span class="nc" id="L50">  override def roomAvatar(roomId: String): ResourceBox = ???</span>
-
-<span class="nc" id="L52">  override def roomCreate(contactIdList: Array[String], topic: String): String = ???</span>
-
-<span class="nc" id="L54">  override def roomDel(roomId: String, contactId: String): Unit = ???</span>
-
-<span class="nc" id="L56">  override def roomList(): Array[String] = ???</span>
-
-<span class="nc" id="L58">  override def roomQRCode(roomId: String): String = ???</span>
-
-<span class="nc" id="L60">  override def roomQuit(roomId: String): Unit = ???</span>
-
-<span class="nc" id="L62">  override def roomTopic(roomId: String): String = ???</span>
-
-<span class="nc" id="L64">  override def roomTopic(roomId: String, topic: String): Unit = ???</span>
-
-<span class="nc" id="L66">  override protected def roomRawPayload(roomId: String): Room.RoomPayload = ???</span>
+<span class="nc" id="L49">  override def selfIdOpt(): Option[String] = selfId</span>
 
   /**
     *
     * Friendship
     *
     */
-<span class="nc" id="L73">  override def friendshipAccept(friendshipId: String): Unit = ???</span>
+<span class="nc" id="L56">  override def friendshipAccept(friendshipId: String): Unit = ???</span>
 
-<span class="nc" id="L75">  override def friendshipAdd(contactId: String, hello: String): Unit = ???</span>
+<span class="nc" id="L58">  override def friendshipAdd(contactId: String, hello: String): Unit = ???</span>
 
-<span class="nc" id="L77">  override def friendshipSearchPhone(phone: String): String = ???</span>
+<span class="nc" id="L60">  override def friendshipSearchPhone(phone: String): String = ???</span>
 
-<span class="nc" id="L79">  override def friendshipSearchWeixin(weixin: String): String = ???</span>
+<span class="nc" id="L62">  override def friendshipSearchWeixin(weixin: String): String = ???</span>
 
-<span class="nc" id="L81">  override protected def friendshipRawPayload(friendshipId: String): Friendship.FriendshipPayload = ???</span>
+<span class="nc" id="L64">  override protected def friendshipRawPayload(friendshipId: String): Friendship.FriendshipPayload = ???</span>
 
   /**
     *
     * RoomMember
     *
     */
-<span class="nc" id="L88">  override def roomAnnounce(roomId: String): String = ???</span>
+<span class="nc" id="L71">  override def roomAnnounce(roomId: String): String = ???</span>
 
-<span class="nc" id="L90">  override def roomAnnounce(roomId: String, text: String): Unit = ???</span>
+<span class="nc" id="L73">  override def roomAnnounce(roomId: String, text: String): Unit = ???</span>
 
-<span class="nc" id="L92">  override def roomMemberList(roomId: String): Array[String] = ???</span>
+<span class="nc" id="L75">  override def roomMemberList(roomId: String): Array[String] = ???</span>
 
-<span class="nc" id="L94">  override protected def roomMemberRawPayload(roomId: String, contactId: String): Room.RoomMemberPayload = ???</span>
+  override protected def roomMemberRawPayload(roomId: String, contactId: String): Room.RoomMemberPayload = {
+    //TODO
+<span class="nc" id="L79">    null</span>
+  }
 
-  /**
-    * message
-    */
-<span class="nc" id="L99">  override def messageContact(messageId: String): String = ???</span>
 
-<span class="nc" id="L101">  override def messageFile(messageId: String): ResourceBox = ???</span>
 
-<span class="nc" id="L103">  override def messageImage(messageId: String, imageType: Type): ResourceBox = ???</span>
+<span class="nc" id="L84">  override def roomInvitationAccept(roomInvitationId: String): Unit = ???</span>
 
-<span class="nc" id="L105">  override def messageMiniProgram(messageId: String): MiniProgram.MiniProgramPayload = ???</span>
+<span class="nc" id="L86">  override protected def roomInvitationRawPayload(roomInvitationId: String): RoomInvitation.RoomInvitationPayload = ???</span>
 
-<span class="nc" id="L107">  override def messageUrl(messageId: String): UrlLink.UrlLinkPayload = ???</span>
+<span class="nc" id="L88">  override def tagContactAdd(tagId: String, contactId: String): Unit = ???</span>
 
-<span class="nc" id="L109">  override def messageSendContact(conversationId: String, contactId: String): String = ???</span>
+<span class="nc" id="L90">  override def tagContactDelete(tagId: String): Unit = ???</span>
 
-<span class="nc" id="L111">  override def messageSendFile(conversationId: String, file: ResourceBox): String = ???</span>
+<span class="nc" id="L92">  override def tagContactList(contactId: String): Array[String] = ???</span>
 
-<span class="nc" id="L113">  override def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgram.MiniProgramPayload): String = ???</span>
+<span class="nc" id="L94">  override def tagContactList(): Array[String] = ???</span>
 
-<span class="nc" id="L115">  override def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]): String = ???</span>
-
-<span class="nc" id="L117">  override def messageSendUrl(conversationId: String, urlLinkPayload: UrlLink.UrlLinkPayload): String = ???</span>
-
-<span class="nc" id="L119">  override def messageRecall(messageId: String): Boolean = ???</span>
-
-<span class="nc" id="L121">  override def messageSendText(conversationID: String, text: String, mentionIDList: String*): String = ???</span>
-
-<span class="nc" id="L123">  override protected def messageRawPayload(messageId: String): Message.MessagePayload = ???</span>
-
-<span class="nc" id="L125">  override protected def ding(data: String): Unit = ???</span>
-
-<span class="nc" id="L127">  override def roomInvitationAccept(roomInvitationId: String): Unit = ???</span>
-
-<span class="nc" id="L129">  override protected def roomInvitationRawPayload(roomInvitationId: String): RoomInvitation.RoomInvitationPayload = ???</span>
-
-<span class="nc" id="L131">  override def tagContactAdd(tagId: String, contactId: String): Unit = ???</span>
-
-<span class="nc" id="L133">  override def tagContactDelete(tagId: String): Unit = ???</span>
-
-<span class="nc" id="L135">  override def tagContactList(contactId: String): Array[String] = ???</span>
-
-<span class="nc" id="L137">  override def tagContactList(): Array[String] = ???</span>
-
-<span class="nc" id="L139">  override def tagContactRemove(tagId: String, contactId: String): Unit = ???</span>
-
-  /**
-    *
-    * ContactSelf
-    *
-    */
-<span class="nc" id="L146">  override def contactSelfName(name: String): Unit = ???</span>
-
-<span class="nc" id="L148">  override def contactSelfQRCode(): String = ???</span>
-
-<span class="nc" id="L150">  override def contactSelfSignature(signature: String): Unit = ???</span>
-
-<span class="nc" id="L152">  override def logout(): Unit = ???</span>
+<span class="nc" id="L96">  override def tagContactRemove(tagId: String, contactId: String): Unit = ???</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

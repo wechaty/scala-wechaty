@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ContactSelfRawSupport.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">wechaty_2.12</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.support</a> &gt; <span class="el_source">ContactSelfRawSupport.scala</span></div><h1>ContactSelfRawSupport.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.support
+
+import com.typesafe.scalalogging.LazyLogging
+import wechaty.padplus.grpc.PadPlusServerOuterClass.ApiType
+import wechaty.padplus.schemas.ModelContact.{GetContactSelfInfoGrpcResponse, PadplusContactPayload}
+import wechaty.puppet.schemas.Contact.ContactGender
+import wechaty.puppet.support.ContactSelfSupport
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-22
+  */
+<span class="nc" id="L14">trait ContactSelfRawSupport {</span>
+  self :GrpcSupport with LazyLogging with ContactSelfSupport =&gt;
+  /**
+    *
+    * ContactSelf
+    *
+    */
+<span class="nc" id="L21">  override def contactSelfName(name: String): Unit = ???</span>
+
+<span class="nc" id="L23">  override def contactSelfQRCode(): String = ???</span>
+
+<span class="nc" id="L25">  override def contactSelfSignature(signature: String): Unit = ???</span>
+
+<span class="nc" id="L27">  override def logout(): Unit = ???</span>
+
+  def contactSelfInfo(callback:PadplusContactPayload=&gt;Unit):Unit={
+<span class="nc" id="L30">    requestForCallback(ApiType.GET_CONTACT_SELF_INFO) {</span>
+<span class="nc" id="L31">      contactPayload: GetContactSelfInfoGrpcResponse =&gt;</span>
+<span class="nc" id="L32">        val payload = new PadplusContactPayload</span>
+<span class="nc" id="L33">        payload.alias = contactPayload.alias;</span>
+<span class="nc" id="L34">        payload.bigHeadUrl = contactPayload.bigHeadImg;</span>
+<span class="nc" id="L35">        payload.city = contactPayload.city</span>
+<span class="nc" id="L36">        payload.contactFlag = 3</span>
+<span class="nc" id="L37">        payload.contactType = 0</span>
+<span class="nc" id="L38">        payload.country = contactPayload.country</span>
+<span class="nc" id="L39">        payload.nickName = contactPayload.nickName</span>
+<span class="nc" id="L40">        payload.province = contactPayload.province</span>
+<span class="nc" id="L41">        payload.remark = &quot;&quot;</span>
+<span class="nc" id="L42">        payload.sex = ContactGender(contactPayload.sex)</span>
+<span class="nc" id="L43">        payload.signature = contactPayload.signature</span>
+<span class="nc" id="L44">        payload.smallHeadUrl = contactPayload.smallHeadImg</span>
+<span class="nc" id="L45">        payload.stranger = &quot;&quot;</span>
+<span class="nc" id="L46">        payload.tagList = &quot;&quot;</span>
+<span class="nc" id="L47">        payload.ticket = &quot;&quot;</span>
+<span class="nc" id="L48">        payload.userName = contactPayload.userName</span>
+<span class="nc" id="L49">        payload.verifyFlag = 0</span>
+<span class="nc" id="L50">        callback(payload)</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,99 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GrpcEventSupport.scala</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.support</a> &gt; <span class="el_source">GrpcEventSupport.scala</span></div><h1>GrpcEventSupport.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.support
 
-import java.io.{File, FileOutputStream}
-import java.util
 import java.util.concurrent.{CountDownLatch, TimeUnit}
 
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource
-import com.google.zxing.common.HybridBinarizer
-import com.google.zxing.{BinaryBitmap, DecodeHintType, MultiFormatReader}
-import com.typesafe.scalalogging.LazyLogging
 import io.grpc.stub.StreamObserver
-import javax.imageio.ImageIO
-import org.apache.commons.io.IOUtils
+import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.grpc.PadPlusServerOuterClass.{ResponseType, StreamResponse}
-import wechaty.padplus.schemas.ModelUser.ScanData
-import wechaty.padplus.schemas.PadplusEnums.QrcodeStatus
-import wechaty.puppet.schemas.Event.EventScanPayload
-import wechaty.puppet.schemas.Puppet.{PuppetEventName, isBlank, objectMapper}
-import wechaty.puppet.{Puppet, ResourceBox}
+import wechaty.puppet.schemas.Puppet.isBlank
 
 /**
   *
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-21
   */
-<span class="nc" id="L26">trait GrpcEventSupport extends StreamObserver[StreamResponse]{</span>
-  self: GrpcSupport with LocalStoreSupport with Puppet with LazyLogging=&gt;
+<span class="nc" id="L15">trait GrpcEventSupport extends StreamObserver[StreamResponse]{</span>
+  self: PuppetPadplus =&gt;
 
-<span class="nc" id="L29">  private val countDownLatch = new CountDownLatch(1)</span>
+<span class="nc" id="L18">  protected var selfId:Option[String] = None</span>
+<span class="nc" id="L19">  private val countDownLatch = new CountDownLatch(1)</span>
 
 
-<span class="nc" id="L32">  protected def awaitStreamStart()=countDownLatch.await(10,TimeUnit.SECONDS)</span>
+<span class="nc" id="L22">  protected def awaitStreamStart()=countDownLatch.await(10,TimeUnit.SECONDS)</span>
   override def onNext(response: StreamResponse): Unit = {
-<span class="nc bnc" id="L34" title="All 2 branches missed.">    logger.debug(&quot;stream response:{}&quot;,response)</span>
-<span class="nc" id="L35">    countDownLatch.countDown()</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">    logger.debug(&quot;stream response:{}&quot;,response)</span>
+<span class="nc" id="L25">    countDownLatch.countDown()</span>
+<span class="nc" id="L26">    saveUin(response.getUinBytes)</span>
 
-<span class="nc" id="L37">    val traceId = response.getTraceId</span>
-<span class="nc bnc" id="L38" title="All 2 branches missed.">    if(!isBlank(traceId)){</span>
-<span class="nc" id="L39">      val callback = callbackPool.get(traceId)</span>
-<span class="nc bnc" id="L40" title="All 2 branches missed.">      if(callback != null){</span>
-<span class="nc" id="L41">        callback(response)</span>
+<span class="nc" id="L28">    val traceId = response.getTraceId</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">    if(!isBlank(traceId)){</span>
+<span class="nc" id="L30">      val callback = callbackPool.getIfPresent(traceId)</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">      if(callback != null){</span>
+<span class="nc" id="L32">        callback(response)</span>
       }
     }else {
-<span class="nc" id="L44">      val responseType = response.getResponseType</span>
-<span class="nc" id="L45">      responseType match {</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">        case ResponseType.QRCODE_SCAN =&gt;</span>
-<span class="nc" id="L47">          onQrcodeScan(response)</span>
-<span class="nc bnc" id="L48" title="All 2 branches missed.">        case ResponseType.LOGIN_QRCODE =&gt;</span>
-<span class="nc" id="L49">          val qrcodeData = objectMapper.readTree(response.getData)</span>
-<span class="nc" id="L50">          println(response.getData)</span>
-
-<span class="nc" id="L52">          val base64=qrcodeData.get(&quot;qrcode&quot;).asText().replaceAll(&quot;\r|\n&quot;,&quot;&quot;)</span>
-<span class="nc" id="L53">          val fileBox = ResourceBox.fromBase64(s&quot;qrcode${(Math.random() * 10000).intValue()}.png&quot;,base64)</span>
-          //解析二维码的类
-<span class="nc" id="L55">          val multiFormatReader=new MultiFormatReader();</span>
-          //要解析的二维码的图片
-<span class="nc" id="L57">          IOUtils.copy(fileBox.toStream,new FileOutputStream(new File(&quot;test.png&quot;)))</span>
-<span class="nc" id="L58">          val bufferedImage= ImageIO.read(fileBox.toStream);</span>
-<span class="nc" id="L59">          val binaryBitmap=new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(bufferedImage)));</span>
-          //二维码的参数设置
-<span class="nc" id="L61">          val hints=new util.HashMap[DecodeHintType,String]();</span>
-<span class="nc" id="L62">          hints.put(DecodeHintType.CHARACTER_SET,&quot;utf-8&quot;);//设置二维码的编码</span>
-          //得到解析结果,
-<span class="nc" id="L64">          val result= multiFormatReader.decode(binaryBitmap,hints);</span>
-<span class="nc" id="L65">          val payload = new EventScanPayload</span>
-<span class="nc" id="L66">          payload.qrcode = result.getText</span>
-<span class="nc bnc" id="L67" title="All 2 branches missed.">          logger.debug(&quot;Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n&quot;.format(payload.status, payload.qrcode))</span>
-<span class="nc" id="L68">          emit(PuppetEventName.SCAN,payload)</span>
-        case _ =&gt;
-<span class="nc" id="L70">          saveUin(response.getUinBytes)</span>
-//          val user = objectMapper.readTree(response.getData())
-//          val userName = user.get(&quot;userName&quot;).asText()
-
-      }
+<span class="nc" id="L35">      val partialFunction=loginPartialFunction(response) orElse messagePartialFunction(response)</span>
+<span class="nc" id="L36">      partialFunction.applyOrElse(response.getResponseType,{_:ResponseType =&gt; Unit})</span>
     }
  }
 
-  def onQrcodeScan(response: StreamResponse): Unit = {
-<span class="nc" id="L79">    val scanRawData = response.getData()</span>
-<span class="nc" id="L80">    val scanData = objectMapper.readValue(scanRawData,classOf[ScanData])</span>
-<span class="nc" id="L81">    QrcodeStatus(scanData.status.intValue()) match{</span>
-<span class="nc bnc" id="L82" title="All 6 branches missed.">      case QrcodeStatus.Scanned =&gt;</span>
-
-<span class="nc bnc" id="L84" title="All 6 branches missed.">      case QrcodeStatus.Confirmed =&gt;</span>
-
-<span class="nc bnc" id="L86" title="All 14 branches missed.">      case QrcodeStatus.Canceled | QrcodeStatus.Expired=&gt;</span>
-
-    }
-  }
-
   override def onError(throwable: Throwable): Unit = {
-<span class="nc bnc" id="L92" title="All 2 branches missed.">    logger.error(throwable.getMessage,throwable)</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">    logger.error(throwable.getMessage,throwable)</span>
   }
 
   override def onCompleted(): Unit = {
-<span class="nc bnc" id="L96" title="All 2 branches missed.">    logger.info(&quot;completed&quot;)</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">    logger.info(&quot;completed&quot;)</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

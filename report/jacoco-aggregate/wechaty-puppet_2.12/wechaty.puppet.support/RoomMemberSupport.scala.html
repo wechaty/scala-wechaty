@@ -54,8 +54,8 @@ import wechaty.puppet.schemas.Room.RoomMemberPayload
 <span class="fc" id="L54">    val CACHE_KEY     = this.cacheKeyRoomMember(roomId, memberId)</span>
 <span class="fc" id="L55">    val cachedPayload = this.cacheRoomMemberPayload.getIfPresent(CACHE_KEY)</span>
 
-<span class="fc bfc" id="L57" title="All 2 branches covered.">    if (cachedPayload != null) {</span>
-<span class="fc" id="L58">      return cachedPayload</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">    if (cachedPayload != null) {</span>
+<span class="nc" id="L58">      return cachedPayload</span>
     }
 
     /**

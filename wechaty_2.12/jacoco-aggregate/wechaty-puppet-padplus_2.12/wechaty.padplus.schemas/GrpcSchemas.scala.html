@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>GrpcSchemas.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">wechaty_2.12</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.schemas</a> &gt; <span class="el_source">GrpcSchemas.scala</span></div><h1>GrpcSchemas.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.schemas
+
+import wechaty.padplus.schemas.PadplusEnums.{ContactOperationBitVal, ContactOperationCmdId, GrpcSelfAvatarType, PadplusMessageType, PadplusRoomMemberFlag}
+import wechaty.puppet.schemas.Contact.ContactGender
+
+
+<span class="nc" id="L7">object GrpcSchemas {</span>
+
+<span class="nc" id="L9">class GrpcQrCode {</span>
+<span class="nc" id="L10">  var qrcodeId:String = _</span>
+<span class="nc" id="L11">  var qrcode:String = _</span>
+}
+
+<span class="nc" id="L14">class GrpcQrCodeStatus {</span>
+<span class="nc" id="L15">  var head_url:String = _</span>
+<span class="nc" id="L16">  var nick_name:String = _</span>
+<span class="nc" id="L17">  var status:Number = _</span>
+<span class="nc" id="L18">  var user_name:String = _</span>
+}
+
+<span class="nc" id="L21">class GrpcQrCodeLogin {</span>
+<span class="nc" id="L22">  var alias:String = _</span>
+<span class="nc" id="L23">  var headImgUrl:String = _</span>
+<span class="nc" id="L24">  var nickName:String = _</span>
+<span class="nc" id="L25">  var status:Number = _</span>
+<span class="nc" id="L26">  var uin:String = _</span>
+<span class="nc" id="L27">  var userName:String = _</span>
+<span class="nc" id="L28">  var verifyFlag:String = _</span>
+}
+
+<span class="nc" id="L31">class GrpcMessagePayload {</span>
+<span class="nc" id="L32">  var AppMsgType:Number = _</span>
+<span class="nc" id="L33">  var Content:String = _</span>
+<span class="nc" id="L34">  var CreateTime:Number = _</span>
+<span class="nc" id="L35">  var fileName:String = _</span>
+<span class="nc" id="L36">  var FileName:String = _</span>
+<span class="nc" id="L37">  var fromMemberNickName:String = _</span>
+<span class="nc" id="L38">  var FromMemberNickName:String = _</span>
+<span class="nc" id="L39">  var FromMemberUserName:String = _</span>
+<span class="nc" id="L40">  var fromMemberUserName:String = _</span>
+<span class="nc" id="L41">  var FromUserName:String = _</span>
+<span class="nc" id="L42">  var ImgBuf:String = _</span>
+<span class="nc" id="L43">  var ImgStatus:Number = _</span>
+<span class="nc" id="L44">  var L1MsgType:Number = _</span>
+<span class="nc" id="L45">  var MsgId:String = _</span>
+<span class="nc" id="L46">  var MsgSource:String = _</span>
+<span class="nc" id="L47">  var msgSourceCd:Number = _</span>
+<span class="nc" id="L48">  var MsgType:Int= _</span>
+<span class="nc" id="L49">  var NewMsgId:Number = _</span>
+<span class="nc" id="L50">  var PushContent:String = _</span>
+<span class="nc" id="L51">  var Status:Number = _</span>
+<span class="nc" id="L52">  var ToUserName:String = _</span>
+<span class="nc" id="L53">  var Uin:String = _</span>
+<span class="nc" id="L54">  var Url:String = _</span>
+<span class="nc" id="L55">  var url:String = _</span>
+<span class="nc" id="L56">  var wechatUserName:String = _</span>
+}
+
+<span class="nc" id="L59">class GrpcSelfInfoPayload {</span>
+<span class="nc" id="L60">  var alias:String = _ //                            // &quot;&quot;,             -&gt; weixin id</span>
+<span class="nc" id="L61">  var bindUin:String = _ //                          // 251642490,      -&gt; QQ number</span>
+<span class="nc" id="L62">  var msgType:PadplusMessageType.Type = _ //               // 101,</span>
+<span class="nc" id="L63">  var signature:String = _ //                        // &quot;&quot;,</span>
+<span class="nc" id="L64">  var userName:String = _ //                         // &quot;lylezhuifeng&quot;, -&gt; unique id</span>
+<span class="nc" id="L65">  var nickName:String = _ //                         // &quot;高原ོ&quot;,</span>
+<span class="nc" id="L66">  var sex:ContactGender.Type = _ //                       // 1,</span>
+<span class="nc" id="L67">  var province:String = _ //                         // &quot;Beijing&quot;,</span>
+<span class="nc" id="L68">  var city:String = _ //                             // &quot;&quot;,</span>
+<span class="nc" id="L69">  var bindEmail:String = _ //                        // &quot;lylezhuifeng@qq.com&quot;,</span>
+<span class="nc" id="L70">  var bindMobile:String = _ //                       // &quot;13999999999&quot;</span>
+}
+
+<span class="nc" id="L73">class GrpcSelfAvatarPayload {</span>
+<span class="nc" id="L74">  var msgType:PadplusMessageType.Type = _ //                       // 35,</span>
+<span class="nc" id="L75">  var imgType:GrpcSelfAvatarType.Type = _ //                      // 1,</span>
+<span class="nc" id="L76">  var imgLen:Number = _ //                                   // 4218,</span>
+<span class="nc" id="L77">  var imgBuf:String = _ //                                   // &quot;/5FQ9qFCup5OcSStjioHU0GNcbDPiSmkusuMq6kqHtQoUoTjVpATIcA7KwKftA0KFZ2WIkou2APWkl/vLohKtwBnFChQXYZE5DJCRUk0TmhQqIguCcUKFCmAf/Z&quot;,</span>
+<span class="nc" id="L78">  var imgMd5:String = _ //                                   // &quot;0144847978f6667ed59cc3d2b4350eb5&quot;,</span>
+<span class="nc" id="L79">  var bigHeadImgUrl:String = _ //                            // &quot;http://wx.qlogo.cn/mmhead/KDLS0iaeMdibHvaeoZVaPM/132&quot;,</span>
+<span class="nc" id="L80">  var smallHeadImgUrl:String = _ //                          // &quot;http://wx.qlogo.cn/mmhead/KDLS0fhbZw1jQScfCqfVaPM/0&quot;</span>
+}
+
+<span class="nc" id="L83">class GrpcDeletedPayload {</span>
+<span class="nc" id="L84">  var msgType:PadplusMessageType.Type = _</span>
+<span class="nc" id="L85">  var userName:String = _</span>
+}
+
+//type GrpcSyncMessagePayload = GrpcMessagePayload
+//                                   | GrpcRoomRawPayload
+//                                   | GrpcSelfInfoPayload
+//                                   | GrpcSelfAvatarPayload
+//                                   | GrpcDeletedPayload
+
+<span class="nc" id="L94">class GrpcRoomRawPayload {</span>
+<span class="nc" id="L95">  var alias:String = _</span>
+<span class="nc" id="L96">  var bigHeadImgUrl:String = _</span>
+<span class="nc" id="L97">  var chatRoomOwner:String = _</span>
+<span class="nc" id="L98">  var chatroomVersion:Number = _</span>
+<span class="nc" id="L99">  var contactType:Number = _</span>
+<span class="nc" id="L100">  var encryptUsername:String = _</span>
+<span class="nc" id="L101">  var extInfo:String = _</span>
+<span class="nc" id="L102">  var extInfoExt:String = _</span>
+<span class="nc" id="L103">  var tagList:String = _</span>
+<span class="nc" id="L104">  var msgType:PadplusMessageType.Type = _</span>
+<span class="nc" id="L105">  var nickName:String = _</span>
+<span class="nc" id="L106">  var smallHeadImgUrl:String = _</span>
+<span class="nc" id="L107">  var ticket:String = _</span>
+<span class="nc" id="L108">  var userName:String = _</span>
+<span class="nc" id="L109">  var verifyFlag:Number = _</span>
+}
+
+<span class="nc" id="L112">class GrpcRoomMemberRawPayload {</span>
+<span class="nc" id="L113">  var chatroomUsername:String = _</span>
+<span class="nc" id="L114">  var serverVersion:Number = _</span>
+<span class="nc" id="L115">  var memberDetails:Array[GrpcRoomMemberDetail] = _</span>
+}
+
+<span class="nc" id="L118">class GrpcRoomMemberDetail {</span>
+<span class="nc" id="L119">  var userName:String = _</span>
+<span class="nc" id="L120">  var nickName:String = _</span>
+<span class="nc" id="L121">  var displayName:String = _</span>
+<span class="nc" id="L122">  var bigHeadImgUrl:String = _</span>
+<span class="nc" id="L123">  var smallHeadImgUrl:String = _</span>
+<span class="nc" id="L124">  var chatroomMemberFlag:PadplusRoomMemberFlag.Type = _</span>
+<span class="nc" id="L125">  var inviterUserName:String = _</span>
+}
+
+<span class="nc" id="L128">class GrpcContactOperationOption {</span>
+<span class="nc" id="L129">  var cmdid:ContactOperationCmdId.Type = _</span>
+<span class="nc" id="L130">  var userId:String = _</span>
+<span class="nc" id="L131">  var bitVal:ContactOperationBitVal.Type = _</span>
+<span class="nc" id="L132">  var remark:String = _</span>
+}
+
+<span class="nc" id="L135">class GrpcCreateRoomMemberPayload {</span>
+<span class="nc" id="L136">  var memberName:String = _</span>
+<span class="nc" id="L137">  var memberStatus:Number = _</span>
+}
+
+<span class="nc" id="L140">class GrpcCreateRoomPayload {</span>
+<span class="nc" id="L141">  var roomeid:String = _</span>
+<span class="nc" id="L142">  var members:Array[GrpcCreateRoomMemberPayload] = _</span>
+}
+
+<span class="nc" id="L145">class GrpcGetMsgImageType {</span>
+<span class="nc" id="L146">  var imageData:String = _</span>
+}
+
+<span class="nc" id="L149">class GrpcGetMsgVoiceType {</span>
+<span class="nc" id="L150">  var voiceData:String = _</span>
+}
+
+<span class="nc" id="L153">class GrpcGetA8KeyType {</span>
+<span class="nc" id="L154">  var url:String = _</span>
+<span class="nc" id="L155">  var xWechatKey:String = _</span>
+<span class="nc" id="L156">  var xWechatUin:String = _</span>
+}
+
+<span class="nc" id="L159">class GrpcGetContactQrcodePayload {</span>
+<span class="nc" id="L160">  var qrcodeBuf:String = _</span>
+<span class="nc" id="L161">  var foterWording:String = _</span>
+}
+
+<span class="nc" id="L164">class GrpcGetCdnDnsPayload {</span>
+  //TODO to fix
+<span class="nc bnc" id="L166" title="All 2 branches missed.">  class dnsCdn{</span>
+<span class="nc" id="L167">    var ver:String = _</span>
+<span class="nc" id="L168">    var uin:String = _</span>
+<span class="nc" id="L169">    var ip:String = _</span>
+<span class="nc" id="L170">    var aesKey:String = _</span>
+  }
+<span class="nc bnc" id="L172" title="All 2 branches missed.">  class snsCdn{</span>
+<span class="nc" id="L173">    var ver:String = _</span>
+<span class="nc" id="L174">    var uin:String = _</span>
+<span class="nc" id="L175">    var ip:String = _</span>
+<span class="nc" id="L176">    var aesKey:String = _</span>
+  }
+<span class="nc bnc" id="L178" title="All 2 branches missed.">  class appCdn{</span>
+<span class="nc" id="L179">    var ver:String = _</span>
+<span class="nc" id="L180">    var uin:String = _</span>
+<span class="nc" id="L181">    var ip:String = _</span>
+<span class="nc" id="L182">    var aesKey:String = _</span>
+  }
+<span class="nc" id="L184">  var clientVersion:Number = _</span>
+}
+
+<span class="nc" id="L187">class GrpcLoginDeviceInfo {</span>
+<span class="nc" id="L188">  var loginer:String = _</span>
+<span class="nc" id="L189">  var uin:String = _</span>
+<span class="nc" id="L190">  var userName:String = _</span>
+<span class="nc" id="L191">  var nickName:String = _</span>
+<span class="nc" id="L192">  var headImgUrl:String = _</span>
+<span class="nc" id="L193">  var wechatUserId:String = _</span>
+<span class="nc" id="L194">  var deviceInfo:Any = _</span>
+<span class="nc" id="L195">  var token:String = _</span>
+<span class="nc" id="L196">  var loginType:String = _</span>
+<span class="nc" id="L197">  var childId:String = _</span>
+}
+
+<span class="nc" id="L200">class LoginDeviceInfo {</span>
+<span class="nc" id="L201">  var uin:String = _</span>
+<span class="nc" id="L202">  var userName:String = _</span>
+<span class="nc" id="L203">  var nickName:String = _</span>
+<span class="nc" id="L204">  var headImgUrl:String = _</span>
+<span class="nc" id="L205">  var wechatUserId:String = _</span>
+<span class="nc" id="L206">  var deviceName:String = _</span>
+<span class="nc" id="L207">  var token:String = _</span>
+<span class="nc" id="L208">  var loginType:String = _</span>
+<span class="nc" id="L209">  var childId:String = _</span>
+}
+
+<span class="nc" id="L212">object GRPC_CODE extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L214">  val OK:Type =  Value(0)</span>
+<span class="nc" id="L215">  val CANCELLED:Type =  Value(1)</span>
+<span class="nc" id="L216">  val UNKNOWN:Type =  Value(2)</span>
+<span class="nc" id="L217">  val INVALID_ARGUMENT:Type =  Value(3)</span>
+<span class="nc" id="L218">  val DEADLINE_EXCEEDED:Type =  Value(4)</span>
+<span class="nc" id="L219">  val NOT_FOUND:Type =  Value(5)</span>
+<span class="nc" id="L220">  val ALREADY_EXISTS:Type =  Value(6)</span>
+<span class="nc" id="L221">  val PERMISSION_DENIED:Type =  Value(7)</span>
+<span class="nc" id="L222">  val UNAUTHENTICATED:Type =  Value(16)</span>
+<span class="nc" id="L223">  val RESOURCE_EXHAUSTED:Type =  Value(8)</span>
+<span class="nc" id="L224">  val FAILED_PRECONDITION:Type =  Value(9)</span>
+<span class="nc" id="L225">  val ABORTED:Type =  Value(10)</span>
+<span class="nc" id="L226">  val OUT_OF_RANGE:Type =  Value(11)</span>
+<span class="nc" id="L227">  val UNIMPLEMENTED:Type =  Value(12)</span>
+<span class="nc" id="L228">  val INTERNAL:Type =  Value(13)</span>
+<span class="nc" id="L229">  val UNAVAILABLE:Type =  Value(14)</span>
+<span class="nc" id="L230">  val DATA_LOSS:Type =  Value(15)</span>
+}
+<span class="nc" id="L232"> }</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>PuppetPadplus.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">wechaty_2.12</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus</a> &gt; <span class="el_source">PuppetPadplus.scala</span></div><h1>PuppetPadplus.scala</h1><pre class="source lang-java linenums">package wechaty.padplus
+
+import com.typesafe.scalalogging.LazyLogging
+import wechaty.padplus.grpc.PadPlusServerOuterClass.ApiType
+import wechaty.padplus.support._
+import wechaty.puppet.Puppet
+import wechaty.puppet.schemas.Puppet.PuppetOptions
+import wechaty.puppet.schemas._
+import wechaty.puppet.support.ContactSupport
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-21
+  */
+<span class="nc bnc" id="L16" title="All 16 branches missed.">class PuppetPadplus(val option:PuppetOptions,val storePath:String=&quot;/tmp/padplus&quot;)</span>
+<span class="nc" id="L17">  extends Puppet</span>
+    with ContactRawSupport
+    with ContactSelfRawSupport
+    with ContactSupport
+    with MessageRawSupport
+    with RoomRawSupport
+    with PadplusHelper
+    with GrpcSupport
+    with GrpcEventSupport
+    with LocalStoreSupport
+    with LazyLogging {
+<span class="nc" id="L28">  protected var uinOpt:Option[String]=None</span>
+  def start(): Unit ={
+<span class="nc" id="L30">    startGrpc(option.endPoint.get)</span>
+    //waiting stream start....
+<span class="nc bnc" id="L32" title="All 2 branches missed.">    logger.info(&quot;waiting stream start....&quot;)</span>
+<span class="nc" id="L33">    awaitStreamStart()</span>
+<span class="nc" id="L34">    startLocalStore()</span>
+<span class="nc" id="L35">    getUin match{</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">      case Some(str) =&gt;</span>
+<span class="nc" id="L37">        uinOpt = Some(str)</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        logger.debug(&quot;found uin in local store:{}&quot;,str)</span>
+<span class="nc" id="L39">        request(ApiType.INIT)</span>
+      case _ =&gt;
+<span class="nc" id="L41">        request(ApiType.GET_QRCODE)</span>
+    }
+  }
+  def stop(): Unit = {
+<span class="nc" id="L45">    stopGrpc()</span>
+<span class="nc" id="L46">    stopLocalStore()</span>
+  }
+
+<span class="nc" id="L49">  override def selfIdOpt(): Option[String] = selfId</span>
+
+  /**
+    *
+    * Friendship
+    *
+    */
+<span class="nc" id="L56">  override def friendshipAccept(friendshipId: String): Unit = ???</span>
+
+<span class="nc" id="L58">  override def friendshipAdd(contactId: String, hello: String): Unit = ???</span>
+
+<span class="nc" id="L60">  override def friendshipSearchPhone(phone: String): String = ???</span>
+
+<span class="nc" id="L62">  override def friendshipSearchWeixin(weixin: String): String = ???</span>
+
+<span class="nc" id="L64">  override protected def friendshipRawPayload(friendshipId: String): Friendship.FriendshipPayload = ???</span>
+
+  /**
+    *
+    * RoomMember
+    *
+    */
+<span class="nc" id="L71">  override def roomAnnounce(roomId: String): String = ???</span>
+
+<span class="nc" id="L73">  override def roomAnnounce(roomId: String, text: String): Unit = ???</span>
+
+<span class="nc" id="L75">  override def roomMemberList(roomId: String): Array[String] = ???</span>
+
+  override protected def roomMemberRawPayload(roomId: String, contactId: String): Room.RoomMemberPayload = {
+    //TODO
+<span class="nc" id="L79">    null</span>
+  }
+
+
+
+<span class="nc" id="L84">  override def roomInvitationAccept(roomInvitationId: String): Unit = ???</span>
+
+<span class="nc" id="L86">  override protected def roomInvitationRawPayload(roomInvitationId: String): RoomInvitation.RoomInvitationPayload = ???</span>
+
+<span class="nc" id="L88">  override def tagContactAdd(tagId: String, contactId: String): Unit = ???</span>
+
+<span class="nc" id="L90">  override def tagContactDelete(tagId: String): Unit = ???</span>
+
+<span class="nc" id="L92">  override def tagContactList(contactId: String): Array[String] = ???</span>
+
+<span class="nc" id="L94">  override def tagContactList(): Array[String] = ???</span>
+
+<span class="nc" id="L96">  override def tagContactRemove(tagId: String, contactId: String): Unit = ???</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

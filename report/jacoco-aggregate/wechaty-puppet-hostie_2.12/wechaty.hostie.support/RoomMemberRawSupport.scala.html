@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>RoomMemberRawSupport.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-hostie_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.hostie.support</a> &gt; <span class="el_source">RoomMemberRawSupport.scala</span></div><h1>RoomMemberRawSupport.scala</h1><pre class="source lang-java linenums">package wechaty.hostie.support
+
+import com.google.protobuf.StringValue
+import io.github.wechaty.grpc.puppet.{Room, RoomMember}
+import wechaty.puppet.schemas.Room.RoomMemberPayload
+import wechaty.puppet.{Puppet, schemas}
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-06
+  */
+<span class="fc" id="L13">trait RoomMemberRawSupport {</span>
+  self: Puppet with GrpcSupport =&gt;
+  /**
+    *
+    * RoomMember
+    *
+    */
+  override def roomAnnounce(roomId: String): String = {
+<span class="nc" id="L21">    val request = Room.RoomAnnounceRequest.newBuilder()</span>
+<span class="nc" id="L22">      .setId(roomId)</span>
+      .build()
+
+<span class="nc" id="L25">    val response = grpcClient.roomAnnounce(request)</span>
+<span class="nc" id="L26">    response.getText.getValue</span>
+  }
+
+  override def roomAnnounce(roomId: String, text: String): Unit = {
+<span class="nc" id="L30">    val value = StringValue.newBuilder().setValue(text)</span>
+
+<span class="nc" id="L32">    val request = Room.RoomAnnounceRequest.newBuilder()</span>
+<span class="nc" id="L33">      .setId(roomId)</span>
+<span class="nc" id="L34">      .setText(value)</span>
+      .build()
+
+<span class="nc" id="L37">    grpcClient.roomAnnounce(request)</span>
+  }
+
+  override def roomMemberList(roomId: String): Array[String] = {
+<span class="nc" id="L41">    val request = RoomMember.RoomMemberListRequest.newBuilder()</span>
+<span class="nc" id="L42">      .setId(roomId)</span>
+      .build()
+
+<span class="nc" id="L45">    val response = grpcClient.roomMemberList(request)</span>
+<span class="nc" id="L46">    response.getMemberIdsList.toArray(Array[String]())</span>
+  }
+
+  override protected def roomMemberRawPayload(roomId: String, contactId: String): schemas.Room.RoomMemberPayload = {
+<span class="fc" id="L50">    val request = RoomMember.RoomMemberPayloadRequest.newBuilder()</span>
+<span class="fc" id="L51">      .setId(roomId)</span>
+<span class="fc" id="L52">      .setMemberId(contactId)</span>
+      .build()
+
+<span class="fc" id="L55">    val response = grpcClient.roomMemberPayload(request)</span>
+<span class="fc" id="L56">    val payload = new RoomMemberPayload()</span>
+
+<span class="fc" id="L58">    payload.avatar = response.getAvatar</span>
+<span class="fc" id="L59">    payload.id = response.getId</span>
+<span class="fc" id="L60">    payload.inviterId = response.getInviterId</span>
+<span class="fc" id="L61">    payload.name = response.getName</span>
+<span class="fc" id="L62">    payload.roomAlias = response.getRoomAlias</span>
+<span class="fc" id="L63">    payload</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

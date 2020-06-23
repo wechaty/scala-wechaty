@@ -23,14 +23,17 @@ import wechaty.puppet.support._
 {
   self:LazyLogging =&gt;
 
+  def start():Unit
+  def stop():Unit
+
 
   //only for test
   private[wechaty] def clearAllCache(): Unit = {
-<span class="nc" id="L29">    cacheContactPayload.cleanUp()</span>
-<span class="nc" id="L30">    cacheFriendshipPayload.cleanUp()</span>
-<span class="nc" id="L31">    cacheMessagePayload.cleanUp()</span>
-<span class="nc" id="L32">    cacheRoomMemberPayload.cleanUp()</span>
-<span class="nc" id="L33">    cacheRoomPayload.cleanUp()</span>
+<span class="nc" id="L32">    cacheContactPayload.cleanUp()</span>
+<span class="nc" id="L33">    cacheFriendshipPayload.cleanUp()</span>
+<span class="nc" id="L34">    cacheMessagePayload.cleanUp()</span>
+<span class="nc" id="L35">    cacheRoomMemberPayload.cleanUp()</span>
+<span class="nc" id="L36">    cacheRoomPayload.cleanUp()</span>
   }
 
   def selfIdOpt():Option[String]

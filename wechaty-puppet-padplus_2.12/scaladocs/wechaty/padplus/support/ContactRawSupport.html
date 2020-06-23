@@ -123,6 +123,10 @@
                         <a href="" title="">ContactRawSupport</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="trait" href="ContactSelfRawSupport.html" title=""></a>
+                        <a href="ContactSelfRawSupport.html" title="">ContactSelfRawSupport</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="trait" href="GrpcEventSupport.html" title=""></a>
                         <a href="GrpcEventSupport.html" title="">GrpcEventSupport</a>
                       </li><li class="current-entities indented3">
@@ -133,6 +137,18 @@
                         <span class="separator"></span>
                         <a class="trait" href="LocalStoreSupport.html" title=""></a>
                         <a href="LocalStoreSupport.html" title="">LocalStoreSupport</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="MessageRawSupport.html" title=""></a>
+                        <a href="MessageRawSupport.html" title="">MessageRawSupport</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="PadplusHelper.html" title=""></a>
+                        <a href="PadplusHelper.html" title="">PadplusHelper</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
+                        <a class="trait" href="RoomRawSupport.html" title=""></a>
+                        <a href="RoomRawSupport.html" title="">RoomRawSupport</a>
                       </li>
               </ul>
             </div>
@@ -161,7 +177,7 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="wechaty.padplus.support.ContactRawSupport">ContactRawSupport</a> with <a href="GrpcSupport.html" class="extype" name="wechaty.padplus.support.GrpcSupport">GrpcSupport</a> with <span class="extype" name="wechaty.puppet.support.ContactSupport">ContactSupport</span></dd><dt>Since</dt><dd><p>2020-06-21</p></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="../PuppetPadplus.html" class="extype" name="wechaty.padplus.PuppetPadplus">PuppetPadplus</a></dd><dt>Since</dt><dd><p>2020-06-21</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -391,6 +407,22 @@
       </span>
       
       
+    </li><li name="wechaty.padplus.support.ContactRawSupport#contactPromises" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="contactPromises:com.github.benmanes.caffeine.cache.Cache[String,List[scala.concurrent.Promise[wechaty.padplus.schemas.ModelContact.PadplusContactPayload]]]"></a><a id="contactPromises:Cache[String,List[Promise[PadplusContactPayload]]]"></a>
+      <span class="permalink">
+      <a href="../../../wechaty/padplus/support/ContactRawSupport.html#contactPromises:com.github.benmanes.caffeine.cache.Cache[String,List[scala.concurrent.Promise[wechaty.padplus.schemas.ModelContact.PadplusContactPayload]]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">contactPromises</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.concurrent.Promise">Promise</span>[<a href="../schemas/ModelContact$$PadplusContactPayload.html" class="extype" name="wechaty.padplus.schemas.ModelContact.PadplusContactPayload">PadplusContactPayload</a>]]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="wechaty.padplus.support.ContactRawSupport#contactRawPayload" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="contactRawPayload(contactId:String):wechaty.puppet.schemas.Contact.ContactPayload"></a><a id="contactRawPayload(String):ContactPayload"></a>
       <span class="permalink">
@@ -409,6 +441,22 @@
       <p class="shortcomment cmt">contact
 </p><div class="fullcomment"><div class="comment cmt"><p>contact
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="wechaty.padplus.support.ContactRawSupport#convertFromGrpcContact" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="convertFromGrpcContact(contactPayload:wechaty.padplus.schemas.ModelContact.GrpcContactPayload):wechaty.padplus.schemas.ModelContact.PadplusContactPayload"></a><a id="convertFromGrpcContact(GrpcContactPayload):PadplusContactPayload"></a>
+      <span class="permalink">
+      <a href="../../../wechaty/padplus/support/ContactRawSupport.html#convertFromGrpcContact(contactPayload:wechaty.padplus.schemas.ModelContact.GrpcContactPayload):wechaty.padplus.schemas.ModelContact.PadplusContactPayload" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">convertFromGrpcContact</span><span class="params">(<span name="contactPayload">contactPayload: <a href="../schemas/ModelContact$$GrpcContactPayload.html" class="extype" name="wechaty.padplus.schemas.ModelContact.GrpcContactPayload">GrpcContactPayload</a></span>)</span><span class="result">: <a href="../schemas/ModelContact$$PadplusContactPayload.html" class="extype" name="wechaty.padplus.schemas.ModelContact.PadplusContactPayload">PadplusContactPayload</a></span>
+      </span>
+      
+      
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -482,6 +530,22 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="wechaty.padplus.support.ContactRawSupport#getContact" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getContact(contactId:String):wechaty.padplus.schemas.ModelContact.PadplusContactPayload"></a><a id="getContact(String):PadplusContactPayload"></a>
+      <span class="permalink">
+      <a href="../../../wechaty/padplus/support/ContactRawSupport.html#getContact(contactId:String):wechaty.padplus.schemas.ModelContact.PadplusContactPayload" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getContact</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="../schemas/ModelContact$$PadplusContactPayload.html" class="extype" name="wechaty.padplus.schemas.ModelContact.PadplusContactPayload">PadplusContactPayload</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
@@ -517,6 +581,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="wechaty.padplus.support.ContactRawSupport#loginPartialFunction" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="loginPartialFunction(response:wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse):PartialFunction[wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseType,Unit]"></a><a id="loginPartialFunction(StreamResponse):PartialFunction[ResponseType,Unit]"></a>
+      <span class="permalink">
+      <a href="../../../wechaty/padplus/support/ContactRawSupport.html#loginPartialFunction(response:wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse):PartialFunction[wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseType,Unit]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loginPartialFunction</span><span class="params">(<span name="response">response: <span class="extype" name="wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse">StreamResponse</span></span>)</span><span class="result">: <span class="extype" name="scala.PartialFunction">PartialFunction</span>[<span class="extype" name="wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseType">ResponseType</span>, <span class="extype" name="scala.Unit">Unit</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">

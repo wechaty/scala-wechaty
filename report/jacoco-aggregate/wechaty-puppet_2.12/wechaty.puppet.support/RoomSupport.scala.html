@@ -44,8 +44,8 @@ import wechaty.puppet.schemas.Room.{RoomPayload, RoomQueryFilter}
       * 1. Try to get from cache first
       */
 <span class="fc" id="L46">    val cachedPayload = cacheRoomPayload.getIfPresent(roomId)</span>
-<span class="fc bfc" id="L47" title="All 2 branches covered.">    if (cachedPayload != null) {</span>
-<span class="fc" id="L48">      return cachedPayload</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">    if (cachedPayload != null) {</span>
+<span class="nc" id="L48">      return cachedPayload</span>
     }
 
     /**

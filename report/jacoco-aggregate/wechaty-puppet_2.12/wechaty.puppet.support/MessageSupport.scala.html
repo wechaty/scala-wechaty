@@ -35,13 +35,13 @@ import wechaty.puppet.{Puppet, ResourceBox}
 
   def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgramPayload): String
 
-  def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]): String
+<span class="fc" id="L38">  def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]=Array()): String</span>
 
   def messageSendUrl(conversationId: String, urlLinkPayload: UrlLinkPayload): String
 
   def messageRecall(messageId: String): Boolean
 
-  def messageSendText(conversationID: String, text: String, mentionIDList: String*): String
+//  def messageSendText(conversationID: String, text: String, mentionIDList: String*): String
 
   def messagePayload(messageId: String): MessagePayload = {
 <span class="pc bpc" id="L47" title="1 of 2 branches missed.">    logger.debug(&quot;Puppet messagePayload({})&quot;, messageId)</span>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>Room.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">wechaty-puppet-hostie_2.12</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.puppet.schemas</a> &gt; <span class="el_source">Room.scala</span></div><h1>Room.scala</h1><pre class="source lang-java linenums">package wechaty.puppet.schemas
+
+<span class="nc" id="L3">object Room {</span>
+
+<span class="nc" id="L5">  class RoomMemberQueryFilter {</span>
+<span class="nc" id="L6">    var name: String = _</span>
+<span class="nc" id="L7">    var roomAlias: String = _</span>
+<span class="nc" id="L8">    var contactAlias: String = _</span>
+  }
+
+  /**
+    * select room function
+    */
+<span class="nc" id="L14">  type RoomQueryFilter = RoomPayload =&gt; Boolean</span>
+
+<span class="nc" id="L16">  class RoomPayload {</span>
+<span class="nc" id="L17">    var id: String = _</span>
+
+<span class="nc" id="L19">    var topic: String = _</span>
+<span class="nc" id="L20">    var avatar: String = _</span>
+<span class="nc" id="L21">    var memberIdList: Array[String] = _</span>
+<span class="nc" id="L22">    var ownerId: String = _</span>
+<span class="nc" id="L23">    var adminIdList: Array[String] = _</span>
+  }
+
+<span class="nc" id="L26">  class RoomMemberPayload {</span>
+<span class="nc" id="L27">    var id: String = _</span>
+<span class="nc" id="L28">    var roomAlias: String = _ //    // &quot;李佳芮-群里设置的备注&quot;, `chatroom_nick_name`</span>
+<span class="nc" id="L29">    var inviterId: String = _ //    // &quot;wxid_7708837087612&quot;,</span>
+<span class="nc" id="L30">    var avatar: String = _</span>
+<span class="nc" id="L31">    var name: String = _</span>
+  }
+
+  /** @hidden */
+<span class="nc" id="L35">  type RoomPayloadFilterFunction = RoomPayload =&gt; Boolean</span>
+
+  /** @hidden */
+  type RoomPayloadFilterFactory = RoomQueryFilter =&gt; RoomPayloadFilterFunction
+<span class="nc" id="L39">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -49,7 +49,7 @@ wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.Eve
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Contact.ContactQueryFilter,31,0,0,0,6,0,9,0,9,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,CacheSupport,6,0,0,0,2,0,2,0,2,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,FriendshipSupport,53,0,4,0,13,0,5,0,3,0
-wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,MessageSupport,424,0,104,0,42,0,55,0,3,0
+wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,MessageSupport,429,0,104,0,43,0,56,0,4,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,RoomMemberSupport,111,0,8,0,18,0,10,0,6,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,ContactSupport,85,0,8,0,13,0,7,0,3,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,RoomSupport,147,0,8,0,25,0,12,0,8,0

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>LocalStore.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">wechaty_2.12</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.internal</a> &gt; <span class="el_source">LocalStore.scala</span></div><h1>LocalStore.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.internal
+
+import java.io.File
+
+import com.google.protobuf.ByteString
+import org.fusesource.leveldbjni.JniDBFactory._
+import org.iq80.leveldb.{DB, Options}
+
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-22
+  */
+<span class="fc" id="L15">class LocalStore(storePath:String) {</span>
+<span class="fc" id="L16">  private var dbOpt :Option[DB] = None</span>
+  def start(): Unit ={
+<span class="fc" id="L18">    val options = new Options()</span>
+<span class="fc" id="L19">    options.createIfMissing(true)</span>
+<span class="fc" id="L20">    val db= factory.open(new File(storePath), options)</span>
+<span class="fc" id="L21">    dbOpt = Some(db)</span>
+  }
+  def put(key: ByteString, value: ByteString): Unit = {
+<span class="fc" id="L24">    db.put(key.toByteArray,value.toByteArray)</span>
+  }
+  def put(key: String, value: String): Unit = {
+<span class="fc" id="L27">    put(ByteString.copyFromUtf8(key),ByteString.copyFromUtf8(value))</span>
+  }
+  def get(key:String): Option[ByteString]={
+<span class="fc" id="L30">    get(ByteString.copyFromUtf8(key))</span>
+  }
+  def get(key:ByteString): Option[ByteString]={
+<span class="fc" id="L33">    val value = db.get(key.toByteArray)</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">    if(value != null) Some(ByteString.copyFrom(value))</span>
+<span class="pc" id="L35">    else None</span>
+  }
+  def delete(key:ByteString): Unit ={
+<span class="nc" id="L38">    db.delete(key.toByteArray)</span>
+  }
+  private def db={
+<span class="fc" id="L41">    dbOpt match{</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">      case Some(d) =&gt; d</span>
+<span class="nc" id="L43">      case _=&gt; throw new IllegalStateException(&quot;db is null,database not init?&quot;)</span>
+    }
+  }
+  def close(): Unit ={
+<span class="fc" id="L47">    db.close()</span>
+  }
+<span class="fc" id="L49">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

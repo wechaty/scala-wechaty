@@ -3,8 +3,8 @@
 import java.util.function.Consumer
 
 import wechaty.Wechaty.PuppetResolver
-import wechaty.puppet.schemas.Event.{EventFriendshipPayload, EventLoginPayload, EventLogoutPayload, EventMessagePayload, EventScanPayload}
-import wechaty.user.{Contact, ContactSelf, Friendship, Message}
+import wechaty.puppet.schemas.Event.{EventFriendshipPayload, EventLoginPayload, EventLogoutPayload, EventMessagePayload, EventRoomJoinPayload, EventScanPayload}
+import wechaty.user.{Contact, ContactSelf, Friendship, Message, Room}
 
 import scala.language.implicitConversions
 
@@ -36,10 +36,16 @@ import scala.language.implicitConversions
   private[wechaty] implicit def toFriendship(friendshipListener: Consumer[Friendship])(implicit puppet: PuppetResolver): EventFriendshipPayload =&gt; Unit = {
 <span class="fc" id="L37">    payload: EventFriendshipPayload =&gt; { friendshipListener.accept(new Friendship(payload.friendshipId)) }</span>
   }
-
-  private[wechaty] implicit def logoutToContact(contactListener: Consumer[Contact])(implicit puppet: PuppetResolver): EventLogoutPayload =&gt; Unit = {
-<span class="nc" id="L41">    payload: EventLogoutPayload =&gt; { contactListener.accept(new Contact(payload.contactId)) }</span>
+  private[wechaty] implicit def toRoomJoinPayload(roomJoinListener: (Option[Room],Contact,Array[Contact])=&gt;Unit)(implicit puppet: PuppetResolver): EventRoomJoinPayload =&gt; Unit = {
+<span class="nc" id="L40">    payload: EventRoomJoinPayload =&gt; {</span>
+<span class="nc" id="L41">      val inviteeList = payload.inviteeIdList.map(new Contact(_))</span>
+<span class="nc" id="L42">      roomJoinListener(Room.load(payload.roomId),new Contact(payload.inviterId),inviteeList)</span>
+    }
   }
 
-<span class="fc" id="L44">}</span>
+  private[wechaty] implicit def logoutToContact(contactListener: Consumer[Contact])(implicit puppet: PuppetResolver): EventLogoutPayload =&gt; Unit = {
+<span class="nc" id="L47">    payload: EventLogoutPayload =&gt; { contactListener.accept(new Contact(payload.contactId)) }</span>
+  }
+
+<span class="fc" id="L50">}</span>
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

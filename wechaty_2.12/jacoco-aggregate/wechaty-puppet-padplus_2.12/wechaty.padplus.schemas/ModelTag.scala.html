@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ModelTag.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">wechaty_2.12</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.schemas</a> &gt; <span class="el_source">ModelTag.scala</span></div><h1>ModelTag.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.schemas
+<span class="nc" id="L2">object ModelTag {</span>
+<span class="nc" id="L3">class TagGrpcPayload {</span>
+<span class="nc" id="L4">  var LabelID:String = _</span>
+<span class="nc" id="L5">  var LabelName:String = _</span>
+}
+
+<span class="nc" id="L8">class TagPayload {</span>
+<span class="nc" id="L9">  var id:String = _</span>
+<span class="nc" id="L10">  var name:String = _</span>
+}
+
+<span class="nc" id="L13">class TagNewOrListGrpcResponse {</span>
+<span class="nc" id="L14">  var count:Number = _</span>
+<span class="nc" id="L15">  var labelList:Array[TagGrpcPayload] = _</span>
+<span class="nc" id="L16">  var loginer:String = _</span>
+<span class="nc" id="L17">  var message:String = _</span>
+<span class="nc" id="L18">  var queueName:String = _</span>
+<span class="nc" id="L19">  var status:Number = _</span>
+<span class="nc" id="L20">  var uin:String = _</span>
+}
+
+<span class="nc" id="L23">class TagNewOrListResponse {</span>
+<span class="nc" id="L24">  var count:Number = _</span>
+<span class="nc" id="L25">  var tagList:Array[TagGrpcPayload] = _</span>
+<span class="nc" id="L26">  var loginer:String = _</span>
+<span class="nc" id="L27">  var message:String = _</span>
+<span class="nc" id="L28">  var queueName:String = _</span>
+<span class="nc" id="L29">  var status:Number = _</span>
+<span class="nc" id="L30">  var uin:String = _</span>
+}
+
+<span class="nc" id="L33">class TagOtherOperationsGrpcResponse {</span>
+<span class="nc" id="L34">  var loginer:String = _</span>
+<span class="nc" id="L35">  var message:String = _</span>
+<span class="nc" id="L36">  var queueName:String = _</span>
+<span class="nc" id="L37">  var status:Number = _</span>
+<span class="nc" id="L38">  var uin:String = _</span>
+<span class="nc" id="L39">  var userName:String = _</span>
+}
+<span class="nc" id="L41"> }</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
