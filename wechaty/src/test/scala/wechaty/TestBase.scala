@@ -1,25 +1,21 @@
 package wechaty
 
-import java.util.concurrent.{CountDownLatch, TimeUnit}
-
+import com.typesafe.scalalogging.LazyLogging
 import io.github.wechaty.grpc.PuppetGrpc
-import io.github.wechaty.grpc.puppet.Base.{LogoutResponse, StartResponse, StopResponse}
+import io.github.wechaty.grpc.puppet.Base.{DingResponse, LogoutResponse, StartResponse, StopResponse}
 import io.github.wechaty.grpc.puppet.Contact.ContactPayloadResponse
-import io.github.wechaty.grpc.puppet.Event.{EventResponse, EventType}
+import io.github.wechaty.grpc.puppet.Event.EventResponse
 import io.github.wechaty.grpc.puppet.Friendship.{FriendshipAcceptResponse, FriendshipPayloadResponse, FriendshipType}
 import io.github.wechaty.grpc.puppet.Message.{MessagePayloadResponse, MessageSendTextResponse, MessageType}
 import io.github.wechaty.grpc.puppet.Room.RoomPayloadResponse
 import io.github.wechaty.grpc.puppet.RoomMember.RoomMemberPayloadResponse
 import io.grpc.ManagedChannelBuilder
 import org.grpcmock.GrpcMock
-import org.grpcmock.GrpcMock.{serverStreamingMethod, stubFor, unaryMethod}
-import org.grpcmock.junit5.GrpcMockExtension
-import org.junit.jupiter.api.{AfterEach, BeforeAll, BeforeEach}
-import org.junit.jupiter.api.extension.ExtendWith
+import org.grpcmock.GrpcMock.{stubFor, unaryMethod}
+import org.junit.jupiter.api.{AfterEach, BeforeEach}
 import wechaty.Wechaty.PuppetResolver
 import wechaty.hostie.PuppetHostie
-import wechaty.puppet.schemas.Event.{EventFriendshipPayload, EventMessagePayload, EventResetPayload}
-import wechaty.puppet.schemas.Puppet
+import wechaty.puppet.schemas.Event.{EventFriendshipPayload, EventMessagePayload}
 import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
 
 /**
@@ -27,8 +23,8 @@ import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-07
   */
-@ExtendWith(Array(classOf[GrpcMockExtension]))
-class TestBase {
+//@ExtendWith(Array(classOf[GrpcMockExtension]))
+class TestBase extends JavaTestBase with LazyLogging {
   protected var instance:Wechaty = null
 
   private lazy val serverChannel = ManagedChannelBuilder.forAddress("localhost", GrpcMock.getGlobalPort).usePlaintext.build
@@ -43,6 +39,8 @@ class TestBase {
     stubFor(unaryMethod(PuppetGrpc.getStartMethod).willReturn(startResponse))
     val logoutResponse = LogoutResponse.newBuilder().build()
     stubFor(unaryMethod(PuppetGrpc.getLogoutMethod).willReturn(logoutResponse))
+    val dingResponse= DingResponse.newBuilder().build()
+    stubFor(unaryMethod(PuppetGrpc.getDingMethod).willReturn(dingResponse))
 
     val stopResponse = StopResponse.newBuilder().build()
     stubFor(unaryMethod(PuppetGrpc.getStopMethod).willReturn(stopResponse))
@@ -56,7 +54,7 @@ class TestBase {
     instance.puppet.asInstanceOf[PuppetHostie].idOpt=Some("me")
     instance.start()
   }
-  @BeforeEach
+  @AfterEach
   def stopInstance: Unit ={
     instance.stop()
   }

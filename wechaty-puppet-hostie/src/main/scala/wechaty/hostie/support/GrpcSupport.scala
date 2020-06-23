@@ -102,6 +102,7 @@ trait GrpcSupport {
   }
 
   protected def stopGrpc(): Unit = {
+    logger.info("shutdown Grpc...")
     if(option.channelOpt.isEmpty) {  //if no test!
       //stop stream
       stopStream()
@@ -109,8 +110,11 @@ trait GrpcSupport {
       //stop grpc client
       this.grpcClient.stop(Base.StopRequest.getDefaultInstance)
 
-      this.channel.shutdownNow()
     }
+    executorService.shutdown()
+    executorService.awaitTermination(5,TimeUnit.SECONDS)
+    this.channel.shutdownNow()
+    this.channel.awaitTermination(5,TimeUnit.SECONDS)
   }
 
   private def stopStream(): Unit = {
