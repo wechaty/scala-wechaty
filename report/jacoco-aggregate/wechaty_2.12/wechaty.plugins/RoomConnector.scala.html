@@ -22,37 +22,39 @@ import wechaty.{Wechaty, WechatyPlugin}
   type RoomMessageMapper = (/* from room */Room,Message,/* to room */Room) =&gt; Option[Message]
 <span class="pc" id="L23">  val  DEFAULT_MESSAGE_SENDER:RoomMessageMapper=(_,msg,_) =&gt; Some(msg)</span>
 }
-<span class="pc bnc" id="L25" title="All 4 branches missed.">class RoomConnector(config: RoomConnectorConfig) extends WechatyPlugin with LazyLogging {</span>
+<span class="pc bpc" id="L25" title="1 of 4 branches missed.">class RoomConnector(config: RoomConnectorConfig) extends WechatyPlugin with LazyLogging {</span>
   override def install(wechaty: Wechaty): Unit = {
 <span class="fc" id="L27">    implicit val resolver: Wechaty = wechaty</span>
 <span class="fc" id="L28">    wechaty.onOnceMessage(message =&gt; {</span>
-<span class="fc" id="L29">      val fromRooms           = PluginHelper.findRooms(config.from)</span>
-<span class="fc" id="L30">      val toRooms             = PluginHelper.findRooms(config.to)</span>
-<span class="fc" id="L31">      val roomMessageListener = (fromRoom:Room,roomMessage: Message) =&gt; {</span>
-<span class="pc bpc" id="L32" title="1 of 4 branches missed.">        if (config.whitelist(roomMessage) &amp;&amp; !config.blacklist(roomMessage)) {</span>
-<span class="fc" id="L33">          toRooms foreach {toRoom=&gt;</span>
-<span class="fc" id="L34">            config.mapper(fromRoom,roomMessage,toRoom) match {</span>
-<span class="fc bfc" id="L35" title="All 2 branches covered.">              case Some(msg) =&gt;</span>
-<span class="fc" id="L36">                msg.forward(toRoom)</span>
-<span class="fc" id="L37">              case _ =&gt; //filtered,so don't forward message</span>
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">      logger.info(&quot;install RoomConnector Plugin....&quot;)</span>
+<span class="fc" id="L30">      val fromRooms           = PluginHelper.findRooms(config.from)</span>
+<span class="fc" id="L31">      val toRooms             = PluginHelper.findRooms(config.to)</span>
+<span class="fc" id="L32">      val roomMessageListener = (fromRoom:Room,roomMessage: Message) =&gt; {</span>
+<span class="pc bpc" id="L33" title="1 of 4 branches missed.">        if (config.whitelist(roomMessage) &amp;&amp; !config.blacklist(roomMessage)) {</span>
+<span class="fc" id="L34">          toRooms foreach {toRoom=&gt;</span>
+<span class="fc" id="L35">            config.mapper(fromRoom,roomMessage,toRoom) match {</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">              case Some(msg) =&gt;</span>
+<span class="fc" id="L37">                msg.forward(toRoom)</span>
+<span class="fc" id="L38">              case _ =&gt; //filtered,so don't forward message</span>
             }
           }
         }
       }
       //process current message
-<span class="fc" id="L43">      message.room match {</span>
-<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        case Some(r) =&gt;</span>
-<span class="pc bpc" id="L45" title="5 of 8 branches missed.">          if (fromRooms.exists(_.id == r.id)) {</span>
-<span class="fc" id="L46">            roomMessageListener(r,message)</span>
+<span class="fc" id="L44">      message.room match {</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">        case Some(r) =&gt;</span>
+<span class="pc bpc" id="L46" title="5 of 8 branches missed.">          if (fromRooms.exists(_.id == r.id)) {</span>
+<span class="fc" id="L47">            roomMessageListener(r,message)</span>
           }
-<span class="nc" id="L48">        case _ =&gt;</span>
+<span class="nc" id="L49">        case _ =&gt;</span>
       }
 
-<span class="fc" id="L51">      fromRooms.foreach(room =&gt; {</span>
-<span class="fc" id="L52">        room.onMessage(roomMessage =&gt; {</span>
-<span class="fc" id="L53">          roomMessageListener(room,roomMessage)</span>
+<span class="fc" id="L52">      fromRooms.foreach(room =&gt; {</span>
+<span class="fc" id="L53">        room.onMessage(roomMessage =&gt; {</span>
+<span class="fc" id="L54">          roomMessageListener(room,roomMessage)</span>
         })
       })
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">      logger.info(&quot;install RoomConnector Plugin done&quot;)</span>
     })
   }
 
