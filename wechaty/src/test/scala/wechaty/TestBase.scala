@@ -14,7 +14,7 @@ import io.grpc.ManagedChannelBuilder
 import org.grpcmock.GrpcMock
 import org.grpcmock.GrpcMock.{serverStreamingMethod, stubFor, unaryMethod}
 import org.grpcmock.junit5.GrpcMockExtension
-import org.junit.jupiter.api.{AfterEach, BeforeEach}
+import org.junit.jupiter.api.{AfterEach, BeforeAll, BeforeEach}
 import org.junit.jupiter.api.extension.ExtendWith
 import wechaty.Wechaty.PuppetResolver
 import wechaty.hostie.PuppetHostie
@@ -31,11 +31,11 @@ import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
 class TestBase {
   protected var instance:Wechaty = null
 
+  private lazy val serverChannel = ManagedChannelBuilder.forAddress("localhost", GrpcMock.getGlobalPort).usePlaintext.build
   @BeforeEach
   def setupChannel(): Unit = {
     resetGrpcMock()
 //    GrpcMock.resetMappings()
-    val serverChannel = ManagedChannelBuilder.forAddress("localhost", GrpcMock.getGlobalPort).usePlaintext.build
     //for server stub
     val eventResponse = EventResponse.newBuilder().build()
     stubFor(unaryMethod(PuppetGrpc.getEventMethod).willReturn(eventResponse))
@@ -56,7 +56,7 @@ class TestBase {
     instance.puppet.asInstanceOf[PuppetHostie].idOpt=Some("me")
     instance.start()
   }
-  @AfterEach
+  @BeforeEach
   def stopInstance: Unit ={
     instance.stop()
   }
