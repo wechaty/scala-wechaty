@@ -108,6 +108,11 @@ class TestBase {
     stubFor(unaryMethod(PuppetGrpc.getMessageSendTextMethod)
       .willReturn(response))
   }
+  protected def mockContactPayload(name:String): Unit ={
+    val response = ContactPayloadResponse.newBuilder().setName(name).build()
+    stubFor(unaryMethod(PuppetGrpc.getContactPayloadMethod)
+      .willReturn(response))
+  }
   protected def emitEvent[T](puppetEventName: PuppetEventName.Type,payload:T): Unit ={
     instance.puppet.emit(puppetEventName,payload)
   }

@@ -1,11 +1,8 @@
 package wechaty
 
 import com.typesafe.scalalogging.LazyLogging
-import wechaty.puppet.schemas.Message.MessageType
-import wechaty.puppet.schemas.MiniProgram.MiniProgramPayload
-import wechaty.puppet.schemas.Puppet
-import wechaty.puppet.schemas.Puppet.objectMapper
-import wechaty.user.{MiniProgram, Room}
+import wechaty.plugins.{RoomJoinHello, RoomJoinHelloConfig}
+import wechaty.user.Room
 
 /**
   *
@@ -17,6 +14,7 @@ object DingDongBotDebug extends LazyLogging {
     val option = new WechatyOptions
     implicit val bot: Wechaty = Wechaty.instance(option)
     bot
+        .use(new RoomJoinHello(RoomJoinHelloConfig(Array("18911721443@chatroom"))))
       .onScan(payload => {
         println("Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n".format(payload.status, payload.qrcode))
       }).onLogin(payload => {
@@ -24,26 +22,6 @@ object DingDongBotDebug extends LazyLogging {
       Room.findAll().foreach(x => {
         println(x.id, x.payload.topic)
       })
-//      Room.load("21822642010@chatroom").get.payload.memberIdList.map(new Contact(_)).foreach(x=>
-//        println(x.name,x.id)
-//      )
-    }).onMessage(message => {
-      //only for test
-      logger.debug("mssage received:{}", message)
-      if (message.from.id == sys.props.get("DEBUG_WEIXIN").get) {
-        message.forward(message.from)
-      }
-      if (message.`type` == MessageType.MiniProgram) {
-        message.toMiniProgram()
-        //构建
-        //TODO FIXME,How to send MiniProgram
-        val miniProgramPayload = Puppet.objectMapper.readValue(mpJson, classOf[MiniProgramPayload])
-        miniProgramPayload.thumbUrl = "https://avatars0.githubusercontent.com/u/25162437?s=200&v=4"
-        miniProgramPayload.thumbKey = null
-        println("===>", objectMapper.writeValueAsString(miniProgramPayload))
-        val miniProgram = new MiniProgram(miniProgramPayload)
-        message.from.say(miniProgram)
-      }
     })
 
     bot.start()

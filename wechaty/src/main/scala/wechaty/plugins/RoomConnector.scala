@@ -1,9 +1,6 @@
 package wechaty.plugins
 
-import java.util.concurrent.TimeUnit
-
 import com.typesafe.scalalogging.LazyLogging
-import wechaty.Wechaty.PuppetResolver
 import wechaty.plugins.RoomConnector._
 import wechaty.user.{Message, Room}
 import wechaty.{Wechaty, WechatyPlugin}
@@ -27,10 +24,10 @@ object RoomConnector {
 }
 class RoomConnector(config: RoomConnectorConfig) extends WechatyPlugin with LazyLogging {
   override def install(wechaty: Wechaty): Unit = {
-    implicit val resolver = wechaty
+    implicit val resolver: Wechaty = wechaty
     wechaty.onOnceMessage(message => {
-      val fromRooms           = findRooms(config.from)
-      val toRooms             = findRooms(config.to)
+      val fromRooms           = PluginHelper.findRooms(config.from)
+      val toRooms             = PluginHelper.findRooms(config.to)
       val roomMessageListener = (fromRoom:Room,roomMessage: Message) => {
         if (config.whitelist(roomMessage) && !config.blacklist(roomMessage)) {
           toRooms foreach {toRoom=>
@@ -59,14 +56,4 @@ class RoomConnector(config: RoomConnectorConfig) extends WechatyPlugin with Lazy
     })
   }
 
-  private def findRooms(roomIds: Array[String])(implicit resolver: PuppetResolver): Array[Room] = {
-    try {
-      roomIds.flatMap(Room.load(_)) //avoid timeout ?
-    } catch {
-      case e: Throwable =>
-        logger.warn("load room occurs exception,so loop load", e)
-        Thread.sleep(TimeUnit.SECONDS.toMillis(5)) //sleep 5s to wait
-        findRooms(roomIds)
-    }
-  }
 }

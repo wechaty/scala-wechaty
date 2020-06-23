@@ -35,8 +35,9 @@ object Room {
     pool.get(roomId) match{
       case Some(room) => Some(room)
       case _ =>
-        val payload = puppetResolver.puppet.roomPayload(roomId)
-        val newRoom = new Room(payload.id)
+//        val payload = puppetResolver.puppet.roomPayload(roomId)
+//        val newRoom = new Room(payload.id)
+        val newRoom = new Room(roomId)
         pool += (roomId-> newRoom)
 
         Some(newRoom)
@@ -120,7 +121,7 @@ class Room private(roomId: String)(implicit resolver: PuppetResolver) extends Co
         case _ => '@' + x.name
       }
     }).mkString("\u2005")
-    this.say(something + mentionText)
+    this.say( mentionText+"\u2005 "+something )
   }
 
   def add(contact: Contact): Unit = {

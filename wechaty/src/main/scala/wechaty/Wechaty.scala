@@ -7,9 +7,9 @@ import wechaty.Wechaty.PuppetResolver
 import wechaty.helper.ImplicitHelper._
 import wechaty.hostie.PuppetHostie
 import wechaty.padplus.PuppetPadplus
+import wechaty.puppet.Puppet
 import wechaty.puppet.schemas.Event._
 import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
-import wechaty.puppet.Puppet
 import wechaty.user._
 
 import scala.language.implicitConversions;
@@ -84,6 +84,9 @@ class Wechaty(private val options: WechatyOptions) extends LazyLogging with Pupp
   def onLogout(listener:Consumer[Contact]):Wechaty={
     puppet.addListener[EventLogoutPayload](PuppetEventName.LOGOUT,listener)
     this
+  }
+  def onRoomJoin(listener: (Option[Room],Contact,Array[Contact])=>Unit): Unit ={
+    puppet.addListener[EventRoomJoinPayload](PuppetEventName.FRIENDSHIP,listener)
   }
   def onFriendAdd(listener:Consumer[Friendship]):Wechaty={
     puppet.addListener[EventFriendshipPayload](PuppetEventName.FRIENDSHIP,listener)
