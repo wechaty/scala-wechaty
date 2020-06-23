@@ -35,13 +35,13 @@ trait MessageSupport {
 
   def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgramPayload): String
 
-  def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]): String
+  def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]=Array()): String
 
   def messageSendUrl(conversationId: String, urlLinkPayload: UrlLinkPayload): String
 
   def messageRecall(messageId: String): Boolean
 
-  def messageSendText(conversationID: String, text: String, mentionIDList: String*): String
+//  def messageSendText(conversationID: String, text: String, mentionIDList: String*): String
 
   def messagePayload(messageId: String): MessagePayload = {
     logger.debug("Puppet messagePayload({})", messageId)

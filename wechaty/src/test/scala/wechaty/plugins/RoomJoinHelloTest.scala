@@ -19,8 +19,8 @@ class RoomJoinHelloTest extends TestBase{
     roomJoinHello.install(instance)
 
     mockRoomMessage(roomId = "from")
-    emitMessagePayloadEvent("messageId")
     mockMessageSendText()
+    emitMessagePayloadEvent("messageId")
 
     mockContactPayload("jcai")
     val payload=new EventRoomJoinPayload

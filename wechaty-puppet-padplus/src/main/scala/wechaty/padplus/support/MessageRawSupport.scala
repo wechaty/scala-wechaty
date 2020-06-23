@@ -54,9 +54,6 @@ trait MessageRawSupport {
 
   override def messageRecall(messageId: String): Boolean = ???
 
-  override def messageSendText(conversationID: String, text: String, mentionIDList: String*): String = {
-    messageSendText(conversationID,text,mentionIDList.toArray)
-  }
 
   override protected def messageRawPayload(messageId: String): Message.MessagePayload = {
     getGrpcMessagePayload(messageId) match {
