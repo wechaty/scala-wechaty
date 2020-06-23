@@ -25,6 +25,14 @@ class RoomJoinHelloTest extends TestBase{
     mockContactPayload("jcai")
     val payload=new EventRoomJoinPayload
     payload.roomId="roomId"
+    payload.inviteeIdList=Array()
+    instance.puppet.emit(PuppetEventName.ROOM_JOIN,payload)
+
+    verifyThat(
+      calledMethod(PuppetGrpc.getMessageSendTextMethod),
+      times(0));
+
+
     payload.inviteeIdList=Array("jcai")
     instance.puppet.emit(PuppetEventName.ROOM_JOIN,payload)
 
