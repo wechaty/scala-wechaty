@@ -29,3 +29,4 @@ support/gpg/gpg.sec
 *.pexe
 project/project/target
 */project/**
+wechaty/src/test/scala/wechaty/DingDongBotDebug.scala
