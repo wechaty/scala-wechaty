@@ -431,7 +431,7 @@
     <url>https://github.com/wechaty/scala-wechaty</url>
     <connection>scm:git:ssh://github.com/wechaty/scala-wechaty.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/wechaty/scala-wechaty.git</developerConnection>
-    <tag>${newVersion}</tag>
+    <tag>HEAD</tag>
   </scm>
   <properties>
     <encoding>UTF-8</encoding>

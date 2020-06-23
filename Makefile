@@ -43,7 +43,6 @@ version:
 	&& git add VERSION \
     && mvn versions:set -DnewVersion=$${newVersion} \
     && mvn versions:commit \
-    && sed -i '' 's/<tag>HEAD<\/tag>/<tag>$${newVersion}<\/tag>/' pom.xml \
 	&& git commit -a -m "Release $${newVersion}" > /dev/null \
 	&& git tag "$${newVersion}" \
 	&& echo "Bumped version to $${newVersion}" \
