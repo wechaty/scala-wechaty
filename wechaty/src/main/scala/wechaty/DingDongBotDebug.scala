@@ -25,7 +25,7 @@ object DingDongBotDebug extends LazyLogging {
     })
 
     bot.start()
-//        bot.logout()
+        bot.logout()
 
     Thread.currentThread().join()
   }

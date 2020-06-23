@@ -1,10 +1,6 @@
 package wechaty.plugins
 
-import java.util.concurrent.TimeUnit
-
 import com.typesafe.scalalogging.LazyLogging
-import wechaty.Wechaty.PuppetResolver
-import wechaty.user.Room
 import wechaty.{Wechaty, WechatyPlugin}
 
 /**
@@ -17,23 +13,14 @@ class RoomJoinHello(config:RoomJoinHelloConfig) extends WechatyPlugin with LazyL
   override def install(wechaty: Wechaty): Unit = {
     implicit val resolver:Wechaty = wechaty
     wechaty.onOnceMessage(message=>{
+      logger.info("install RoomJoinHello Plugin....")
       val rooms = PluginHelper.findRooms(config.rooms)
       rooms.foreach(room=>{
         room.onJoin{case (list,_,_)=>
           room.say(config.hello,list)
         }
       })
+      logger.info("install RoomJoinHello Plugin done")
     })
   }
-  private def findRooms(roomIds: Array[String])(implicit resolver: PuppetResolver): Array[Room] = {
-    try {
-      roomIds.flatMap(Room.load(_)) //avoid timeout ?
-    } catch {
-      case e: Throwable =>
-        logger.warn("load room occurs exception,so loop load", e)
-        Thread.sleep(TimeUnit.SECONDS.toMillis(5)) //sleep 5s to wait
-        findRooms(roomIds)
-    }
-  }
-
 }

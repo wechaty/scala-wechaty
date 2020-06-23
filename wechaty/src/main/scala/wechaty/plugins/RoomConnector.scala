@@ -26,6 +26,7 @@ class RoomConnector(config: RoomConnectorConfig) extends WechatyPlugin with Lazy
   override def install(wechaty: Wechaty): Unit = {
     implicit val resolver: Wechaty = wechaty
     wechaty.onOnceMessage(message => {
+      logger.info("install RoomConnector Plugin....")
       val fromRooms           = PluginHelper.findRooms(config.from)
       val toRooms             = PluginHelper.findRooms(config.to)
       val roomMessageListener = (fromRoom:Room,roomMessage: Message) => {
@@ -53,6 +54,7 @@ class RoomConnector(config: RoomConnectorConfig) extends WechatyPlugin with Lazy
           roomMessageListener(room,roomMessage)
         })
       })
+      logger.info("install RoomConnector Plugin done")
     })
   }
 
