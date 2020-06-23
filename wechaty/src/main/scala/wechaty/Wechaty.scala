@@ -131,6 +131,7 @@ class Wechaty(private val options: WechatyOptions) extends LazyLogging with Pupp
 
   }
   def stop(): Unit ={
+    Room.clear()
     this.hostie.stop()
     Wechaty.globalInstance = null
   }

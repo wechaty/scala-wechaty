@@ -9,9 +9,11 @@ import io.github.wechaty.grpc.puppet.Friendship.{FriendshipAcceptResponse, Frien
 import io.github.wechaty.grpc.puppet.Message.{MessagePayloadResponse, MessageSendTextResponse, MessageType}
 import io.github.wechaty.grpc.puppet.Room.RoomPayloadResponse
 import io.github.wechaty.grpc.puppet.RoomMember.RoomMemberPayloadResponse
-import io.grpc.ManagedChannelBuilder
+import io.grpc.{ManagedChannel, ManagedChannelBuilder}
 import org.grpcmock.GrpcMock
 import org.grpcmock.GrpcMock.{stubFor, unaryMethod}
+import org.grpcmock.junit5.GrpcMockExtension
+import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.{AfterEach, BeforeEach}
 import wechaty.Wechaty.PuppetResolver
 import wechaty.hostie.PuppetHostie
@@ -23,15 +25,16 @@ import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-07
   */
-//@ExtendWith(Array(classOf[GrpcMockExtension]))
-class TestBase extends JavaTestBase with LazyLogging {
+@ExtendWith(Array(classOf[GrpcMockExtension]))
+class TestBase extends LazyLogging {
   protected var instance:Wechaty = null
 
-  private lazy val serverChannel = ManagedChannelBuilder.forAddress("localhost", GrpcMock.getGlobalPort).usePlaintext.build
+  private var serverChannel:ManagedChannel = _
   @BeforeEach
   def setupChannel(): Unit = {
     resetGrpcMock()
 //    GrpcMock.resetMappings()
+    serverChannel = ManagedChannelBuilder.forAddress("localhost", GrpcMock.getGlobalPort).usePlaintext.build
     //for server stub
     val eventResponse = EventResponse.newBuilder().build()
     stubFor(unaryMethod(PuppetGrpc.getEventMethod).willReturn(eventResponse))
@@ -56,9 +59,11 @@ class TestBase extends JavaTestBase with LazyLogging {
   }
   @AfterEach
   def stopInstance: Unit ={
+    //clear cache
+    instance.puppet.clearAllCache()
     instance.stop()
   }
-  protected implicit lazy val puppetResolver: PuppetResolver = {
+  protected implicit def puppetResolver: PuppetResolver = {
     instance
   }
   protected def mockRoomMessage(message:String="message",roomId:String="roomId",memberIds:Array[String]=Array()): Unit ={

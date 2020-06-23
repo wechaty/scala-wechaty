@@ -43,6 +43,9 @@ object Room {
         Some(newRoom)
     }
   }
+  def clear(): Unit ={
+    pool=Map[String,Room]()
+  }
   def messageEvent(messagePayload: EventMessagePayload)(implicit resolver: PuppetResolver):Unit = {
     val message = new Message(messagePayload.messageId)
     val roomOpt = message.room
