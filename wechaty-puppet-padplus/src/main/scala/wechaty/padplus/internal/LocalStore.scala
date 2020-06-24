@@ -5,6 +5,9 @@ import java.io.File
 import com.google.protobuf.ByteString
 import org.fusesource.leveldbjni.JniDBFactory._
 import org.iq80.leveldb.{DB, Options}
+import wechaty.puppet.schemas.Puppet.objectMapper
+
+import scala.reflect.ClassTag
 
 
 /**
@@ -29,6 +32,12 @@ class LocalStore(storePath:String) {
   def get(key:String): Option[ByteString]={
     get(ByteString.copyFromUtf8(key))
   }
+  def getObject[T](key:String)(implicit classTag: ClassTag[T]): Option[T]={
+    get(key).map(str=>{
+      objectMapper.readValue(str.toStringUtf8,classTag.runtimeClass.asInstanceOf[Class[T]])
+    })
+  }
+
   def get(key:ByteString): Option[ByteString]={
     val value = db.get(key.toByteArray)
     if(value != null) Some(ByteString.copyFrom(value))

@@ -2,6 +2,7 @@ package wechaty.user
 
 import java.util.Date
 
+import com.typesafe.scalalogging.LazyLogging
 import wechaty.Wechaty.PuppetResolver
 import wechaty.helper.ImplicitHelper._
 import wechaty.puppet.schemas.Message.MessageType
@@ -15,7 +16,7 @@ import wechaty.puppet.{ResourceBox, schemas}
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-02
   */
-class Message(messageId:String)(implicit resolver: PuppetResolver) {
+class Message(messageId:String)(implicit resolver: PuppetResolver) extends LazyLogging{
   private val MENTION_MEMBER_PATTERN= ("@([^\u2005^\u0020^$]+)")
   lazy val payload: schemas.Message.MessagePayload = {
     resolver
@@ -159,6 +160,7 @@ class Message(messageId:String)(implicit resolver: PuppetResolver) {
       room.get.alias(member).getOrElse(member.name)
     }
 
+    logger.debug(s"message text:$text mentionsList:$list")
     val mentionNameList = list.map(toAliasName)
 
     val textWithoutMention = mentionNameList.foldLeft(text)((prev, cur) => {

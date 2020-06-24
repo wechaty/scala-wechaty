@@ -110,7 +110,7 @@ trait ContactRawSupport {
       padplusContactPayload.sex = ContactGender.Unknown
       padplusContactPayload.userName = loginData.userName
       padplusContactPayload.verifyFlag = 0
-      saveRawContactPayload(padplusContactPayload.userName, padplusContactPayload)
+      savePadplusContactPayload( padplusContactPayload)
       val eventLoginPayload = new EventLoginPayload
       eventLoginPayload.contactId = padplusContactPayload.userName
       emit(PuppetEventName.LOGIN, eventLoginPayload)
@@ -132,7 +132,7 @@ trait ContactRawSupport {
           rawContactPayload.nickName = wechatUser.get("nickName").asText()
           rawContactPayload.sex = ContactGender.Unknown
           rawContactPayload.userName = wechatUser.get("userName").asText()
-          saveRawContactPayload(rawContactPayload.userName, rawContactPayload)
+          savePadplusContactPayload(rawContactPayload)
           // "{\"uin\":1213374243,\"online\":true,\"wechatUser\":{\"headImgUrl\":\"http://wx.qlogo.cn/mmhead/ver_1/iag5D2R2U9ibgTW2eh7XUbPTHqpEMP2DhSpXSBeQYzEPWgEmLIx5IDibwicGh4fTh4IibkL4hNianoiaTzXmVORnm1O4ZjhxfPosKzkMPSwic8Iicylk/0\",\"nickName\":\"\351\230\277\350\224\241\",\"uin\":1213374243,\"userName\":\"wxid_gbk03zsepqny22\",\"alias\":\"\",\"verifyFlag\":0}}"
           selfId = Some(rawContactPayload.userName)
         }
@@ -140,7 +140,7 @@ trait ContactRawSupport {
         contactSelfInfo { padplusContact =>
           selfId = Some(padplusContact.userName)
           logger.debug("contactSelf:{}", padplusContact)
-          saveRawContactPayload(padplusContact.userName, padplusContact)
+          savePadplusContactPayload(padplusContact)
           val eventLoginPayload = new EventLoginPayload
           eventLoginPayload.contactId = padplusContact.userName
           emit(PuppetEventName.LOGIN, eventLoginPayload)
@@ -169,7 +169,7 @@ trait ContactRawSupport {
             throw new PadplusError(PadplusErrorType.NO_CACHE, `CONTACT_MODIFY`)
           }
            */
-            saveRoom(roomPayload)
+            savePadplusRoomPayload(roomPayload)
 
             roomPayload
           }
@@ -180,7 +180,7 @@ trait ContactRawSupport {
           val result:Try[PadplusContactPayload] = Try {
             val contact               = objectMapper.readValue(data, classOf[GrpcContactPayload])
             val padplusContactPayload = convertFromGrpcContact(contact)
-            saveRawContactPayload(padplusContactPayload.userName, padplusContactPayload)
+            savePadplusContactPayload(padplusContactPayload)
             padplusContactPayload
           }
           val callbacks =contactPromises.getIfPresent(userName)
@@ -201,7 +201,7 @@ trait ContactRawSupport {
         contactSelfInfo { padplusContact =>
           selfId = Some(padplusContact.userName)
           logger.debug("contactSelf:{}", padplusContact)
-          saveRawContactPayload(padplusContact.userName, padplusContact)
+          savePadplusContactPayload(padplusContact)
           val eventLoginPayload = new EventLoginPayload
           eventLoginPayload.contactId = padplusContact.userName
           emit(PuppetEventName.LOGIN, eventLoginPayload)

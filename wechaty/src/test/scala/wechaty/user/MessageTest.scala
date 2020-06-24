@@ -27,9 +27,9 @@ class MessageTest extends TestBase{
     stubFor(unaryMethod(PuppetGrpc.getMessagePayloadMethod)
       .willReturn(response))
 
-    val method = unaryMethod(PuppetGrpc.getContactPayloadMethod)
     memberIds.toList match{
       case head::remain=>
+        val method = unaryMethod(PuppetGrpc.getContactPayloadMethod)
         val response = ContactPayloadResponse.newBuilder()
           .setName(head)
           .build()
@@ -40,9 +40,9 @@ class MessageTest extends TestBase{
             .build()
           n.nextWillReturn(response)
         }}
+        stubFor(method)
       case Nil =>
     }
-    stubFor(method)
 
     val roomMemberPayloadResponse = RoomMemberPayloadResponse.newBuilder().build()
     stubFor(unaryMethod(PuppetGrpc.getRoomMemberPayloadMethod)
@@ -96,6 +96,18 @@ class MessageTest extends TestBase{
     Assertions.assertEquals("member2",mentionList(1).id)
     Assertions.assertEquals("member3",mentionList(2).id)
     Assertions.assertEquals("中文中文测试",message.mentionText())
+  }
+  @Test
+  def testMentionAll: Unit ={
+    //测试名称特殊字符
+    val wexinText = "@所有人\u2005hello"
+    constructMessage(wexinText,"所有人")
+
+    val message = new Message("messageId")
+
+    val mentionList = message.mentionList
+    Assertions.assertEquals(1,message.mentionList.size)
+    Assertions.assertEquals("hello",message.mentionText())
   }
   @Test
   def testForward: Unit ={

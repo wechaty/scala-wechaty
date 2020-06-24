@@ -1,15 +1,17 @@
 package wechaty.padplus.support
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.typesafe.scalalogging.LazyLogging
 import wechaty.padplus.grpc.PadPlusServerOuterClass.{ApiType, ResponseType, StreamResponse}
 import wechaty.padplus.schemas.GrpcSchemas.GrpcMessagePayload
+import wechaty.padplus.schemas.ModelMessage.PadplusMessagePayload
 import wechaty.padplus.schemas.PadplusEnums.PadplusMessageType
 import wechaty.puppet.ResourceBox
 import wechaty.puppet.events.EventEmitter
 import wechaty.puppet.schemas.Event.EventMessagePayload
 import wechaty.puppet.schemas.Image.ImageType.Type
 import wechaty.puppet.schemas.Message.{MessagePayload, MessageType}
-import wechaty.puppet.schemas.Puppet.{PuppetEventName, objectMapper}
+import wechaty.puppet.schemas.Puppet.{PuppetEventName, isBlank, objectMapper}
 import wechaty.puppet.schemas.{Message, MiniProgram, Puppet, UrlLink}
 import wechaty.puppet.support.MessageSupport
 
@@ -56,38 +58,38 @@ trait MessageRawSupport {
 
 
   override protected def messageRawPayload(messageId: String): Message.MessagePayload = {
-    getGrpcMessagePayload(messageId) match {
+    getPadplusMessagePayload(messageId) match {
       case Some(rawPayload) =>
         val messagePayload = new MessagePayload
-        messagePayload.id = rawPayload.MsgId
-        messagePayload.`type` = messageType(PadplusMessageType(rawPayload.MsgType))
+        messagePayload.id = rawPayload.msgId
+        messagePayload.`type` = messageType(rawPayload.msgType)
 
         /**
           * 1. Set Room Id
           */
-        if (isRoomId(rawPayload.FromUserName)) {
-          messagePayload.roomId = rawPayload.FromUserName
-        } else if (isRoomId(rawPayload.ToUserName)) {
-          messagePayload.roomId = rawPayload.ToUserName
+        if (isRoomId(rawPayload.fromUserName)) {
+          messagePayload.roomId = rawPayload.fromUserName
+        } else if (isRoomId(rawPayload.toUserName)) {
+          messagePayload.roomId = rawPayload.toUserName
         }
 
         /**
           * 2. Set To Contact Id
           */
-        if (isContactId(rawPayload.ToUserName)) {
+        if (isContactId(rawPayload.toUserName)) {
 
-          messagePayload.toId = rawPayload.ToUserName
+          messagePayload.toId = rawPayload.toUserName
         }
 
         /**
           * 3. Set From Contact Id
           */
-        if (isContactId(rawPayload.FromUserName)) {
+        if (isContactId(rawPayload.fromUserName)) {
 
-          messagePayload.fromId = rawPayload.FromUserName
+          messagePayload.fromId = rawPayload.fromUserName
 
         } else {
-          val parts = rawPayload.Content.split(":\n")
+          val parts = rawPayload.content.split(":\n")
           if (parts.length > 1) {
             if (isContactId(parts(0))) {
               messagePayload.fromId = parts(0)
@@ -99,13 +101,13 @@ trait MessageRawSupport {
           *
           * 4. Set Text
           */
-        if (isRoomId(rawPayload.FromUserName)) {
+        if (isRoomId(rawPayload.fromUserName)) {
 
-          val startIndex = rawPayload.Content.indexOf(":\n")
-          messagePayload.text = rawPayload.Content.substring(if (startIndex != -1) startIndex + 2 else 0)
+          val startIndex = rawPayload.content.indexOf(":\n")
+          messagePayload.text = rawPayload.content.substring(if (startIndex != -1) startIndex + 2 else 0)
 
         } else {
-          messagePayload.text = rawPayload.Content
+          messagePayload.text = rawPayload.content
         }
 
         if (messagePayload.`type` == MessageType.Recalled) {
@@ -116,13 +118,14 @@ trait MessageRawSupport {
         /**
           * 6. Set mention list, only for room messages
           */
-        //TODO
-        //    if (roomId) {
-        //    const messageSource = await messageSourceParser(rawPayload.msgSource)
-        //    if (messageSource !== null && messageSource.atUserList) {
-        //    mentionIdList = messageSource.atUserList || []
-        //    }
-        //    }
+        if (!isBlank(messagePayload.roomId)) {
+          val xmlMapper = new XmlMapper();
+          println(rawPayload.msgSource)
+          val root = xmlMapper.readTree(rawPayload.msgSource)
+          if(root.has("atuserlist")){
+            messagePayload.mentionIdList = root.get("atuserlist").asText().split(",")
+          }
+        }
 
         /**
           * 6. Set Contact for ShareCard
@@ -147,7 +150,32 @@ trait MessageRawSupport {
       val payload                                  = objectMapper.readValue(rawMessageStr, classOf[GrpcMessagePayload])
       val eventMessagePayload                      = new EventMessagePayload
       eventMessagePayload.messageId = payload.MsgId
-      saveRawMessagePayload(payload.MsgId, rawMessageStr)
+      savePadplusMessagePayload(payload)
       emit(PuppetEventName.MESSAGE, eventMessagePayload)
+  }
+  private implicit def convertMessageFromGrpcToPadplus (rawMessage: GrpcMessagePayload): PadplusMessagePayload= {
+    val padplusMessagePayload = new  PadplusMessagePayload
+    padplusMessagePayload.appMsgType= rawMessage.AppMsgType
+    padplusMessagePayload.content= rawMessage.Content
+    padplusMessagePayload.createTime= rawMessage.CreateTime
+    padplusMessagePayload.fileName= if(isBlank(rawMessage.FileName))  rawMessage.fileName else rawMessage.FileName
+    padplusMessagePayload.fromMemberNickName= rawMessage.FromMemberNickName
+    padplusMessagePayload.fromMemberUserName= rawMessage.FromMemberUserName
+    padplusMessagePayload.fromUserName= rawMessage.FromUserName
+    padplusMessagePayload.imgBuf= rawMessage.ImgBuf
+    padplusMessagePayload.imgStatus= rawMessage.ImgStatus
+    padplusMessagePayload.l1MsgType= rawMessage.L1MsgType
+    padplusMessagePayload.msgId= rawMessage.MsgId
+    padplusMessagePayload.msgSource= rawMessage.MsgSource
+    padplusMessagePayload.msgSourceCd= rawMessage.msgSourceCd
+    padplusMessagePayload.msgType= PadplusMessageType(rawMessage.MsgType)
+    padplusMessagePayload.newMsgId= rawMessage.NewMsgId
+    padplusMessagePayload.pushContent= rawMessage.PushContent
+    padplusMessagePayload.status= rawMessage.Status
+    padplusMessagePayload.toUserName= rawMessage.ToUserName
+    padplusMessagePayload.uin= rawMessage.Uin
+    padplusMessagePayload.url= rawMessage.Url
+    padplusMessagePayload.wechatUserName= rawMessage.wechatUserName
+    padplusMessagePayload
   }
 }
