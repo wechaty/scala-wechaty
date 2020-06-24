@@ -63,7 +63,7 @@ import wechaty.puppet.schemas.Room.RoomMemberPayload
       */
 <span class="fc" id="L64">    val rawPayload = this.roomMemberRawPayload(roomId, memberId)</span>
 <span class="pc bpc" id="L65" title="1 of 2 branches missed.">    if (rawPayload == null) {</span>
-<span class="nc" id="L66">      throw new Error(&quot;contact(&quot; + memberId + &quot;) is not in the Room(&quot; + roomId + &quot;)&quot;)</span>
+//      throw new Error(&quot;contact(&quot; + memberId + &quot;) is not in the Room(&quot; + roomId + &quot;)&quot;)
     }
 <span class="fc" id="L68">    this.cacheRoomMemberPayload.put(CACHE_KEY, rawPayload)</span>
 <span class="fc" id="L69">    rawPayload</span>

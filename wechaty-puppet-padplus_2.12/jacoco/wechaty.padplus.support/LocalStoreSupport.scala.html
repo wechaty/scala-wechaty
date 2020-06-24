@@ -5,7 +5,7 @@ import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.internal.LocalStore
 import wechaty.padplus.schemas.GrpcSchemas.GrpcMessagePayload
 import wechaty.padplus.schemas.ModelContact.PadplusContactPayload
-import wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload
+import wechaty.padplus.schemas.ModelRoom.{PadplusRoomMemberMap, PadplusRoomPayload}
 import wechaty.puppet.schemas.Puppet.objectMapper
 
 /**
@@ -19,44 +19,56 @@ import wechaty.puppet.schemas.Puppet.objectMapper
 <span class="nc" id="L19">  private val uinKey = ByteString.copyFromUtf8(&quot;uin&quot;)</span>
 <span class="nc" id="L20">  private val messageKeyFormat=&quot;MSG_%s&quot;</span>
 <span class="nc" id="L21">  private val contactKeyFormat=&quot;CON_%s&quot;</span>
+<span class="nc" id="L22">  private val roomMemberKeyFormat=&quot;RM_%s&quot;</span>
   protected def saveUin(uin:ByteString): Unit ={
-<span class="nc bnc" id="L23" title="All 2 branches missed.">    if(!uin.isEmpty){</span>
-<span class="nc" id="L24">      store.put(uinKey,uin)</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">    if(!uin.isEmpty){</span>
+<span class="nc" id="L25">      store.put(uinKey,uin)</span>
     }
   }
   protected def getUin: Option[String]={
-<span class="nc" id="L28">    store.get(uinKey).map(_.toStringUtf8)</span>
+<span class="nc" id="L29">    store.get(uinKey).map(_.toStringUtf8)</span>
   }
   protected def deleteUin():Unit ={
-<span class="nc" id="L31">    store.delete(uinKey)</span>
+<span class="nc" id="L32">    store.delete(uinKey)</span>
   }
   protected def saveRawContactPayload(contactId:String,payload:PadplusContactPayload): Unit ={
-<span class="nc" id="L34">    store.put(contactKeyFormat.format(contactId),objectMapper.writeValueAsString(payload))</span>
+<span class="nc" id="L35">    store.put(contactKeyFormat.format(contactId),objectMapper.writeValueAsString(payload))</span>
   }
   protected def getRawContactPayload(contactId:String):Option[PadplusContactPayload] ={
-<span class="nc" id="L37">    store.get(contactKeyFormat.format(contactId)).map(str=&gt;{</span>
-<span class="nc" id="L38">      objectMapper.readValue(str.toStringUtf8,classOf[PadplusContactPayload])</span>
+<span class="nc" id="L38">    store.get(contactKeyFormat.format(contactId)).map(str=&gt;{</span>
+<span class="nc" id="L39">      objectMapper.readValue(str.toStringUtf8,classOf[PadplusContactPayload])</span>
     })
   }
   protected def saveRawMessagePayload(messageId:String,rawMessage:String): Unit ={
-<span class="nc" id="L42">    store.put(messageKeyFormat.format(messageId),rawMessage)</span>
+<span class="nc" id="L43">    store.put(messageKeyFormat.format(messageId),rawMessage)</span>
   }
   protected def saveRoom(roomPayload:PadplusRoomPayload): Unit ={
-<span class="nc" id="L45">    store.put(roomPayload.chatroomId,objectMapper.writeValueAsString(roomPayload))</span>
+<span class="nc" id="L46">    store.put(roomPayload.chatroomId,objectMapper.writeValueAsString(roomPayload))</span>
+  }
+  protected def getPadplusRoomPayload(roomId:String):Option[PadplusRoomPayload]={
+<span class="nc" id="L49">    store.get(roomId).map(v=&gt;objectMapper.readValue(v.toStringUtf8,classOf[PadplusRoomPayload]))</span>
+  }
+  protected def savePadplusRoomMembers(roomId:String,padplusRoomMemberMap: PadplusRoomMemberMap): Unit ={
+<span class="nc" id="L52">    store.put(roomMemberKeyFormat.format(roomId),objectMapper.writeValueAsString(padplusRoomMemberMap))</span>
+  }
+  protected def getPadplusRoomMembers(roomId:String): Option[PadplusRoomMemberMap]={
+<span class="nc" id="L55">    store.get(roomMemberKeyFormat.format(roomId)).map(v=&gt;{</span>
+<span class="nc" id="L56">      objectMapper.readValue(v.toStringUtf8,classOf[PadplusRoomMemberMap])</span>
+    })
   }
   protected def getGrpcMessagePayload(messageId:String):Option[GrpcMessagePayload] ={
-<span class="nc" id="L48">    store.get(messageKeyFormat.format(messageId)).map(str=&gt;{</span>
-<span class="nc" id="L49">      objectMapper.readValue(str.toStringUtf8,classOf[GrpcMessagePayload])</span>
+<span class="nc" id="L60">    store.get(messageKeyFormat.format(messageId)).map(str=&gt;{</span>
+<span class="nc" id="L61">      objectMapper.readValue(str.toStringUtf8,classOf[GrpcMessagePayload])</span>
     })
   }
 
   protected def startLocalStore(): Unit ={
-<span class="nc" id="L54">    store = new LocalStore(storePath)</span>
-<span class="nc" id="L55">    store.start()</span>
+<span class="nc" id="L66">    store = new LocalStore(storePath)</span>
+<span class="nc" id="L67">    store.start()</span>
   }
   protected def stopLocalStore(): Unit ={
-<span class="nc bnc" id="L58" title="All 2 branches missed.">    if(store != null)</span>
-<span class="nc" id="L59">      store.close()</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">    if(store != null)</span>
+<span class="nc" id="L71">      store.close()</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
