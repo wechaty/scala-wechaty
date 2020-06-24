@@ -1,24 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Image.scala</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">wechaty_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.user</a> &gt; <span class="el_source">Image.scala</span></div><h1>Image.scala</h1><pre class="source lang-java linenums">package wechaty.user
 
+import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.fasterxml.jackson.dataformat.xml.annotation.{JacksonXmlProperty, JacksonXmlRootElement}
 import com.typesafe.scalalogging.LazyLogging
 import wechaty.Wechaty.PuppetResolver
-import wechaty.puppet.ResourceBox
+import wechaty.puppet.{ResourceBox, schemas}
 import wechaty.puppet.schemas.Image.ImageType
+import wechaty.user.Image.{CdnImage, Msg}
 
 /**
   *
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-15
   */
-<span class="nc bnc" id="L13" title="All 4 branches missed.">class Image(imageId:String)(implicit resolver:PuppetResolver) extends LazyLogging{</span>
+<span class="nc" id="L16">object Image{</span>
+  @JacksonXmlRootElement(localName = &quot;msg&quot;)
+<span class="fc" id="L18">  class Msg{</span>
+    @JacksonXmlProperty
+<span class="pc" id="L20">    var img:CdnImage = _</span>
+  }
+<span class="fc" id="L22">  class CdnImage{</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="pc" id="L24">    var aeskey:String = _</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="nc" id="L26">    var encryver :String = _</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="nc" id="L28">    var cdnthumblength :Int= _</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="nc" id="L30">    var cdnthumbheight:Int= _</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="nc" id="L32">    var cdnthumbwidth:Int= _</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="nc" id="L34">    var cdnmidheight:Int= _</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="nc" id="L36">    var cdnmidwidth:Int= _</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="nc" id="L38">    var cdnhdheight:Int= _</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="nc" id="L40">    var cdnhdwidth:Int= _</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="nc" id="L42">    var cdnmidimgurl:String = _</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="nc" id="L44">    var length:Int= _</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="nc" id="L46">    var cdnbigimgurl:String = _</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="nc" id="L48">    var hdlength:String = _</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="nc" id="L50">    var md5:String = _</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="pc" id="L52">    var cdnthumbaeskey:String = _</span>
+    @JacksonXmlProperty(isAttribute = true)
+<span class="nc" id="L54">    var cdnthumburl:String = _</span>
+  }
+<span class="fc" id="L56">}</span>
+<span class="pc bnc" id="L57" title="All 4 branches missed.">class Image(imageId:String)(implicit resolver:PuppetResolver) extends LazyLogging{</span>
+<span class="pc bpc" id="L58" title="2 of 4 branches missed.">  lazy val payload: schemas.Message.MessagePayload = {</span>
+<span class="fc" id="L59">    resolver</span>
+      .puppet
+<span class="fc" id="L61">      .messagePayload(imageId)</span>
+  }
+  def getCdnImage: CdnImage ={
+<span class="fc" id="L64">    val mapper = new XmlMapper()</span>
+<span class="fc" id="L65">    mapper.readValue(payload.text,classOf[Msg]).img</span>
+
+  }
+
   def thumbnail : ResourceBox = {
-<span class="nc" id="L15">    resolver.puppet.messageImage(this.imageId, ImageType.Thumbnail)</span>
+<span class="nc" id="L70">    resolver.puppet.messageImage(this.imageId, ImageType.Thumbnail)</span>
   }
   def hd: ResourceBox= {
-<span class="nc" id="L18">    resolver.puppet.messageImage(this.imageId, ImageType.HD)</span>
+<span class="nc" id="L73">    resolver.puppet.messageImage(this.imageId, ImageType.HD)</span>
   }
   def artwork : ResourceBox =  {
-<span class="nc" id="L21">    resolver.puppet.messageImage(this.imageId, ImageType.Artwork)</span>
+<span class="nc" id="L76">    resolver.puppet.messageImage(this.imageId, ImageType.Artwork)</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
