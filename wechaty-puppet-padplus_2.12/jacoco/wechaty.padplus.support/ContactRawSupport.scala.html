@@ -110,7 +110,7 @@ import scala.util.{Failure, Success, Try}
 <span class="nc" id="L110">      padplusContactPayload.sex = ContactGender.Unknown</span>
 <span class="nc" id="L111">      padplusContactPayload.userName = loginData.userName</span>
 <span class="nc" id="L112">      padplusContactPayload.verifyFlag = 0</span>
-<span class="nc" id="L113">      saveRawContactPayload(padplusContactPayload.userName, padplusContactPayload)</span>
+<span class="nc" id="L113">      savePadplusContactPayload( padplusContactPayload)</span>
 <span class="nc" id="L114">      val eventLoginPayload = new EventLoginPayload</span>
 <span class="nc" id="L115">      eventLoginPayload.contactId = padplusContactPayload.userName</span>
 <span class="nc" id="L116">      emit(PuppetEventName.LOGIN, eventLoginPayload)</span>
@@ -132,7 +132,7 @@ import scala.util.{Failure, Success, Try}
 <span class="nc" id="L132">          rawContactPayload.nickName = wechatUser.get(&quot;nickName&quot;).asText()</span>
 <span class="nc" id="L133">          rawContactPayload.sex = ContactGender.Unknown</span>
 <span class="nc" id="L134">          rawContactPayload.userName = wechatUser.get(&quot;userName&quot;).asText()</span>
-<span class="nc" id="L135">          saveRawContactPayload(rawContactPayload.userName, rawContactPayload)</span>
+<span class="nc" id="L135">          savePadplusContactPayload(rawContactPayload)</span>
           // &quot;{\&quot;uin\&quot;:1213374243,\&quot;online\&quot;:true,\&quot;wechatUser\&quot;:{\&quot;headImgUrl\&quot;:\&quot;http://wx.qlogo.cn/mmhead/ver_1/iag5D2R2U9ibgTW2eh7XUbPTHqpEMP2DhSpXSBeQYzEPWgEmLIx5IDibwicGh4fTh4IibkL4hNianoiaTzXmVORnm1O4ZjhxfPosKzkMPSwic8Iicylk/0\&quot;,\&quot;nickName\&quot;:\&quot;\351\230\277\350\224\241\&quot;,\&quot;uin\&quot;:1213374243,\&quot;userName\&quot;:\&quot;wxid_gbk03zsepqny22\&quot;,\&quot;alias\&quot;:\&quot;\&quot;,\&quot;verifyFlag\&quot;:0}}&quot;
 <span class="nc" id="L137">          selfId = Some(rawContactPayload.userName)</span>
         }
@@ -140,7 +140,7 @@ import scala.util.{Failure, Success, Try}
 <span class="nc" id="L140">        contactSelfInfo { padplusContact =&gt;</span>
 <span class="nc" id="L141">          selfId = Some(padplusContact.userName)</span>
 <span class="nc bnc" id="L142" title="All 2 branches missed.">          logger.debug(&quot;contactSelf:{}&quot;, padplusContact)</span>
-<span class="nc" id="L143">          saveRawContactPayload(padplusContact.userName, padplusContact)</span>
+<span class="nc" id="L143">          savePadplusContactPayload(padplusContact)</span>
 <span class="nc" id="L144">          val eventLoginPayload = new EventLoginPayload</span>
 <span class="nc" id="L145">          eventLoginPayload.contactId = padplusContact.userName</span>
 <span class="nc" id="L146">          emit(PuppetEventName.LOGIN, eventLoginPayload)</span>
@@ -169,7 +169,7 @@ import scala.util.{Failure, Success, Try}
             throw new PadplusError(PadplusErrorType.NO_CACHE, `CONTACT_MODIFY`)
           }
            */
-<span class="nc" id="L172">            saveRoom(roomPayload)</span>
+<span class="nc" id="L172">            savePadplusRoomPayload(roomPayload)</span>
 
 <span class="nc" id="L174">            roomPayload</span>
           }
@@ -180,7 +180,7 @@ import scala.util.{Failure, Success, Try}
 <span class="nc" id="L180">          val result:Try[PadplusContactPayload] = Try {</span>
 <span class="nc" id="L181">            val contact               = objectMapper.readValue(data, classOf[GrpcContactPayload])</span>
 <span class="nc" id="L182">            val padplusContactPayload = convertFromGrpcContact(contact)</span>
-<span class="nc" id="L183">            saveRawContactPayload(padplusContactPayload.userName, padplusContactPayload)</span>
+<span class="nc" id="L183">            savePadplusContactPayload(padplusContactPayload)</span>
 <span class="nc" id="L184">            padplusContactPayload</span>
           }
 <span class="nc" id="L186">          val callbacks =contactPromises.getIfPresent(userName)</span>
@@ -201,7 +201,7 @@ import scala.util.{Failure, Success, Try}
 <span class="nc" id="L201">        contactSelfInfo { padplusContact =&gt;</span>
 <span class="nc" id="L202">          selfId = Some(padplusContact.userName)</span>
 <span class="nc bnc" id="L203" title="All 2 branches missed.">          logger.debug(&quot;contactSelf:{}&quot;, padplusContact)</span>
-<span class="nc" id="L204">          saveRawContactPayload(padplusContact.userName, padplusContact)</span>
+<span class="nc" id="L204">          savePadplusContactPayload(padplusContact)</span>
 <span class="nc" id="L205">          val eventLoginPayload = new EventLoginPayload</span>
 <span class="nc" id="L206">          eventLoginPayload.contactId = padplusContact.userName</span>
 <span class="nc" id="L207">          emit(PuppetEventName.LOGIN, eventLoginPayload)</span>

@@ -11,12 +11,12 @@ wechaty_2.12,wechaty,DingDongBot,4,0,0,0,0,0,1,0,1,0
 wechaty_2.12,wechaty.helper,ImplicitHelper.,108,83,0,0,6,7,13,15,13,15
 wechaty_2.12,wechaty.user,Conversation,39,34,0,0,3,3,3,3,3,3
 wechaty_2.12,wechaty.user,Tag,3,0,0,0,2,0,1,0,1,0
-wechaty_2.12,wechaty.user,Message,526,316,83,19,64,47,70,22,21,20
+wechaty_2.12,wechaty.user,Message,527,371,85,23,64,47,72,25,21,22
 wechaty_2.12,wechaty.user,Friendship,32,69,2,2,4,14,4,8,2,8
 wechaty_2.12,wechaty.user,Room.,66,338,8,6,10,34,10,21,4,20
 wechaty_2.12,wechaty.user,UrlLink,9,0,0,0,2,0,2,0,2,0
 wechaty_2.12,wechaty.user,Friendship.,15,0,0,0,3,0,3,0,3,0
-wechaty_2.12,wechaty.user,Contact,265,61,48,4,38,13,43,6,17,6
+wechaty_2.12,wechaty.user,Contact,236,90,46,6,33,18,42,7,16,7
 wechaty_2.12,wechaty.user,Image,67,0,4,0,4,0,8,0,6,0
 wechaty_2.12,wechaty.user,MiniProgram,37,0,0,0,9,0,9,0,9,0
 wechaty_2.12,wechaty.user,Room,441,145,33,3,33,15,52,13,34,13
