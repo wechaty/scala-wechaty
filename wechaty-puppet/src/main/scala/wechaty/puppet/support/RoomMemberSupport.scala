@@ -63,7 +63,7 @@ trait RoomMemberSupport {
       */
     val rawPayload = this.roomMemberRawPayload(roomId, memberId)
     if (rawPayload == null) {
-      throw new Error("contact(" + memberId + ") is not in the Room(" + roomId + ")")
+//      throw new Error("contact(" + memberId + ") is not in the Room(" + roomId + ")")
     }
     this.cacheRoomMemberPayload.put(CACHE_KEY, rawPayload)
     rawPayload

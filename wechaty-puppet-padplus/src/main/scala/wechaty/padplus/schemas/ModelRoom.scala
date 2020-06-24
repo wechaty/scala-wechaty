@@ -126,7 +126,7 @@ class GrpcSetAnnouncementData {
 }
 
 class PadplusRoomMemberMap {
-//  [contactId: string]: PadplusRoomMemberPayload
+  var members:Map[String,PadplusRoomMemberPayload] = _
 }
 
 class GrpcAccpetRoomInvitation {

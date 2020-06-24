@@ -5,7 +5,7 @@ import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.internal.LocalStore
 import wechaty.padplus.schemas.GrpcSchemas.GrpcMessagePayload
 import wechaty.padplus.schemas.ModelContact.PadplusContactPayload
-import wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload
+import wechaty.padplus.schemas.ModelRoom.{PadplusRoomMemberMap, PadplusRoomPayload}
 import wechaty.puppet.schemas.Puppet.objectMapper
 
 /**
@@ -19,6 +19,7 @@ trait LocalStoreSupport {
   private val uinKey = ByteString.copyFromUtf8("uin")
   private val messageKeyFormat="MSG_%s"
   private val contactKeyFormat="CON_%s"
+  private val roomMemberKeyFormat="RM_%s"
   protected def saveUin(uin:ByteString): Unit ={
     if(!uin.isEmpty){
       store.put(uinKey,uin)
@@ -43,6 +44,17 @@ trait LocalStoreSupport {
   }
   protected def saveRoom(roomPayload:PadplusRoomPayload): Unit ={
     store.put(roomPayload.chatroomId,objectMapper.writeValueAsString(roomPayload))
+  }
+  protected def getPadplusRoomPayload(roomId:String):Option[PadplusRoomPayload]={
+    store.get(roomId).map(v=>objectMapper.readValue(v.toStringUtf8,classOf[PadplusRoomPayload]))
+  }
+  protected def savePadplusRoomMembers(roomId:String,padplusRoomMemberMap: PadplusRoomMemberMap): Unit ={
+    store.put(roomMemberKeyFormat.format(roomId),objectMapper.writeValueAsString(padplusRoomMemberMap))
+  }
+  protected def getPadplusRoomMembers(roomId:String): Option[PadplusRoomMemberMap]={
+    store.get(roomMemberKeyFormat.format(roomId)).map(v=>{
+      objectMapper.readValue(v.toStringUtf8,classOf[PadplusRoomMemberMap])
+    })
   }
   protected def getGrpcMessagePayload(messageId:String):Option[GrpcMessagePayload] ={
     store.get(messageKeyFormat.format(messageId)).map(str=>{

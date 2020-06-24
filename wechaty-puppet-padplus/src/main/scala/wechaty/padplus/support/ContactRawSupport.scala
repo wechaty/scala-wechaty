@@ -69,9 +69,6 @@ trait ContactRawSupport {
       case Success(payload) => payload
       case Failure(e) => throw e
     }
-    contactPromises.get(contactId,key=>{
-      List(contactPayloadPromise)
-    })
     val oldValue=contactPromises.getIfPresent(contactId)
     if(oldValue != null){
       contactPromises.put(contactId, oldValue :+ contactPayloadPromise)
@@ -156,7 +153,7 @@ trait ContactRawSupport {
       val data = response.getData
       if(!isBlank(data)){
         val root = objectMapper.readTree(data)
-        val userName = root.get("userName").asText()
+        val userName = root.get("UserName").asText()
         if(isRoomId(userName)){
           val roomTry=Try {
             val grpcRoomPayload = objectMapper.readValue(data, classOf[GrpcRoomPayload])
