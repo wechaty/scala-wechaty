@@ -1,5 +1,6 @@
 FROM java:openjdk-8-jdk-alpine
 MAINTAINER Jun Tsai jcai AT Ganshane Dot Com
+RUN apk add --no-cache libstdc++
 CMD ["java", "-version"]
 ADD target/dependencies /usr/share/wechaty/lib
 ARG JAR_FILE
