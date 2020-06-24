@@ -5,7 +5,7 @@
   <groupId>io.github.wechaty</groupId>
   <artifactId>wechaty-project_2.12</artifactId>
   <packaging>pom</packaging>
-  <version>0.0.13</version>
+  <version>0.0.14-SNAPSHOT</version>
   <name>wechaty-project</name>
 
   <description>
