@@ -22,5 +22,12 @@ object PluginHelper extends LazyLogging {
         findRooms(roomIds)
     }
   }
-
+  private[plugins] def executeWithNotThrow(pluginName:String)(func: =>Unit): Unit ={
+    try {
+      func
+    }catch{
+      case e:Throwable=>
+        logger.error(s"$pluginName error:${e.getMessage}",e)
+    }
+  }
 }

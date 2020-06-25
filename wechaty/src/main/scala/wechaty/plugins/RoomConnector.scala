@@ -29,17 +29,18 @@ class RoomConnector(config: RoomConnectorConfig) extends WechatyPlugin with Lazy
       logger.info("install RoomConnector Plugin....")
       val fromRooms           = PluginHelper.findRooms(config.from)
       val toRooms             = PluginHelper.findRooms(config.to)
-      val roomMessageListener = (fromRoom:Room,roomMessage: Message) => {
-        if (config.whitelist(roomMessage) && !config.blacklist(roomMessage)) {
-          toRooms foreach {toRoom=>
-            config.mapper(fromRoom,roomMessage,toRoom) match {
-              case Some(msg) =>
-                msg.forward(toRoom)
-              case _ => //filtered,so don't forward message
+      val roomMessageListener = (fromRoom:Room,roomMessage: Message) =>
+        PluginHelper.executeWithNotThrow("RoomConnector") {
+          if (config.whitelist(roomMessage) && !config.blacklist(roomMessage)) {
+            toRooms foreach { toRoom =>
+              config.mapper(fromRoom, roomMessage, toRoom) match {
+                case Some(msg) =>
+                  msg.forward(toRoom)
+                case _ => //filtered,so don't forward message
+              }
             }
           }
         }
-      }
       //process current message
       message.room match {
         case Some(r) =>

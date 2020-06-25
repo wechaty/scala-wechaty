@@ -66,15 +66,17 @@ class DingDongPlugin(config:DingDongConfig) extends WechatyPlugin{
   }
   override def install(wechaty: Wechaty): Unit = {
     wechaty.onMessage(message=>{
-      val text = message.room match{
-        case Some(_) => message.mentionText()
-        case _ => message.text
-      }
+      PluginHelper.executeWithNotThrow("DingDong") {
+        val text = message.room match {
+          case Some(_) => message.mentionText()
+          case _ => message.text
+        }
 
-      text match{
-        case DING_REGEXP(_) if isMatch(message)=>
-          message.say(DONG)
-        case _ =>
+        text match {
+          case DING_REGEXP(_) if isMatch(message) =>
+            message.say(DONG)
+          case _ =>
+        }
       }
     })
   }

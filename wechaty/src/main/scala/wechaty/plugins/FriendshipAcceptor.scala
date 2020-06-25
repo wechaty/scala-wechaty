@@ -31,19 +31,22 @@ class FriendshipAcceptor(config:FriendshipAcceptorConfig) extends WechatyPlugin 
   }
   override def install(wechaty: Wechaty): Unit = {
     wechaty.onFriendAdd(friendship => {
-      friendship.payload match{
-      case _:FriendshipPayloadReceive =>
-        val hello = friendship.hello()
-        if (isMatchKeyword(hello)) {
-          friendship.accept()
-        }
-      case _:FriendshipPayloadConfirm =>
-          val contact = friendship.contact()
-          doGreeting(contact)
-      case _:FriendshipPayloadVerify =>
+      PluginHelper.executeWithNotThrow("FriendshipAcceptor") {
+
+        friendship.payload match {
+          case _: FriendshipPayloadReceive =>
+            val hello = friendship.hello()
+            if (isMatchKeyword(hello)) {
+              friendship.accept()
+            }
+          case _: FriendshipPayloadConfirm =>
+            val contact = friendship.contact()
+            doGreeting(contact)
+          case _: FriendshipPayloadVerify =>
           // This is for when we send a message to others, but they did not accept us as a friend.
-      case _ =>
-        throw new Error("friendshipType unknown: " + friendship.`type`)
+          case _ =>
+            throw new Error("friendshipType unknown: " + friendship.`type`)
+        }
       }
     })
   }

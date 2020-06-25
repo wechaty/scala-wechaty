@@ -17,9 +17,11 @@ class RoomJoinHello(config:RoomJoinHelloConfig) extends WechatyPlugin with LazyL
       val rooms = PluginHelper.findRooms(config.rooms)
       rooms.foreach(room=>{
         room.onJoin{case (list,_,_)=>
-          if(list==null || list.isEmpty ){
-            logger.warn("invitee list is empty")
-          }else room.say(config.hello,list)
+          PluginHelper.executeWithNotThrow("RoomJoinHello") {
+            if (list == null || list.isEmpty) {
+              logger.warn("invitee list is empty")
+            } else room.say(config.hello, list)
+          }
         }
       })
       logger.info("install RoomJoinHello Plugin done")
