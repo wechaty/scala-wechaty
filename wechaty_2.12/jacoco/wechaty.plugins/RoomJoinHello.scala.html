@@ -17,12 +17,14 @@ import wechaty.{Wechaty, WechatyPlugin}
 <span class="fc" id="L17">      val rooms = PluginHelper.findRooms(config.rooms)</span>
 <span class="fc" id="L18">      rooms.foreach(room=&gt;{</span>
 <span class="pc bpc" id="L19" title="1 of 2 branches missed.">        room.onJoin{case (list,_,_)=&gt;</span>
-<span class="pc bpc" id="L20" title="1 of 4 branches missed.">          if(list==null || list.isEmpty ){</span>
-<span class="pc bpc" id="L21" title="1 of 2 branches missed.">            logger.warn(&quot;invitee list is empty&quot;)</span>
-<span class="fc" id="L22">          }else room.say(config.hello,list)</span>
+<span class="fc" id="L20">          PluginHelper.executeWithNotThrow(&quot;RoomJoinHello&quot;) {</span>
+<span class="pc bpc" id="L21" title="1 of 4 branches missed.">            if (list == null || list.isEmpty) {</span>
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">              logger.warn(&quot;invitee list is empty&quot;)</span>
+<span class="fc" id="L23">            } else room.say(config.hello, list)</span>
+          }
         }
       })
-<span class="pc bpc" id="L25" title="1 of 2 branches missed.">      logger.info(&quot;install RoomJoinHello Plugin done&quot;)</span>
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">      logger.info(&quot;install RoomJoinHello Plugin done&quot;)</span>
     })
   }
 }

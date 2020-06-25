@@ -31,19 +31,22 @@ import wechaty.{Wechaty, WechatyPlugin}
   }
   override def install(wechaty: Wechaty): Unit = {
 <span class="fc" id="L33">    wechaty.onFriendAdd(friendship =&gt; {</span>
-<span class="fc" id="L34">      friendship.payload match{</span>
-<span class="fc bfc" id="L35" title="All 2 branches covered.">      case _:FriendshipPayloadReceive =&gt;</span>
-<span class="fc" id="L36">        val hello = friendship.hello()</span>
-<span class="fc bfc" id="L37" title="All 2 branches covered.">        if (isMatchKeyword(hello)) {</span>
-<span class="fc" id="L38">          friendship.accept()</span>
-        }
-<span class="pc bpc" id="L40" title="1 of 2 branches missed.">      case _:FriendshipPayloadConfirm =&gt;</span>
-<span class="fc" id="L41">          val contact = friendship.contact()</span>
-<span class="fc" id="L42">          doGreeting(contact)</span>
-<span class="nc bnc" id="L43" title="All 2 branches missed.">      case _:FriendshipPayloadVerify =&gt;</span>
+<span class="fc" id="L34">      PluginHelper.executeWithNotThrow(&quot;FriendshipAcceptor&quot;) {</span>
+
+<span class="fc" id="L36">        friendship.payload match {</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">          case _: FriendshipPayloadReceive =&gt;</span>
+<span class="fc" id="L38">            val hello = friendship.hello()</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">            if (isMatchKeyword(hello)) {</span>
+<span class="fc" id="L40">              friendship.accept()</span>
+            }
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">          case _: FriendshipPayloadConfirm =&gt;</span>
+<span class="fc" id="L43">            val contact = friendship.contact()</span>
+<span class="fc" id="L44">            doGreeting(contact)</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">          case _: FriendshipPayloadVerify =&gt;</span>
           // This is for when we send a message to others, but they did not accept us as a friend.
-      case _ =&gt;
-<span class="nc" id="L46">        throw new Error(&quot;friendshipType unknown: &quot; + friendship.`type`)</span>
+          case _ =&gt;
+<span class="nc" id="L48">            throw new Error(&quot;friendshipType unknown: &quot; + friendship.`type`)</span>
+        }
       }
     })
   }

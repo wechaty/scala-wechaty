@@ -66,15 +66,17 @@ import wechaty.{Wechaty, WechatyPlugin}
   }
   override def install(wechaty: Wechaty): Unit = {
 <span class="fc" id="L68">    wechaty.onMessage(message=&gt;{</span>
-<span class="fc" id="L69">      val text = message.room match{</span>
-<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        case Some(_) =&gt; message.mentionText()</span>
-<span class="nc" id="L71">        case _ =&gt; message.text</span>
-      }
+<span class="fc" id="L69">      PluginHelper.executeWithNotThrow(&quot;DingDong&quot;) {</span>
+<span class="fc" id="L70">        val text = message.room match {</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">          case Some(_) =&gt; message.mentionText()</span>
+<span class="nc" id="L72">          case _ =&gt; message.text</span>
+        }
 
-<span class="fc" id="L74">      text match{</span>
-<span class="pc bpc" id="L75" title="2 of 8 branches missed.">        case DING_REGEXP(_) if isMatch(message)=&gt;</span>
-<span class="fc" id="L76">          message.say(DONG)</span>
-<span class="fc" id="L77">        case _ =&gt;</span>
+<span class="fc" id="L75">        text match {</span>
+<span class="pc bpc" id="L76" title="2 of 8 branches missed.">          case DING_REGEXP(_) if isMatch(message) =&gt;</span>
+<span class="fc" id="L77">            message.say(DONG)</span>
+<span class="fc" id="L78">          case _ =&gt;</span>
+        }
       }
     })
   }

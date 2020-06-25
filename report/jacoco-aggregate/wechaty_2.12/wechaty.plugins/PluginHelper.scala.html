@@ -22,6 +22,13 @@ import wechaty.user.Room
 <span class="pc" id="L22">        findRooms(roomIds)</span>
     }
   }
-
+  private[plugins] def executeWithNotThrow(pluginName:String)(func: =&gt;Unit): Unit ={
+    try {
+<span class="pc" id="L27">      func</span>
+    }catch{
+      case e:Throwable=&gt;
+<span class="pc bnc" id="L30" title="All 2 branches missed.">        logger.error(s&quot;$pluginName error:${e.getMessage}&quot;,e)</span>
+    }
+  }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
