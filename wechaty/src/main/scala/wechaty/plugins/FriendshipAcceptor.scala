@@ -1,5 +1,7 @@
 package wechaty.plugins
 
+import java.util.concurrent.TimeUnit
+
 import com.typesafe.scalalogging.StrictLogging
 import wechaty.puppet.schemas.Friendship.{FriendshipPayloadConfirm, FriendshipPayloadReceive, FriendshipPayloadVerify}
 import wechaty.puppet.schemas.Puppet._
@@ -11,7 +13,7 @@ import wechaty.{Wechaty, WechatyPlugin}
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-19
   */
-case class FriendshipAcceptorConfig( var greeting:String = "we are friends now!", var keywordOpt:Option[String]=None)
+case class FriendshipAcceptorConfig( var greeting:String = "we are friends now!",var waitSeconds:Int=0, var keywordOpt:Option[String]=None)
 class FriendshipAcceptor(config:FriendshipAcceptorConfig) extends WechatyPlugin with StrictLogging{
   private def isMatchKeyword(str: String): Boolean ={
     logger.debug("keyword:{} hello:{} ",config.keywordOpt,str)
@@ -37,6 +39,7 @@ class FriendshipAcceptor(config:FriendshipAcceptorConfig) extends WechatyPlugin 
           case _: FriendshipPayloadReceive =>
             val hello = friendship.hello()
             if (isMatchKeyword(hello)) {
+              Thread.sleep(TimeUnit.SECONDS.toMillis(config.waitSeconds))
               friendship.accept()
             }
           case _: FriendshipPayloadConfirm =>
