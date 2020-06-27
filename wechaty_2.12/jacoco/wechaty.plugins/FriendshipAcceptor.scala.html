@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FriendshipAcceptor.scala</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">wechaty_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.plugins</a> &gt; <span class="el_source">FriendshipAcceptor.scala</span></div><h1>FriendshipAcceptor.scala</h1><pre class="source lang-java linenums">package wechaty.plugins
 
+import java.util.concurrent.TimeUnit
+
 import com.typesafe.scalalogging.StrictLogging
 import wechaty.puppet.schemas.Friendship.{FriendshipPayloadConfirm, FriendshipPayloadReceive, FriendshipPayloadVerify}
 import wechaty.puppet.schemas.Puppet._
@@ -11,41 +13,42 @@ import wechaty.{Wechaty, WechatyPlugin}
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-19
   */
-<span class="pc bnc" id="L14" title="All 27 branches missed.">case class FriendshipAcceptorConfig( var greeting:String = &quot;we are friends now!&quot;, var keywordOpt:Option[String]=None)</span>
-<span class="fc" id="L15">class FriendshipAcceptor(config:FriendshipAcceptorConfig) extends WechatyPlugin with StrictLogging{</span>
+<span class="pc bnc" id="L16" title="All 30 branches missed.">case class FriendshipAcceptorConfig( var greeting:String = &quot;we are friends now!&quot;,var waitSeconds:Int=0, var keywordOpt:Option[String]=None)</span>
+<span class="fc" id="L17">class FriendshipAcceptor(config:FriendshipAcceptorConfig) extends WechatyPlugin with StrictLogging{</span>
   private def isMatchKeyword(str: String): Boolean ={
-<span class="pc bpc" id="L17" title="1 of 2 branches missed.">    logger.debug(&quot;keyword:{} hello:{} &quot;,config.keywordOpt,str)</span>
-<span class="fc" id="L18">    config.keywordOpt match{</span>
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">    logger.debug(&quot;keyword:{} hello:{} &quot;,config.keywordOpt,str)</span>
+<span class="fc" id="L20">    config.keywordOpt match{</span>
         //use contains simply
         //TODO use complex function or regexp to match string
         // see https://github.com/wechaty/wechaty-plugin-contrib/blob/05cfec3606480d2f2a544ac4e742a967bcaec2b4/src/matchers/string-matcher.ts#L9
-<span class="fc bfc" id="L22" title="All 2 branches covered.">      case Some(keyword) =&gt;</span>
-<span class="pc bpc" id="L23" title="1 of 2 branches missed.">        if(isBlank(str)){false}</span>
-<span class="fc" id="L24">        else str.contains(keyword) //simple use contains</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">      case Some(keyword) =&gt;</span>
+<span class="pc bpc" id="L25" title="1 of 2 branches missed.">        if(isBlank(str)){false}</span>
+<span class="fc" id="L26">        else str.contains(keyword) //simple use contains</span>
       case _ =&gt;
-<span class="fc" id="L26">        true</span>
+<span class="fc" id="L28">        true</span>
     }
   }
   private def doGreeting(contact: Contact): Unit ={
-<span class="fc" id="L30">    contact.say(config.greeting)</span>
+<span class="fc" id="L32">    contact.say(config.greeting)</span>
   }
   override def install(wechaty: Wechaty): Unit = {
-<span class="fc" id="L33">    wechaty.onFriendAdd(friendship =&gt; {</span>
-<span class="fc" id="L34">      PluginHelper.executeWithNotThrow(&quot;FriendshipAcceptor&quot;) {</span>
+<span class="fc" id="L35">    wechaty.onFriendAdd(friendship =&gt; {</span>
+<span class="fc" id="L36">      PluginHelper.executeWithNotThrow(&quot;FriendshipAcceptor&quot;) {</span>
 
-<span class="fc" id="L36">        friendship.payload match {</span>
-<span class="fc bfc" id="L37" title="All 2 branches covered.">          case _: FriendshipPayloadReceive =&gt;</span>
-<span class="fc" id="L38">            val hello = friendship.hello()</span>
-<span class="fc bfc" id="L39" title="All 2 branches covered.">            if (isMatchKeyword(hello)) {</span>
-<span class="fc" id="L40">              friendship.accept()</span>
+<span class="fc" id="L38">        friendship.payload match {</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">          case _: FriendshipPayloadReceive =&gt;</span>
+<span class="fc" id="L40">            val hello = friendship.hello()</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">            if (isMatchKeyword(hello)) {</span>
+<span class="fc" id="L42">              Thread.sleep(TimeUnit.SECONDS.toMillis(config.waitSeconds))</span>
+<span class="fc" id="L43">              friendship.accept()</span>
             }
-<span class="pc bpc" id="L42" title="1 of 2 branches missed.">          case _: FriendshipPayloadConfirm =&gt;</span>
-<span class="fc" id="L43">            val contact = friendship.contact()</span>
-<span class="fc" id="L44">            doGreeting(contact)</span>
-<span class="nc bnc" id="L45" title="All 2 branches missed.">          case _: FriendshipPayloadVerify =&gt;</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">          case _: FriendshipPayloadConfirm =&gt;</span>
+<span class="fc" id="L46">            val contact = friendship.contact()</span>
+<span class="fc" id="L47">            doGreeting(contact)</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">          case _: FriendshipPayloadVerify =&gt;</span>
           // This is for when we send a message to others, but they did not accept us as a friend.
           case _ =&gt;
-<span class="nc" id="L48">            throw new Error(&quot;friendshipType unknown: &quot; + friendship.`type`)</span>
+<span class="nc" id="L51">            throw new Error(&quot;friendshipType unknown: &quot; + friendship.`type`)</span>
         }
       }
     })
