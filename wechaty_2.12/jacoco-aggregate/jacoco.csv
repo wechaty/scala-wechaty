@@ -1,5 +1,5 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie,PuppetHostie,335,359,11,9,22,13,58,70,50,68
+wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie,PuppetHostie,338,369,11,9,22,13,59,72,51,70
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie,Configuration.,54,62,8,4,4,6,7,5,2,4
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie,Configuration,6,0,0,0,0,0,2,0,2,0
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,MessageRawSupport,216,178,7,3,44,32,14,5,9,5
@@ -8,10 +8,10 @@ wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,ContactSelfRawSup
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,FriendshipRawSupport,60,86,3,3,15,22,5,4,3,3
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,GrpcSupport,191,159,17,5,16,28,14,6,3,6
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,TagRawSupport,89,1,0,0,20,1,5,1,5,1
-wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,RoomInvitationRawSupport,78,1,0,0,17,1,2,1,2,1
+wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,RoomInvitationRawSupport,66,13,0,0,14,4,1,2,1,2
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,RoomMemberRawSupport,56,40,0,0,13,12,3,2,3,2
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,ContactRawSupport,152,91,12,0,26,22,10,3,4,3
-wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,GrpcEventSupport,181,261,25,25,16,37,24,8,3,4
+wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,GrpcEventSupport,173,269,24,26,15,38,23,9,3,4
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,RoomRawSupport,125,81,0,0,34,15,8,3,8,3
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcMessagePayload,178,0,0,0,27,0,51,0,51,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.AutoLoginError.,22,0,0,0,3,0,4,0,4,0
@@ -157,7 +157,7 @@ wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus,TestMain.,71,0,4,0,9,0,
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus,Configuration.,116,0,12,0,10,0,12,0,6,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus,Configuration,6,0,0,0,0,0,2,0,2,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus,PuppetPadplus.,10,0,0,0,1,0,3,0,3,0
-wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus,PuppetPadplus,863,0,22,0,32,0,175,0,164,0
+wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus,PuppetPadplus,876,0,22,0,32,0,178,0,167,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.ResponseObject,424,0,47,0,125,0,61,0,37,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.StreamResponse.Builder,835,0,88,0,243,0,94,0,50,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerGrpc.PadPlusServerImplBase,31,0,0,0,13,0,4,0,4,0

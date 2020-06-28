@@ -143,7 +143,7 @@ wechaty-puppet-padplus_2.12,wechaty.padplus,TestMain.,71,0,4,0,9,0,7,0,5,0
 wechaty-puppet-padplus_2.12,wechaty.padplus,Configuration.,116,0,12,0,10,0,12,0,6,0
 wechaty-puppet-padplus_2.12,wechaty.padplus,Configuration,6,0,0,0,0,0,2,0,2,0
 wechaty-puppet-padplus_2.12,wechaty.padplus,PuppetPadplus.,10,0,0,0,1,0,3,0,3,0
-wechaty-puppet-padplus_2.12,wechaty.padplus,PuppetPadplus,863,0,22,0,32,0,175,0,164,0
+wechaty-puppet-padplus_2.12,wechaty.padplus,PuppetPadplus,876,0,22,0,32,0,178,0,167,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.ResponseObject,424,0,47,0,125,0,61,0,37,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.StreamResponse.Builder,835,0,88,0,243,0,94,0,50,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerGrpc.PadPlusServerImplBase,31,0,0,0,13,0,4,0,4,0

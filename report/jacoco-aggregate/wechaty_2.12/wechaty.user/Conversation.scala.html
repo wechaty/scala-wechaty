@@ -2,6 +2,7 @@
 
 import wechaty.helper.ImplicitHelper._
 import wechaty.Wechaty.PuppetResolver
+import wechaty.puppet.ResourceBox
 
 
 /**
@@ -9,21 +10,24 @@ import wechaty.Wechaty.PuppetResolver
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-08
   */
-<span class="fc" id="L12">class Conversation(val id:String)(implicit resolver:PuppetResolver) {</span>
+<span class="fc" id="L13">class Conversation(val id:String)(implicit resolver:PuppetResolver) {</span>
   def say(something: String): Message = {
-<span class="fc" id="L14">    resolver.puppet.messageSendText(this.id, something)</span>
+<span class="fc" id="L15">    resolver.puppet.messageSendText(this.id, something)</span>
   }
 
   def say(something: Contact): Message = {
-<span class="nc" id="L18">    resolver.puppet.messageSendContact(this.id, something.id)</span>
+<span class="nc" id="L19">    resolver.puppet.messageSendContact(this.id, something.id)</span>
   }
 
   def say(something: UrlLink): Message = {
-<span class="nc" id="L22">    resolver.puppet.messageSendUrl(this.id, something.payload)</span>
+<span class="nc" id="L23">    resolver.puppet.messageSendUrl(this.id, something.payload)</span>
   }
 
   def say(something: MiniProgram): Message = {
-<span class="nc" id="L26">    resolver.puppet.messageSendMiniProgram(this.id, something.payload)</span>
+<span class="nc" id="L27">    resolver.puppet.messageSendMiniProgram(this.id, something.payload)</span>
   }
-<span class="fc" id="L28">}</span>
+  def say(something: ResourceBox): Message = {
+<span class="nc" id="L30">    resolver.puppet.messageSendFile(this.id, something)</span>
+  }
+<span class="fc" id="L32">}</span>
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

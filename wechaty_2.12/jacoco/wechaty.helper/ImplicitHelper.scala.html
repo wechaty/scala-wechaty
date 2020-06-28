@@ -3,8 +3,8 @@
 import java.util.function.Consumer
 
 import wechaty.Wechaty.PuppetResolver
-import wechaty.puppet.schemas.Event.{EventFriendshipPayload, EventLoginPayload, EventLogoutPayload, EventMessagePayload, EventRoomJoinPayload, EventScanPayload}
-import wechaty.user.{Contact, ContactSelf, Friendship, Message, Room}
+import wechaty.puppet.schemas.Event.{EventFriendshipPayload, EventLoginPayload, EventLogoutPayload, EventMessagePayload, EventRoomInvitePayload, EventRoomJoinPayload, EventScanPayload}
+import wechaty.user.{Contact, ContactSelf, Friendship, Message, Room, RoomInvitation}
 
 import scala.language.implicitConversions
 
@@ -43,9 +43,15 @@ import scala.language.implicitConversions
     }
   }
 
-  private[wechaty] implicit def logoutToContact(contactListener: Consumer[Contact])(implicit puppet: PuppetResolver): EventLogoutPayload =&gt; Unit = {
-<span class="nc" id="L47">    payload: EventLogoutPayload =&gt; { contactListener.accept(new Contact(payload.contactId)) }</span>
+  private[wechaty] implicit def toInvite(roomInvitation: RoomInvitation =&gt;Unit)(implicit puppet: PuppetResolver): EventRoomInvitePayload =&gt; Unit = {
+<span class="fc" id="L47">    payload: EventRoomInvitePayload =&gt; {</span>
+<span class="fc" id="L48">      roomInvitation.apply(new RoomInvitation(payload.roomInvitationId))</span>
+    }
   }
 
-<span class="fc" id="L50">}</span>
+  private[wechaty] implicit def logoutToContact(contactListener: Consumer[Contact])(implicit puppet: PuppetResolver): EventLogoutPayload =&gt; Unit = {
+<span class="nc" id="L53">    payload: EventLogoutPayload =&gt; { contactListener.accept(new Contact(payload.contactId)) }</span>
+  }
+
+<span class="fc" id="L56">}</span>
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

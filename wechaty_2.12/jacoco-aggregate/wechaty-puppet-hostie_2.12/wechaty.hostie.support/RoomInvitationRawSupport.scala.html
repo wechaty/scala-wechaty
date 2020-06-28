@@ -12,11 +12,11 @@ import wechaty.puppet.schemas.RoomInvitation.RoomInvitationPayload
 <span class="fc" id="L12">trait RoomInvitationRawSupport {</span>
   self: Puppet with GrpcSupport =&gt;
   override def roomInvitationAccept(roomInvitationId: String): Unit = {
-<span class="nc" id="L15">    val request = RoomInvitation.RoomInvitationAcceptRequest.newBuilder()</span>
-<span class="nc" id="L16">      .setId(roomInvitationId)</span>
+<span class="fc" id="L15">    val request = RoomInvitation.RoomInvitationAcceptRequest.newBuilder()</span>
+<span class="fc" id="L16">      .setId(roomInvitationId)</span>
       .build()
 
-<span class="nc" id="L19">    grpcClient.roomInvitationAccept(request)</span>
+<span class="fc" id="L19">    grpcClient.roomInvitationAccept(request)</span>
   }
 
   override protected def roomInvitationRawPayload(roomInvitationId: String): wechaty.puppet.schemas.RoomInvitation.RoomInvitationPayload = {

@@ -39,16 +39,17 @@ import wechaty.{Wechaty, WechatyPlugin}
 <span class="fc bfc" id="L39" title="All 2 branches covered.">          case _: FriendshipPayloadReceive =&gt;</span>
 <span class="fc" id="L40">            val hello = friendship.hello()</span>
 <span class="fc bfc" id="L41" title="All 2 branches covered.">            if (isMatchKeyword(hello)) {</span>
-<span class="fc" id="L42">              Thread.sleep(TimeUnit.SECONDS.toMillis(config.waitSeconds))</span>
-<span class="fc" id="L43">              friendship.accept()</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">              if(config.waitSeconds &gt;0)</span>
+<span class="nc" id="L43">                Thread.sleep(TimeUnit.SECONDS.toMillis(config.waitSeconds))</span>
+<span class="fc" id="L44">              friendship.accept()</span>
             }
-<span class="pc bpc" id="L45" title="1 of 2 branches missed.">          case _: FriendshipPayloadConfirm =&gt;</span>
-<span class="fc" id="L46">            val contact = friendship.contact()</span>
-<span class="fc" id="L47">            doGreeting(contact)</span>
-<span class="nc bnc" id="L48" title="All 2 branches missed.">          case _: FriendshipPayloadVerify =&gt;</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">          case _: FriendshipPayloadConfirm =&gt;</span>
+<span class="fc" id="L47">            val contact = friendship.contact()</span>
+<span class="fc" id="L48">            doGreeting(contact)</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">          case _: FriendshipPayloadVerify =&gt;</span>
           // This is for when we send a message to others, but they did not accept us as a friend.
           case _ =&gt;
-<span class="nc" id="L51">            throw new Error(&quot;friendshipType unknown: &quot; + friendship.`type`)</span>
+<span class="nc" id="L52">            throw new Error(&quot;friendshipType unknown: &quot; + friendship.`type`)</span>
         }
       }
     })

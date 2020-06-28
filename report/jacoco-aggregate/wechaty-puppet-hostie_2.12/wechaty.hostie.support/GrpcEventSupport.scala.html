@@ -62,8 +62,8 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
 <span class="nc" id="L62">        Puppet.objectMapper.readValue(data, classOf[EventMessagePayload])</span>
 <span class="pc bpc" id="L63" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_READY =&gt;</span>
 <span class="nc" id="L64">        Puppet.objectMapper.readValue(data, classOf[EventReadyPayload])</span>
-<span class="pc bpc" id="L65" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_ROOM_INVITE =&gt;</span>
-<span class="nc" id="L66">        Puppet.objectMapper.readValue(data, classOf[EventRoomInvitePayload])</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">      case EventType.EVENT_TYPE_ROOM_INVITE =&gt;</span>
+<span class="fc" id="L66">        Puppet.objectMapper.readValue(data, classOf[EventRoomInvitePayload])</span>
 <span class="pc bpc" id="L67" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_ROOM_JOIN =&gt;</span>
 <span class="nc" id="L68">        Puppet.objectMapper.readValue(data, classOf[EventRoomJoinPayload])</span>
 <span class="pc bpc" id="L69" title="1 of 2 branches missed.">      case EventType.EVENT_TYPE_ROOM_LEAVE =&gt;</span>
