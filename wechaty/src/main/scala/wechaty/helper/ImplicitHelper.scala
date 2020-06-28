@@ -3,8 +3,8 @@ package wechaty.helper
 import java.util.function.Consumer
 
 import wechaty.Wechaty.PuppetResolver
-import wechaty.puppet.schemas.Event.{EventFriendshipPayload, EventLoginPayload, EventLogoutPayload, EventMessagePayload, EventRoomJoinPayload, EventScanPayload}
-import wechaty.user.{Contact, ContactSelf, Friendship, Message, Room}
+import wechaty.puppet.schemas.Event.{EventFriendshipPayload, EventLoginPayload, EventLogoutPayload, EventMessagePayload, EventRoomInvitePayload, EventRoomJoinPayload, EventScanPayload}
+import wechaty.user.{Contact, ContactSelf, Friendship, Message, Room, RoomInvitation}
 
 import scala.language.implicitConversions
 
@@ -40,6 +40,12 @@ object ImplicitHelper {
     payload: EventRoomJoinPayload => {
       val inviteeList = payload.inviteeIdList.map(new Contact(_))
       roomJoinListener(Room.load(payload.roomId),new Contact(payload.inviterId),inviteeList)
+    }
+  }
+
+  private[wechaty] implicit def toInvite(roomInvitation: RoomInvitation =>Unit)(implicit puppet: PuppetResolver): EventRoomInvitePayload => Unit = {
+    payload: EventRoomInvitePayload => {
+      roomInvitation.apply(new RoomInvitation(payload.roomInvitationId))
     }
   }
 

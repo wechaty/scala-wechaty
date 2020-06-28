@@ -88,6 +88,9 @@ class Wechaty(private val options: WechatyOptions) extends LazyLogging with Pupp
   def onRoomJoin(listener: (Option[Room],Contact,Array[Contact])=>Unit): Unit ={
     puppet.addListener[EventRoomJoinPayload](PuppetEventName.FRIENDSHIP,listener)
   }
+  def onRoomInvite(listener: RoomInvitation =>Unit): Unit ={
+    puppet.addListener[EventRoomInvitePayload](PuppetEventName.INVITE,listener)
+  }
   def onFriendAdd(listener:Consumer[Friendship]):Wechaty={
     puppet.addListener[EventFriendshipPayload](PuppetEventName.FRIENDSHIP,listener)
     this

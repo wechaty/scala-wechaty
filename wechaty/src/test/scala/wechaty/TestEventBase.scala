@@ -53,6 +53,7 @@ class TestEventBase extends LazyLogging{
   }
   @AfterEach
   def stopInstance: Unit ={
+    instance.puppet.clearAllCache()
     instance.stop()
   }
   protected implicit lazy val puppetResolver: PuppetResolver = {

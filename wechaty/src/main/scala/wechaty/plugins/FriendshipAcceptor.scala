@@ -39,7 +39,8 @@ class FriendshipAcceptor(config:FriendshipAcceptorConfig) extends WechatyPlugin 
           case _: FriendshipPayloadReceive =>
             val hello = friendship.hello()
             if (isMatchKeyword(hello)) {
-              Thread.sleep(TimeUnit.SECONDS.toMillis(config.waitSeconds))
+              if(config.waitSeconds >0)
+                Thread.sleep(TimeUnit.SECONDS.toMillis(config.waitSeconds))
               friendship.accept()
             }
           case _: FriendshipPayloadConfirm =>

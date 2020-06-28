@@ -2,6 +2,7 @@ package wechaty.user
 
 import wechaty.helper.ImplicitHelper._
 import wechaty.Wechaty.PuppetResolver
+import wechaty.puppet.ResourceBox
 
 
 /**
@@ -24,5 +25,8 @@ class Conversation(val id:String)(implicit resolver:PuppetResolver) {
 
   def say(something: MiniProgram): Message = {
     resolver.puppet.messageSendMiniProgram(this.id, something.payload)
+  }
+  def say(something: ResourceBox): Message = {
+    resolver.puppet.messageSendFile(this.id, something)
   }
 }
