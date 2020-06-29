@@ -188,12 +188,12 @@ trait GrpcSupport {
     response
   }
     private val ACCESS_KEY_ID = "AKIA3PQY2OQG5FEXWMH6"
-    private val BUCKET= "macpro-message-file",
-    private val EXPIRE_TIME= 3600 * 24 * 3,
-    private val PATH= "image-message",
-    private val SECRET_ACCESS_KEY= "jw7Deo+W8l4FTOL2BXd/VubTJjt1mhm55sRhnsEn",
+    private val BUCKET= "macpro-message-file"
+    private val EXPIRE_TIME= 3600 * 24 * 3
+    private val PATH= "image-message"
+    private val SECRET_ACCESS_KEY= "jw7Deo+W8l4FTOL2BXd/VubTJjt1mhm55sRhnsEn"
 //  private val s3 = new AmazonS3Client(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY));
-    private val s3=new AmazonS3ClientBuilder()
+    private val s3=AmazonS3ClientBuilder.standard()
     .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY)))
   .enablePayloadSigning()
       .withRegion(Regions.CN_NORTHWEST_1).build(); // 此处根据自己的 s3 地区位置改变

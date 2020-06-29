@@ -6,6 +6,8 @@ import java.util.Base64
 
 import javax.activation.MimeType
 import org.apache.commons.io.IOUtils
+import wechaty.puppet.ResourceBox.ResourceBoxType
+import wechaty.puppet.ResourceBox.ResourceBoxType.Type
 import wechaty.puppet.schemas.Puppet.objectMapper
 
 /**
@@ -55,7 +57,7 @@ object ResourceBox {
     val File    :Type = Value(5)
     val Stream  :Type = Value(6)
   }
-  class UrlResourceBox private(val url:String) extends AbstractResourceBox{
+  private class UrlResourceBox (val url:String) extends AbstractResourceBox{
     override def toStream: InputStream = {
       val connection = new URL(url).openConnection.asInstanceOf[HttpURLConnection]
       connection.setConnectTimeout(5000)
@@ -75,8 +77,10 @@ object ResourceBox {
     }
 
     override def name: String = url.substring(url.lastIndexOf("/")+1)
+
+    override def resourceType: Type = ResourceBoxType.Url
   }
-  class Base64ResourceBox private(override val name:String,base64:String) extends AbstractResourceBox{
+  private class Base64ResourceBox (override val name:String,base64:String) extends AbstractResourceBox{
     override def toStream: InputStream = {
       //decode base64 as byte array input stream
       new ByteArrayInputStream(Base64.getDecoder.decode(base64))
@@ -92,17 +96,22 @@ object ResourceBox {
       objectNode.toString
     }
 
+    override def resourceType: Type = ResourceBoxType.Base64
   }
-  class StreamResourceBox private(override val name:String,stream:InputStream) extends AbstractResourceBox{
+  private class StreamResourceBox (override val name:String,stream:InputStream) extends AbstractResourceBox{
     override def toStream: InputStream = stream
     override protected def using[T <: Closeable, R](resource: T)(block: T => R): R = {
       block(resource) //don't close the stream.must be closed by creator
     }
+
+    override def resourceType: Type = ResourceBoxType.Stream
   }
   private class FileResourceBox(file:File) extends AbstractResourceBox{
     override def toStream: InputStream = new FileInputStream(file)
 
     override def name: String = file.getName
+
+    override def resourceType: Type = ResourceBoxType.File
   }
   private trait AbstractResourceBox extends ResourceBox {
     override def toBase64: String = {
@@ -130,6 +139,7 @@ object ResourceBox {
   }
 }
 trait ResourceBox {
+  def resourceType:ResourceBoxType.Type
   def name:String
   def toStream:InputStream
   def toBase64:String

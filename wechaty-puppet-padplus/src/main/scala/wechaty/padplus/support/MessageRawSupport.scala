@@ -7,7 +7,6 @@ import wechaty.padplus.schemas.GrpcSchemas.GrpcMessagePayload
 import wechaty.padplus.schemas.ModelMessage.{GrpcResponseMessageData, PadplusMessagePayload}
 import wechaty.padplus.schemas.PadplusEnums.PadplusMessageType
 import wechaty.puppet.ResourceBox
-import wechaty.puppet.ResourceBox.UrlResourceBox
 import wechaty.puppet.events.EventEmitter
 import wechaty.puppet.schemas.Event.EventMessagePayload
 import wechaty.puppet.schemas.Image.ImageType.Type
@@ -39,10 +38,10 @@ trait MessageRawSupport {
   override def messageSendContact(conversationId: String, contactId: String): String = ???
 
   override def messageSendFile(conversationId: String, file: ResourceBox): String = {
-    val url = file match{
-      case urlResource:UrlResourceBox => urlResource.url
-      case _ => uploadFile(file.name,file.toStream)
-    }
+//    val url = file.resourceType match{
+//      case ResourceBoxType.Url => file.url
+//      case _ => uploadFile(file.name,file.toStream)
+//    }
 
     /*
     data = {
