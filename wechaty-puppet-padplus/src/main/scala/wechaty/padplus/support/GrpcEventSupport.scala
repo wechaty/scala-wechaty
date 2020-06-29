@@ -7,6 +7,8 @@ import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.grpc.PadPlusServerOuterClass.{ResponseType, StreamResponse}
 import wechaty.puppet.schemas.Puppet.isBlank
 
+import scala.util.{Failure, Success, Try}
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
@@ -32,8 +34,14 @@ trait GrpcEventSupport extends StreamObserver[StreamResponse]{
         callback(response)
       }
     }else {
-      val partialFunction=loginPartialFunction(response) orElse messagePartialFunction(response)
-      partialFunction.applyOrElse(response.getResponseType,{_:ResponseType => Unit})
+      Try {
+        val partialFunction = loginPartialFunction(response) orElse messagePartialFunction(response)
+        partialFunction.applyOrElse(response.getResponseType, { _: ResponseType => Unit })
+      } match {
+        case Success(_)=>
+        case Failure(exception) =>
+          logger.error(exception.getMessage,exception)
+      }
     }
  }
 

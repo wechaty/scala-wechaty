@@ -1,9 +1,15 @@
 package wechaty.padplus.support
 
+import java.io.InputStream
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.{ConcurrentHashMap, ConcurrentMap, Executors, TimeUnit}
 
+import com.amazonaws.auth.{AWSStaticCredentialsProvider, BasicAWSCredentials}
+import com.amazonaws.internal.StaticCredentialsProvider
+import com.amazonaws.regions.{Region, Regions}
+import com.amazonaws.services.s3.{AmazonS3Client, AmazonS3ClientBuilder}
+import com.amazonaws.services.s3.model.{CannedAccessControlList, GeneratePresignedUrlRequest, ObjectMetadata, PutObjectRequest}
 import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
 import com.typesafe.scalalogging.LazyLogging
 import io.grpc.{ManagedChannel, ManagedChannelBuilder}
@@ -180,5 +186,28 @@ trait GrpcSupport {
     val response = grpcClient.request(request.build())
     logger.debug("request->response:{}",response)
     response
+  }
+    private val ACCESS_KEY_ID = "AKIA3PQY2OQG5FEXWMH6"
+    private val BUCKET= "macpro-message-file",
+    private val EXPIRE_TIME= 3600 * 24 * 3,
+    private val PATH= "image-message",
+    private val SECRET_ACCESS_KEY= "jw7Deo+W8l4FTOL2BXd/VubTJjt1mhm55sRhnsEn",
+//  private val s3 = new AmazonS3Client(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY));
+    private val s3=new AmazonS3ClientBuilder()
+    .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY)))
+  .enablePayloadSigning()
+      .withRegion(Regions.CN_NORTHWEST_1).build(); // 此处根据自己的 s3 地区位置改变
+
+  def uploadFile (filename: String, stream: InputStream) {
+//    ACL: "public-read",
+//    const s3 = new AWS.S3({ region: "cn-northwest-1", signatureVersion: "v4" })
+    val meta = new ObjectMetadata
+    val key=PATH+"/"+filename
+    val params = new PutObjectRequest(BUCKET,key,stream,meta)
+    val result = s3.putObject(params.withCannedAcl(CannedAccessControlList.PublicRead));
+    //获取一个request
+    val urlRequest = new GeneratePresignedUrlRequest( BUCKET, key);
+    //生成公用的url
+    s3.generatePresignedUrl(urlRequest);
   }
 }

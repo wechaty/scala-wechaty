@@ -16,8 +16,8 @@ import wechaty.padplus.schemas.ModelRoom.GrpcRoomPayload
 import wechaty.padplus.schemas.ModelUser.ScanData
 import wechaty.padplus.schemas.PadplusEnums.QrcodeStatus
 import wechaty.puppet.ResourceBox
-import wechaty.puppet.schemas.Contact
-import wechaty.puppet.schemas.Contact.ContactGender
+import wechaty.puppet.schemas.{Contact, Puppet}
+import wechaty.puppet.schemas.Contact.{ContactGender, ContactPayload, ContactType}
 import wechaty.puppet.schemas.Event.{EventLoginPayload, EventScanPayload}
 import wechaty.puppet.schemas.Puppet._
 
@@ -55,7 +55,7 @@ trait ContactRawSupport {
     * contact
     */
   override protected def contactRawPayload(contactId: String): Contact.ContactPayload = {
-    ???
+    this.getContact(contactId)
   }
 
   protected def getContact(contactId: String): PadplusContactPayload = {
@@ -83,7 +83,7 @@ trait ContactRawSupport {
       onQrcodeScan(response)
     case ResponseType.LOGIN_QRCODE =>
       val qrcodeData = objectMapper.readTree(response.getData)
-      println(response.getData)
+      logger.debug("qrcode:",response.getData)
 
       val base64            = qrcodeData.get("qrcode").asText().replaceAll("\r|\n", "")
       val fileBox           = ResourceBox.fromBase64(s"qrcode${(Math.random() * 10000).intValue()}.png", base64)
@@ -137,14 +137,14 @@ trait ContactRawSupport {
           selfId = Some(rawContactPayload.userName)
         }
 
-        contactSelfInfo { padplusContact =>
-          selfId = Some(padplusContact.userName)
-          logger.debug("contactSelf:{}", padplusContact)
-          savePadplusContactPayload(padplusContact)
-          val eventLoginPayload = new EventLoginPayload
-          eventLoginPayload.contactId = padplusContact.userName
-          emit(PuppetEventName.LOGIN, eventLoginPayload)
-        }
+//        contactSelfInfo { padplusContact =>
+//          selfId = Some(padplusContact.userName)
+//          logger.debug("contactSelf:{}", padplusContact)
+//          savePadplusContactPayload(padplusContact)
+//          val eventLoginPayload = new EventLoginPayload
+//          eventLoginPayload.contactId = padplusContact.userName
+//          emit(PuppetEventName.LOGIN, eventLoginPayload)
+//        }
       } else {
         deleteUin()
         request(ApiType.GET_QRCODE)
@@ -174,7 +174,8 @@ trait ContactRawSupport {
             roomPayload
           }
           val roomCallback=roomPromises.getIfPresent(userName)
-          roomCallback.foreach(_.complete(roomTry))
+          if(roomCallback != null)
+            roomCallback.foreach(_.complete(roomTry))
 
         }else{
           val result:Try[PadplusContactPayload] = Try {
@@ -198,14 +199,14 @@ trait ContactRawSupport {
       case QrcodeStatus.Scanned =>
 
       case QrcodeStatus.Confirmed =>
-        contactSelfInfo { padplusContact =>
-          selfId = Some(padplusContact.userName)
-          logger.debug("contactSelf:{}", padplusContact)
-          savePadplusContactPayload(padplusContact)
-          val eventLoginPayload = new EventLoginPayload
-          eventLoginPayload.contactId = padplusContact.userName
-          emit(PuppetEventName.LOGIN, eventLoginPayload)
-        }
+//        contactSelfInfo { padplusContact =>
+//          selfId = Some(padplusContact.userName)
+//          logger.debug("contactSelf:{}", padplusContact)
+//          savePadplusContactPayload(padplusContact)
+//          val eventLoginPayload = new EventLoginPayload
+//          eventLoginPayload.contactId = padplusContact.userName
+//          emit(PuppetEventName.LOGIN, eventLoginPayload)
+//        }
       case QrcodeStatus.Canceled | QrcodeStatus.Expired =>
 
     }
@@ -217,7 +218,7 @@ trait ContactRawSupport {
     payload.bigHeadUrl       = contactPayload.BigHeadImgUrl
     payload.city             = contactPayload.City
     payload.contactFlag      = contactPayload.ContactFlag
-    payload.contactType      = contactPayload.ContactType.toInt
+    payload.contactType      = if(Puppet.isBlank(contactPayload.ContactType)) 0 else contactPayload.ContactType.toInt
     payload.country          = ""
     payload.nickName         = contactPayload.NickName
     payload.province         = contactPayload.Province
@@ -230,6 +231,36 @@ trait ContactRawSupport {
     payload.ticket           = ""
     payload.userName         = contactPayload.UserName
     payload.verifyFlag       = contactPayload.VerifyFlag
+
+    payload
+  }
+  implicit def convertPadplusContactToContactPayload(rawPayload:PadplusContactPayload): ContactPayload ={
+    if (isRoomId(rawPayload.userName)) {
+      throw new Error("Room Object instead of Contact!")
+    }
+
+    var contactType = ContactType.Unknown
+    if (isContactOfficialId(rawPayload.userName) || rawPayload.verifyFlag != 0) {
+      contactType = ContactType.Official
+    } else {
+      contactType = ContactType.Personal
+    }
+    var friend = false
+    if (rawPayload.contactFlag > 0 && rawPayload.contactFlag != 0 && rawPayload.verifyFlag == 0) {
+      friend = true
+    }
+    val payload = new ContactPayload
+      payload.alias     = rawPayload.remark
+      payload.avatar    = rawPayload.bigHeadUrl
+      payload.city      = rawPayload.city
+      payload.friend    = friend
+      payload.gender    = rawPayload.sex
+      payload.id        = rawPayload.userName
+      payload.name      = rawPayload.nickName
+      payload.province  = rawPayload.province
+      payload.signature = (rawPayload.signature).replace("+", "")          // Stay+Foolis
+      payload.`type`      = contactType
+      payload.weixin    = rawPayload.alias
 
     payload
   }

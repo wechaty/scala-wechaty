@@ -20,24 +20,24 @@ class PadplusContactPayload {
   var stranger:String = _ //                      // 用户v1码，从未加过好友则为空 "v1_0468f2cd3f0efe7ca2589d57c3f9ba952a3789e41b6e78ee00ed53d1e6096b88@stranger"
   var ticket:String = _ //                      // 用户v2码，如果非空则为单向好友(非对方好友) 'v2_xxx@stranger'
   var userName:String = _ //                      // "mengjunjun001" | "qq512436430" Unique name
-  var verifyFlag:Number = _
-  var contactFlag:Number = _
+  var verifyFlag:Int = _
+  var contactFlag:Int= _
 }
 
 class GrpcContactPayload {
   var Alias:String = _
   var BigHeadImgUrl:String = _
   var ChatRoomOwner:String = _
-  var ChatroomVersion:Number = _
+  var ChatroomVersion:Int= _
   var City:String = _
-  var ContactFlag:Number = _
+  var ContactFlag:Int= _
   var ContactType:String = _
   var EncryptUsername:String = _
   var ExtInfo:String = _
   var ExtInfoExt:String = _
   var HeadImgUrl:String = _
   var LabelLists:String = _
-  var MsgType:Number = _
+  var MsgType:Int= _
   var NickName:String = _
   var Province:String = _
   var PYInitial:String = _
@@ -47,13 +47,13 @@ class GrpcContactPayload {
   var RemarkPYInitial:String = _
   var RemarkPYQuanPin:String = _
   var Seq:String = _
-  var Sex:Number = _
+  var Sex:Int= _
   var Signature:String = _
   var SmallHeadImgUrl:String = _
   var Type7:String = _
-  var Uin:Number = _
+  var Uin:Int= _
   var UserName:String = _
-  var VerifyFlag:Number = _
+  var VerifyFlag:Int= _
   var wechatUserName:String = _
 }
 

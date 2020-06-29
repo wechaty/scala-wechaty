@@ -55,7 +55,7 @@ object ResourceBox {
     val File    :Type = Value(5)
     val Stream  :Type = Value(6)
   }
-  private class UrlResourceBox(url:String) extends AbstractResourceBox{
+  class UrlResourceBox private(val url:String) extends AbstractResourceBox{
     override def toStream: InputStream = {
       val connection = new URL(url).openConnection.asInstanceOf[HttpURLConnection]
       connection.setConnectTimeout(5000)
@@ -76,7 +76,7 @@ object ResourceBox {
 
     override def name: String = url.substring(url.lastIndexOf("/")+1)
   }
-  private class Base64ResourceBox(override val name:String,base64:String) extends AbstractResourceBox{
+  class Base64ResourceBox private(override val name:String,base64:String) extends AbstractResourceBox{
     override def toStream: InputStream = {
       //decode base64 as byte array input stream
       new ByteArrayInputStream(Base64.getDecoder.decode(base64))
@@ -93,7 +93,7 @@ object ResourceBox {
     }
 
   }
-  private class StreamResourceBox(override val name:String,stream:InputStream) extends AbstractResourceBox{
+  class StreamResourceBox private(override val name:String,stream:InputStream) extends AbstractResourceBox{
     override def toStream: InputStream = stream
     override protected def using[T <: Closeable, R](resource: T)(block: T => R): R = {
       block(resource) //don't close the stream.must be closed by creator

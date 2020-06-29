@@ -4,9 +4,10 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.typesafe.scalalogging.LazyLogging
 import wechaty.padplus.grpc.PadPlusServerOuterClass.{ApiType, ResponseType, StreamResponse}
 import wechaty.padplus.schemas.GrpcSchemas.GrpcMessagePayload
-import wechaty.padplus.schemas.ModelMessage.PadplusMessagePayload
+import wechaty.padplus.schemas.ModelMessage.{GrpcResponseMessageData, PadplusMessagePayload}
 import wechaty.padplus.schemas.PadplusEnums.PadplusMessageType
 import wechaty.puppet.ResourceBox
+import wechaty.puppet.ResourceBox.UrlResourceBox
 import wechaty.puppet.events.EventEmitter
 import wechaty.puppet.schemas.Event.EventMessagePayload
 import wechaty.puppet.schemas.Image.ImageType.Type
@@ -37,7 +38,28 @@ trait MessageRawSupport {
 
   override def messageSendContact(conversationId: String, contactId: String): String = ???
 
-  override def messageSendFile(conversationId: String, file: ResourceBox): String = ???
+  override def messageSendFile(conversationId: String, file: ResourceBox): String = {
+    val url = file match{
+      case urlResource:UrlResourceBox => urlResource.url
+      case _ => uploadFile(file.name,file.toStream)
+    }
+
+    /*
+    data = {
+      fileName,
+      fromUserName: selfId,
+      messageType: PadplusMessageType.Image,
+      subType,
+      toUserName: receiver,
+      url,
+    }
+    const res = await this.requestClient.request({
+      apiType: ApiType.SEND_FILE,
+      data,
+    })
+     */
+    ???
+  }
 
   override def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgram.MiniProgramPayload): String = ???
 
@@ -47,9 +69,8 @@ trait MessageRawSupport {
     json.put("messageType",PadplusMessageType.Text.id)
     json.put("fromUserName",selfId.get)
     json.put("toUserName",conversationId)
-    val response = request(ApiType.SEND_MESSAGE, Some(json.toString))
-    //TODO
-    ""
+    val response = requestForObject[GrpcResponseMessageData](ApiType.SEND_MESSAGE, Some(json.toString))
+    response.msgId
   }
 
   override def messageSendUrl(conversationId: String, urlLinkPayload: UrlLink.UrlLinkPayload): String = ???
@@ -120,10 +141,11 @@ trait MessageRawSupport {
           */
         if (!isBlank(messagePayload.roomId)) {
           val xmlMapper = new XmlMapper();
-          println(rawPayload.msgSource)
-          val root = xmlMapper.readTree(rawPayload.msgSource)
-          if(root.has("atuserlist")){
-            messagePayload.mentionIdList = root.get("atuserlist").asText().split(",")
+          if(!Puppet.isBlank(rawPayload.msgSource)) {
+            val root = xmlMapper.readTree(rawPayload.msgSource)
+            if (root.has("atuserlist")) {
+              messagePayload.mentionIdList = root.get("atuserlist").asText().split(",")
+            }
           }
         }
 

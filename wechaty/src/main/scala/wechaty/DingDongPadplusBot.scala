@@ -24,6 +24,9 @@ object DingDongPadplusBot {
     val bot = Wechaty.instance(option)
 
     bot.use(new DingDongPlugin(DingDongConfig()))
+      .onMessage(message=>{
+        println(message.text)
+      })
       .onScan(payload => {
         println("Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n".format(payload.status, payload.qrcode))
       })
