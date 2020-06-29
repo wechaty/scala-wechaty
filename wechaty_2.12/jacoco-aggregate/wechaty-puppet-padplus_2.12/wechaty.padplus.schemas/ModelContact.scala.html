@@ -20,24 +20,24 @@ import wechaty.puppet.schemas.Contact.ContactGender
 <span class="nc" id="L20">  var stranger:String = _ //                      // 用户v1码，从未加过好友则为空 &quot;v1_0468f2cd3f0efe7ca2589d57c3f9ba952a3789e41b6e78ee00ed53d1e6096b88@stranger&quot;</span>
 <span class="nc" id="L21">  var ticket:String = _ //                      // 用户v2码，如果非空则为单向好友(非对方好友) 'v2_xxx@stranger'</span>
 <span class="nc" id="L22">  var userName:String = _ //                      // &quot;mengjunjun001&quot; | &quot;qq512436430&quot; Unique name</span>
-<span class="nc" id="L23">  var verifyFlag:Number = _</span>
-<span class="nc" id="L24">  var contactFlag:Number = _</span>
+<span class="nc" id="L23">  var verifyFlag:Int = _</span>
+<span class="nc" id="L24">  var contactFlag:Int= _</span>
 }
 
 <span class="nc" id="L27">class GrpcContactPayload {</span>
 <span class="nc" id="L28">  var Alias:String = _</span>
 <span class="nc" id="L29">  var BigHeadImgUrl:String = _</span>
 <span class="nc" id="L30">  var ChatRoomOwner:String = _</span>
-<span class="nc" id="L31">  var ChatroomVersion:Number = _</span>
+<span class="nc" id="L31">  var ChatroomVersion:Int= _</span>
 <span class="nc" id="L32">  var City:String = _</span>
-<span class="nc" id="L33">  var ContactFlag:Number = _</span>
+<span class="nc" id="L33">  var ContactFlag:Int= _</span>
 <span class="nc" id="L34">  var ContactType:String = _</span>
 <span class="nc" id="L35">  var EncryptUsername:String = _</span>
 <span class="nc" id="L36">  var ExtInfo:String = _</span>
 <span class="nc" id="L37">  var ExtInfoExt:String = _</span>
 <span class="nc" id="L38">  var HeadImgUrl:String = _</span>
 <span class="nc" id="L39">  var LabelLists:String = _</span>
-<span class="nc" id="L40">  var MsgType:Number = _</span>
+<span class="nc" id="L40">  var MsgType:Int= _</span>
 <span class="nc" id="L41">  var NickName:String = _</span>
 <span class="nc" id="L42">  var Province:String = _</span>
 <span class="nc" id="L43">  var PYInitial:String = _</span>
@@ -47,13 +47,13 @@ import wechaty.puppet.schemas.Contact.ContactGender
 <span class="nc" id="L47">  var RemarkPYInitial:String = _</span>
 <span class="nc" id="L48">  var RemarkPYQuanPin:String = _</span>
 <span class="nc" id="L49">  var Seq:String = _</span>
-<span class="nc" id="L50">  var Sex:Number = _</span>
+<span class="nc" id="L50">  var Sex:Int= _</span>
 <span class="nc" id="L51">  var Signature:String = _</span>
 <span class="nc" id="L52">  var SmallHeadImgUrl:String = _</span>
 <span class="nc" id="L53">  var Type7:String = _</span>
-<span class="nc" id="L54">  var Uin:Number = _</span>
+<span class="nc" id="L54">  var Uin:Int= _</span>
 <span class="nc" id="L55">  var UserName:String = _</span>
-<span class="nc" id="L56">  var VerifyFlag:Number = _</span>
+<span class="nc" id="L56">  var VerifyFlag:Int= _</span>
 <span class="nc" id="L57">  var wechatUserName:String = _</span>
 }
 

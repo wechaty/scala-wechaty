@@ -7,42 +7,50 @@ import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.grpc.PadPlusServerOuterClass.{ResponseType, StreamResponse}
 import wechaty.puppet.schemas.Puppet.isBlank
 
+import scala.util.{Failure, Success, Try}
+
 /**
   *
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-21
   */
-<span class="nc" id="L15">trait GrpcEventSupport extends StreamObserver[StreamResponse]{</span>
+<span class="nc" id="L17">trait GrpcEventSupport extends StreamObserver[StreamResponse]{</span>
   self: PuppetPadplus =&gt;
 
-<span class="nc" id="L18">  protected var selfId:Option[String] = None</span>
-<span class="nc" id="L19">  private val countDownLatch = new CountDownLatch(1)</span>
+<span class="nc" id="L20">  protected var selfId:Option[String] = None</span>
+<span class="nc" id="L21">  private val countDownLatch = new CountDownLatch(1)</span>
 
 
-<span class="nc" id="L22">  protected def awaitStreamStart()=countDownLatch.await(10,TimeUnit.SECONDS)</span>
+<span class="nc" id="L24">  protected def awaitStreamStart()=countDownLatch.await(10,TimeUnit.SECONDS)</span>
   override def onNext(response: StreamResponse): Unit = {
-<span class="nc bnc" id="L24" title="All 2 branches missed.">    logger.debug(&quot;stream response:{}&quot;,response)</span>
-<span class="nc" id="L25">    countDownLatch.countDown()</span>
-<span class="nc" id="L26">    saveUin(response.getUinBytes)</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">    logger.debug(&quot;stream response:{}&quot;,response)</span>
+<span class="nc" id="L27">    countDownLatch.countDown()</span>
+<span class="nc" id="L28">    saveUin(response.getUinBytes)</span>
 
-<span class="nc" id="L28">    val traceId = response.getTraceId</span>
-<span class="nc bnc" id="L29" title="All 2 branches missed.">    if(!isBlank(traceId)){</span>
-<span class="nc" id="L30">      val callback = callbackPool.getIfPresent(traceId)</span>
-<span class="nc bnc" id="L31" title="All 2 branches missed.">      if(callback != null){</span>
-<span class="nc" id="L32">        callback(response)</span>
+<span class="nc" id="L30">    val traceId = response.getTraceId</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">    if(!isBlank(traceId)){</span>
+<span class="nc" id="L32">      val callback = callbackPool.getIfPresent(traceId)</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">      if(callback != null){</span>
+<span class="nc" id="L34">        callback(response)</span>
       }
     }else {
-<span class="nc" id="L35">      val partialFunction=loginPartialFunction(response) orElse messagePartialFunction(response)</span>
-<span class="nc" id="L36">      partialFunction.applyOrElse(response.getResponseType,{_:ResponseType =&gt; Unit})</span>
+<span class="nc" id="L37">      Try {</span>
+<span class="nc" id="L38">        val partialFunction = loginPartialFunction(response) orElse messagePartialFunction(response)</span>
+<span class="nc" id="L39">        partialFunction.applyOrElse(response.getResponseType, { _: ResponseType =&gt; Unit })</span>
+      } match {
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        case Success(_)=&gt;</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        case Failure(exception) =&gt;</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">          logger.error(exception.getMessage,exception)</span>
+      }
     }
  }
 
   override def onError(throwable: Throwable): Unit = {
-<span class="nc bnc" id="L41" title="All 2 branches missed.">    logger.error(throwable.getMessage,throwable)</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">    logger.error(throwable.getMessage,throwable)</span>
   }
 
   override def onCompleted(): Unit = {
-<span class="nc bnc" id="L45" title="All 2 branches missed.">    logger.info(&quot;completed&quot;)</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">    logger.info(&quot;completed&quot;)</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

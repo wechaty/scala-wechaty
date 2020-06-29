@@ -1,6 +1,6 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 wechaty_2.12,wechaty,Wechaty.,5,33,3,3,0,6,3,5,0,5
-wechaty_2.12,wechaty,DingDongPadplusBot.,125,0,2,0,20,0,6,0,5,0
+wechaty_2.12,wechaty,DingDongPadplusBot.,132,0,2,0,22,0,7,0,6,0
 wechaty_2.12,wechaty,Wechaty,75,374,5,5,7,34,8,28,4,27
 wechaty_2.12,wechaty,WechatyOptions,18,25,0,0,0,6,5,4,5,4
 wechaty_2.12,wechaty,Wechaty..anon.new Runnable() {...},3,28,2,2,0,3,2,2,0,2
