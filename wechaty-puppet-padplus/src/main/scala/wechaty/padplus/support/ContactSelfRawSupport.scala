@@ -27,6 +27,7 @@ trait ContactSelfRawSupport {
   override def logout(): Unit = ???
 
   def contactSelfInfo(callback:PadplusContactPayload=>Unit):Unit={
+//    asyncRequest[GetContactSelfInfoGrpcResponse](ApiType.GET_CONTACT_SELF_INFO)
     requestForCallback(ApiType.GET_CONTACT_SELF_INFO) {
       contactPayload: GetContactSelfInfoGrpcResponse =>
         val payload = new PadplusContactPayload

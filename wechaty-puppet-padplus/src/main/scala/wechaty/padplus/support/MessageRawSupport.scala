@@ -15,10 +15,6 @@ import wechaty.puppet.schemas.Puppet.{PuppetEventName, isBlank, objectMapper}
 import wechaty.puppet.schemas.{Message, MiniProgram, Puppet, UrlLink}
 import wechaty.puppet.support.MessageSupport
 
-import scala.concurrent.duration._
-import scala.concurrent.{Await, Promise}
-import scala.util.{Failure, Success}
-
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
@@ -67,21 +63,12 @@ trait MessageRawSupport {
   override def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgram.MiniProgramPayload): String = ???
 
   override def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]): String = {
-    val grpcMessagePayloadPromise = Promise[GrpcMessagePayload]()
-    grpcMessagePayloadPromise.future.onComplete {
-      case Success(payload) => payload
-      case Failure(e) => throw e
-    }
-
     val json = Puppet.objectMapper.createObjectNode()
     json.put("content",text)
     json.put("messageType",PadplusMessageType.Text.id)
     json.put("fromUserName",selfId.get)
     json.put("toUserName",conversationId)
-    requestForCallback(ApiType.SEND_MESSAGE,Some(json.toString)) {message:GrpcMessagePayload=>
-      grpcMessagePayloadPromise.success(message)
-    }
-    Await.result(grpcMessagePayloadPromise.future, 10 seconds).msgId
+    asyncRequest[GrpcMessagePayload](ApiType.SEND_MESSAGE,Some(json.toString)).msgId
   }
 
   override def messageSendUrl(conversationId: String, urlLinkPayload: UrlLink.UrlLinkPayload): String = ???

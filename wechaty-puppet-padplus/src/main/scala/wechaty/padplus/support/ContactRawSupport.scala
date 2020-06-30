@@ -24,6 +24,7 @@ import wechaty.puppet.schemas.Puppet._
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Future, Promise}
+import scala.language.implicitConversions
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -60,23 +61,26 @@ trait ContactRawSupport {
   }
 
   protected def getContact(contactId: String): PadplusContactPayload = {
-    Future {
-      val json = objectMapper.createObjectNode()
-      json.put("userName", contactId)
-      request(ApiType.GET_CONTACT, Some(json.toString))
-    }
-    val contactPayloadPromise = Promise[PadplusContactPayload]()
-    contactPayloadPromise.future.onComplete {
-      case Success(payload) => payload
-      case Failure(e) => throw e
-    }
-    val oldValue=contactPromises.getIfPresent(contactId)
-    if(oldValue != null){
-      contactPromises.put(contactId, oldValue :+ contactPayloadPromise)
-    }else{
-      contactPromises.put(contactId, List(contactPayloadPromise))
-    }
-    Await.result(contactPayloadPromise.future, 10 seconds)
+    val json = objectMapper.createObjectNode()
+    json.put("userName", contactId)
+    asyncRequest[GrpcContactPayload](ApiType.GET_CONTACT,Some(json.toString))
+//    Future {
+//      val json = objectMapper.createObjectNode()
+//      json.put("userName", contactId)
+//      request(ApiType.GET_CONTACT, Some(json.toString))
+//    }
+//    val contactPayloadPromise = Promise[PadplusContactPayload]()
+//    contactPayloadPromise.future.onComplete {
+//      case Success(payload) => payload
+//      case Failure(e) => throw e
+//    }
+//    val oldValue=contactPromises.getIfPresent(contactId)
+//    if(oldValue != null){
+//      contactPromises.put(contactId, oldValue :+ contactPayloadPromise)
+//    }else{
+//      contactPromises.put(contactId, List(contactPayloadPromise))
+//    }
+//    Await.result(contactPayloadPromise.future, 10 seconds)
   }
 
   protected def loginPartialFunction(response: StreamResponse): PartialFunction[ResponseType, Unit] = {
@@ -215,7 +219,7 @@ trait ContactRawSupport {
     }
   }
 
-  def convertFromGrpcContact (contactPayload: GrpcContactPayload): PadplusContactPayload = {
+  implicit def convertFromGrpcContact (contactPayload: GrpcContactPayload): PadplusContactPayload = {
     val payload = new PadplusContactPayload
     payload.alias            = contactPayload.Alias
     payload.bigHeadUrl       = contactPayload.BigHeadImgUrl

@@ -3,23 +3,24 @@ package wechaty.padplus.support
 import java.io.InputStream
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicLong
-import java.util.concurrent.{ConcurrentHashMap, ConcurrentMap, Executors, TimeUnit}
+import java.util.concurrent.{Executors, TimeUnit}
 
 import com.amazonaws.auth.{AWSStaticCredentialsProvider, BasicAWSCredentials}
-import com.amazonaws.internal.StaticCredentialsProvider
-import com.amazonaws.regions.{Region, Regions}
-import com.amazonaws.services.s3.{AmazonS3Client, AmazonS3ClientBuilder}
+import com.amazonaws.regions.Regions
+import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.amazonaws.services.s3.model.{CannedAccessControlList, GeneratePresignedUrlRequest, ObjectMetadata, PutObjectRequest}
 import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
 import com.typesafe.scalalogging.LazyLogging
 import io.grpc.{ManagedChannel, ManagedChannelBuilder}
 import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.grpc.PadPlusServerGrpc
-import wechaty.padplus.grpc.PadPlusServerOuterClass.{ApiType, InitConfig, RequestObject, ResponseObject, StreamResponse}
+import wechaty.padplus.grpc.PadPlusServerOuterClass._
 import wechaty.puppet.schemas.Puppet
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContext, Promise}
 import scala.reflect.ClassTag
+import scala.util.{Failure, Success}
 
 /**
   *
@@ -131,6 +132,17 @@ trait GrpcSupport {
   protected def requestForObject[T](apiType:ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]):T={
     val response = request(apiType,data)
     Puppet.objectMapper.readValue(response.getResult,classTag.runtimeClass).asInstanceOf[T]
+  }
+  protected def asyncRequest[T](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): T ={
+    val payloadPromise = Promise[T]()
+    payloadPromise.future.onComplete {
+      case Success(payload) => payload
+      case Failure(e) => throw e
+    }
+    requestForCallback(apiType,data) {message:T=>
+      payloadPromise.success(message)
+    }
+    Await.result(payloadPromise.future, 10 seconds)
   }
   protected def requestForCallback[T](apiType: ApiType,data:Option[Any]=None)(callback:T=>Unit)(implicit classTag: ClassTag[T]): ResponseObject ={
     val request = RequestObject.newBuilder()
