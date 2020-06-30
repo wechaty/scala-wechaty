@@ -21,6 +21,7 @@ import wechaty.puppet.schemas.Puppet
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future, Promise}
 import scala.reflect.ClassTag
+import scala.reflect.runtime.universe._
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -121,11 +122,11 @@ trait GrpcSupport {
   private def stopStream(): Unit = {
     //do nothing
   }
-  protected def syncRequest[T](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): T ={
+  protected def syncRequest[T:TypeTag](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): T ={
     val future= asyncRequest[T](apiType,data)
     Await.result(future, 10 seconds)
   }
-  protected def asyncRequest[T](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): Future[T] ={
+  protected def asyncRequest[T : TypeTag ](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): Future[T] ={
     val request = RequestObject.newBuilder()
     request.setToken(option.token.get)
     uinOpt match{
@@ -153,11 +154,10 @@ trait GrpcSupport {
         logger.warn("promise is completed ,{}",p)
       }else {
         p.complete(Try {
-          classTag match{
-            case _:ClassTag[Nothing] =>
-              //not return anything
+          typeOf[T] match{
+            case t if t =:= typeOf[Nothing] =>
               null.asInstanceOf[T]
-            case _:ClassTag[JsonNode] =>
+            case t if t =:= typeOf[JsonNode] =>
               Puppet.objectMapper.readTree(streamResponse.getData).asInstanceOf[T]
             case _ =>
               try {
@@ -167,12 +167,15 @@ trait GrpcSupport {
                   logger.error(e.getMessage,e)
                   throw e
               }
-        }})
+          }
+        })
       }
     }
     //过滤不需要返回
-    if(classTag != Class[Nothing])
-      callbackPool.put(traceId,callbackDelegate)
+    typeOf[T] match{
+      case t if t =:= typeOf[Nothing] =>
+      case _ => callbackPool.put(traceId,callbackDelegate)
+    }
     val response = grpcClient.request(request.build())
     logger.debug(s"request $apiType response $response")
 
