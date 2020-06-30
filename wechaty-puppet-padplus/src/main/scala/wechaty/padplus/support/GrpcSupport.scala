@@ -98,16 +98,6 @@ trait GrpcSupport {
     logger.info("start grpc client ....")
     this.grpcClient = PadPlusServerGrpc.newBlockingStub(channel)
     startStream()
-
-//    this.grpcClient.start(Base.StartRequest.newBuilder().build())
-//
-//    try{
-//      //sometime the grpc can't work well,so logout before start bot
-//      //      this.grpcClient.logout(Base.LogoutRequest.newBuilder().build())
-//    }catch{
-//      case e:Throwable=>
-//        logger.warn(e.getMessage)
-//    }
     logger.info("start grpc client done")
   }
 

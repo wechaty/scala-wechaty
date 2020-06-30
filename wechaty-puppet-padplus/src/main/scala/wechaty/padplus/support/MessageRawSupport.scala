@@ -68,9 +68,8 @@ trait MessageRawSupport {
     json.put("messageType",PadplusMessageType.Text.id)
     json.put("fromUserName",selfId.get)
     json.put("toUserName",conversationId)
-    val payload = asyncRequest[GrpcMessagePayload](ApiType.SEND_MESSAGE,Some(json.toString))
-//    payload.msgId
-    null
+    val payload = syncRequest[GrpcMessagePayload](ApiType.SEND_MESSAGE,Some(json.toString))
+    payload.MsgId
   }
 
   override def messageSendUrl(conversationId: String, urlLinkPayload: UrlLink.UrlLinkPayload): String = ???

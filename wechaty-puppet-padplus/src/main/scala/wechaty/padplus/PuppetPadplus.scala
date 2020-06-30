@@ -24,9 +24,11 @@ class PuppetPadplus(val option:PuppetOptions,val storePath:String="/tmp/padplus"
     with GrpcSupport
     with GrpcEventSupport
     with LocalStoreSupport
+    with DisrutporSupport
     with LazyLogging {
   protected var uinOpt:Option[String]=None
   def start(): Unit ={
+    startDisruptor()
     startGrpc(option.endPoint.get)
     //waiting stream start....
     logger.info("waiting stream start....")
@@ -42,11 +44,14 @@ class PuppetPadplus(val option:PuppetOptions,val storePath:String="/tmp/padplus"
     }
   }
   def stop(): Unit = {
+    shutdownDisruptor()
     stopGrpc()
     stopLocalStore()
   }
 
   override def selfIdOpt(): Option[String] = selfId
+
+
 
   /**
     *
