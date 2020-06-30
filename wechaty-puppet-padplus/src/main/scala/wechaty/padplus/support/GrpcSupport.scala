@@ -170,9 +170,11 @@ trait GrpcSupport {
         }})
       }
     }
-    callbackPool.put(traceId,callbackDelegate)
+    //过滤不需要返回
+    if(classTag != Class[Nothing])
+      callbackPool.put(traceId,callbackDelegate)
     val response = grpcClient.request(request.build())
-    logger.debug("request->response:{}",response)
+    logger.debug(s"request $apiType response $response")
 
     if(response.getResult != "success"){
       //fail?
