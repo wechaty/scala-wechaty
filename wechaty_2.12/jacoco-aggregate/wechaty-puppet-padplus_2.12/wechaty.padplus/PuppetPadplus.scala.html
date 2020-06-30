@@ -36,9 +36,9 @@ import wechaty.puppet.support.ContactSupport
 <span class="nc bnc" id="L36" title="All 2 branches missed.">      case Some(str) =&gt;</span>
 <span class="nc" id="L37">        uinOpt = Some(str)</span>
 <span class="nc bnc" id="L38" title="All 2 branches missed.">        logger.debug(&quot;found uin in local store:{}&quot;,str)</span>
-<span class="nc" id="L39">        request(ApiType.INIT)</span>
+<span class="nc" id="L39">        asyncRequest(ApiType.INIT)</span>
       case _ =&gt;
-<span class="nc" id="L41">        request(ApiType.GET_QRCODE)</span>
+<span class="nc" id="L41">        asyncRequest(ApiType.GET_QRCODE)</span>
     }
   }
   def stop(): Unit = {

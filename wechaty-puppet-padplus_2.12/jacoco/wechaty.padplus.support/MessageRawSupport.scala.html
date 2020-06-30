@@ -68,50 +68,52 @@ import wechaty.puppet.support.MessageSupport
 <span class="nc" id="L68">    json.put(&quot;messageType&quot;,PadplusMessageType.Text.id)</span>
 <span class="nc" id="L69">    json.put(&quot;fromUserName&quot;,selfId.get)</span>
 <span class="nc" id="L70">    json.put(&quot;toUserName&quot;,conversationId)</span>
-<span class="nc" id="L71">    asyncRequest[GrpcMessagePayload](ApiType.SEND_MESSAGE,Some(json.toString)).msgId</span>
+<span class="nc" id="L71">    val payload = asyncRequest[GrpcMessagePayload](ApiType.SEND_MESSAGE,Some(json.toString))</span>
+//    payload.msgId
+<span class="nc" id="L73">    null</span>
   }
 
-<span class="nc" id="L74">  override def messageSendUrl(conversationId: String, urlLinkPayload: UrlLink.UrlLinkPayload): String = ???</span>
+<span class="nc" id="L76">  override def messageSendUrl(conversationId: String, urlLinkPayload: UrlLink.UrlLinkPayload): String = ???</span>
 
-<span class="nc" id="L76">  override def messageRecall(messageId: String): Boolean = ???</span>
+<span class="nc" id="L78">  override def messageRecall(messageId: String): Boolean = ???</span>
 
 
   override protected def messageRawPayload(messageId: String): Message.MessagePayload = {
-<span class="nc" id="L80">    getPadplusMessagePayload(messageId) match {</span>
-<span class="nc bnc" id="L81" title="All 2 branches missed.">      case Some(rawPayload) =&gt;</span>
-<span class="nc" id="L82">        val messagePayload = new MessagePayload</span>
-<span class="nc" id="L83">        messagePayload.id = rawPayload.msgId</span>
-<span class="nc" id="L84">        messagePayload.`type` = messageType(rawPayload.msgType)</span>
+<span class="nc" id="L82">    getPadplusMessagePayload(messageId) match {</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">      case Some(rawPayload) =&gt;</span>
+<span class="nc" id="L84">        val messagePayload = new MessagePayload</span>
+<span class="nc" id="L85">        messagePayload.id = rawPayload.msgId</span>
+<span class="nc" id="L86">        messagePayload.`type` = messageType(rawPayload.msgType)</span>
 
         /**
           * 1. Set Room Id
           */
-<span class="nc bnc" id="L89" title="All 2 branches missed.">        if (isRoomId(rawPayload.fromUserName)) {</span>
-<span class="nc" id="L90">          messagePayload.roomId = rawPayload.fromUserName</span>
-<span class="nc bnc" id="L91" title="All 2 branches missed.">        } else if (isRoomId(rawPayload.toUserName)) {</span>
-<span class="nc" id="L92">          messagePayload.roomId = rawPayload.toUserName</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (isRoomId(rawPayload.fromUserName)) {</span>
+<span class="nc" id="L92">          messagePayload.roomId = rawPayload.fromUserName</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        } else if (isRoomId(rawPayload.toUserName)) {</span>
+<span class="nc" id="L94">          messagePayload.roomId = rawPayload.toUserName</span>
         }
 
         /**
           * 2. Set To Contact Id
           */
-<span class="nc bnc" id="L98" title="All 2 branches missed.">        if (isContactId(rawPayload.toUserName)) {</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        if (isContactId(rawPayload.toUserName)) {</span>
 
-<span class="nc" id="L100">          messagePayload.toId = rawPayload.toUserName</span>
+<span class="nc" id="L102">          messagePayload.toId = rawPayload.toUserName</span>
         }
 
         /**
           * 3. Set From Contact Id
           */
-<span class="nc bnc" id="L106" title="All 2 branches missed.">        if (isContactId(rawPayload.fromUserName)) {</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (isContactId(rawPayload.fromUserName)) {</span>
 
-<span class="nc" id="L108">          messagePayload.fromId = rawPayload.fromUserName</span>
+<span class="nc" id="L110">          messagePayload.fromId = rawPayload.fromUserName</span>
 
         } else {
-<span class="nc" id="L111">          val parts = rawPayload.content.split(&quot;:\n&quot;)</span>
-<span class="nc bnc" id="L112" title="All 2 branches missed.">          if (parts.length &gt; 1) {</span>
-<span class="nc bnc" id="L113" title="All 2 branches missed.">            if (isContactId(parts(0))) {</span>
-<span class="nc" id="L114">              messagePayload.fromId = parts(0)</span>
+<span class="nc" id="L113">          val parts = rawPayload.content.split(&quot;:\n&quot;)</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">          if (parts.length &gt; 1) {</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">            if (isContactId(parts(0))) {</span>
+<span class="nc" id="L116">              messagePayload.fromId = parts(0)</span>
             }
           }
         }
@@ -120,16 +122,16 @@ import wechaty.puppet.support.MessageSupport
           *
           * 4. Set Text
           */
-<span class="nc bnc" id="L123" title="All 2 branches missed.">        if (isRoomId(rawPayload.fromUserName)) {</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        if (isRoomId(rawPayload.fromUserName)) {</span>
 
-<span class="nc" id="L125">          val startIndex = rawPayload.content.indexOf(&quot;:\n&quot;)</span>
-<span class="nc bnc" id="L126" title="All 2 branches missed.">          messagePayload.text = rawPayload.content.substring(if (startIndex != -1) startIndex + 2 else 0)</span>
+<span class="nc" id="L127">          val startIndex = rawPayload.content.indexOf(&quot;:\n&quot;)</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">          messagePayload.text = rawPayload.content.substring(if (startIndex != -1) startIndex + 2 else 0)</span>
 
         } else {
-<span class="nc" id="L129">          messagePayload.text = rawPayload.content</span>
+<span class="nc" id="L131">          messagePayload.text = rawPayload.content</span>
         }
 
-<span class="nc bnc" id="L132" title="All 6 branches missed.">        if (messagePayload.`type` == MessageType.Recalled) {</span>
+<span class="nc bnc" id="L134" title="All 6 branches missed.">        if (messagePayload.`type` == MessageType.Recalled) {</span>
           //not supported
         }
 
@@ -137,12 +139,12 @@ import wechaty.puppet.support.MessageSupport
         /**
           * 6. Set mention list, only for room messages
           */
-<span class="nc bnc" id="L140" title="All 2 branches missed.">        if (!isBlank(messagePayload.roomId)) {</span>
-<span class="nc" id="L141">          val xmlMapper = new XmlMapper();</span>
-<span class="nc bnc" id="L142" title="All 2 branches missed.">          if(!Puppet.isBlank(rawPayload.msgSource)) {</span>
-<span class="nc" id="L143">            val root = xmlMapper.readTree(rawPayload.msgSource)</span>
-<span class="nc bnc" id="L144" title="All 2 branches missed.">            if (root.has(&quot;atuserlist&quot;)) {</span>
-<span class="nc" id="L145">              messagePayload.mentionIdList = root.get(&quot;atuserlist&quot;).asText().split(&quot;,&quot;)</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if (!isBlank(messagePayload.roomId)) {</span>
+<span class="nc" id="L143">          val xmlMapper = new XmlMapper();</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">          if(!Puppet.isBlank(rawPayload.msgSource)) {</span>
+<span class="nc" id="L145">            val root = xmlMapper.readTree(rawPayload.msgSource)</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">            if (root.has(&quot;atuserlist&quot;)) {</span>
+<span class="nc" id="L147">              messagePayload.mentionIdList = root.get(&quot;atuserlist&quot;).asText().split(&quot;,&quot;)</span>
             }
           }
         }
@@ -157,46 +159,46 @@ import wechaty.puppet.support.MessageSupport
         text = JSON.stringify(shareCardData)
       } */
 
-<span class="nc" id="L160">        messagePayload</span>
+<span class="nc" id="L162">        messagePayload</span>
       case _ =&gt;
-<span class="nc" id="L162">        throw new IllegalAccessException(&quot;message not found by &quot; + messageId)</span>
+<span class="nc" id="L164">        throw new IllegalAccessException(&quot;message not found by &quot; + messageId)</span>
     }
   }
 
-<span class="nc" id="L166">  override protected def ding(data: String): Unit = ???</span>
-<span class="nc bnc" id="L167" title="All 2 branches missed.">  def messagePartialFunction(response:StreamResponse):PartialFunction[ResponseType,Unit] = {</span>
-<span class="nc bnc" id="L168" title="All 4 branches missed.">    case ResponseType.MESSAGE_RECEIVE =&gt;</span>
-<span class="nc" id="L169">      val rawMessageStr                            = response.getData()</span>
-<span class="nc" id="L170">      val payload                                  = objectMapper.readValue(rawMessageStr, classOf[GrpcMessagePayload])</span>
-<span class="nc" id="L171">      val eventMessagePayload                      = new EventMessagePayload</span>
-<span class="nc" id="L172">      eventMessagePayload.messageId = payload.MsgId</span>
-<span class="nc" id="L173">      savePadplusMessagePayload(payload)</span>
-<span class="nc" id="L174">      emit(PuppetEventName.MESSAGE, eventMessagePayload)</span>
+<span class="nc" id="L168">  override protected def ding(data: String): Unit = ???</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">  def messagePartialFunction(response:StreamResponse):PartialFunction[ResponseType,Unit] = {</span>
+<span class="nc bnc" id="L170" title="All 4 branches missed.">    case ResponseType.MESSAGE_RECEIVE =&gt;</span>
+<span class="nc" id="L171">      val rawMessageStr                            = response.getData()</span>
+<span class="nc" id="L172">      val payload                                  = objectMapper.readValue(rawMessageStr, classOf[GrpcMessagePayload])</span>
+<span class="nc" id="L173">      val eventMessagePayload                      = new EventMessagePayload</span>
+<span class="nc" id="L174">      eventMessagePayload.messageId = payload.MsgId</span>
+<span class="nc" id="L175">      savePadplusMessagePayload(payload)</span>
+<span class="nc" id="L176">      emit(PuppetEventName.MESSAGE, eventMessagePayload)</span>
   }
   private implicit def convertMessageFromGrpcToPadplus (rawMessage: GrpcMessagePayload): PadplusMessagePayload= {
-<span class="nc" id="L177">    val padplusMessagePayload = new  PadplusMessagePayload</span>
-<span class="nc" id="L178">    padplusMessagePayload.appMsgType= rawMessage.AppMsgType</span>
-<span class="nc" id="L179">    padplusMessagePayload.content= rawMessage.Content</span>
-<span class="nc" id="L180">    padplusMessagePayload.createTime= rawMessage.CreateTime</span>
-<span class="nc bnc" id="L181" title="All 2 branches missed.">    padplusMessagePayload.fileName= if(isBlank(rawMessage.FileName))  rawMessage.fileName else rawMessage.FileName</span>
-<span class="nc" id="L182">    padplusMessagePayload.fromMemberNickName= rawMessage.FromMemberNickName</span>
-<span class="nc" id="L183">    padplusMessagePayload.fromMemberUserName= rawMessage.FromMemberUserName</span>
-<span class="nc" id="L184">    padplusMessagePayload.fromUserName= rawMessage.FromUserName</span>
-<span class="nc" id="L185">    padplusMessagePayload.imgBuf= rawMessage.ImgBuf</span>
-<span class="nc" id="L186">    padplusMessagePayload.imgStatus= rawMessage.ImgStatus</span>
-<span class="nc" id="L187">    padplusMessagePayload.l1MsgType= rawMessage.L1MsgType</span>
-<span class="nc" id="L188">    padplusMessagePayload.msgId= rawMessage.MsgId</span>
-<span class="nc" id="L189">    padplusMessagePayload.msgSource= rawMessage.MsgSource</span>
-<span class="nc" id="L190">    padplusMessagePayload.msgSourceCd= rawMessage.msgSourceCd</span>
-<span class="nc" id="L191">    padplusMessagePayload.msgType= PadplusMessageType(rawMessage.MsgType)</span>
-<span class="nc" id="L192">    padplusMessagePayload.newMsgId= rawMessage.NewMsgId</span>
-<span class="nc" id="L193">    padplusMessagePayload.pushContent= rawMessage.PushContent</span>
-<span class="nc" id="L194">    padplusMessagePayload.status= rawMessage.Status</span>
-<span class="nc" id="L195">    padplusMessagePayload.toUserName= rawMessage.ToUserName</span>
-<span class="nc" id="L196">    padplusMessagePayload.uin= rawMessage.Uin</span>
-<span class="nc" id="L197">    padplusMessagePayload.url= rawMessage.Url</span>
-<span class="nc" id="L198">    padplusMessagePayload.wechatUserName= rawMessage.wechatUserName</span>
-<span class="nc" id="L199">    padplusMessagePayload</span>
+<span class="nc" id="L179">    val padplusMessagePayload = new  PadplusMessagePayload</span>
+<span class="nc" id="L180">    padplusMessagePayload.appMsgType= rawMessage.AppMsgType</span>
+<span class="nc" id="L181">    padplusMessagePayload.content= rawMessage.Content</span>
+<span class="nc" id="L182">    padplusMessagePayload.createTime= rawMessage.CreateTime</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">    padplusMessagePayload.fileName= if(isBlank(rawMessage.FileName))  rawMessage.fileName else rawMessage.FileName</span>
+<span class="nc" id="L184">    padplusMessagePayload.fromMemberNickName= rawMessage.FromMemberNickName</span>
+<span class="nc" id="L185">    padplusMessagePayload.fromMemberUserName= rawMessage.FromMemberUserName</span>
+<span class="nc" id="L186">    padplusMessagePayload.fromUserName= rawMessage.FromUserName</span>
+<span class="nc" id="L187">    padplusMessagePayload.imgBuf= rawMessage.ImgBuf</span>
+<span class="nc" id="L188">    padplusMessagePayload.imgStatus= rawMessage.ImgStatus</span>
+<span class="nc" id="L189">    padplusMessagePayload.l1MsgType= rawMessage.L1MsgType</span>
+<span class="nc" id="L190">    padplusMessagePayload.msgId= rawMessage.MsgId</span>
+<span class="nc" id="L191">    padplusMessagePayload.msgSource= rawMessage.MsgSource</span>
+<span class="nc" id="L192">    padplusMessagePayload.msgSourceCd= rawMessage.msgSourceCd</span>
+<span class="nc" id="L193">    padplusMessagePayload.msgType= PadplusMessageType(rawMessage.MsgType)</span>
+<span class="nc" id="L194">    padplusMessagePayload.newMsgId= rawMessage.NewMsgId</span>
+<span class="nc" id="L195">    padplusMessagePayload.pushContent= rawMessage.PushContent</span>
+<span class="nc" id="L196">    padplusMessagePayload.status= rawMessage.Status</span>
+<span class="nc" id="L197">    padplusMessagePayload.toUserName= rawMessage.ToUserName</span>
+<span class="nc" id="L198">    padplusMessagePayload.uin= rawMessage.Uin</span>
+<span class="nc" id="L199">    padplusMessagePayload.url= rawMessage.Url</span>
+<span class="nc" id="L200">    padplusMessagePayload.wechatUserName= rawMessage.wechatUserName</span>
+<span class="nc" id="L201">    padplusMessagePayload</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
