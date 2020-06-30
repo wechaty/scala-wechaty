@@ -27,27 +27,28 @@ import wechaty.puppet.support.ContactSelfSupport
 <span class="nc" id="L27">  override def logout(): Unit = ???</span>
 
   def contactSelfInfo(callback:PadplusContactPayload=&gt;Unit):Unit={
-<span class="nc" id="L30">    requestForCallback(ApiType.GET_CONTACT_SELF_INFO) {</span>
-<span class="nc" id="L31">      contactPayload: GetContactSelfInfoGrpcResponse =&gt;</span>
-<span class="nc" id="L32">        val payload = new PadplusContactPayload</span>
-<span class="nc" id="L33">        payload.alias = contactPayload.alias;</span>
-<span class="nc" id="L34">        payload.bigHeadUrl = contactPayload.bigHeadImg;</span>
-<span class="nc" id="L35">        payload.city = contactPayload.city</span>
-<span class="nc" id="L36">        payload.contactFlag = 3</span>
-<span class="nc" id="L37">        payload.contactType = 0</span>
-<span class="nc" id="L38">        payload.country = contactPayload.country</span>
-<span class="nc" id="L39">        payload.nickName = contactPayload.nickName</span>
-<span class="nc" id="L40">        payload.province = contactPayload.province</span>
-<span class="nc" id="L41">        payload.remark = &quot;&quot;</span>
-<span class="nc" id="L42">        payload.sex = ContactGender(contactPayload.sex)</span>
-<span class="nc" id="L43">        payload.signature = contactPayload.signature</span>
-<span class="nc" id="L44">        payload.smallHeadUrl = contactPayload.smallHeadImg</span>
-<span class="nc" id="L45">        payload.stranger = &quot;&quot;</span>
-<span class="nc" id="L46">        payload.tagList = &quot;&quot;</span>
-<span class="nc" id="L47">        payload.ticket = &quot;&quot;</span>
-<span class="nc" id="L48">        payload.userName = contactPayload.userName</span>
-<span class="nc" id="L49">        payload.verifyFlag = 0</span>
-<span class="nc" id="L50">        callback(payload)</span>
+//    asyncRequest[GetContactSelfInfoGrpcResponse](ApiType.GET_CONTACT_SELF_INFO)
+<span class="nc" id="L31">    requestForCallback(ApiType.GET_CONTACT_SELF_INFO) {</span>
+<span class="nc" id="L32">      contactPayload: GetContactSelfInfoGrpcResponse =&gt;</span>
+<span class="nc" id="L33">        val payload = new PadplusContactPayload</span>
+<span class="nc" id="L34">        payload.alias = contactPayload.alias;</span>
+<span class="nc" id="L35">        payload.bigHeadUrl = contactPayload.bigHeadImg;</span>
+<span class="nc" id="L36">        payload.city = contactPayload.city</span>
+<span class="nc" id="L37">        payload.contactFlag = 3</span>
+<span class="nc" id="L38">        payload.contactType = 0</span>
+<span class="nc" id="L39">        payload.country = contactPayload.country</span>
+<span class="nc" id="L40">        payload.nickName = contactPayload.nickName</span>
+<span class="nc" id="L41">        payload.province = contactPayload.province</span>
+<span class="nc" id="L42">        payload.remark = &quot;&quot;</span>
+<span class="nc" id="L43">        payload.sex = ContactGender(contactPayload.sex)</span>
+<span class="nc" id="L44">        payload.signature = contactPayload.signature</span>
+<span class="nc" id="L45">        payload.smallHeadUrl = contactPayload.smallHeadImg</span>
+<span class="nc" id="L46">        payload.stranger = &quot;&quot;</span>
+<span class="nc" id="L47">        payload.tagList = &quot;&quot;</span>
+<span class="nc" id="L48">        payload.ticket = &quot;&quot;</span>
+<span class="nc" id="L49">        payload.userName = contactPayload.userName</span>
+<span class="nc" id="L50">        payload.verifyFlag = 0</span>
+<span class="nc" id="L51">        callback(payload)</span>
     }
   }
 }
