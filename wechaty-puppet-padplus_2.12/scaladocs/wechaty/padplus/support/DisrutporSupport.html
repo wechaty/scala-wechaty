@@ -3,9 +3,9 @@
         <head>
           <meta http-equiv="X-UA-Compatible" content="IE=edge" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-          <title>wechaty-puppet-padplus_2.12 0.0.16-SNAPSHOT API  - wechaty.padplus.support.RoomRawSupport</title>
-          <meta name="description" content="wechaty - puppet - padplus 2.12 0.0.16 - SNAPSHOT API - wechaty.padplus.support.RoomRawSupport" />
-          <meta name="keywords" content="wechaty puppet padplus 2.12 0.0.16 SNAPSHOT API wechaty.padplus.support.RoomRawSupport" />
+          <title>wechaty-puppet-padplus_2.12 0.0.16-SNAPSHOT API  - wechaty.padplus.support.DisrutporSupport</title>
+          <meta name="description" content="wechaty - puppet - padplus 2.12 0.0.16 - SNAPSHOT API - wechaty.padplus.support.DisrutporSupport" />
+          <meta name="keywords" content="wechaty puppet padplus 2.12 0.0.16 SNAPSHOT API wechaty.padplus.support.DisrutporSupport" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       
@@ -127,8 +127,8 @@
                         <a href="ContactSelfRawSupport.html" title="">ContactSelfRawSupport</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="trait" href="DisrutporSupport.html" title=""></a>
-                        <a href="DisrutporSupport.html" title="">DisrutporSupport</a>
+                        <a class="trait" href="" title=""></a>
+                        <a href="" title="">DisrutporSupport</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
                         <a class="trait" href="GrpcEventSupport.html" title=""></a>
@@ -155,8 +155,8 @@
                         <a href="RoomMemberRawSupport.html" title="">RoomMemberRawSupport</a>
                       </li><li class="current-entities indented3">
                         <span class="separator"></span>
-                        <a class="trait" href="" title=""></a>
-                        <a href="" title="">RoomRawSupport</a>
+                        <a class="trait" href="RoomRawSupport.html" title=""></a>
+                        <a href="RoomRawSupport.html" title="">RoomRawSupport</a>
                       </li>
               </ul>
             </div>
@@ -166,8 +166,8 @@
       <div id="definition">
         <div class="big-circle trait">t</div>
         <p id="owner"><a href="../../index.html" class="extype" name="wechaty">wechaty</a>.<a href="../index.html" class="extype" name="wechaty.padplus">padplus</a>.<a href="index.html" class="extype" name="wechaty.padplus.support">support</a></p>
-        <h1>RoomRawSupport<span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html" title="Permalink">
+        <h1>DisrutporSupport<span class="permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
@@ -180,16 +180,16 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">RoomRawSupport</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">DisrutporSupport</span><span class="result"> extends <span class="extype" name="wechaty.puppet.events.EventEmitter">EventEmitter</span></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="wechaty.padplus.support.RoomRawSupport">RoomRawSupport</a> with <span class="extype" name="wechaty.puppet.support.RoomSupport">RoomSupport</span></dd><dt>Since</dt><dd><p>2020-06-22</p></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"></div><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="wechaty.padplus.support.DisrutporSupport">DisrutporSupport</a> with <span class="extype" name="com.typesafe.scalalogging.LazyLogging">LazyLogging</span></dd><dt>Since</dt><dd><p>2020-06-30</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="wechaty.puppet.events.EventEmitter">EventEmitter</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
@@ -220,7 +220,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="wechaty.padplus.support.RoomRawSupport"><span>RoomRawSupport</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="wechaty.padplus.support.DisrutporSupport"><span>DisrutporSupport</span></li><li class="in" name="wechaty.puppet.events.EventEmitter"><span>EventEmitter</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -240,7 +240,26 @@
         <div id="allMembers">
         
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="wechaty.puppet.events.EventEmitter.Listener" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Listener[T]=T=&gt;Unit"></a><a id="Listener[T]:(DisrutporSupport.this)#Listener[T]"></a>
+      <span class="permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#Listener[T]=T=&gt;Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Listener</span><span class="tparams">[<span name="T">T</span>]</span><span class="result alias"> = (<span class="extype" name="wechaty.puppet.events.EventEmitter.Listener.T">T</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EventEmitter</dd></dl></div>
+    </li></ol>
+            </div>
 
         
 
@@ -250,7 +269,7 @@
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -266,7 +285,7 @@
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html###():Int" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -282,7 +301,7 @@
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -295,10 +314,26 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="wechaty.puppet.events.EventEmitter#addListener" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="addListener[T](event:wechaty.puppet.schemas.Puppet.PuppetEventName.Type,listener:EventEmitter.this.Listener[T],once:Boolean):Unit"></a><a id="addListener[T](Type,(DisrutporSupport.this)#Listener[T],Boolean):Unit"></a>
+      <span class="permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#addListener[T](event:wechaty.puppet.schemas.Puppet.PuppetEventName.Type,listener:EventEmitter.this.Listener[T],once:Boolean):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">addListener</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="event">event: <span class="extype" name="wechaty.puppet.schemas.Puppet.PuppetEventName.Type">Type</span></span>, <span name="listener">listener: (<a href="" class="extype" name="wechaty.padplus.support.DisrutporSupport">DisrutporSupport</a>.this)#<span class="extype" name="wechaty.puppet.events.EventEmitter.Listener">Listener</span>[<span class="extype" name="wechaty.puppet.events.EventEmitter.addListener.T">T</span>]</span>, <span name="once">once: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>EventEmitter</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -314,7 +349,7 @@
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#clone():Object" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -335,10 +370,10 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="wechaty.padplus.support.RoomRawSupport#convertRoomFromGrpc" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="convertRoomFromGrpc(room:wechaty.padplus.schemas.ModelRoom.GrpcRoomPayload):wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload"></a><a id="convertRoomFromGrpc(GrpcRoomPayload):PadplusRoomPayload"></a>
+    </li><li name="wechaty.padplus.support.DisrutporSupport#emit" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="emit[T](eventName:wechaty.puppet.schemas.Puppet.PuppetEventName.Type,value:T):Unit"></a><a id="emit[T](Type,T):Unit"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#convertRoomFromGrpc(room:wechaty.padplus.schemas.ModelRoom.GrpcRoomPayload):wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#emit[T](eventName:wechaty.puppet.schemas.Puppet.PuppetEventName.Type,value:T):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -347,14 +382,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">convertRoomFromGrpc</span><span class="params">(<span name="room">room: <a href="../schemas/ModelRoom$$GrpcRoomPayload.html" class="extype" name="wechaty.padplus.schemas.ModelRoom.GrpcRoomPayload">GrpcRoomPayload</a></span>)</span><span class="result">: <a href="../schemas/ModelRoom$$PadplusRoomPayload.html" class="extype" name="wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload">PadplusRoomPayload</a></span>
+        <span class="name">emit</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="eventName">eventName: <span class="extype" name="wechaty.puppet.schemas.Puppet.PuppetEventName.Type">Type</span></span>, <span name="value">value: <span class="extype" name="wechaty.padplus.support.DisrutporSupport.emit.T">T</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="wechaty.padplus.support.DisrutporSupport">DisrutporSupport</a> → EventEmitter</dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -370,7 +405,7 @@
     </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#equals(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -386,7 +421,7 @@
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#finalize():Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -408,7 +443,7 @@
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#getClass():Class[_]" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -427,7 +462,7 @@
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#hashCode():Int" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#hashCode():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -446,7 +481,7 @@
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -462,7 +497,7 @@
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -478,7 +513,7 @@
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#notify():Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -497,7 +532,7 @@
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#notifyAll():Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -513,10 +548,10 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="wechaty.padplus.support.RoomRawSupport#roomAdd" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="roomAdd(roomId:String,contactId:String):Unit"></a><a id="roomAdd(String,String):Unit"></a>
+    </li><li name="wechaty.padplus.support.DisrutporSupport#shutdownDisruptor" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="shutdownDisruptor():Unit"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#roomAdd(roomId:String,contactId:String):Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#shutdownDisruptor():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -525,94 +560,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">roomAdd</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      
-      
-    </li><li name="wechaty.padplus.support.RoomRawSupport#roomAvatar" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="roomAvatar(roomId:String):wechaty.puppet.ResourceBox"></a><a id="roomAvatar(String):ResourceBox"></a>
-      <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#roomAvatar(roomId:String):wechaty.puppet.ResourceBox" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">roomAvatar</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="wechaty.puppet.ResourceBox">ResourceBox</span></span>
-      </span>
-      
-      
-    </li><li name="wechaty.padplus.support.RoomRawSupport#roomCreate" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="roomCreate(contactIdList:Array[String],topic:String):String"></a><a id="roomCreate(Array[String],String):String"></a>
-      <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#roomCreate(contactIdList:Array[String],topic:String):String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">roomCreate</span><span class="params">(<span name="contactIdList">contactIdList: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="topic">topic: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      
-      
-    </li><li name="wechaty.padplus.support.RoomRawSupport#roomDel" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="roomDel(roomId:String,contactId:String):Unit"></a><a id="roomDel(String,String):Unit"></a>
-      <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#roomDel(roomId:String,contactId:String):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">roomDel</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      
-      
-    </li><li name="wechaty.padplus.support.RoomRawSupport#roomList" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="roomList():Array[String]"></a>
-      <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#roomList():Array[String]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">roomList</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
-      </span>
-      
-      
-    </li><li name="wechaty.padplus.support.RoomRawSupport#roomPromises" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="roomPromises:com.github.benmanes.caffeine.cache.Cache[String,List[scala.concurrent.Promise[wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload]]]"></a><a id="roomPromises:Cache[String,List[Promise[PadplusRoomPayload]]]"></a>
-      <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#roomPromises:com.github.benmanes.caffeine.cache.Cache[String,List[scala.concurrent.Promise[wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload]]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">roomPromises</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.List">List</span>[<span class="extype" name="scala.concurrent.Promise">Promise</span>[<a href="../schemas/ModelRoom$$PadplusRoomPayload.html" class="extype" name="wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload">PadplusRoomPayload</a>]]]</span>
+        <span class="name">shutdownDisruptor</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="wechaty.padplus.support.RoomRawSupport#roomQRCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="roomQRCode(roomId:String):String"></a><a id="roomQRCode(String):String"></a>
+    </li><li name="wechaty.padplus.support.DisrutporSupport#startDisruptor" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="startDisruptor():Unit"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#roomQRCode(roomId:String):String" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#startDisruptor():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -621,78 +576,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">roomQRCode</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      
-      
-    </li><li name="wechaty.padplus.support.RoomRawSupport#roomQuit" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="roomQuit(roomId:String):Unit"></a><a id="roomQuit(String):Unit"></a>
-      <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#roomQuit(roomId:String):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">roomQuit</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      
-      
-    </li><li name="wechaty.padplus.support.RoomRawSupport#roomRawPayload" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="roomRawPayload(roomId:String):wechaty.puppet.schemas.Room.RoomPayload"></a><a id="roomRawPayload(String):RoomPayload"></a>
-      <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#roomRawPayload(roomId:String):wechaty.puppet.schemas.Room.RoomPayload" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">roomRawPayload</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="wechaty.puppet.schemas.Room.RoomPayload">RoomPayload</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="wechaty.padplus.support.RoomRawSupport#roomTopic" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="roomTopic(roomId:String,topic:String):Unit"></a><a id="roomTopic(String,String):Unit"></a>
-      <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#roomTopic(roomId:String,topic:String):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">roomTopic</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="topic">topic: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      
-      
-    </li><li name="wechaty.padplus.support.RoomRawSupport#roomTopic" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="roomTopic(roomId:String):String"></a><a id="roomTopic(String):String"></a>
-      <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#roomTopic(roomId:String):String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">roomTopic</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">startDisruptor</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
       
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -708,7 +599,7 @@
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#toString():String" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#toString():String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -724,7 +615,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#wait():Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -746,7 +637,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -768,7 +659,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/RoomRawSupport.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/DisrutporSupport.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -799,7 +690,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="wechaty.puppet.events.EventEmitter">
+              <h3>Inherited from <span class="extype" name="wechaty.puppet.events.EventEmitter">EventEmitter</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

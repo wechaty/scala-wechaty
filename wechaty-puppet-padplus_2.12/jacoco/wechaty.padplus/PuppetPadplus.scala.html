@@ -24,76 +24,81 @@ import wechaty.puppet.support.ContactSupport
     with GrpcSupport
     with GrpcEventSupport
     with LocalStoreSupport
+    with DisrutporSupport
     with LazyLogging {
-<span class="nc" id="L28">  protected var uinOpt:Option[String]=None</span>
+<span class="nc" id="L29">  protected var uinOpt:Option[String]=None</span>
   def start(): Unit ={
-<span class="nc" id="L30">    startGrpc(option.endPoint.get)</span>
+<span class="nc" id="L31">    startDisruptor()</span>
+<span class="nc" id="L32">    startGrpc(option.endPoint.get)</span>
     //waiting stream start....
-<span class="nc bnc" id="L32" title="All 2 branches missed.">    logger.info(&quot;waiting stream start....&quot;)</span>
-<span class="nc" id="L33">    awaitStreamStart()</span>
-<span class="nc" id="L34">    startLocalStore()</span>
-<span class="nc" id="L35">    getUin match{</span>
-<span class="nc bnc" id="L36" title="All 2 branches missed.">      case Some(str) =&gt;</span>
-<span class="nc" id="L37">        uinOpt = Some(str)</span>
-<span class="nc bnc" id="L38" title="All 2 branches missed.">        logger.debug(&quot;found uin in local store:{}&quot;,str)</span>
-<span class="nc" id="L39">        asyncRequest(ApiType.INIT)</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">    logger.info(&quot;waiting stream start....&quot;)</span>
+<span class="nc" id="L35">    awaitStreamStart()</span>
+<span class="nc" id="L36">    startLocalStore()</span>
+<span class="nc" id="L37">    getUin match{</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">      case Some(str) =&gt;</span>
+<span class="nc" id="L39">        uinOpt = Some(str)</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        logger.debug(&quot;found uin in local store:{}&quot;,str)</span>
+<span class="nc" id="L41">        asyncRequest(ApiType.INIT)</span>
       case _ =&gt;
-<span class="nc" id="L41">        asyncRequest(ApiType.GET_QRCODE)</span>
+<span class="nc" id="L43">        asyncRequest(ApiType.GET_QRCODE)</span>
     }
   }
   def stop(): Unit = {
-<span class="nc" id="L45">    stopGrpc()</span>
-<span class="nc" id="L46">    stopLocalStore()</span>
+<span class="nc" id="L47">    shutdownDisruptor()</span>
+<span class="nc" id="L48">    stopGrpc()</span>
+<span class="nc" id="L49">    stopLocalStore()</span>
   }
 
-<span class="nc" id="L49">  override def selfIdOpt(): Option[String] = selfId</span>
+<span class="nc" id="L52">  override def selfIdOpt(): Option[String] = selfId</span>
+
+
 
   /**
     *
     * Friendship
     *
     */
-<span class="nc" id="L56">  override def friendshipAccept(friendshipId: String): Unit = ???</span>
+<span class="nc" id="L61">  override def friendshipAccept(friendshipId: String): Unit = ???</span>
 
-<span class="nc" id="L58">  override def friendshipAdd(contactId: String, hello: String): Unit = ???</span>
+<span class="nc" id="L63">  override def friendshipAdd(contactId: String, hello: String): Unit = ???</span>
 
-<span class="nc" id="L60">  override def friendshipSearchPhone(phone: String): String = ???</span>
+<span class="nc" id="L65">  override def friendshipSearchPhone(phone: String): String = ???</span>
 
-<span class="nc" id="L62">  override def friendshipSearchWeixin(weixin: String): String = ???</span>
+<span class="nc" id="L67">  override def friendshipSearchWeixin(weixin: String): String = ???</span>
 
-<span class="nc" id="L64">  override protected def friendshipRawPayload(friendshipId: String): Friendship.FriendshipPayload = ???</span>
+<span class="nc" id="L69">  override protected def friendshipRawPayload(friendshipId: String): Friendship.FriendshipPayload = ???</span>
 
   /**
     *
     * RoomMember
     *
     */
-<span class="nc" id="L71">  override def roomAnnounce(roomId: String): String = ???</span>
+<span class="nc" id="L76">  override def roomAnnounce(roomId: String): String = ???</span>
 
-<span class="nc" id="L73">  override def roomAnnounce(roomId: String, text: String): Unit = ???</span>
+<span class="nc" id="L78">  override def roomAnnounce(roomId: String, text: String): Unit = ???</span>
 
-<span class="nc" id="L75">  override def roomMemberList(roomId: String): Array[String] = ???</span>
+<span class="nc" id="L80">  override def roomMemberList(roomId: String): Array[String] = ???</span>
 
   override protected def roomMemberRawPayload(roomId: String, contactId: String): Room.RoomMemberPayload = {
     //TODO
-<span class="nc" id="L79">    null</span>
+<span class="nc" id="L84">    null</span>
   }
 
 
 
-<span class="nc" id="L84">  override def roomInvitationAccept(roomInvitationId: String): Unit = ???</span>
+<span class="nc" id="L89">  override def roomInvitationAccept(roomInvitationId: String): Unit = ???</span>
 
-<span class="nc" id="L86">  override protected def roomInvitationRawPayload(roomInvitationId: String): RoomInvitation.RoomInvitationPayload = ???</span>
+<span class="nc" id="L91">  override protected def roomInvitationRawPayload(roomInvitationId: String): RoomInvitation.RoomInvitationPayload = ???</span>
 
-<span class="nc" id="L88">  override def tagContactAdd(tagId: String, contactId: String): Unit = ???</span>
+<span class="nc" id="L93">  override def tagContactAdd(tagId: String, contactId: String): Unit = ???</span>
 
-<span class="nc" id="L90">  override def tagContactDelete(tagId: String): Unit = ???</span>
+<span class="nc" id="L95">  override def tagContactDelete(tagId: String): Unit = ???</span>
 
-<span class="nc" id="L92">  override def tagContactList(contactId: String): Array[String] = ???</span>
+<span class="nc" id="L97">  override def tagContactList(contactId: String): Array[String] = ???</span>
 
-<span class="nc" id="L94">  override def tagContactList(): Array[String] = ???</span>
+<span class="nc" id="L99">  override def tagContactList(): Array[String] = ???</span>
 
-<span class="nc" id="L96">  override def tagContactRemove(tagId: String, contactId: String): Unit = ???</span>
+<span class="nc" id="L101">  override def tagContactRemove(tagId: String, contactId: String): Unit = ???</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
