@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.typesafe.scalalogging.LazyLogging
 import wechaty.padplus.grpc.PadPlusServerOuterClass.{ApiType, ResponseType, StreamResponse}
 import wechaty.padplus.schemas.GrpcSchemas.GrpcMessagePayload
-import wechaty.padplus.schemas.ModelMessage.{GrpcResponseMessageData, PadplusMessagePayload}
+import wechaty.padplus.schemas.ModelMessage.PadplusMessagePayload
 import wechaty.padplus.schemas.PadplusEnums.PadplusMessageType
 import wechaty.puppet.ResourceBox
 import wechaty.puppet.events.EventEmitter
@@ -14,6 +14,10 @@ import wechaty.puppet.schemas.Message.{MessagePayload, MessageType}
 import wechaty.puppet.schemas.Puppet.{PuppetEventName, isBlank, objectMapper}
 import wechaty.puppet.schemas.{Message, MiniProgram, Puppet, UrlLink}
 import wechaty.puppet.support.MessageSupport
+
+import scala.concurrent.duration._
+import scala.concurrent.{Await, Promise}
+import scala.util.{Failure, Success}
 
 /**
   *
@@ -63,13 +67,21 @@ trait MessageRawSupport {
   override def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgram.MiniProgramPayload): String = ???
 
   override def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]): String = {
+    val grpcMessagePayloadPromise = Promise[GrpcMessagePayload]()
+    grpcMessagePayloadPromise.future.onComplete {
+      case Success(payload) => payload
+      case Failure(e) => throw e
+    }
+
     val json = Puppet.objectMapper.createObjectNode()
     json.put("content",text)
     json.put("messageType",PadplusMessageType.Text.id)
     json.put("fromUserName",selfId.get)
     json.put("toUserName",conversationId)
-    val response = requestForObject[GrpcResponseMessageData](ApiType.SEND_MESSAGE, Some(json.toString))
-    response.msgId
+    requestForCallback(ApiType.SEND_MESSAGE,Some(json.toString)) {message:GrpcMessagePayload=>
+      grpcMessagePayloadPromise.success(message)
+    }
+    Await.result(grpcMessagePayloadPromise.future, 10 seconds).msgId
   }
 
   override def messageSendUrl(conversationId: String, urlLinkPayload: UrlLink.UrlLinkPayload): String = ???
