@@ -9,6 +9,7 @@ import com.amazonaws.auth.{AWSStaticCredentialsProvider, BasicAWSCredentials}
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.amazonaws.services.s3.model.{CannedAccessControlList, GeneratePresignedUrlRequest, ObjectMetadata, PutObjectRequest}
+import com.fasterxml.jackson.databind.JsonNode
 import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
 import com.typesafe.scalalogging.LazyLogging
 import io.grpc.{ManagedChannel, ManagedChannelBuilder}
@@ -18,9 +19,9 @@ import wechaty.padplus.grpc.PadPlusServerOuterClass._
 import wechaty.puppet.schemas.Puppet
 
 import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContext, Promise}
+import scala.concurrent.{Await, ExecutionContext, Future, Promise}
 import scala.reflect.ClassTag
-import scala.util.{Failure, Success}
+import scala.util.{Failure, Success, Try}
 
 /**
   *
@@ -38,8 +39,9 @@ trait GrpcSupport {
   private var eventStream: PadPlusServerGrpc.PadPlusServerStub = _
   protected var channel: ManagedChannel = _
   protected implicit val executionContext: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
+  type CallbackType = StreamResponse => Unit
   protected lazy val callbackPool                           = {
-    Caffeine.newBuilder().maximumSize(1000).expireAfterWrite(1,TimeUnit.MINUTES).build().asInstanceOf[Cache[String,StreamResponse=>Unit]]
+    Caffeine.newBuilder().maximumSize(1000).expireAfterWrite(1,TimeUnit.MINUTES).build().asInstanceOf[Cache[String,CallbackType]]
   }
 
 
@@ -50,7 +52,7 @@ trait GrpcSupport {
     executorService.scheduleAtFixedRate(() => {
       val seq = HEARTBEAT_COUNTER.incrementAndGet()
       try {
-        request(ApiType.HEARTBEAT)
+        asyncRequest(ApiType.HEARTBEAT)
       } catch {
         case e: Throwable =>
           logger.warn("ding exception:{}", e.getMessage)
@@ -129,22 +131,11 @@ trait GrpcSupport {
   private def stopStream(): Unit = {
     //do nothing
   }
-  protected def requestForObject[T](apiType:ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]):T={
-    val response = request(apiType,data)
-    Puppet.objectMapper.readValue(response.getResult,classTag.runtimeClass).asInstanceOf[T]
+  protected def syncRequest[T](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): T ={
+    val future= asyncRequest[T](apiType,data)
+    Await.result(future, 10 seconds)
   }
-  protected def asyncRequest[T](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): T ={
-    val payloadPromise = Promise[T]()
-    payloadPromise.future.onComplete {
-      case Success(payload) => payload
-      case Failure(e) => throw e
-    }
-    requestForCallback(apiType,data) {message:T=>
-      payloadPromise.success(message)
-    }
-    Await.result(payloadPromise.future, 10 seconds)
-  }
-  protected def requestForCallback[T](apiType: ApiType,data:Option[Any]=None)(callback:T=>Unit)(implicit classTag: ClassTag[T]): ResponseObject ={
+  protected def asyncRequest[T](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): Future[T] ={
     val request = RequestObject.newBuilder()
     request.setToken(option.token.get)
     uinOpt match{
@@ -165,39 +156,41 @@ trait GrpcSupport {
     val traceId= UUID.randomUUID().toString
     request.setTraceId(traceId)
     logger.debug("request:{}",request.build())
-    val callbackDelegate=(streamResponse:StreamResponse)=>{
-      val obj=Puppet.objectMapper.readValue(streamResponse.getData,classTag.runtimeClass).asInstanceOf[T]
-      callback(obj)
+    val p = Promise[T]()
+
+    val callbackDelegate:CallbackType=(streamResponse:StreamResponse)=>{
+      if(p.isCompleted){
+        logger.warn("promise is completed ,{}",p)
+      }else {
+        p.complete(Try {
+          classTag match{
+            case _:ClassTag[Nothing] =>
+              //not return anything
+              null.asInstanceOf[T]
+            case _:ClassTag[JsonNode] =>
+              Puppet.objectMapper.readTree(streamResponse.getData).asInstanceOf[T]
+            case _ =>
+              try {
+                Puppet.objectMapper.readValue(streamResponse.getData, classTag.runtimeClass).asInstanceOf[T]
+              }catch{
+                case e:Throwable =>
+                  logger.error(e.getMessage,e)
+                  throw e
+              }
+        }})
+      }
     }
     callbackPool.put(traceId,callbackDelegate)
     val response = grpcClient.request(request.build())
     logger.debug("request->response:{}",response)
-    response
-  }
-  protected def request(apiType: ApiType,data:Option[Any]=None): ResponseObject ={
-    val request = RequestObject.newBuilder()
-    request.setToken(option.token.get)
-    uinOpt match{
-      case Some(id) =>
-        request.setUin(id)
-      case _ =>
+
+    if(response.getResult != "success"){
+      //fail?
+      logger.error("fail to request grpc,response {}",response)
+      p.failure(new IllegalAccessException("fail to request ,grpc result:"+response))
     }
-    request.setApiType(apiType)
-    data match{
-      case Some(str:String) =>
-        request.setParams(str)
-      case Some(d) =>
-        request.setParams(Puppet.objectMapper.writeValueAsString(d))
-      case _ =>
-    }
-    val requestId = UUID.randomUUID().toString
-    request.setRequestId(requestId)
-    val traceId= UUID.randomUUID().toString
-    request.setTraceId(traceId)
-    logger.debug("request:{}",request.build())
-    val response = grpcClient.request(request.build())
-    logger.debug("request->response:{}",response)
-    response
+
+    p.future
   }
     private val ACCESS_KEY_ID = "AKIA3PQY2OQG5FEXWMH6"
     private val BUCKET= "macpro-message-file"

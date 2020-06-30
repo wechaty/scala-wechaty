@@ -28,8 +28,7 @@ trait ContactSelfRawSupport {
 
   def contactSelfInfo(callback:PadplusContactPayload=>Unit):Unit={
 //    asyncRequest[GetContactSelfInfoGrpcResponse](ApiType.GET_CONTACT_SELF_INFO)
-    requestForCallback(ApiType.GET_CONTACT_SELF_INFO) {
-      contactPayload: GetContactSelfInfoGrpcResponse =>
+    asyncRequest[GetContactSelfInfoGrpcResponse](ApiType.GET_CONTACT_SELF_INFO).map{ contactPayload =>
         val payload = new PadplusContactPayload
         payload.alias = contactPayload.alias;
         payload.bigHeadUrl = contactPayload.bigHeadImg;

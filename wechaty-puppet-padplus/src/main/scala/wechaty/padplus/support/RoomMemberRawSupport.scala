@@ -11,9 +11,7 @@ import wechaty.puppet.schemas.Room
 import wechaty.puppet.schemas.Room.RoomMemberPayload
 import wechaty.puppet.support.RoomMemberSupport
 
-import scala.concurrent.duration._
-import scala.concurrent.{Await, Future, Promise}
-import scala.util.{Failure, Success}
+import scala.concurrent.Promise
 
 /**
   *
@@ -43,28 +41,14 @@ trait RoomMemberRawSupport {
       case Some(padplusRoomMembers) =>
         padplusRoomMembers.members.get(contactId).map(convertToPuppetRoomMember).orNull
       case _ =>
-        Future {
           val json = objectMapper.createObjectNode()
           json.put("OpType", "UPDATE")
           json.put("type", "GET_MEMBER")
           json.put("roomId", roomId)
-          request(ApiType.ROOM_OPERATION, Some(json.toString))
-        }
-        val roomMemberPayloadPromise = Promise[PadplusRoomMemberMap]()
-        roomMemberPayloadPromise.future.onComplete {
-          case Success(payload) => payload
-          case Failure(e) => throw e
-        }
-        val oldValue=roomMemberPayloadPromises.getIfPresent(roomId)
-        if(oldValue != null){
-          roomMemberPayloadPromises.put(roomId, oldValue :+ roomMemberPayloadPromise)
-        }else{
-          roomMemberPayloadPromises.put(roomId, List(roomMemberPayloadPromise))
-        }
-        val map = Await.result(roomMemberPayloadPromise.future, 10 seconds)
+        val map = syncRequest[PadplusRoomMemberMap](ApiType.ROOM_OPERATION, Some(json.toString))
+        savePadplusRoomMembers(roomId,map)
         map.members.get(contactId).map(convertToPuppetRoomMember).orNull
     }
-
   }
   private def convertToPuppetRoomMember(input: PadplusRoomMemberPayload): RoomMemberPayload = {
     val result = new  RoomMemberPayload

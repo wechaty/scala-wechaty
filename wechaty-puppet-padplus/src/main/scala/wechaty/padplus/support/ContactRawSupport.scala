@@ -17,15 +17,14 @@ import wechaty.padplus.schemas.ModelRoom.GrpcRoomPayload
 import wechaty.padplus.schemas.ModelUser.ScanData
 import wechaty.padplus.schemas.PadplusEnums.QrcodeStatus
 import wechaty.puppet.ResourceBox
-import wechaty.puppet.schemas.{Contact, Puppet}
 import wechaty.puppet.schemas.Contact.{ContactGender, ContactPayload, ContactType}
 import wechaty.puppet.schemas.Event.{EventLoginPayload, EventScanPayload}
 import wechaty.puppet.schemas.Puppet._
+import wechaty.puppet.schemas.{Contact, Puppet}
 
-import scala.concurrent.duration._
-import scala.concurrent.{Await, Future, Promise}
+import scala.concurrent.{Future, Promise}
 import scala.language.implicitConversions
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 
 /**
   *
@@ -63,24 +62,7 @@ trait ContactRawSupport {
   protected def getContact(contactId: String): PadplusContactPayload = {
     val json = objectMapper.createObjectNode()
     json.put("userName", contactId)
-    asyncRequest[GrpcContactPayload](ApiType.GET_CONTACT,Some(json.toString))
-//    Future {
-//      val json = objectMapper.createObjectNode()
-//      json.put("userName", contactId)
-//      request(ApiType.GET_CONTACT, Some(json.toString))
-//    }
-//    val contactPayloadPromise = Promise[PadplusContactPayload]()
-//    contactPayloadPromise.future.onComplete {
-//      case Success(payload) => payload
-//      case Failure(e) => throw e
-//    }
-//    val oldValue=contactPromises.getIfPresent(contactId)
-//    if(oldValue != null){
-//      contactPromises.put(contactId, oldValue :+ contactPayloadPromise)
-//    }else{
-//      contactPromises.put(contactId, List(contactPayloadPromise))
-//    }
-//    Await.result(contactPayloadPromise.future, 10 seconds)
+    syncRequest[GrpcContactPayload](ApiType.GET_CONTACT,Some(json.toString))
   }
 
   protected def loginPartialFunction(response: StreamResponse): PartialFunction[ResponseType, Unit] = {
@@ -154,7 +136,7 @@ trait ContactRawSupport {
 //        }
       } else {
         deleteUin()
-        request(ApiType.GET_QRCODE)
+        asyncRequest(ApiType.GET_QRCODE)
       }
     case ResponseType.CONTACT_LIST | ResponseType.CONTACT_MODIFY =>
       val data = response.getData
