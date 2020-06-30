@@ -140,7 +140,7 @@ wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.CD
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelRoom.GrpcRoomMemberList,17,0,0,0,4,0,5,0,5,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelMessage.PadplusRecallData.BaseResponse,24,0,2,0,4,0,6,0,5,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.internal,LocalStore,28,98,2,2,4,16,5,10,3,10
-wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactRawSupport..anonfun.loginPartialFunction.new Serializable() {...},580,0,50,0,72,0,33,0,8,0
+wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactRawSupport..anonfun.loginPartialFunction.new Serializable() {...},594,0,50,0,74,0,33,0,8,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,GrpcEventSupport,170,0,16,0,20,0,15,0,7,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactRawSupport,442,0,46,0,69,0,38,0,15,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,LocalStoreSupport,224,0,4,0,22,0,18,0,16,0
@@ -149,7 +149,7 @@ wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,MessageRawSuppo
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,RoomMemberRawSupport,254,0,8,0,40,0,17,0,13,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactSelfRawSupport,106,0,0,0,26,0,8,0,8,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,RoomMemberRawSupport..anonfun.roomMemberPartialFunction.new Serializable() {...},138,0,8,0,13,0,9,0,5,0
-wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,MessageRawSupport,381,0,32,0,73,0,32,0,16,0
+wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,MessageRawSupport,450,0,36,0,78,0,37,0,19,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,GrpcSupport,712,0,40,0,101,0,39,0,19,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,RoomRawSupport,106,0,0,0,28,0,13,0,13,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus,TestMain,4,0,0,0,0,0,1,0,1,0
