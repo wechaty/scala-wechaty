@@ -236,6 +236,14 @@ make bot
 
 ### master
 
+### v0.4 (Jun 19, 2020)
+
+Scala Wechaqty Beta Released!
+
+Read more from our Multi-language Wechaqty Beta Release event from our blog:
+
+- [Multi Language Wechaty Beta Release Announcement!](https://wechaty.github.io/2020/06/19/multi-language-wechaty-beta-release/)
+
 ### v0.0.1 (Jun 3, 2020)
 
 Thanks for our community contributor [@jcai](https://github.com/jcai/) Jun Tsai, who is a very experienced Scala developer, start from scratch three days ago (Jun 1) and finished the first version for ding-dong-bot.scala on two days ago, which only last 1 days for all the translation tasks!
