@@ -35,7 +35,9 @@ trait GrpcEventSupport extends StreamObserver[StreamResponse]{
       }
     }else {
       Try {
-        val partialFunction = loginPartialFunction(response) orElse messagePartialFunction(response)
+        val partialFunction = sysPartialFunction(response) orElse
+          loginPartialFunction(response) orElse
+          messagePartialFunction(response)
         partialFunction.applyOrElse(response.getResponseType, { _: ResponseType => Unit })
       } match {
         case Success(_)=>

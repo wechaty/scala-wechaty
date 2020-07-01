@@ -98,11 +98,11 @@ trait GrpcSupport {
   private def internalStartGrpc() {
     logger.info("start grpc client ....")
     this.grpcClient = PadPlusServerGrpc.newBlockingStub(channel)
-    startStream()
+//    startStream()
     logger.info("start grpc client done")
   }
 
-  private def startStream() {
+  private[wechaty] def startStream() {
     this.eventStream = PadPlusServerGrpc.newStub(channel)
     val initConfig = InitConfig.newBuilder().setToken(option.token.get).build()
     this.eventStream.init(initConfig, this)
@@ -126,6 +126,9 @@ trait GrpcSupport {
     val future= asyncRequest[T](apiType,data)
     Await.result(future, 10 seconds)
   }
+  protected def generateTraceId(apiType:ApiType): String={
+    UUID.randomUUID().toString
+  }
   protected def asyncRequest[T : TypeTag ](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): Future[T] ={
     val request = RequestObject.newBuilder()
     request.setToken(option.token.get)
@@ -142,9 +145,9 @@ trait GrpcSupport {
         request.setParams(Puppet.objectMapper.writeValueAsString(d))
       case _ =>
     }
-    val requestId = UUID.randomUUID().toString
-    request.setRequestId(requestId)
-    val traceId= UUID.randomUUID().toString
+//    val requestId = UUID.randomUUID().toString
+//    request.setRequestId(requestId)
+    val traceId= generateTraceId(apiType)
     request.setTraceId(traceId)
     logger.debug("request:{}",request.build())
     val p = Promise[T]()

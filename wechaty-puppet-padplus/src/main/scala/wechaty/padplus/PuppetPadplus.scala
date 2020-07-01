@@ -1,10 +1,11 @@
 package wechaty.padplus
 
 import com.typesafe.scalalogging.LazyLogging
-import wechaty.padplus.grpc.PadPlusServerOuterClass.ApiType
+import wechaty.padplus.grpc.PadPlusServerOuterClass.{ApiType, ResponseType, StreamResponse}
 import wechaty.padplus.support._
 import wechaty.puppet.Puppet
-import wechaty.puppet.schemas.Puppet.PuppetOptions
+import wechaty.puppet.schemas.Event.EventResetPayload
+import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
 import wechaty.puppet.schemas._
 import wechaty.puppet.support.ContactSupport
 
@@ -27,13 +28,20 @@ class PuppetPadplus(val option:PuppetOptions,val storePath:String="/tmp/padplus"
     with DisrutporSupport
     with LazyLogging {
   protected var uinOpt:Option[String]=None
-  def start(): Unit ={
+  private[wechaty] def startGrpc(): Unit ={
+    startLocalStore()
     startDisruptor()
     startGrpc(option.endPoint.get)
+  }
+  def start(): Unit ={
+    startGrpc()
+    startAwaitStream()
+  }
+  private[wechaty] def startAwaitStream(): Unit ={
+    startStream()
     //waiting stream start....
     logger.info("waiting stream start....")
     awaitStreamStart()
-    startLocalStore()
     getUin match{
       case Some(str) =>
         uinOpt = Some(str)
@@ -48,6 +56,11 @@ class PuppetPadplus(val option:PuppetOptions,val storePath:String="/tmp/padplus"
     stopGrpc()
     stopLocalStore()
   }
+  protected def sysPartialFunction(response: StreamResponse): PartialFunction[ResponseType, Unit] = {
+    case ResponseType.DISCONNECT =>
+      emit(PuppetEventName.RESET,new EventResetPayload)
+  }
+
 
   override def selfIdOpt(): Option[String] = selfId
 

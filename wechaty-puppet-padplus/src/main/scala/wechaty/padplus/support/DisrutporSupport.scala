@@ -21,7 +21,7 @@ trait DisrutporSupport extends EventEmitter {
     var value    : Any = _
   }
   private var disruptor:Disruptor[EventDef] = _
-  def startDisruptor(): Unit ={
+  protected def startDisruptor(): Unit ={
     disruptor = new Disruptor[EventDef](
       new EventFactory[EventDef]() {
         @Override

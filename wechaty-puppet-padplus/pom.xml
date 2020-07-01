@@ -61,7 +61,10 @@
     <dependency>
       <groupId>org.fusesource.leveldbjni</groupId>
       <artifactId>leveldbjni-all</artifactId>
-      <version>1.8</version>
+    </dependency>
+    <dependency>
+      <groupId>org.grpcmock</groupId>
+      <artifactId>grpcmock-junit5</artifactId>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
