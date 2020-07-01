@@ -1,14 +1,9 @@
 package wechaty.padplus.support
 
-import java.util.concurrent.TimeUnit
-
-import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
 import wechaty.padplus.schemas.ModelRoom.{GrpcRoomPayload, PadplusMemberBrief, PadplusRoomPayload}
 import wechaty.puppet.ResourceBox
 import wechaty.puppet.schemas.{Puppet, Room}
 import wechaty.puppet.support.RoomSupport
-
-import scala.concurrent.Promise
 
 /**
   *
@@ -17,10 +12,6 @@ import scala.concurrent.Promise
   */
 trait RoomRawSupport {
   self:RoomSupport =>
-  protected lazy val roomPromises: Cache[String, List[Promise[PadplusRoomPayload]]] = {
-    Caffeine.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.MINUTES).build()
-      .asInstanceOf[Cache[String, List[Promise[PadplusRoomPayload]]]]
-  }
 
   override def roomAdd(roomId: String, contactId: String): Unit = ???
 

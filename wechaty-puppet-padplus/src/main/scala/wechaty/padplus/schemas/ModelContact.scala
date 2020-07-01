@@ -4,7 +4,8 @@ import wechaty.puppet.schemas.Contact.ContactGender
 
 object ModelContact {
 
-class PadplusContactPayload {
+  trait PadplusConversation
+class PadplusContactPayload extends PadplusConversation{
   var alias:String = _
   var contactType:Number = _
   var tagList:String = _

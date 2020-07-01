@@ -10,19 +10,19 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.amazonaws.services.s3.model.{CannedAccessControlList, GeneratePresignedUrlRequest, ObjectMetadata, PutObjectRequest}
 import com.fasterxml.jackson.databind.JsonNode
-import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
 import com.typesafe.scalalogging.LazyLogging
 import io.grpc.{ManagedChannel, ManagedChannelBuilder}
 import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.grpc.PadPlusServerGrpc
 import wechaty.padplus.grpc.PadPlusServerOuterClass._
+import wechaty.padplus.support.CallbackHelper.TraceRequestCallback
 import wechaty.puppet.schemas.Puppet
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future, Promise}
 import scala.reflect.ClassTag
 import scala.reflect.runtime.universe._
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 
 /**
   *
@@ -40,10 +40,6 @@ trait GrpcSupport {
   private var eventStream: PadPlusServerGrpc.PadPlusServerStub = _
   protected var channel: ManagedChannel = _
   protected implicit val executionContext: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
-  type CallbackType = StreamResponse => Unit
-  protected lazy val callbackPool                           = {
-    Caffeine.newBuilder().maximumSize(1000).expireAfterWrite(1,TimeUnit.MINUTES).build().asInstanceOf[Cache[String,CallbackType]]
-  }
 
 
   protected def startGrpc(endpoint: String): Unit = {
@@ -152,7 +148,7 @@ trait GrpcSupport {
     logger.debug("request:{}",request.build())
     val p = Promise[T]()
 
-    val callbackDelegate:CallbackType=(streamResponse:StreamResponse)=>{
+    val callbackDelegate:TraceRequestCallback=(streamResponse:StreamResponse)=>{
       if(p.isCompleted){
         logger.warn("promise is completed ,{}",p)
       }else {
@@ -177,7 +173,7 @@ trait GrpcSupport {
     //过滤不需要返回
     typeOf[T] match{
       case t if t =:= typeOf[Nothing] =>
-      case _ => callbackPool.put(traceId,callbackDelegate)
+      case _ => CallbackHelper.pushCallbackToPool(traceId,callbackDelegate)
     }
     val response = grpcClient.request(request.build())
     logger.debug(s"request $apiType response $response")

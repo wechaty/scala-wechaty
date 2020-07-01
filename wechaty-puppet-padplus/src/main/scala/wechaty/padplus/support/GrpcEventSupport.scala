@@ -29,10 +29,7 @@ trait GrpcEventSupport extends StreamObserver[StreamResponse]{
 
     val traceId = response.getTraceId
     if(!isBlank(traceId)){
-      val callback = callbackPool.getIfPresent(traceId)
-      if(callback != null){
-        callback(response)
-      }
+      CallbackHelper.resolveCallBack(traceId,response)
     }else {
       Try {
         val partialFunction = sysPartialFunction(response) orElse

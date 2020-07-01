@@ -1,9 +1,7 @@
 package wechaty.padplus.support
 
 import java.util
-import java.util.concurrent.TimeUnit
 
-import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
 import com.google.protobuf.ByteString
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource
 import com.google.zxing.common.HybridBinarizer
@@ -22,7 +20,7 @@ import wechaty.puppet.schemas.Event.{EventLoginPayload, EventScanPayload}
 import wechaty.puppet.schemas.Puppet._
 import wechaty.puppet.schemas.{Contact, Puppet}
 
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.Future
 import scala.language.implicitConversions
 import scala.util.Try
 
@@ -33,9 +31,6 @@ import scala.util.Try
   */
 trait ContactRawSupport {
   self: PuppetPadplus =>
-  protected lazy val contactPromises: Cache[String, List[Promise[PadplusContactPayload]]] = {
-    Caffeine.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.MINUTES).build().asInstanceOf[Cache[String, List[Promise[PadplusContactPayload]]]]
-  }
 
   /**
     *
@@ -60,9 +55,13 @@ trait ContactRawSupport {
   }
 
   protected def getContact(contactId: String): PadplusContactPayload = {
-    val json = objectMapper.createObjectNode()
-    json.put("userName", contactId)
-    syncRequest[GrpcContactPayload](ApiType.GET_CONTACT,Some(json.toString))
+    getPadplusContactPayload(contactId) match{
+      case Some(padplusContactPayload) => padplusContactPayload
+      case _ =>
+        val json = objectMapper.createObjectNode()
+        json.put("userName", contactId)
+        syncRequest[GrpcContactPayload](ApiType.GET_CONTACT,Some(json.toString))
+    }
   }
 
   protected def loginPartialFunction(response: StreamResponse): PartialFunction[ResponseType, Unit] = {
@@ -162,9 +161,9 @@ trait ContactRawSupport {
 
             roomPayload
           }
-          val roomCallback=roomPromises.getIfPresent(userName)
-          if(roomCallback != null)
-            roomCallback.foreach(_.complete(roomTry))
+          //TODO use Try instance to avoid memory leak
+          if(roomTry.isSuccess)
+            CallbackHelper.resolveRoomCallBack(userName,roomTry.get)
 
         }else{
           val result:Try[PadplusContactPayload] = Try {
@@ -173,10 +172,10 @@ trait ContactRawSupport {
             savePadplusContactPayload(padplusContactPayload)
             padplusContactPayload
           }
-          val callbacks =contactPromises.getIfPresent(userName)
-          if(callbacks!=null){
-            callbacks.foreach(_.complete(result))
-          }
+
+          //TODO use Try instance to avoid memory leak
+          if(result.isSuccess)
+            CallbackHelper.resolveContactCallBack(userName,result.get)
         }
       }
   }

@@ -1,4 +1,7 @@
 package wechaty.padplus.schemas
+
+import wechaty.padplus.schemas.ModelContact.PadplusConversation
+
 object ModelRoom {
 class PadplusRoomMemberPayload {
   var contactId:String = _
@@ -29,7 +32,7 @@ class GrpcRoomMemberList {
   var membersJson:String = _
 }
 
-class PadplusRoomPayload {
+class PadplusRoomPayload extends PadplusConversation{
   var alias:String = _
   var bigHeadUrl:String = _
   var chatRoomOwner:String = _

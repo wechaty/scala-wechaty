@@ -1,8 +1,5 @@
 package wechaty.padplus.support
 
-import java.util.concurrent.TimeUnit
-
-import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
 import com.typesafe.scalalogging.LazyLogging
 import wechaty.padplus.grpc.PadPlusServerOuterClass.{ApiType, ResponseType, StreamResponse}
 import wechaty.padplus.schemas.ModelRoom.{GrpcRoomMemberList, GrpcRoomMemberPayload, PadplusRoomMemberMap, PadplusRoomMemberPayload}
@@ -11,8 +8,6 @@ import wechaty.puppet.schemas.Room
 import wechaty.puppet.schemas.Room.RoomMemberPayload
 import wechaty.puppet.support.RoomMemberSupport
 
-import scala.concurrent.Promise
-
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
@@ -20,10 +15,6 @@ import scala.concurrent.Promise
   */
 trait RoomMemberRawSupport {
   self:RoomMemberSupport with GrpcSupport with LocalStoreSupport with LazyLogging=>
-  protected lazy val roomMemberPayloadPromises: Cache[String, List[Promise[PadplusRoomMemberMap]]] = {
-    Caffeine.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.MINUTES).build()
-      .asInstanceOf[Cache[String, List[Promise[PadplusRoomMemberMap]]]]
-  }
 
   /**
     *
@@ -81,9 +72,7 @@ trait RoomMemberRawSupport {
       padplusRoomMemberMap.members = data
       savePadplusRoomMembers(roomId,padplusRoomMemberMap)
 
-      val promises = roomMemberPayloadPromises.getIfPresent(roomId)
-      if(promises != null){
-        promises.map(_.success(padplusRoomMemberMap))
-      }
+
+      CallbackHelper.resolveRoomMemberCallback(roomId,padplusRoomMemberMap)
   }
 }
