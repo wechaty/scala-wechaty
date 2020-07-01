@@ -238,9 +238,9 @@ make bot
 
 ### v0.4 (Jun 19, 2020)
 
-Scala Wechaqty Beta Released!
+Scala Wechaty **BETA** Released
 
-Read more from our Multi-language Wechaqty Beta Release event from our blog:
+Read more from our Multi-language Wechaty Beta Release event from our blog:
 
 - [Multi Language Wechaty Beta Release Announcement!](https://wechaty.github.io/2020/06/19/multi-language-wechaty-beta-release/)
 
