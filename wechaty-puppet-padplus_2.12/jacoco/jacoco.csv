@@ -127,25 +127,31 @@ wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.CDNFileMd5Exist
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelMessage.PadplusRecallData.BaseResponse,24,0,2,0,4,0,6,0,5,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.internal,LocalStore,28,98,2,2,4,16,5,10,3,10
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,GrpcEventSupport,170,0,16,0,20,0,15,0,7,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactRawSupport,354,0,40,0,59,0,33,0,13,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactRawSupport,374,0,40,0,59,0,33,0,13,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,LocalStoreSupport,224,0,4,0,22,0,18,0,16,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,PadplusHelper,342,0,90,0,28,0,52,0,7,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,RoomMemberRawSupport..anonfun.roomMemberPartialFunction.new Serializable() {...},138,0,8,0,13,0,9,0,5,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,MessageRawSupport..typecreator1.new TypeCreator() {...},51,0,0,0,1,0,2,0,2,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactSelfRawSupport..typecreator1.new TypeCreator() {...},51,0,0,0,1,0,2,0,2,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,RoomRawSupport,106,0,0,0,28,0,13,0,13,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactRawSupport..anonfun.loginPartialFunction.new Serializable() {...},596,0,50,0,74,0,33,0,8,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactRawSupport..anonfun.loginPartialFunction.new Serializable() {...},601,0,50,0,74,0,33,0,8,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,GrpcSupport..typecreator1.new TypeCreator() {...},14,0,0,0,1,0,2,0,2,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,GrpcSupport..typecreator1.new TypeCreator() {...},70,0,0,0,1,0,2,0,2,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,DisrutporSupport,83,0,2,0,15,0,6,0,5,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,MessageRawSupport..anonfun.messagePartialFunction.new Serializable() {...},79,0,6,0,8,0,6,0,3,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.support,RoomMemberRawSupport,169,0,2,0,31,0,12,0,11,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,RoomMemberRawSupport..typecreator1.new TypeCreator() {...},51,0,0,0,1,0,2,0,2,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,RoomMemberRawSupport,188,0,2,0,31,0,12,0,11,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,DisrutporSupport.EventDef,24,0,2,0,4,0,6,0,5,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactSelfRawSupport,110,0,0,0,25,0,8,0,8,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactSelfRawSupport,129,0,0,0,25,0,8,0,8,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactRawSupport..typecreator1.new TypeCreator() {...},51,0,0,0,1,0,2,0,2,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,DisrutporSupport..anon.new EventHandler() {...},43,0,4,0,3,0,4,0,2,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,DisrutporSupport..anon.new EventFactory() {...},16,0,2,0,2,0,3,0,2,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,DisrutporSupport..anon.new ExceptionHandler() {...},54,0,6,0,4,0,7,0,4,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.support,MessageRawSupport,381,0,32,0,73,0,32,0,16,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.support,GrpcSupport,701,0,46,0,92,0,41,0,18,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,MessageRawSupport,400,0,32,0,73,0,32,0,16,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,GrpcSupport,786,0,48,0,94,0,42,0,18,0
 wechaty-puppet-padplus_2.12,wechaty.padplus,Configuration,6,0,0,0,0,0,2,0,2,0
 wechaty-puppet-padplus_2.12,wechaty.padplus,PuppetPadplus.,10,0,0,0,1,0,3,0,3,0
-wechaty-puppet-padplus_2.12,wechaty.padplus,PuppetPadplus,941,0,22,0,34,0,194,0,183,0
+wechaty-puppet-padplus_2.12,wechaty.padplus,PuppetPadplus,953,0,22,0,34,0,194,0,183,0
 wechaty-puppet-padplus_2.12,wechaty.padplus,TestMain,4,0,0,0,0,0,1,0,1,0
 wechaty-puppet-padplus_2.12,wechaty.padplus,TestMain.,71,0,4,0,9,0,7,0,5,0
 wechaty-puppet-padplus_2.12,wechaty.padplus,Configuration.,116,0,12,0,10,0,12,0,6,0
