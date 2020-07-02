@@ -48,9 +48,8 @@ trait GrpcSupport {
     internalStartGrpc()
     //from https://github.com/wechaty/java-wechaty/blob/master/wechaty-puppet/src/main/kotlin/Puppet.kt
     executorService.scheduleAtFixedRate(() => {
-      val seq = HEARTBEAT_COUNTER.incrementAndGet()
       try {
-        asyncRequest(ApiType.HEARTBEAT)
+        asyncRequest[JsonNode](ApiType.HEARTBEAT)
       } catch {
         case e: Throwable =>
           logger.warn("ding exception:{}", e.getMessage)
@@ -156,7 +155,10 @@ trait GrpcSupport {
     typeOf[T] match {
       case t if t =:= typeOf[Nothing] =>
         throw new IllegalAccessException("generic type is nothing,maybe you should use asyncRequestNothing !")
-      case _ =>
+      case t if t =:= typeOf[RuntimeClass] =>
+        throw new IllegalAccessException("generic type is nothing,maybe you should use asyncRequestNothing !")
+      case other =>
+        logger.debug(s"async request generic type is $other")
     }
     val request = RequestObject.newBuilder()
     request.setToken(option.token.get)
@@ -173,8 +175,8 @@ trait GrpcSupport {
         request.setParams(Puppet.objectMapper.writeValueAsString(d))
       case _ =>
     }
-//    val requestId = UUID.randomUUID().toString
-//    request.setRequestId(requestId)
+    val requestId = UUID.randomUUID().toString
+    request.setRequestId(requestId)
     val traceId= generateTraceId(apiType)
     request.setTraceId(traceId)
     logger.debug("request:{}",request.build())
@@ -184,6 +186,7 @@ trait GrpcSupport {
     val future = asyncCall(PadPlusServerGrpc.getRequestMethod,request.build())
     future.flatMap{rep=>
       if(rep.getResult != "success"){
+        logger.warn("fail to request:{}",rep)
         callbackPromise.failure(new IllegalAccessException("fail to request ,grpc result:"+rep))
       }
       callbackPromise.future
