@@ -198,13 +198,7 @@ trait GrpcSupport {
         case t if t =:= typeOf[JsonNode] =>
           Puppet.objectMapper.readTree(streamResponse.getData).asInstanceOf[T]
         case _ =>
-          try {
-            Puppet.objectMapper.readValue(streamResponse.getData, classTag.runtimeClass).asInstanceOf[T]
-          } catch {
-            case e: Throwable =>
-              logger.error(e.getMessage, e)
-              throw e
-          }
+          Puppet.objectMapper.readValue(streamResponse.getData, classTag.runtimeClass).asInstanceOf[T]
       }
     }
   }
