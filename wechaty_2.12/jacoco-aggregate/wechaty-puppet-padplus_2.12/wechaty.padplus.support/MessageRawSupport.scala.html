@@ -165,7 +165,7 @@ import wechaty.puppet.support.MessageSupport
   }
 
 <span class="nc" id="L167">  override protected def ding(data: String): Unit = ???</span>
-<span class="nc bnc" id="L168" title="All 2 branches missed.">  def messagePartialFunction(response:StreamResponse):PartialFunction[ResponseType,Unit] = {</span>
+<span class="pc bpc" id="L168" title="1 of 2 branches missed.">  def messagePartialFunction(response:StreamResponse):PartialFunction[ResponseType,Unit] = {</span>
 <span class="nc bnc" id="L169" title="All 4 branches missed.">    case ResponseType.MESSAGE_RECEIVE =&gt;</span>
 <span class="nc" id="L170">      val rawMessageStr                            = response.getData()</span>
 <span class="nc" id="L171">      val payload                                  = objectMapper.readValue(rawMessageStr, classOf[GrpcMessagePayload])</span>

@@ -29,15 +29,15 @@ import scala.util.{Failure, Success, Try}
 
 <span class="fc" id="L30">    val traceId = response.getTraceId</span>
 <span class="pc bpc" id="L31" title="1 of 2 branches missed.">    if(!isBlank(traceId)){</span>
-<span class="fc" id="L32">      CallbackHelper.resolveCallBack(traceId,response)</span>
+<span class="nc" id="L32">      CallbackHelper.resolveCallBack(traceId,response)</span>
     }else {
 <span class="pc" id="L34">      Try {</span>
-<span class="nc" id="L35">        val partialFunction = sysPartialFunction(response) orElse</span>
-<span class="nc" id="L36">          loginPartialFunction(response) orElse</span>
-<span class="nc" id="L37">          messagePartialFunction(response)</span>
-<span class="nc" id="L38">        partialFunction.applyOrElse(response.getResponseType, { _: ResponseType =&gt; Unit })</span>
+<span class="fc" id="L35">        val partialFunction = sysPartialFunction(response) orElse</span>
+<span class="fc" id="L36">          loginPartialFunction(response) orElse</span>
+<span class="fc" id="L37">          messagePartialFunction(response)</span>
+<span class="pc" id="L38">        partialFunction.applyOrElse(response.getResponseType, { _: ResponseType =&gt; Unit })</span>
       } match {
-<span class="nc bnc" id="L40" title="All 2 branches missed.">        case Success(_)=&gt;</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        case Success(_)=&gt;</span>
 <span class="nc bnc" id="L41" title="All 2 branches missed.">        case Failure(exception) =&gt;</span>
 <span class="nc bnc" id="L42" title="All 2 branches missed.">          logger.error(exception.getMessage,exception)</span>
       }

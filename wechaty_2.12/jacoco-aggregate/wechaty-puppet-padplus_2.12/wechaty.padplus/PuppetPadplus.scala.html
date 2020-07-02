@@ -46,9 +46,9 @@ import wechaty.puppet.support.ContactSupport
 <span class="pc bpc" id="L46" title="1 of 2 branches missed.">      case Some(str) =&gt;</span>
 <span class="fc" id="L47">        uinOpt = Some(str)</span>
 <span class="pc bpc" id="L48" title="1 of 2 branches missed.">        logger.debug(&quot;found uin in local store:{}&quot;,str)</span>
-<span class="fc" id="L49">        asyncRequest(ApiType.INIT)</span>
+<span class="fc" id="L49">        asyncRequestNothing(ApiType.INIT)</span>
       case _ =&gt;
-<span class="nc" id="L51">        asyncRequest(ApiType.GET_QRCODE)</span>
+<span class="nc" id="L51">        asyncRequestNothing(ApiType.GET_QRCODE)</span>
     }
   }
   def stop(): Unit = {
@@ -56,9 +56,9 @@ import wechaty.puppet.support.ContactSupport
 <span class="fc" id="L56">    stopGrpc()</span>
 <span class="fc" id="L57">    stopLocalStore()</span>
   }
-<span class="nc bnc" id="L59" title="All 2 branches missed.">  protected def sysPartialFunction(response: StreamResponse): PartialFunction[ResponseType, Unit] = {</span>
-<span class="nc bnc" id="L60" title="All 4 branches missed.">    case ResponseType.DISCONNECT =&gt;</span>
-<span class="nc" id="L61">      emit(PuppetEventName.RESET,new EventResetPayload)</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">  protected def sysPartialFunction(response: StreamResponse): PartialFunction[ResponseType, Unit] = {</span>
+<span class="pc bpc" id="L60" title="2 of 4 branches missed.">    case ResponseType.DISCONNECT =&gt;</span>
+<span class="pc" id="L61">      emit(PuppetEventName.RESET,new EventResetPayload)</span>
   }
 
 

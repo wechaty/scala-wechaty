@@ -8,12 +8,14 @@ import wechaty.puppet.schemas.Room
 import wechaty.puppet.schemas.Room.RoomMemberPayload
 import wechaty.puppet.support.RoomMemberSupport
 
+import scala.util.Try
+
 /**
   *
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-24
   */
-<span class="nc" id="L16">trait RoomMemberRawSupport {</span>
+<span class="nc" id="L18">trait RoomMemberRawSupport {</span>
   self:RoomMemberSupport with GrpcSupport with LocalStoreSupport with LazyLogging=&gt;
 
   /**
@@ -21,59 +23,62 @@ import wechaty.puppet.support.RoomMemberSupport
     * RoomMember
     *
     */
-<span class="nc" id="L24">  override def roomAnnounce(roomId: String): String = ???</span>
+<span class="nc" id="L26">  override def roomAnnounce(roomId: String): String = ???</span>
 
-<span class="nc" id="L26">  override def roomAnnounce(roomId: String, text: String): Unit = ???</span>
+<span class="nc" id="L28">  override def roomAnnounce(roomId: String, text: String): Unit = ???</span>
 
-<span class="nc" id="L28">  override def roomMemberList(roomId: String): Array[String] = ???</span>
+<span class="nc" id="L30">  override def roomMemberList(roomId: String): Array[String] = ???</span>
 
   override protected def roomMemberRawPayload(roomId: String, contactId: String): Room.RoomMemberPayload = {
-<span class="nc" id="L31">    getPadplusRoomMembers(roomId) match{</span>
-<span class="nc bnc" id="L32" title="All 2 branches missed.">      case Some(padplusRoomMembers) =&gt;</span>
-<span class="nc" id="L33">        padplusRoomMembers.members.get(contactId).map(convertToPuppetRoomMember).orNull</span>
+<span class="nc" id="L33">    getPadplusRoomMembers(roomId) match{</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">      case Some(padplusRoomMembers) =&gt;</span>
+<span class="nc" id="L35">        padplusRoomMembers.members.get(contactId).map(convertToPuppetRoomMember).orNull</span>
       case _ =&gt;
-<span class="nc" id="L35">          val json = objectMapper.createObjectNode()</span>
-<span class="nc" id="L36">          json.put(&quot;OpType&quot;, &quot;UPDATE&quot;)</span>
-<span class="nc" id="L37">          json.put(&quot;type&quot;, &quot;GET_MEMBER&quot;)</span>
-<span class="nc" id="L38">          json.put(&quot;roomId&quot;, roomId)</span>
-<span class="nc" id="L39">        val map = syncRequest[PadplusRoomMemberMap](ApiType.ROOM_OPERATION, Some(json.toString))</span>
-<span class="nc" id="L40">        savePadplusRoomMembers(roomId,map)</span>
-<span class="nc" id="L41">        map.members.get(contactId).map(convertToPuppetRoomMember).orNull</span>
+<span class="nc" id="L37">          val json = objectMapper.createObjectNode()</span>
+<span class="nc" id="L38">          json.put(&quot;OpType&quot;, &quot;UPDATE&quot;)</span>
+<span class="nc" id="L39">          json.put(&quot;type&quot;, &quot;GET_MEMBER&quot;)</span>
+<span class="nc" id="L40">          json.put(&quot;roomId&quot;, roomId)</span>
+<span class="nc" id="L41">        val map = syncRequest[PadplusRoomMemberMap](ApiType.ROOM_OPERATION, Some(json.toString))</span>
+<span class="nc" id="L42">        savePadplusRoomMembers(roomId,map)</span>
+<span class="nc" id="L43">        map.members.get(contactId).map(convertToPuppetRoomMember).orNull</span>
     }
   }
   private def convertToPuppetRoomMember(input: PadplusRoomMemberPayload): RoomMemberPayload = {
-<span class="nc" id="L45">    val result = new  RoomMemberPayload</span>
-<span class="nc" id="L46">    result.avatar     = input.smallHeadUrl</span>
-<span class="nc" id="L47">    result.id         = input.contactId</span>
-<span class="nc" id="L48">    result.inviterId  = input.inviterId   // 'wxid_7708837087612',</span>
-<span class="nc" id="L49">    result.name       = input.nickName</span>
-<span class="nc" id="L50">    result.roomAlias  = input.displayName   // '李佳芮-群里设置的备注', `chatroom_nick_name`</span>
-<span class="nc" id="L51">    result</span>
+<span class="nc" id="L47">    val result = new  RoomMemberPayload</span>
+<span class="nc" id="L48">    result.avatar     = input.smallHeadUrl</span>
+<span class="nc" id="L49">    result.id         = input.contactId</span>
+<span class="nc" id="L50">    result.inviterId  = input.inviterId   // 'wxid_7708837087612',</span>
+<span class="nc" id="L51">    result.name       = input.nickName</span>
+<span class="nc" id="L52">    result.roomAlias  = input.displayName   // '李佳芮-群里设置的备注', `chatroom_nick_name`</span>
+<span class="nc" id="L53">    result</span>
   }
   private def convertToPadplusRoomMemberPayload(grpcRoomMemberPayload: GrpcRoomMemberPayload) = {
-<span class="nc" id="L54">    val padplusRoomMemberPayload=new PadplusRoomMemberPayload</span>
-<span class="nc" id="L55">    padplusRoomMemberPayload.bigHeadUrl= grpcRoomMemberPayload.HeadImgUrl</span>
-<span class="nc" id="L56">    padplusRoomMemberPayload.contactId= grpcRoomMemberPayload.UserName</span>
-<span class="nc" id="L57">    padplusRoomMemberPayload.displayName= grpcRoomMemberPayload.DisplayName</span>
-<span class="nc" id="L58">    padplusRoomMemberPayload.inviterId= &quot;&quot;</span>
-<span class="nc" id="L59">    padplusRoomMemberPayload.nickName= grpcRoomMemberPayload.NickName</span>
-<span class="nc" id="L60">    padplusRoomMemberPayload.smallHeadUrl= grpcRoomMemberPayload.HeadImgUrl</span>
+<span class="nc" id="L56">    val padplusRoomMemberPayload=new PadplusRoomMemberPayload</span>
+<span class="nc" id="L57">    padplusRoomMemberPayload.bigHeadUrl= grpcRoomMemberPayload.HeadImgUrl</span>
+<span class="nc" id="L58">    padplusRoomMemberPayload.contactId= grpcRoomMemberPayload.UserName</span>
+<span class="nc" id="L59">    padplusRoomMemberPayload.displayName= grpcRoomMemberPayload.DisplayName</span>
+<span class="nc" id="L60">    padplusRoomMemberPayload.inviterId= &quot;&quot;</span>
+<span class="nc" id="L61">    padplusRoomMemberPayload.nickName= grpcRoomMemberPayload.NickName</span>
+<span class="nc" id="L62">    padplusRoomMemberPayload.smallHeadUrl= grpcRoomMemberPayload.HeadImgUrl</span>
 
-<span class="nc" id="L62">    padplusRoomMemberPayload</span>
+<span class="nc" id="L64">    padplusRoomMemberPayload</span>
   }
-<span class="nc bnc" id="L64" title="All 2 branches missed.">  protected def roomMemberPartialFunction(response:StreamResponse):PartialFunction[ResponseType,Unit]={</span>
-<span class="nc bnc" id="L65" title="All 4 branches missed.">    case ResponseType.ROOM_MEMBER_LIST =&gt;</span>
-<span class="nc" id="L66">      val roomMemberList= objectMapper.readValue(response.getData,classOf[GrpcRoomMemberList])</span>
-<span class="nc" id="L67">      val roomId = roomMemberList.roomId</span>
-<span class="nc" id="L68">      val membersStr = roomMemberList.membersJson</span>
-<span class="nc" id="L69">      val membersList =objectMapper.readValue(membersStr,classOf[Array[GrpcRoomMemberPayload]])</span>
-<span class="nc" id="L70">      val data=membersList.map(x=&gt; x.UserName-&gt; convertToPadplusRoomMemberPayload(x)).toMap</span>
-<span class="nc" id="L71">      val padplusRoomMemberMap = new PadplusRoomMemberMap</span>
-<span class="nc" id="L72">      padplusRoomMemberMap.members = data</span>
-<span class="nc" id="L73">      savePadplusRoomMembers(roomId,padplusRoomMemberMap)</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">  protected def roomMemberPartialFunction(response:StreamResponse):PartialFunction[ResponseType,Unit]={</span>
+<span class="nc bnc" id="L67" title="All 4 branches missed.">    case ResponseType.ROOM_MEMBER_LIST =&gt;</span>
+<span class="nc" id="L68">      val roomMemberList       = objectMapper.readValue(response.getData, classOf[GrpcRoomMemberList])</span>
+<span class="nc" id="L69">      val roomId               = roomMemberList.roomId</span>
+<span class="nc" id="L70">      val roomMembers = Try {</span>
+<span class="nc" id="L71">        val membersStr           = roomMemberList.membersJson</span>
+<span class="nc" id="L72">        val membersList          = objectMapper.readValue(membersStr, classOf[Array[GrpcRoomMemberPayload]])</span>
+<span class="nc" id="L73">        val data                 = membersList.map(x =&gt; x.UserName -&gt; convertToPadplusRoomMemberPayload(x)).toMap</span>
+<span class="nc" id="L74">        val padplusRoomMemberMap = new PadplusRoomMemberMap</span>
+<span class="nc" id="L75">        padplusRoomMemberMap.members = data</span>
+<span class="nc" id="L76">        savePadplusRoomMembers(roomId, padplusRoomMemberMap)</span>
+<span class="nc" id="L77">        padplusRoomMemberMap</span>
+      }
 
 
-<span class="nc" id="L76">      CallbackHelper.resolveRoomMemberCallback(roomId,padplusRoomMemberMap)</span>
+<span class="nc" id="L81">      CallbackHelper.resolveRoomMemberCallback(roomId,roomMembers)</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

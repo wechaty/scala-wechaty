@@ -9,14 +9,14 @@ wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,RoomInvit
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Puppet,17,0,0,0,0,0,5,0,5,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Friendship.FriendshipPayloadReceive,24,0,0,0,4,0,7,0,7,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.WechatAppMessageType.,160,0,0,0,20,0,21,0,21,0
-wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Puppet.PuppetEventName.,6,138,0,0,0,18,2,17,2,17
+wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Puppet.PuppetEventName.,0,144,0,0,0,18,0,19,0,19
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventMessagePayload,10,0,0,0,2,0,3,0,3,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,UrlLink.UrlLinkPayload,31,0,0,0,6,0,9,0,9,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,RoomInvitation.RoomInvitationPayload,66,0,0,0,11,0,19,0,19,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Friendship.FriendshipPayload,38,0,0,0,7,0,11,0,11,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,MiniProgram.MiniProgramPayload,66,0,0,0,11,0,19,0,19,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Room.RoomPayload,45,0,0,0,8,0,13,0,13,0
-wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Contact.ContactGender.,9,23,0,0,0,4,3,2,3,2
+wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Contact.ContactGender.,0,32,0,0,0,4,0,5,0,5
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventScanPayload,30,0,0,0,5,0,8,0,8,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Friendship.FriendshipPayloadVerify,3,0,0,0,1,0,1,0,1,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.MessageType.,121,0,0,0,17,0,18,0,18,0
@@ -34,9 +34,9 @@ wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Room.Room
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.,8,0,0,0,2,0,2,0,2,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Image.ImageType.,40,0,0,0,5,0,6,0,6,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventRoomTopicPayload,38,0,0,0,6,0,11,0,11,0
-wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Puppet.,21,270,6,8,4,24,7,9,2,7
+wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Puppet.,19,272,4,10,4,24,5,11,2,7
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.,8,0,0,0,2,0,2,0,2,0
-wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.BaseEventPayload,10,0,0,0,2,0,3,0,3,0
+wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.BaseEventPayload,7,3,0,0,1,1,2,1,2,1
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.WechatMessageType.,192,0,0,0,24,0,25,0,25,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.MessagePayload,66,0,0,0,11,0,19,0,19,0
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.ScalaEnumerationSerializer,8,0,0,0,2,0,2,0,2,0
@@ -63,4 +63,4 @@ wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.Abstr
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.ResourceBoxType.,18,46,0,0,0,8,6,3,6,3
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.UrlResourceBox,39,49,0,0,7,7,3,6,3,6
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.,85,24,12,0,9,5,7,5,1,5
-wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.events,EventEmitter,91,43,3,1,7,6,7,3,5,3
+wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.events,EventEmitter,34,100,2,2,1,12,2,8,0,8

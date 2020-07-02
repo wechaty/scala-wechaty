@@ -17,8 +17,8 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName.Type
 <span class="fc" id="L17">trait DisrutporSupport extends EventEmitter {</span>
   self :LazyLogging =&gt;
 <span class="pc bpc" id="L19" title="1 of 2 branches missed.">  private class EventDef {</span>
-<span class="nc" id="L20">    var eventName: PuppetEventName.Type = _</span>
-<span class="nc" id="L21">    var value    : Any = _</span>
+<span class="fc" id="L20">    var eventName: PuppetEventName.Type = _</span>
+<span class="fc" id="L21">    var value    : Any = _</span>
   }
 <span class="fc" id="L23">  private var disruptor:Disruptor[EventDef] = _</span>
   protected def startDisruptor(): Unit ={
@@ -36,8 +36,8 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName.Type
     )
 <span class="pc bpc" id="L37" title="1 of 2 branches missed.">    disruptor.handleEventsWith(new EventHandler[EventDef](){</span>
       override def onEvent(event: EventDef, sequence: Long, endOfBatch: Boolean): Unit = {
-<span class="nc bnc" id="L39" title="All 2 branches missed.">        logger.debug(&quot;emit event using super {}&quot;,event.eventName)</span>
-<span class="nc" id="L40">        DisrutporSupport.super.emit(event.eventName,event.value)</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        logger.debug(&quot;emit event using super {}&quot;,event.eventName)</span>
+<span class="fc" id="L40">        DisrutporSupport.super.emit(event.eventName,event.value)</span>
       }
     })
 <span class="pc bpc" id="L43" title="1 of 2 branches missed.">    disruptor.setDefaultExceptionHandler(new ExceptionHandler[EventDef] {</span>
@@ -56,10 +56,10 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName.Type
 <span class="fc" id="L56">    disruptor.start()</span>
   }
   override def emit[T](eventName: Type, value: T): Unit = {
-<span class="nc bnc" id="L59" title="All 2 branches missed.">    logger.debug(&quot;publish event {}&quot;,eventName)</span>
-<span class="nc" id="L60">    disruptor.publishEvent((event: EventDef, sequence: Long) =&gt; {</span>
-<span class="nc" id="L61">      event.eventName = eventName</span>
-<span class="nc" id="L62">      event.value = value</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">    logger.debug(&quot;publish event {}&quot;,eventName)</span>
+<span class="fc" id="L60">    disruptor.publishEvent((event: EventDef, sequence: Long) =&gt; {</span>
+<span class="fc" id="L61">      event.eventName = eventName</span>
+<span class="fc" id="L62">      event.value = value</span>
     })
   }
   protected def shutdownDisruptor(): Unit ={

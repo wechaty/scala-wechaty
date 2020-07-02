@@ -680,12 +680,12 @@ public final class PadPlusServerOuterClass {
 <span class="nc" id="L680">        case 17: return CONTACT_SELF_INFO_GET;</span>
 <span class="nc" id="L681">        case 18: return CONTACT_SELF_INFO_SET;</span>
 <span class="nc" id="L682">        case 19: return CONTACT_SELF_QRCODE_GET;</span>
-<span class="nc" id="L683">        case 20: return CONTACT_LIST;</span>
+<span class="fc" id="L683">        case 20: return CONTACT_LIST;</span>
 <span class="nc" id="L684">        case 21: return CONTACT_MODIFY;</span>
 <span class="nc" id="L685">        case 22: return CONTACT_DELETE;</span>
 <span class="nc" id="L686">        case 23: return ROOM_MEMBER_LIST;</span>
 <span class="nc" id="L687">        case 24: return ROOM_MEMBER_MODIFY;</span>
-<span class="fc" id="L688">        case 25: return CONTACT_SEARCH;</span>
+<span class="nc" id="L688">        case 25: return CONTACT_SEARCH;</span>
 <span class="nc" id="L689">        case 26: return CONTACT_ADD;</span>
 <span class="nc" id="L690">        case 27: return ROOM_QRCODE;</span>
 <span class="nc" id="L691">        case 30: return MESSAGE_RECEIVE;</span>
@@ -894,7 +894,7 @@ public final class PadPlusServerOuterClass {
 <span class="fc" id="L894">        boolean done = false;</span>
 <span class="fc bfc" id="L895" title="All 2 branches covered.">        while (!done) {</span>
 <span class="fc" id="L896">          int tag = input.readTag();</span>
-<span class="pc bpc" id="L897" title="2 of 8 branches missed.">          switch (tag) {</span>
+<span class="pc bpc" id="L897" title="3 of 8 branches missed.">          switch (tag) {</span>
             case 0:
 <span class="fc" id="L899">              done = true;</span>
 <span class="fc" id="L900">              break;</span>
@@ -935,10 +935,10 @@ public final class PadPlusServerOuterClass {
 <span class="fc" id="L935">              break;</span>
             }
             case 402: {
-<span class="fc" id="L938">              com.google.protobuf.ByteString bs = input.readBytes();</span>
-<span class="fc" id="L939">              bitField0_ |= 0x00000020;</span>
-<span class="fc" id="L940">              traceId_ = bs;</span>
-<span class="fc" id="L941">              break;</span>
+<span class="nc" id="L938">              com.google.protobuf.ByteString bs = input.readBytes();</span>
+<span class="nc" id="L939">              bitField0_ |= 0x00000020;</span>
+<span class="nc" id="L940">              traceId_ = bs;</span>
+<span class="nc" id="L941">              break;</span>
             }
             default: {
 <span class="nc bnc" id="L944" title="All 2 branches missed.">              if (!parseUnknownField(</span>
@@ -990,8 +990,8 @@ public final class PadPlusServerOuterClass {
     @java.lang.Override
     public java.lang.String getUin() {
 <span class="fc" id="L992">      java.lang.Object ref = uin_;</span>
-<span class="fc bfc" id="L993" title="All 2 branches covered.">      if (ref instanceof java.lang.String) {</span>
-<span class="fc" id="L994">        return (java.lang.String) ref;</span>
+<span class="pc bpc" id="L993" title="1 of 2 branches missed.">      if (ref instanceof java.lang.String) {</span>
+<span class="nc" id="L994">        return (java.lang.String) ref;</span>
       } else {
 <span class="fc" id="L996">        com.google.protobuf.ByteString bs = </span>
             (com.google.protobuf.ByteString) ref;
@@ -1086,8 +1086,8 @@ public final class PadPlusServerOuterClass {
     @java.lang.Override
     public java.lang.String getToken() {
 <span class="fc" id="L1088">      java.lang.Object ref = token_;</span>
-<span class="fc bfc" id="L1089" title="All 2 branches covered.">      if (ref instanceof java.lang.String) {</span>
-<span class="fc" id="L1090">        return (java.lang.String) ref;</span>
+<span class="pc bpc" id="L1089" title="1 of 2 branches missed.">      if (ref instanceof java.lang.String) {</span>
+<span class="nc" id="L1090">        return (java.lang.String) ref;</span>
       } else {
 <span class="fc" id="L1092">        com.google.protobuf.ByteString bs = </span>
             (com.google.protobuf.ByteString) ref;
@@ -1153,8 +1153,8 @@ public final class PadPlusServerOuterClass {
     @java.lang.Override
     public java.lang.String getParams() {
 <span class="fc" id="L1155">      java.lang.Object ref = params_;</span>
-<span class="fc bfc" id="L1156" title="All 2 branches covered.">      if (ref instanceof java.lang.String) {</span>
-<span class="fc" id="L1157">        return (java.lang.String) ref;</span>
+<span class="pc bpc" id="L1156" title="1 of 2 branches missed.">      if (ref instanceof java.lang.String) {</span>
+<span class="nc" id="L1157">        return (java.lang.String) ref;</span>
       } else {
 <span class="fc" id="L1159">        com.google.protobuf.ByteString bs = </span>
             (com.google.protobuf.ByteString) ref;
@@ -1200,17 +1200,17 @@ public final class PadPlusServerOuterClass {
      */
     @java.lang.Override
     public java.lang.String getTraceId() {
-<span class="fc" id="L1203">      java.lang.Object ref = traceId_;</span>
-<span class="fc bfc" id="L1204" title="All 2 branches covered.">      if (ref instanceof java.lang.String) {</span>
-<span class="fc" id="L1205">        return (java.lang.String) ref;</span>
+<span class="nc" id="L1203">      java.lang.Object ref = traceId_;</span>
+<span class="nc bnc" id="L1204" title="All 2 branches missed.">      if (ref instanceof java.lang.String) {</span>
+<span class="nc" id="L1205">        return (java.lang.String) ref;</span>
       } else {
-<span class="fc" id="L1207">        com.google.protobuf.ByteString bs = </span>
+<span class="nc" id="L1207">        com.google.protobuf.ByteString bs = </span>
             (com.google.protobuf.ByteString) ref;
-<span class="fc" id="L1209">        java.lang.String s = bs.toStringUtf8();</span>
-<span class="pc bpc" id="L1210" title="1 of 2 branches missed.">        if (bs.isValidUtf8()) {</span>
-<span class="fc" id="L1211">          traceId_ = s;</span>
+<span class="nc" id="L1209">        java.lang.String s = bs.toStringUtf8();</span>
+<span class="nc bnc" id="L1210" title="All 2 branches missed.">        if (bs.isValidUtf8()) {</span>
+<span class="nc" id="L1211">          traceId_ = s;</span>
         }
-<span class="fc" id="L1213">        return s;</span>
+<span class="nc" id="L1213">        return s;</span>
       }
     }
     /**
@@ -1270,7 +1270,7 @@ public final class PadPlusServerOuterClass {
 <span class="fc" id="L1270">        com.google.protobuf.GeneratedMessageV3.writeString(output, 40, params_);</span>
       }
 <span class="pc bpc" id="L1272" title="1 of 2 branches missed.">      if (((bitField0_ &amp; 0x00000020) != 0)) {</span>
-<span class="fc" id="L1273">        com.google.protobuf.GeneratedMessageV3.writeString(output, 50, traceId_);</span>
+<span class="nc" id="L1273">        com.google.protobuf.GeneratedMessageV3.writeString(output, 50, traceId_);</span>
       }
 <span class="fc" id="L1275">      unknownFields.writeTo(output);</span>
 <span class="fc" id="L1276">    }</span>
@@ -1298,7 +1298,7 @@ public final class PadPlusServerOuterClass {
 <span class="fc" id="L1298">        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(40, params_);</span>
       }
 <span class="pc bpc" id="L1300" title="1 of 2 branches missed.">      if (((bitField0_ &amp; 0x00000020) != 0)) {</span>
-<span class="fc" id="L1301">        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(50, traceId_);</span>
+<span class="nc" id="L1301">        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(50, traceId_);</span>
       }
 <span class="fc" id="L1303">      size += unknownFields.getSerializedSize();</span>
 <span class="fc" id="L1304">      memoizedSize = size;</span>
@@ -1572,7 +1572,7 @@ public final class PadPlusServerOuterClass {
 <span class="fc" id="L1572">          to_bitField0_ |= 0x00000010;</span>
         }
 <span class="fc" id="L1574">        result.params_ = params_;</span>
-<span class="pc bpc" id="L1575" title="1 of 2 branches missed.">        if (((from_bitField0_ &amp; 0x00000020) != 0)) {</span>
+<span class="fc bfc" id="L1575" title="All 2 branches covered.">        if (((from_bitField0_ &amp; 0x00000020) != 0)) {</span>
 <span class="fc" id="L1576">          to_bitField0_ |= 0x00000020;</span>
         }
 <span class="fc" id="L1578">        result.traceId_ = traceId_;</span>
@@ -2251,7 +2251,7 @@ public final class PadPlusServerOuterClass {
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
-<span class="nc" id="L2254">      return this.unknownFields;</span>
+<span class="fc" id="L2254">      return this.unknownFields;</span>
     }
     private ResponseObject(
         com.google.protobuf.CodedInputStream input,
@@ -2305,8 +2305,8 @@ public final class PadPlusServerOuterClass {
     @java.lang.Override
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-<span class="nc" id="L2308">      return wechaty.padplus.grpc.PadPlusServerOuterClass.internal_static_PadPlusServer_ResponseObject_fieldAccessorTable</span>
-<span class="nc" id="L2309">          .ensureFieldAccessorsInitialized(</span>
+<span class="fc" id="L2308">      return wechaty.padplus.grpc.PadPlusServerOuterClass.internal_static_PadPlusServer_ResponseObject_fieldAccessorTable</span>
+<span class="fc" id="L2309">          .ensureFieldAccessorsInitialized(</span>
               wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject.class, wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject.Builder.class);
     }
 
@@ -2328,8 +2328,8 @@ public final class PadPlusServerOuterClass {
     @java.lang.Override
     public java.lang.String getResult() {
 <span class="fc" id="L2330">      java.lang.Object ref = result_;</span>
-<span class="pc bpc" id="L2331" title="1 of 2 branches missed.">      if (ref instanceof java.lang.String) {</span>
-<span class="nc" id="L2332">        return (java.lang.String) ref;</span>
+<span class="fc bfc" id="L2331" title="All 2 branches covered.">      if (ref instanceof java.lang.String) {</span>
+<span class="fc" id="L2332">        return (java.lang.String) ref;</span>
       } else {
 <span class="fc" id="L2334">        com.google.protobuf.ByteString bs = </span>
             (com.google.protobuf.ByteString) ref;
@@ -3560,7 +3560,7 @@ public final class PadPlusServerOuterClass {
 <span class="fc" id="L3560">        boolean done = false;</span>
 <span class="fc bfc" id="L3561" title="All 2 branches covered.">        while (!done) {</span>
 <span class="fc" id="L3562">          int tag = input.readTag();</span>
-<span class="pc bpc" id="L3563" title="3 of 7 branches missed.">          switch (tag) {</span>
+<span class="pc bpc" id="L3563" title="4 of 7 branches missed.">          switch (tag) {</span>
             case 0:
 <span class="fc" id="L3565">              done = true;</span>
 <span class="fc" id="L3566">              break;</span>
@@ -3595,10 +3595,10 @@ public final class PadPlusServerOuterClass {
 <span class="fc" id="L3595">              break;</span>
             }
             case 322: {
-<span class="fc" id="L3598">              com.google.protobuf.ByteString bs = input.readBytes();</span>
-<span class="fc" id="L3599">              bitField0_ |= 0x00000010;</span>
-<span class="fc" id="L3600">              traceId_ = bs;</span>
-<span class="fc" id="L3601">              break;</span>
+<span class="nc" id="L3598">              com.google.protobuf.ByteString bs = input.readBytes();</span>
+<span class="nc" id="L3599">              bitField0_ |= 0x00000010;</span>
+<span class="nc" id="L3600">              traceId_ = bs;</span>
+<span class="nc" id="L3601">              break;</span>
             }
             default: {
 <span class="nc bnc" id="L3604" title="All 2 branches missed.">              if (!parseUnknownField(</span>
@@ -3813,16 +3813,16 @@ public final class PadPlusServerOuterClass {
     @java.lang.Override
     public java.lang.String getTraceId() {
 <span class="fc" id="L3815">      java.lang.Object ref = traceId_;</span>
-<span class="fc bfc" id="L3816" title="All 2 branches covered.">      if (ref instanceof java.lang.String) {</span>
+<span class="pc bpc" id="L3816" title="1 of 2 branches missed.">      if (ref instanceof java.lang.String) {</span>
 <span class="fc" id="L3817">        return (java.lang.String) ref;</span>
       } else {
-<span class="fc" id="L3819">        com.google.protobuf.ByteString bs = </span>
+<span class="nc" id="L3819">        com.google.protobuf.ByteString bs = </span>
             (com.google.protobuf.ByteString) ref;
-<span class="fc" id="L3821">        java.lang.String s = bs.toStringUtf8();</span>
-<span class="pc bpc" id="L3822" title="1 of 2 branches missed.">        if (bs.isValidUtf8()) {</span>
-<span class="fc" id="L3823">          traceId_ = s;</span>
+<span class="nc" id="L3821">        java.lang.String s = bs.toStringUtf8();</span>
+<span class="nc bnc" id="L3822" title="All 2 branches missed.">        if (bs.isValidUtf8()) {</span>
+<span class="nc" id="L3823">          traceId_ = s;</span>
         }
-<span class="fc" id="L3825">        return s;</span>
+<span class="nc" id="L3825">        return s;</span>
       }
     }
     /**
@@ -3879,7 +3879,7 @@ public final class PadPlusServerOuterClass {
 <span class="fc" id="L3879">        output.writeEnum(30, responseType_);</span>
       }
 <span class="pc bpc" id="L3881" title="1 of 2 branches missed.">      if (((bitField0_ &amp; 0x00000010) != 0)) {</span>
-<span class="fc" id="L3882">        com.google.protobuf.GeneratedMessageV3.writeString(output, 40, traceId_);</span>
+<span class="nc" id="L3882">        com.google.protobuf.GeneratedMessageV3.writeString(output, 40, traceId_);</span>
       }
 <span class="fc" id="L3884">      unknownFields.writeTo(output);</span>
 <span class="fc" id="L3885">    }</span>
@@ -3904,7 +3904,7 @@ public final class PadPlusServerOuterClass {
 <span class="fc" id="L3904">          .computeEnumSize(30, responseType_);</span>
       }
 <span class="pc bpc" id="L3906" title="1 of 2 branches missed.">      if (((bitField0_ &amp; 0x00000010) != 0)) {</span>
-<span class="fc" id="L3907">        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(40, traceId_);</span>
+<span class="nc" id="L3907">        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(40, traceId_);</span>
       }
 <span class="fc" id="L3909">      size += unknownFields.getSerializedSize();</span>
 <span class="fc" id="L3910">      memoizedSize = size;</span>
@@ -4164,7 +4164,7 @@ public final class PadPlusServerOuterClass {
         }
 <span class="fc" id="L4165">        result.responseType_ = responseType_;</span>
 <span class="pc bpc" id="L4166" title="1 of 2 branches missed.">        if (((from_bitField0_ &amp; 0x00000010) != 0)) {</span>
-<span class="fc" id="L4167">          to_bitField0_ |= 0x00000010;</span>
+<span class="nc" id="L4167">          to_bitField0_ |= 0x00000010;</span>
         }
 <span class="fc" id="L4169">        result.traceId_ = traceId_;</span>
 <span class="fc" id="L4170">        result.bitField0_ = to_bitField0_;</span>
@@ -4620,13 +4620,13 @@ public final class PadPlusServerOuterClass {
        */
       public Builder setTraceId(
           java.lang.String value) {
-<span class="pc bpc" id="L4623" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc bnc" id="L4623" title="All 2 branches missed.">        if (value == null) {</span>
 <span class="nc" id="L4624">    throw new NullPointerException();</span>
   }
-<span class="fc" id="L4626">  bitField0_ |= 0x00000010;</span>
-<span class="fc" id="L4627">        traceId_ = value;</span>
-<span class="fc" id="L4628">        onChanged();</span>
-<span class="fc" id="L4629">        return this;</span>
+<span class="nc" id="L4626">  bitField0_ |= 0x00000010;</span>
+<span class="nc" id="L4627">        traceId_ = value;</span>
+<span class="nc" id="L4628">        onChanged();</span>
+<span class="nc" id="L4629">        return this;</span>
       }
       /**
        * &lt;code&gt;optional string traceId = 40;&lt;/code&gt;

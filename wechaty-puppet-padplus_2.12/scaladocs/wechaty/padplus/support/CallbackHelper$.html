@@ -242,9 +242,9 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="wechaty.padplus.support.CallbackHelper.AcceptFriendCallback" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="AcceptFriendCallback=()=&gt;Unit"></a><a id="AcceptFriendCallback:AcceptFriendCallback"></a>
+      <a id="AcceptFriendCallback=scala.concurrent.Promise[Unit]"></a><a id="AcceptFriendCallback:AcceptFriendCallback"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#AcceptFriendCallback=()=&gt;Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#AcceptFriendCallback=scala.concurrent.Promise[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -253,14 +253,14 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">AcceptFriendCallback</span><span class="result alias"> = () ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">AcceptFriendCallback</span><span class="result alias"> = <span class="extype" name="scala.concurrent.Promise">Promise</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
       
       
     </li><li name="wechaty.padplus.support.CallbackHelper.ContactAliasCallback" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ContactAliasCallback=()=&gt;Unit"></a><a id="ContactAliasCallback:ContactAliasCallback"></a>
+      <a id="ContactAliasCallback=scala.concurrent.Promise[Unit]"></a><a id="ContactAliasCallback:ContactAliasCallback"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#ContactAliasCallback=()=&gt;Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#ContactAliasCallback=scala.concurrent.Promise[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -269,14 +269,14 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">ContactAliasCallback</span><span class="result alias"> = () ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">ContactAliasCallback</span><span class="result alias"> = <span class="extype" name="scala.concurrent.Promise">Promise</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
       
       
-    </li><li name="wechaty.padplus.support.CallbackHelper.ContactCallback" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ContactCallback=wechaty.padplus.schemas.ModelContact.PadplusConversation=&gt;Unit"></a><a id="ContactCallback:ContactCallback"></a>
+    </li><li name="wechaty.padplus.support.CallbackHelper.ContactPromise" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ContactPromise=scala.concurrent.Promise[wechaty.padplus.schemas.ModelContact.PadplusContactPayload]"></a><a id="ContactPromise:ContactPromise"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#ContactCallback=wechaty.padplus.schemas.ModelContact.PadplusConversation=&gt;Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#ContactPromise=scala.concurrent.Promise[wechaty.padplus.schemas.ModelContact.PadplusContactPayload]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -285,14 +285,14 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">ContactCallback</span><span class="result alias"> = (<a href="../schemas/ModelContact$$PadplusConversation.html" class="extype" name="wechaty.padplus.schemas.ModelContact.PadplusConversation">PadplusConversation</a>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">ContactPromise</span><span class="result alias"> = <span class="extype" name="scala.concurrent.Promise">Promise</span>[<a href="../schemas/ModelContact$$PadplusContactPayload.html" class="extype" name="wechaty.padplus.schemas.ModelContact.PadplusContactPayload">PadplusContactPayload</a>]</span>
       </span>
       
       
     </li><li name="wechaty.padplus.support.CallbackHelper.RoomMemberCallback" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="RoomMemberCallback=wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap=&gt;Unit"></a><a id="RoomMemberCallback:RoomMemberCallback"></a>
+      <a id="RoomMemberCallback=scala.concurrent.Promise[wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap]"></a><a id="RoomMemberCallback:RoomMemberCallback"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#RoomMemberCallback=wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap=&gt;Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#RoomMemberCallback=scala.concurrent.Promise[wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -301,14 +301,30 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">RoomMemberCallback</span><span class="result alias"> = (<a href="../schemas/ModelRoom$$PadplusRoomMemberMap.html" class="extype" name="wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap">PadplusRoomMemberMap</a>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">RoomMemberCallback</span><span class="result alias"> = <span class="extype" name="scala.concurrent.Promise">Promise</span>[<a href="../schemas/ModelRoom$$PadplusRoomMemberMap.html" class="extype" name="wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap">PadplusRoomMemberMap</a>]</span>
+      </span>
+      
+      
+    </li><li name="wechaty.padplus.support.CallbackHelper.RoomPromise" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RoomPromise=scala.concurrent.Promise[wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload]"></a><a id="RoomPromise:RoomPromise"></a>
+      <span class="permalink">
+      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#RoomPromise=scala.concurrent.Promise[wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">RoomPromise</span><span class="result alias"> = <span class="extype" name="scala.concurrent.Promise">Promise</span>[<a href="../schemas/ModelRoom$$PadplusRoomPayload.html" class="extype" name="wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload">PadplusRoomPayload</a>]</span>
       </span>
       
       
     </li><li name="wechaty.padplus.support.CallbackHelper.RoomTopicCallback" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="RoomTopicCallback=()=&gt;Unit"></a><a id="RoomTopicCallback:RoomTopicCallback"></a>
+      <a id="RoomTopicCallback=scala.concurrent.Promise[Unit]"></a><a id="RoomTopicCallback:RoomTopicCallback"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#RoomTopicCallback=()=&gt;Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#RoomTopicCallback=scala.concurrent.Promise[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -317,14 +333,14 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">RoomTopicCallback</span><span class="result alias"> = () ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">RoomTopicCallback</span><span class="result alias"> = <span class="extype" name="scala.concurrent.Promise">Promise</span>[<span class="extype" name="scala.Unit">Unit</span>]</span>
       </span>
       
       
     </li><li name="wechaty.padplus.support.CallbackHelper.TraceRequestCallback" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="TraceRequestCallback=wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse=&gt;Unit"></a><a id="TraceRequestCallback:TraceRequestCallback"></a>
+      <a id="TraceRequestCallback=scala.concurrent.Promise[wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse]"></a><a id="TraceRequestCallback:TraceRequestCallback"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#TraceRequestCallback=wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse=&gt;Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#TraceRequestCallback=scala.concurrent.Promise[wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -333,7 +349,7 @@
         <span class="kind">type</span>
       </span>
       <span class="symbol">
-        <span class="name">TraceRequestCallback</span><span class="result alias"> = (<span class="extype" name="wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse">StreamResponse</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">TraceRequestCallback</span><span class="result alias"> = <span class="extype" name="scala.concurrent.Promise">Promise</span>[<span class="extype" name="wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse">StreamResponse</span>]</span>
       </span>
       
       
@@ -405,7 +421,7 @@
         <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
-        <span class="name">acceptFriendCallbacks</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.List">List</span>[<a href="#AcceptFriendCallback=()=&gt;Unit" class="extmbr" name="wechaty.padplus.support.CallbackHelper.AcceptFriendCallback">AcceptFriendCallback</a>]]</span>
+        <span class="name">acceptFriendCallbacks</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.List">List</span>[<a href="#AcceptFriendCallback=scala.concurrent.Promise[Unit]" class="extmbr" name="wechaty.padplus.support.CallbackHelper.AcceptFriendCallback">AcceptFriendCallback</a>]]</span>
       </span>
       
       
@@ -461,14 +477,14 @@
         <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
-        <span class="name">contactAliasCallbacks</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="#ContactAliasCallback=()=&gt;Unit" class="extmbr" name="wechaty.padplus.support.CallbackHelper.ContactAliasCallback">ContactAliasCallback</a>]]</span>
+        <span class="name">contactAliasCallbacks</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="#ContactAliasCallback=scala.concurrent.Promise[Unit]" class="extmbr" name="wechaty.padplus.support.CallbackHelper.ContactAliasCallback">ContactAliasCallback</a>]]</span>
       </span>
       
       
     </li><li name="wechaty.padplus.support.CallbackHelper#contactCallbacks" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="contactCallbacks:com.github.benmanes.caffeine.cache.Cache[String,List[wechaty.padplus.support.CallbackHelper.ContactCallback]]"></a><a id="contactCallbacks:Cache[String,List[ContactCallback]]"></a>
+      <a id="contactCallbacks:com.github.benmanes.caffeine.cache.Cache[String,List[wechaty.padplus.support.CallbackHelper.ContactPromise]]"></a><a id="contactCallbacks:Cache[String,List[ContactPromise]]"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#contactCallbacks:com.github.benmanes.caffeine.cache.Cache[String,List[wechaty.padplus.support.CallbackHelper.ContactCallback]]" title="Permalink">
+      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#contactCallbacks:com.github.benmanes.caffeine.cache.Cache[String,List[wechaty.padplus.support.CallbackHelper.ContactPromise]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -477,7 +493,7 @@
         <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
-        <span class="name">contactCallbacks</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.List">List</span>[<a href="#ContactCallback=wechaty.padplus.schemas.ModelContact.PadplusConversation=&gt;Unit" class="extmbr" name="wechaty.padplus.support.CallbackHelper.ContactCallback">ContactCallback</a>]]</span>
+        <span class="name">contactCallbacks</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.List">List</span>[<a href="#ContactPromise=scala.concurrent.Promise[wechaty.padplus.schemas.ModelContact.PadplusContactPayload]" class="extmbr" name="wechaty.padplus.support.CallbackHelper.ContactPromise">ContactPromise</a>]]</span>
       </span>
       
       
@@ -655,7 +671,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pushAcceptFriendCallback</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="#AcceptFriendCallback=()=&gt;Unit" class="extmbr" name="wechaty.padplus.support.CallbackHelper.AcceptFriendCallback">AcceptFriendCallback</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">pushAcceptFriendCallback</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="#AcceptFriendCallback=scala.concurrent.Promise[Unit]" class="extmbr" name="wechaty.padplus.support.CallbackHelper.AcceptFriendCallback">AcceptFriendCallback</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
       
@@ -671,7 +687,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pushCallbackToPool</span><span class="params">(<span name="traceId">traceId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="#TraceRequestCallback=wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse=&gt;Unit" class="extmbr" name="wechaty.padplus.support.CallbackHelper.TraceRequestCallback">TraceRequestCallback</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">pushCallbackToPool</span><span class="params">(<span name="traceId">traceId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="#TraceRequestCallback=scala.concurrent.Promise[wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse]" class="extmbr" name="wechaty.padplus.support.CallbackHelper.TraceRequestCallback">TraceRequestCallback</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
       
@@ -687,14 +703,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pushContactAliasCallback</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="alias">alias: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="#ContactAliasCallback=()=&gt;Unit" class="extmbr" name="wechaty.padplus.support.CallbackHelper.ContactAliasCallback">ContactAliasCallback</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">pushContactAliasCallback</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="alias">alias: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="#ContactAliasCallback=scala.concurrent.Promise[Unit]" class="extmbr" name="wechaty.padplus.support.CallbackHelper.ContactAliasCallback">ContactAliasCallback</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
       
     </li><li name="wechaty.padplus.support.CallbackHelper#pushContactCallback" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="pushContactCallback(contactId:String,callback:wechaty.padplus.support.CallbackHelper.ContactCallback):Unit"></a><a id="pushContactCallback(String,ContactCallback):Unit"></a>
+      <a id="pushContactCallback(contactId:String,callback:wechaty.padplus.support.CallbackHelper.ContactPromise):Unit"></a><a id="pushContactCallback(String,ContactPromise):Unit"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#pushContactCallback(contactId:String,callback:wechaty.padplus.support.CallbackHelper.ContactCallback):Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#pushContactCallback(contactId:String,callback:wechaty.padplus.support.CallbackHelper.ContactPromise):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -703,7 +719,23 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pushContactCallback</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="#ContactCallback=wechaty.padplus.schemas.ModelContact.PadplusConversation=&gt;Unit" class="extmbr" name="wechaty.padplus.support.CallbackHelper.ContactCallback">ContactCallback</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">pushContactCallback</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="#ContactPromise=scala.concurrent.Promise[wechaty.padplus.schemas.ModelContact.PadplusContactPayload]" class="extmbr" name="wechaty.padplus.support.CallbackHelper.ContactPromise">ContactPromise</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      
+    </li><li name="wechaty.padplus.support.CallbackHelper#pushRoomCallback" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="pushRoomCallback(roomId:String,callback:wechaty.padplus.support.CallbackHelper.RoomPromise):Unit"></a><a id="pushRoomCallback(String,RoomPromise):Unit"></a>
+      <span class="permalink">
+      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#pushRoomCallback(roomId:String,callback:wechaty.padplus.support.CallbackHelper.RoomPromise):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pushRoomCallback</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="#RoomPromise=scala.concurrent.Promise[wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload]" class="extmbr" name="wechaty.padplus.support.CallbackHelper.RoomPromise">RoomPromise</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
       
@@ -719,7 +751,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pushRoomMemberCallback</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="#RoomMemberCallback=wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap=&gt;Unit" class="extmbr" name="wechaty.padplus.support.CallbackHelper.RoomMemberCallback">RoomMemberCallback</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">pushRoomMemberCallback</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="#RoomMemberCallback=scala.concurrent.Promise[wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap]" class="extmbr" name="wechaty.padplus.support.CallbackHelper.RoomMemberCallback">RoomMemberCallback</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
       
@@ -735,7 +767,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">pushRoomTopicCallback</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="topic">topic: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="#RoomTopicCallback=()=&gt;Unit" class="extmbr" name="wechaty.padplus.support.CallbackHelper.RoomTopicCallback">RoomTopicCallback</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">pushRoomTopicCallback</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="topic">topic: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="callback">callback: <a href="#RoomTopicCallback=scala.concurrent.Promise[Unit]" class="extmbr" name="wechaty.padplus.support.CallbackHelper.RoomTopicCallback">RoomTopicCallback</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
       
@@ -772,9 +804,9 @@
       
       
     </li><li name="wechaty.padplus.support.CallbackHelper#resolveContactCallBack" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="resolveContactCallBack(contactId:String,data:wechaty.padplus.schemas.ModelContact.PadplusContactPayload):Unit"></a><a id="resolveContactCallBack(String,PadplusContactPayload):Unit"></a>
+      <a id="resolveContactCallBack(contactId:String,data:scala.util.Try[wechaty.padplus.schemas.ModelContact.PadplusContactPayload]):Unit"></a><a id="resolveContactCallBack(String,Try[PadplusContactPayload]):Unit"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#resolveContactCallBack(contactId:String,data:wechaty.padplus.schemas.ModelContact.PadplusContactPayload):Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#resolveContactCallBack(contactId:String,data:scala.util.Try[wechaty.padplus.schemas.ModelContact.PadplusContactPayload]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -783,14 +815,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">resolveContactCallBack</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="data">data: <a href="../schemas/ModelContact$$PadplusContactPayload.html" class="extype" name="wechaty.padplus.schemas.ModelContact.PadplusContactPayload">PadplusContactPayload</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">resolveContactCallBack</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="data">data: <span class="extype" name="scala.util.Try">Try</span>[<a href="../schemas/ModelContact$$PadplusContactPayload.html" class="extype" name="wechaty.padplus.schemas.ModelContact.PadplusContactPayload">PadplusContactPayload</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
       
     </li><li name="wechaty.padplus.support.CallbackHelper#resolveRoomCallBack" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="resolveRoomCallBack(roomId:String,data:wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload):Unit"></a><a id="resolveRoomCallBack(String,PadplusRoomPayload):Unit"></a>
+      <a id="resolveRoomCallBack(roomId:String,data:scala.util.Try[wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload]):Unit"></a><a id="resolveRoomCallBack(String,Try[PadplusRoomPayload]):Unit"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#resolveRoomCallBack(roomId:String,data:wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload):Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#resolveRoomCallBack(roomId:String,data:scala.util.Try[wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -799,14 +831,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">resolveRoomCallBack</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="data">data: <a href="../schemas/ModelRoom$$PadplusRoomPayload.html" class="extype" name="wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload">PadplusRoomPayload</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">resolveRoomCallBack</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="data">data: <span class="extype" name="scala.util.Try">Try</span>[<a href="../schemas/ModelRoom$$PadplusRoomPayload.html" class="extype" name="wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload">PadplusRoomPayload</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
       </span>
       
       
     </li><li name="wechaty.padplus.support.CallbackHelper#resolveRoomMemberCallback" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="resolveRoomMemberCallback(roomId:String,memberList:wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap):Unit"></a><a id="resolveRoomMemberCallback(String,PadplusRoomMemberMap):Unit"></a>
+      <a id="resolveRoomMemberCallback(roomId:String,memberList:scala.util.Try[wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap]):Unit"></a><a id="resolveRoomMemberCallback(String,Try[PadplusRoomMemberMap]):Unit"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#resolveRoomMemberCallback(roomId:String,memberList:wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap):Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#resolveRoomMemberCallback(roomId:String,memberList:scala.util.Try[wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -815,7 +847,23 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">resolveRoomMemberCallback</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="memberList">memberList: <a href="../schemas/ModelRoom$$PadplusRoomMemberMap.html" class="extype" name="wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap">PadplusRoomMemberMap</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">resolveRoomMemberCallback</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="memberList">memberList: <span class="extype" name="scala.util.Try">Try</span>[<a href="../schemas/ModelRoom$$PadplusRoomMemberMap.html" class="extype" name="wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap">PadplusRoomMemberMap</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      
+    </li><li name="wechaty.padplus.support.CallbackHelper#roomCallbacks" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="roomCallbacks:com.github.benmanes.caffeine.cache.Cache[String,List[wechaty.padplus.support.CallbackHelper.RoomPromise]]"></a><a id="roomCallbacks:Cache[String,List[RoomPromise]]"></a>
+      <span class="permalink">
+      <a href="../../../wechaty/padplus/support/CallbackHelper$.html#roomCallbacks:com.github.benmanes.caffeine.cache.Cache[String,List[wechaty.padplus.support.CallbackHelper.RoomPromise]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">roomCallbacks</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.List">List</span>[<a href="#RoomPromise=scala.concurrent.Promise[wechaty.padplus.schemas.ModelRoom.PadplusRoomPayload]" class="extmbr" name="wechaty.padplus.support.CallbackHelper.RoomPromise">RoomPromise</a>]]</span>
       </span>
       
       
@@ -831,7 +879,7 @@
         <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
-        <span class="name">roomMemberCallbacks</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.List">List</span>[<a href="#RoomMemberCallback=wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap=&gt;Unit" class="extmbr" name="wechaty.padplus.support.CallbackHelper.RoomMemberCallback">RoomMemberCallback</a>]]</span>
+        <span class="name">roomMemberCallbacks</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.List">List</span>[<a href="#RoomMemberCallback=scala.concurrent.Promise[wechaty.padplus.schemas.ModelRoom.PadplusRoomMemberMap]" class="extmbr" name="wechaty.padplus.support.CallbackHelper.RoomMemberCallback">RoomMemberCallback</a>]]</span>
       </span>
       
       
@@ -847,7 +895,7 @@
         <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
-        <span class="name">roomTopicCallbacks</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="#RoomTopicCallback=()=&gt;Unit" class="extmbr" name="wechaty.padplus.support.CallbackHelper.RoomTopicCallback">RoomTopicCallback</a>]]</span>
+        <span class="name">roomTopicCallbacks</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="#RoomTopicCallback=scala.concurrent.Promise[Unit]" class="extmbr" name="wechaty.padplus.support.CallbackHelper.RoomTopicCallback">RoomTopicCallback</a>]]</span>
       </span>
       
       
@@ -895,7 +943,7 @@
         <span class="kind">lazy val</span>
       </span>
       <span class="symbol">
-        <span class="name">traceCallbacks</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="#TraceRequestCallback=wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse=&gt;Unit" class="extmbr" name="wechaty.padplus.support.CallbackHelper.TraceRequestCallback">TraceRequestCallback</a>]</span>
+        <span class="name">traceCallbacks</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="#TraceRequestCallback=scala.concurrent.Promise[wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse]" class="extmbr" name="wechaty.padplus.support.CallbackHelper.TraceRequestCallback">TraceRequestCallback</a>]</span>
       </span>
       
       

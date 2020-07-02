@@ -13,13 +13,13 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
 <span class="fc" id="L13">  private var listeners: Map[PuppetEventName.Type, List[(Listener[_],Boolean)]] = Map()</span>
 
   def emit[T](event: PuppetEventName.Type, data: T):Unit={
-<span class="nc" id="L16">    val eventListenerOpts = listeners.get(event)</span>
-<span class="nc" id="L17">    eventListenerOpts match {</span>
-<span class="nc bnc" id="L18" title="All 2 branches missed.">      case Some(eventListeners) =&gt;</span>
-<span class="nc" id="L19">          eventListeners.foreach{x =&gt;</span>
-<span class="nc" id="L20">            x._1.asInstanceOf[Listener[T]](data)</span>
+<span class="fc" id="L16">    val eventListenerOpts = listeners.get(event)</span>
+<span class="fc" id="L17">    eventListenerOpts match {</span>
+<span class="pc bpc" id="L18" title="1 of 2 branches missed.">      case Some(eventListeners) =&gt;</span>
+<span class="fc" id="L19">          eventListeners.foreach{x =&gt;</span>
+<span class="fc" id="L20">            x._1.asInstanceOf[Listener[T]](data)</span>
           }
-<span class="nc" id="L22">          listeners += event-&gt; eventListeners.filterNot(x=&gt;x._2)</span>
+<span class="fc" id="L22">          listeners += event-&gt; eventListeners.filterNot(x=&gt;x._2)</span>
 <span class="nc" id="L23">      case _ =&gt;</span>
       //donothing
     }
