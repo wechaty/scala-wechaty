@@ -21,7 +21,7 @@ class DingDongTest extends TestBase{
     config.dm = false
     config.at = false
     config.self = false
-    instance.use(new DingDongPlugin(config))
+    instance.use(new DingDongPlugin(config,isWait = true))
     mockRoomMessage("#ding")
     mockMessageSendText()
 
@@ -29,27 +29,21 @@ class DingDongTest extends TestBase{
     payload.messageId="messageId"
     instance.puppet.emit(PuppetEventName.MESSAGE,payload)
 
-    verifyThat(
-      calledMethod(PuppetGrpc.getMessageSendTextMethod),
-      times(0));
+    verifyThat( calledMethod(PuppetGrpc.getMessageSendTextMethod), times(0));
 
 
     config.room=true
     config.self=true
     mockRoomMessage("#ding @me","newMessage1",Array("me"))
     emitMessagePayloadEvent("newMessage1")
-    verifyThat(
-      calledMethod(PuppetGrpc.getMessageSendTextMethod),
-      times(1));
+    verifyThat(calledMethod(PuppetGrpc.getMessageSendTextMethod),times(1));
 
     //test wrong message
     resetGrpcMock()
     mockRoomMessage("hello @me",roomId="newMessage2",Array("me"))
     emitMessagePayloadEvent("newMessage2")
     mockMessageSendText()
-    verifyThat(
-      calledMethod(PuppetGrpc.getMessageSendTextMethod),
-      times(0));
+    verifyThat( calledMethod(PuppetGrpc.getMessageSendTextMethod),times(0));
 
     //test wrong message
     resetGrpcMock()
@@ -76,8 +70,6 @@ class DingDongTest extends TestBase{
     payload.messageId="messageId"
     instance.puppet.emit(PuppetEventName.MESSAGE,payload)
 
-    verifyThat(
-      calledMethod(PuppetGrpc.getMessageSendTextMethod),
-      times(1));
+    verifyThat(calledMethod(PuppetGrpc.getMessageSendTextMethod), times(1));
   }
 }

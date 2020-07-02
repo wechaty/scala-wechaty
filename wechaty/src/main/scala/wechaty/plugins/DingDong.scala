@@ -3,6 +3,9 @@ package wechaty.plugins
 import wechaty.user.Message
 import wechaty.{Wechaty, WechatyPlugin}
 
+import scala.concurrent.Await
+import scala.concurrent.duration._
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
@@ -32,9 +35,9 @@ case class DingDongConfig(
   /**
     * ding regexp expression
     */
-  var dingReg:String="^#ding$"
+  var dingReg:String="^#ding$",
 )
-class DingDongPlugin(config:DingDongConfig) extends WechatyPlugin{
+class DingDongPlugin(config:DingDongConfig,/*only for test*/isWait:Boolean=false) extends WechatyPlugin{
   private val DONG="dong"
   private val DING_REGEXP=("("+config.dingReg+")").r
   private def isMatch(message: Message): Boolean ={
@@ -74,7 +77,9 @@ class DingDongPlugin(config:DingDongConfig) extends WechatyPlugin{
 
         text match {
           case DING_REGEXP(_) if isMatch(message) =>
-            message.say(DONG)
+            val future = message.say(DONG)
+            if(isWait)
+              Await.ready(future,5 seconds)
           case _ =>
         }
       }
