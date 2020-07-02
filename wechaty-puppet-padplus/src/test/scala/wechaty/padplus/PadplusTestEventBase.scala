@@ -44,6 +44,7 @@ class PadplusTestEventBase extends LazyLogging{
     options.token=Some("token")
 
     instance = new PuppetPadplus(options,storePath){
+      this.selfId = Some(uin)
       override protected def generateTraceId(apiType: ApiType): String = {
         NEED_CALLBACK_API_LIST.values.find( _ == apiType) match{
           case Some(v) =>
@@ -122,7 +123,7 @@ val requestBuilder2 = RequestObject.newBuilder()
   }
   private val NEED_CALLBACK_API_LIST=Map(
 //    ApiType.INIT,
-//    ApiType.SEND_MESSAGE,
+    ResponseType.REQUEST_RESPONSE->ApiType.SEND_MESSAGE,
 //    ApiType.SEND_FILE,
 //    ApiType.GET_MESSAGE_MEDIA,
 //    ApiType.SEARCH_CONTACT,

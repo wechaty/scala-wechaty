@@ -1,9 +1,12 @@
 package wechaty.hostie.support
 
 import com.google.protobuf.StringValue
+import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.{Room, RoomMember}
 import wechaty.puppet.schemas.Room.RoomMemberPayload
 import wechaty.puppet.{Puppet, schemas}
+
+import scala.concurrent.Future
 
 /**
   *
@@ -46,20 +49,21 @@ trait RoomMemberRawSupport {
     response.getMemberIdsList.toArray(Array[String]())
   }
 
-  override protected def roomMemberRawPayload(roomId: String, contactId: String): schemas.Room.RoomMemberPayload = {
+  override protected def roomMemberRawPayload(roomId: String, contactId: String): Future[schemas.Room.RoomMemberPayload] = {
     val request = RoomMember.RoomMemberPayloadRequest.newBuilder()
       .setId(roomId)
       .setMemberId(contactId)
       .build()
 
-    val response = grpcClient.roomMemberPayload(request)
-    val payload = new RoomMemberPayload()
+    asyncCallback(PuppetGrpc.getRoomMemberPayloadMethod, request) { response =>
 
-    payload.avatar = response.getAvatar
-    payload.id = response.getId
-    payload.inviterId = response.getInviterId
-    payload.name = response.getName
-    payload.roomAlias = response.getRoomAlias
-    payload
+      val payload = new RoomMemberPayload()
+      payload.avatar = response.getAvatar
+      payload.id = response.getId
+      payload.inviterId = response.getInviterId
+      payload.name = response.getName
+      payload.roomAlias = response.getRoomAlias
+      payload
+    }
   }
 }

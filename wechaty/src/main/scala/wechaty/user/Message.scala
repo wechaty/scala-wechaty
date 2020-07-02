@@ -10,6 +10,8 @@ import wechaty.puppet.schemas.Puppet._
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.{ResourceBox, schemas}
 
+import scala.concurrent.Future
+
 
 /**
   * wrap MessagePayload
@@ -88,7 +90,7 @@ class Message(messageId:String)(implicit resolver: PuppetResolver) extends LazyL
     new Message(originalMessageId)
   }
 
-  def say(text:String): Message = {
+  def say(text:String): Future[Message] = {
     resolver.puppet.messageSendText(sayId,text)
   }
   def say(contact: Contact): Message = {

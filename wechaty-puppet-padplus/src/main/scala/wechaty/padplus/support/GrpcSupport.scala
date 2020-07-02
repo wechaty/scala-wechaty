@@ -118,10 +118,10 @@ trait GrpcSupport {
     //do nothing
   }
 
-  protected def syncRequest[T: TypeTag](apiType: ApiType, data: Option[Any] = None)(implicit classTag: ClassTag[T]): T = {
-    val future = asyncRequest[T](apiType, data)
-    Await.result(future, 10 seconds)
-  }
+//  protected def syncRequest[T: TypeTag](apiType: ApiType, data: Option[Any] = None)(implicit classTag: ClassTag[T]): T = {
+//    val future = asyncRequest[T](apiType, data)
+//    Await.result(future, 10 seconds)
+//  }
 
   protected def generateTraceId(apiType: ApiType): String = {
     UUID.randomUUID().toString

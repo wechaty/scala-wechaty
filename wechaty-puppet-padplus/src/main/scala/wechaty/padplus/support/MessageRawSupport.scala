@@ -15,6 +15,9 @@ import wechaty.puppet.schemas.Puppet.{PuppetEventName, isBlank, objectMapper}
 import wechaty.puppet.schemas.{Message, MiniProgram, Puppet, UrlLink}
 import wechaty.puppet.support.MessageSupport
 
+import scala.concurrent.Future
+import scala.language.implicitConversions
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
@@ -62,14 +65,16 @@ trait MessageRawSupport {
 
   override def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgram.MiniProgramPayload): String = ???
 
-  override def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]): String = {
+  override def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]): Future[String] = {
     val json = Puppet.objectMapper.createObjectNode()
     json.put("content",text)
     json.put("messageType",PadplusMessageType.Text.id)
     json.put("fromUserName",selfId.get)
     json.put("toUserName",conversationId)
-    val payload = syncRequest[GrpcMessagePayload](ApiType.SEND_MESSAGE,Some(json.toString))
-    payload.MsgId
+    asyncRequest[GrpcMessagePayload](ApiType.SEND_MESSAGE,Some(json.toString)).map { payload =>
+      savePadplusMessagePayload(payload)
+      payload.MsgId
+    }
   }
 
   override def messageSendUrl(conversationId: String, urlLinkPayload: UrlLink.UrlLinkPayload): String = ???

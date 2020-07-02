@@ -11,6 +11,9 @@ import wechaty.puppet.schemas.Puppet._
 import wechaty.puppet.schemas.Room.{RoomPayload, RoomQueryFilter}
 import wechaty.user.Room.{RoomJoinEvent, RoomLeaveEvent, RoomTopicEvent}
 
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration._
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
@@ -100,11 +103,13 @@ class Room private(roomId: String)(implicit resolver: PuppetResolver) extends Co
   }
 
   def alias(contact: Contact): Option[String] = {
-    val memberPayload = resolver.puppet.roomMemberPayload(this.id, contact.id)
-
-    if (memberPayload != null && !isBlank(memberPayload.roomAlias)) {
-      Some(memberPayload.roomAlias)
-    } else None
+//    val memberPayload =
+      val future = resolver.puppet.roomMemberPayload(this.id, contact.id).map{memberPayload=>
+        if (memberPayload != null && !isBlank(memberPayload.roomAlias)) {
+          Some(memberPayload.roomAlias)
+        } else None
+      }
+    Await.result(future,10 seconds)
   }
 
   def memberList(): Array[Contact] = {
@@ -116,7 +121,7 @@ class Room private(roomId: String)(implicit resolver: PuppetResolver) extends Co
     resolver.puppet.roomPayloadDirty(this.roomId)
   }
 
-  def say(something: String, mentionList: Array[Contact]): Message = {
+  def say(something: String, mentionList: Array[Contact]): Future[Message] = {
     val mentionText = mentionList.map(x => {
       val aliasOpt = this.alias(x)
       aliasOpt match {

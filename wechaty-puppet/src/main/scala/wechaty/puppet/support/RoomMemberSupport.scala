@@ -5,6 +5,8 @@ import wechaty.puppet.Puppet
 import wechaty.puppet.schemas.Puppet.isBlank
 import wechaty.puppet.schemas.Room.RoomMemberPayload
 
+import scala.concurrent.{Future, Promise}
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
@@ -25,7 +27,7 @@ trait RoomMemberSupport {
 
   def roomMemberList(roomId: String): Array[String]
 
-  protected def roomMemberRawPayload(roomId: String, contactId: String): RoomMemberPayload
+  protected def roomMemberRawPayload(roomId: String, contactId: String): Future[RoomMemberPayload]
 
   /**
     * Concat roomId & contactId to one string
@@ -42,7 +44,7 @@ trait RoomMemberSupport {
     })
   }
 
-  def roomMemberPayload ( roomId    : String, memberId : String): RoomMemberPayload = {
+  def roomMemberPayload ( roomId    : String, memberId : String): Future[RoomMemberPayload] = {
 
     if (isBlank(roomId)|| isBlank(memberId)) {
       throw new Error("roomId or memberId is blank")
@@ -55,17 +57,16 @@ trait RoomMemberSupport {
     val cachedPayload = this.cacheRoomMemberPayload.getIfPresent(CACHE_KEY)
 
     if (cachedPayload != null) {
-      return cachedPayload
+      return Promise[RoomMemberPayload].success(cachedPayload).future
     }
 
     /**
       * 2. Cache not found
       */
-    val rawPayload = this.roomMemberRawPayload(roomId, memberId)
-    if (rawPayload == null) {
-      throw new Error("contact(" + memberId + ") is not in the Room(" + roomId + ")")
+    import wechaty.puppet.schemas.Puppet.executionContext
+    roomMemberRawPayload(roomId, memberId).map{ rawPayload=>
+      this.cacheRoomMemberPayload.put(CACHE_KEY, rawPayload)
+      rawPayload
     }
-    this.cacheRoomMemberPayload.put(CACHE_KEY, rawPayload)
-    rawPayload
   }
 }

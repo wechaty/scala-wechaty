@@ -8,6 +8,7 @@ import wechaty.puppet.schemas.Room
 import wechaty.puppet.schemas.Room.RoomMemberPayload
 import wechaty.puppet.support.RoomMemberSupport
 
+import scala.concurrent.{Future, Promise}
 import scala.util.Try
 
 /**
@@ -29,18 +30,20 @@ trait RoomMemberRawSupport {
 
   override def roomMemberList(roomId: String): Array[String] = ???
 
-  override protected def roomMemberRawPayload(roomId: String, contactId: String): Room.RoomMemberPayload = {
+  override protected def roomMemberRawPayload(roomId: String, contactId: String): Future[Room.RoomMemberPayload] = {
     getPadplusRoomMembers(roomId) match{
       case Some(padplusRoomMembers) =>
-        padplusRoomMembers.members.get(contactId).map(convertToPuppetRoomMember).orNull
+        val value = padplusRoomMembers.members.get(contactId).map(convertToPuppetRoomMember).orNull
+        Promise[Room.RoomMemberPayload].success(value).future
       case _ =>
           val json = objectMapper.createObjectNode()
           json.put("OpType", "UPDATE")
           json.put("type", "GET_MEMBER")
           json.put("roomId", roomId)
-        val map = syncRequest[PadplusRoomMemberMap](ApiType.ROOM_OPERATION, Some(json.toString))
-        savePadplusRoomMembers(roomId,map)
-        map.members.get(contactId).map(convertToPuppetRoomMember).orNull
+        asyncRequest[PadplusRoomMemberMap](ApiType.ROOM_OPERATION, Some(json.toString)).map{payload=>
+          savePadplusRoomMembers(roomId,payload)
+          payload.members.get(contactId).map(convertToPuppetRoomMember).orNull
+        }
     }
   }
   private def convertToPuppetRoomMember(input: PadplusRoomMemberPayload): RoomMemberPayload = {

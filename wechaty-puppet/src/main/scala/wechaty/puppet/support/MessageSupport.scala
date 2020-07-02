@@ -9,6 +9,8 @@ import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.schemas.UrlLink.UrlLinkPayload
 import wechaty.puppet.{Puppet, ResourceBox}
 
+import scala.concurrent.{Future, Promise}
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
@@ -35,7 +37,7 @@ trait MessageSupport {
 
   def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgramPayload): String
 
-  def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]=Array()): String
+  def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]=Array()): Future[String]
 
   def messageSendUrl(conversationId: String, urlLinkPayload: UrlLinkPayload): String
 
@@ -67,14 +69,15 @@ trait MessageSupport {
 
     payload
   }
-  def messageForward (conversationId: String, messageId: String): String= {
+  def messageForward (conversationId: String, messageId: String): Future[String]= {
     val payload = this.messagePayload(messageId)
     payload.`type` match{
       case MessageType.Attachment |  MessageType.Audio  | MessageType.Video =>
-        messageSendFile(conversationId,messageFile(messageId))
+        val id = messageSendFile(conversationId,messageFile(messageId))
+        Promise[String].success(id).future
       case MessageType.Image =>
-        messageSendFile(conversationId,messageFile(messageId))
-//        messageSendFile(conversationId,messageImage(messageId,ImageType.Thumbnail))
+        val id = messageSendFile(conversationId,messageFile(messageId))
+        Promise[String].success(id).future
       case MessageType.Text =>
         if(!Puppet.isBlank(payload.text)){
           this.messageSendText(
@@ -86,22 +89,24 @@ trait MessageSupport {
           throw new IllegalStateException("Puppet messageForward() payload.text is undefined.")
         }
       case MessageType.MiniProgram =>
-        this.messageSendMiniProgram(
+        val id = this.messageSendMiniProgram(
           conversationId,
           this.messageMiniProgram(messageId) )
+        Promise[String].success(id).future
 
       case MessageType.Url =>
-        this.messageSendUrl(
+        val id = this.messageSendUrl(
           conversationId,
           this.messageUrl(messageId)
         )
+        Promise[String].success(id).future
 
       case MessageType.Contact =>
-        this.messageSendContact(
+        val id = this.messageSendContact(
           conversationId,
           this.messageContact(messageId)
         )
-
+        Promise[String].success(id).future
       case MessageType.ChatHistory | MessageType.Location
            | MessageType.Emoticon | MessageType.Transfer
            | MessageType.RedEnvelope| MessageType.Recalled =>
@@ -109,7 +114,6 @@ trait MessageSupport {
       case MessageType.Unknown =>
         throw new Error("Unsupported forward message type:" + payload.`type`)
     }
-
   }
 
   protected def messageRawPayload(messageId: String): MessagePayload

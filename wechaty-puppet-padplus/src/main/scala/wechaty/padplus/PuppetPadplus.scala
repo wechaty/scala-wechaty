@@ -9,6 +9,8 @@ import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
 import wechaty.puppet.schemas._
 import wechaty.puppet.support.ContactSupport
 
+import scala.concurrent.Future
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
@@ -92,9 +94,8 @@ class PuppetPadplus(val option:PuppetOptions,val storePath:String="/tmp/padplus"
 
   override def roomMemberList(roomId: String): Array[String] = ???
 
-  override protected def roomMemberRawPayload(roomId: String, contactId: String): Room.RoomMemberPayload = {
-    //TODO
-    null
+  override protected def roomMemberRawPayload(roomId: String, contactId: String): Future[Room.RoomMemberPayload] = {
+    ???
   }
 
 

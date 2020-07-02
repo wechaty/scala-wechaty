@@ -3,6 +3,9 @@ package wechaty.user
 import wechaty.helper.ImplicitHelper._
 import wechaty.Wechaty.PuppetResolver
 import wechaty.puppet.ResourceBox
+import wechaty.puppet.schemas.Puppet.executionContext
+
+import scala.concurrent.Future
 
 
 /**
@@ -11,7 +14,7 @@ import wechaty.puppet.ResourceBox
   * @since 2020-06-08
   */
 class Conversation(val id:String)(implicit resolver:PuppetResolver) {
-  def say(something: String): Message = {
+  def say(something: String): Future[Message] = {
     resolver.puppet.messageSendText(this.id, something)
   }
 

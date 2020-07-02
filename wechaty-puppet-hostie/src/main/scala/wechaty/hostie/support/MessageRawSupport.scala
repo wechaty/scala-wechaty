@@ -1,6 +1,7 @@
 package wechaty.hostie.support
 
 import com.typesafe.scalalogging.LazyLogging
+import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Base.DingRequest
 import io.github.wechaty.grpc.puppet.Message
 import io.github.wechaty.grpc.puppet.Message.MessagePayloadRequest
@@ -9,9 +10,11 @@ import wechaty.puppet.schemas.Image.ImageType.Type
 import wechaty.puppet.schemas.Message.{MessagePayload, MessageType}
 import wechaty.puppet.schemas.MiniProgram.MiniProgramPayload
 import wechaty.puppet.schemas.Puppet
-import wechaty.puppet.schemas.Puppet.objectMapper
+import wechaty.puppet.schemas.Puppet._
 import wechaty.puppet.schemas.UrlLink.UrlLinkPayload
 import wechaty.puppet.support.MessageSupport
+
+import scala.concurrent.Future
 
 /**
   *
@@ -94,7 +97,7 @@ trait MessageRawSupport {
     response.getId.getValue
   }
 
-  override def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]): String = {
+  override def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]): Future[String] = {
     import scala.collection.JavaConverters._
     val request = Message.MessageSendTextRequest.newBuilder()
       .setConversationId(conversationId)
@@ -102,8 +105,8 @@ trait MessageRawSupport {
       .addAllMentonalIds(asJavaIterable(mentionIdList.toIterable))
       .build()
 
-    val response = grpcClient.messageSendText(request)
-    response.getId.getValue
+    asyncCall(PuppetGrpc.getMessageSendTextMethod,request)
+      .map(response=>response.getId.getValue)
   }
 
   override def messageSendUrl(conversationId: String, urlLinkPayload: UrlLinkPayload): String = {
