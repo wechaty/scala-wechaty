@@ -6,12 +6,12 @@ wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,MessageRawSupport
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,GrpcSupport..anon.new StreamObserver() {...},12,0,0,0,5,0,4,0,4,0
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,ContactSelfRawSupport,44,1,0,0,10,1,4,1,4,1
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,FriendshipRawSupport,60,86,3,3,15,22,5,4,3,3
-wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,GrpcSupport,171,179,16,6,13,31,13,7,2,7
+wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,GrpcSupport,191,159,17,5,16,28,14,6,3,6
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,TagRawSupport,89,1,0,0,20,1,5,1,5,1
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,RoomInvitationRawSupport,66,13,0,0,14,4,1,2,1,2
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,RoomMemberRawSupport,56,40,0,0,13,12,3,2,3,2
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,ContactRawSupport,152,91,12,0,26,22,10,3,4,3
-wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,GrpcEventSupport,142,300,22,28,13,40,22,10,2,5
+wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,GrpcEventSupport,173,269,24,26,15,38,23,9,3,4
 wechaty_2.12/wechaty-puppet-hostie_2.12,wechaty.hostie.support,RoomRawSupport,125,81,0,0,34,15,8,3,8,3
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcMessagePayload,178,0,0,0,27,0,51,0,51,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.AutoLoginError.,22,0,0,0,3,0,4,0,4,0

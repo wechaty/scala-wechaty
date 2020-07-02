@@ -80,8 +80,8 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
   }
 
   override def onError(throwable: Throwable): Unit = {
-<span class="pc bpc" id="L83" title="1 of 2 branches missed.">    logger.error(&quot;Grpc onError&quot;, throwable)</span>
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">    logger.info(&quot;reconnect.....&quot;)</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">    logger.error(&quot;Grpc onError&quot;, throwable)</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">    logger.info(&quot;reconnect.....&quot;)</span>
 <span class="nc" id="L85">    new Thread(() =&gt; {</span>
 <span class="nc" id="L86">      reconnectStream()</span>
     }).run()
