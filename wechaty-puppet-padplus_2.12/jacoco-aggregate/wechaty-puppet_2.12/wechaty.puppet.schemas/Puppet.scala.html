@@ -15,15 +15,15 @@ import scala.concurrent.{ExecutionContext, ExecutionContextExecutor}
   * @since 2020-06-01
   */
 <span class="fc" id="L17">object Puppet {</span>
-<span class="nc bnc" id="L18" title="All 4 branches missed.">  implicit lazy val executionContext: ExecutionContextExecutor =  ExecutionContext.global</span>
+<span class="pc bpc" id="L18" title="2 of 4 branches missed.">  implicit lazy val executionContext: ExecutionContextExecutor =  ExecutionContext.global</span>
 <span class="fc" id="L19">  class PuppetOptions {</span>
 <span class="fc" id="L20">    var endPoint: Option[String] = None</span>
 <span class="pc" id="L21">    var timeout: Option[Long] = None</span>
-<span class="pc" id="L22">    var token: Option[String] = None</span>
+<span class="fc" id="L22">    var token: Option[String] = None</span>
 <span class="fc" id="L23">    var channelOpt:Option[ManagedChannel] = None</span>
 <span class="pc" id="L24">    var puppetOptionKey: Option[String] = None</span>
   }
-<span class="pc bpc" id="L26" title="2 of 4 branches missed.">  lazy val objectMapper: ObjectMapper = {</span>
+<span class="pc bpc" id="L26" title="1 of 4 branches missed.">  lazy val objectMapper: ObjectMapper = {</span>
 <span class="fc" id="L27">    val om = new ObjectMapper()</span>
     import com.fasterxml.jackson.databind.DeserializationFeature
 <span class="fc" id="L29">    om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)</span>
@@ -69,7 +69,7 @@ import scala.concurrent.{ExecutionContext, ExecutionContextExecutor}
 <span class="fc" id="L69">    EventType.EVENT_TYPE_UNSPECIFIED-&gt; PuppetEventName.UNKNOWN</span>
   )
 
-<span class="nc bnc" id="L72" title="All 4 branches missed.">  def isBlank(value:String): Boolean = value == null || value.trim.length ==0</span>
+<span class="pc bpc" id="L72" title="1 of 4 branches missed.">  def isBlank(value:String): Boolean = value == null || value.trim.length ==0</span>
   def timestampToDate(timestamp:Long): Date ={
 <span class="nc" id="L74">    var tmpTimestamp = timestamp</span>
 <span class="nc bnc" id="L75" title="All 2 branches missed.">    if (timestamp &lt; 0x1e11) {</span>

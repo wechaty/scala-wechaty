@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>RoomMemberRawSupport.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.support</a> &gt; <span class="el_source">RoomMemberRawSupport.scala</span></div><h1>RoomMemberRawSupport.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.support
+
+import com.typesafe.scalalogging.LazyLogging
+import wechaty.padplus.grpc.PadPlusServerOuterClass.{ApiType, ResponseType, StreamResponse}
+import wechaty.padplus.schemas.ModelRoom.{GrpcRoomMemberList, GrpcRoomMemberPayload, PadplusRoomMemberMap, PadplusRoomMemberPayload}
+import wechaty.puppet.schemas.Puppet.objectMapper
+import wechaty.puppet.schemas.Room
+import wechaty.puppet.schemas.Room.RoomMemberPayload
+import wechaty.puppet.support.RoomMemberSupport
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-24
+  */
+<span class="nc" id="L16">trait RoomMemberRawSupport {</span>
+  self:RoomMemberSupport with GrpcSupport with LocalStoreSupport with LazyLogging=&gt;
+
+  /**
+    *
+    * RoomMember
+    *
+    */
+<span class="nc" id="L24">  override def roomAnnounce(roomId: String): String = ???</span>
+
+<span class="nc" id="L26">  override def roomAnnounce(roomId: String, text: String): Unit = ???</span>
+
+<span class="nc" id="L28">  override def roomMemberList(roomId: String): Array[String] = ???</span>
+
+  override protected def roomMemberRawPayload(roomId: String, contactId: String): Room.RoomMemberPayload = {
+<span class="nc" id="L31">    getPadplusRoomMembers(roomId) match{</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">      case Some(padplusRoomMembers) =&gt;</span>
+<span class="nc" id="L33">        padplusRoomMembers.members.get(contactId).map(convertToPuppetRoomMember).orNull</span>
+      case _ =&gt;
+<span class="nc" id="L35">          val json = objectMapper.createObjectNode()</span>
+<span class="nc" id="L36">          json.put(&quot;OpType&quot;, &quot;UPDATE&quot;)</span>
+<span class="nc" id="L37">          json.put(&quot;type&quot;, &quot;GET_MEMBER&quot;)</span>
+<span class="nc" id="L38">          json.put(&quot;roomId&quot;, roomId)</span>
+<span class="nc" id="L39">        val map = syncRequest[PadplusRoomMemberMap](ApiType.ROOM_OPERATION, Some(json.toString))</span>
+<span class="nc" id="L40">        savePadplusRoomMembers(roomId,map)</span>
+<span class="nc" id="L41">        map.members.get(contactId).map(convertToPuppetRoomMember).orNull</span>
+    }
+  }
+  private def convertToPuppetRoomMember(input: PadplusRoomMemberPayload): RoomMemberPayload = {
+<span class="nc" id="L45">    val result = new  RoomMemberPayload</span>
+<span class="nc" id="L46">    result.avatar     = input.smallHeadUrl</span>
+<span class="nc" id="L47">    result.id         = input.contactId</span>
+<span class="nc" id="L48">    result.inviterId  = input.inviterId   // 'wxid_7708837087612',</span>
+<span class="nc" id="L49">    result.name       = input.nickName</span>
+<span class="nc" id="L50">    result.roomAlias  = input.displayName   // '李佳芮-群里设置的备注', `chatroom_nick_name`</span>
+<span class="nc" id="L51">    result</span>
+  }
+  private def convertToPadplusRoomMemberPayload(grpcRoomMemberPayload: GrpcRoomMemberPayload) = {
+<span class="nc" id="L54">    val padplusRoomMemberPayload=new PadplusRoomMemberPayload</span>
+<span class="nc" id="L55">    padplusRoomMemberPayload.bigHeadUrl= grpcRoomMemberPayload.HeadImgUrl</span>
+<span class="nc" id="L56">    padplusRoomMemberPayload.contactId= grpcRoomMemberPayload.UserName</span>
+<span class="nc" id="L57">    padplusRoomMemberPayload.displayName= grpcRoomMemberPayload.DisplayName</span>
+<span class="nc" id="L58">    padplusRoomMemberPayload.inviterId= &quot;&quot;</span>
+<span class="nc" id="L59">    padplusRoomMemberPayload.nickName= grpcRoomMemberPayload.NickName</span>
+<span class="nc" id="L60">    padplusRoomMemberPayload.smallHeadUrl= grpcRoomMemberPayload.HeadImgUrl</span>
+
+<span class="nc" id="L62">    padplusRoomMemberPayload</span>
+  }
+<span class="nc bnc" id="L64" title="All 2 branches missed.">  protected def roomMemberPartialFunction(response:StreamResponse):PartialFunction[ResponseType,Unit]={</span>
+<span class="nc bnc" id="L65" title="All 4 branches missed.">    case ResponseType.ROOM_MEMBER_LIST =&gt;</span>
+<span class="nc" id="L66">      val roomMemberList= objectMapper.readValue(response.getData,classOf[GrpcRoomMemberList])</span>
+<span class="nc" id="L67">      val roomId = roomMemberList.roomId</span>
+<span class="nc" id="L68">      val membersStr = roomMemberList.membersJson</span>
+<span class="nc" id="L69">      val membersList =objectMapper.readValue(membersStr,classOf[Array[GrpcRoomMemberPayload]])</span>
+<span class="nc" id="L70">      val data=membersList.map(x=&gt; x.UserName-&gt; convertToPadplusRoomMemberPayload(x)).toMap</span>
+<span class="nc" id="L71">      val padplusRoomMemberMap = new PadplusRoomMemberMap</span>
+<span class="nc" id="L72">      padplusRoomMemberMap.members = data</span>
+<span class="nc" id="L73">      savePadplusRoomMembers(roomId,padplusRoomMemberMap)</span>
+
+
+<span class="nc" id="L76">      CallbackHelper.resolveRoomMemberCallback(roomId,padplusRoomMemberMap)</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

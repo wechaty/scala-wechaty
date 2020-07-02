@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>PadPlusServerGrpc.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.grpc</a> &gt; <span class="el_source">PadPlusServerGrpc.java</span></div><h1>PadPlusServerGrpc.java</h1><pre class="source lang-java linenums">package wechaty.padplus.grpc;
+
+import static io.grpc.MethodDescriptor.generateFullMethodName;
+import static io.grpc.stub.ClientCalls.asyncBidiStreamingCall;
+import static io.grpc.stub.ClientCalls.asyncClientStreamingCall;
+import static io.grpc.stub.ClientCalls.asyncServerStreamingCall;
+import static io.grpc.stub.ClientCalls.asyncUnaryCall;
+import static io.grpc.stub.ClientCalls.blockingServerStreamingCall;
+import static io.grpc.stub.ClientCalls.blockingUnaryCall;
+import static io.grpc.stub.ClientCalls.futureUnaryCall;
+import static io.grpc.stub.ServerCalls.asyncBidiStreamingCall;
+import static io.grpc.stub.ServerCalls.asyncClientStreamingCall;
+import static io.grpc.stub.ServerCalls.asyncServerStreamingCall;
+import static io.grpc.stub.ServerCalls.asyncUnaryCall;
+import static io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall;
+import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
+
+/**
+ */
+@javax.annotation.Generated(
+    value = &quot;by gRPC proto compiler (version 1.29.0)&quot;,
+    comments = &quot;Source: PadPlusServer.proto&quot;)
+public final class PadPlusServerGrpc {
+
+  private PadPlusServerGrpc() {}
+
+  public static final String SERVICE_NAME = &quot;PadPlusServer.PadPlusServer&quot;;
+
+  // Static method descriptors that strictly reflect the proto.
+  private static volatile io.grpc.MethodDescriptor&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject,
+      wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject&gt; getRequestMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + &quot;Request&quot;,
+      requestType = wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject.class,
+      responseType = wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject,
+      wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject&gt; getRequestMethod() {
+    io.grpc.MethodDescriptor&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject, wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject&gt; getRequestMethod;
+<span class="fc bfc" id="L41" title="All 2 branches covered.">    if ((getRequestMethod = PadPlusServerGrpc.getRequestMethod) == null) {</span>
+<span class="fc" id="L42">      synchronized (PadPlusServerGrpc.class) {</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if ((getRequestMethod = PadPlusServerGrpc.getRequestMethod) == null) {</span>
+          PadPlusServerGrpc.getRequestMethod = getRequestMethod =
+<span class="fc" id="L45">              io.grpc.MethodDescriptor.&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject, wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject&gt;newBuilder()</span>
+<span class="fc" id="L46">              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L47">              .setFullMethodName(generateFullMethodName(SERVICE_NAME, &quot;Request&quot;))</span>
+<span class="fc" id="L48">              .setSampledToLocalTracing(true)</span>
+<span class="fc" id="L49">              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(</span>
+<span class="fc" id="L50">                  wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject.getDefaultInstance()))</span>
+<span class="fc" id="L51">              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(</span>
+<span class="fc" id="L52">                  wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject.getDefaultInstance()))</span>
+<span class="fc" id="L53">              .setSchemaDescriptor(new PadPlusServerMethodDescriptorSupplier(&quot;Request&quot;))</span>
+<span class="fc" id="L54">              .build();</span>
+        }
+<span class="fc" id="L56">      }</span>
+    }
+<span class="fc" id="L58">    return getRequestMethod;</span>
+  }
+
+  private static volatile io.grpc.MethodDescriptor&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.InitConfig,
+      wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse&gt; getInitMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + &quot;Init&quot;,
+      requestType = wechaty.padplus.grpc.PadPlusServerOuterClass.InitConfig.class,
+      responseType = wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+  public static io.grpc.MethodDescriptor&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.InitConfig,
+      wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse&gt; getInitMethod() {
+    io.grpc.MethodDescriptor&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.InitConfig, wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse&gt; getInitMethod;
+<span class="fc bfc" id="L72" title="All 2 branches covered.">    if ((getInitMethod = PadPlusServerGrpc.getInitMethod) == null) {</span>
+<span class="fc" id="L73">      synchronized (PadPlusServerGrpc.class) {</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if ((getInitMethod = PadPlusServerGrpc.getInitMethod) == null) {</span>
+          PadPlusServerGrpc.getInitMethod = getInitMethod =
+<span class="fc" id="L76">              io.grpc.MethodDescriptor.&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.InitConfig, wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse&gt;newBuilder()</span>
+<span class="fc" id="L77">              .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)</span>
+<span class="fc" id="L78">              .setFullMethodName(generateFullMethodName(SERVICE_NAME, &quot;Init&quot;))</span>
+<span class="fc" id="L79">              .setSampledToLocalTracing(true)</span>
+<span class="fc" id="L80">              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(</span>
+<span class="fc" id="L81">                  wechaty.padplus.grpc.PadPlusServerOuterClass.InitConfig.getDefaultInstance()))</span>
+<span class="fc" id="L82">              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(</span>
+<span class="fc" id="L83">                  wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse.getDefaultInstance()))</span>
+<span class="fc" id="L84">              .setSchemaDescriptor(new PadPlusServerMethodDescriptorSupplier(&quot;Init&quot;))</span>
+<span class="fc" id="L85">              .build();</span>
+        }
+<span class="fc" id="L87">      }</span>
+    }
+<span class="fc" id="L89">    return getInitMethod;</span>
+  }
+
+  /**
+   * Creates a new async stub that supports all call types for the service
+   */
+  public static PadPlusServerStub newStub(io.grpc.Channel channel) {
+<span class="fc" id="L96">    io.grpc.stub.AbstractStub.StubFactory&lt;PadPlusServerStub&gt; factory =</span>
+<span class="fc" id="L97">      new io.grpc.stub.AbstractStub.StubFactory&lt;PadPlusServerStub&gt;() {</span>
+        @java.lang.Override
+        public PadPlusServerStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+<span class="fc" id="L100">          return new PadPlusServerStub(channel, callOptions);</span>
+        }
+      };
+<span class="fc" id="L103">    return PadPlusServerStub.newStub(factory, channel);</span>
+  }
+
+  /**
+   * Creates a new blocking-style stub that supports unary and streaming output calls on the service
+   */
+  public static PadPlusServerBlockingStub newBlockingStub(
+      io.grpc.Channel channel) {
+<span class="fc" id="L111">    io.grpc.stub.AbstractStub.StubFactory&lt;PadPlusServerBlockingStub&gt; factory =</span>
+<span class="fc" id="L112">      new io.grpc.stub.AbstractStub.StubFactory&lt;PadPlusServerBlockingStub&gt;() {</span>
+        @java.lang.Override
+        public PadPlusServerBlockingStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+<span class="fc" id="L115">          return new PadPlusServerBlockingStub(channel, callOptions);</span>
+        }
+      };
+<span class="fc" id="L118">    return PadPlusServerBlockingStub.newStub(factory, channel);</span>
+  }
+
+  /**
+   * Creates a new ListenableFuture-style stub that supports unary calls on the service
+   */
+  public static PadPlusServerFutureStub newFutureStub(
+      io.grpc.Channel channel) {
+<span class="nc" id="L126">    io.grpc.stub.AbstractStub.StubFactory&lt;PadPlusServerFutureStub&gt; factory =</span>
+<span class="nc" id="L127">      new io.grpc.stub.AbstractStub.StubFactory&lt;PadPlusServerFutureStub&gt;() {</span>
+        @java.lang.Override
+        public PadPlusServerFutureStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+<span class="nc" id="L130">          return new PadPlusServerFutureStub(channel, callOptions);</span>
+        }
+      };
+<span class="nc" id="L133">    return PadPlusServerFutureStub.newStub(factory, channel);</span>
+  }
+
+  /**
+   */
+<span class="nc" id="L138">  public static abstract class PadPlusServerImplBase implements io.grpc.BindableService {</span>
+
+    /**
+     */
+    public void request(wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject request,
+        io.grpc.stub.StreamObserver&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject&gt; responseObserver) {
+<span class="nc" id="L144">      asyncUnimplementedUnaryCall(getRequestMethod(), responseObserver);</span>
+<span class="nc" id="L145">    }</span>
+
+    /**
+     */
+    public void init(wechaty.padplus.grpc.PadPlusServerOuterClass.InitConfig request,
+        io.grpc.stub.StreamObserver&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse&gt; responseObserver) {
+<span class="nc" id="L151">      asyncUnimplementedUnaryCall(getInitMethod(), responseObserver);</span>
+<span class="nc" id="L152">    }</span>
+
+    @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
+<span class="nc" id="L155">      return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())</span>
+<span class="nc" id="L156">          .addMethod(</span>
+<span class="nc" id="L157">            getRequestMethod(),</span>
+<span class="nc" id="L158">            asyncUnaryCall(</span>
+              new MethodHandlers&lt;
+                wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject,
+                wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject&gt;(
+                  this, METHODID_REQUEST)))
+<span class="nc" id="L163">          .addMethod(</span>
+<span class="nc" id="L164">            getInitMethod(),</span>
+<span class="nc" id="L165">            asyncServerStreamingCall(</span>
+              new MethodHandlers&lt;
+                wechaty.padplus.grpc.PadPlusServerOuterClass.InitConfig,
+                wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse&gt;(
+                  this, METHODID_INIT)))
+<span class="nc" id="L170">          .build();</span>
+    }
+  }
+
+  /**
+   */
+  public static final class PadPlusServerStub extends io.grpc.stub.AbstractAsyncStub&lt;PadPlusServerStub&gt; {
+    private PadPlusServerStub(
+        io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+<span class="fc" id="L179">      super(channel, callOptions);</span>
+<span class="fc" id="L180">    }</span>
+
+    @java.lang.Override
+    protected PadPlusServerStub build(
+        io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+<span class="nc" id="L185">      return new PadPlusServerStub(channel, callOptions);</span>
+    }
+
+    /**
+     */
+    public void request(wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject request,
+        io.grpc.stub.StreamObserver&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject&gt; responseObserver) {
+<span class="nc" id="L192">      asyncUnaryCall(</span>
+<span class="nc" id="L193">          getChannel().newCall(getRequestMethod(), getCallOptions()), request, responseObserver);</span>
+<span class="nc" id="L194">    }</span>
+
+    /**
+     */
+    public void init(wechaty.padplus.grpc.PadPlusServerOuterClass.InitConfig request,
+        io.grpc.stub.StreamObserver&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse&gt; responseObserver) {
+<span class="fc" id="L200">      asyncServerStreamingCall(</span>
+<span class="fc" id="L201">          getChannel().newCall(getInitMethod(), getCallOptions()), request, responseObserver);</span>
+<span class="fc" id="L202">    }</span>
+  }
+
+  /**
+   */
+  public static final class PadPlusServerBlockingStub extends io.grpc.stub.AbstractBlockingStub&lt;PadPlusServerBlockingStub&gt; {
+    private PadPlusServerBlockingStub(
+        io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+<span class="fc" id="L210">      super(channel, callOptions);</span>
+<span class="fc" id="L211">    }</span>
+
+    @java.lang.Override
+    protected PadPlusServerBlockingStub build(
+        io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+<span class="nc" id="L216">      return new PadPlusServerBlockingStub(channel, callOptions);</span>
+    }
+
+    /**
+     */
+    public wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject request(wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject request) {
+<span class="fc" id="L222">      return blockingUnaryCall(</span>
+<span class="fc" id="L223">          getChannel(), getRequestMethod(), getCallOptions(), request);</span>
+    }
+
+    /**
+     */
+    public java.util.Iterator&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse&gt; init(
+        wechaty.padplus.grpc.PadPlusServerOuterClass.InitConfig request) {
+<span class="nc" id="L230">      return blockingServerStreamingCall(</span>
+<span class="nc" id="L231">          getChannel(), getInitMethod(), getCallOptions(), request);</span>
+    }
+  }
+
+  /**
+   */
+  public static final class PadPlusServerFutureStub extends io.grpc.stub.AbstractFutureStub&lt;PadPlusServerFutureStub&gt; {
+    private PadPlusServerFutureStub(
+        io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+<span class="nc" id="L240">      super(channel, callOptions);</span>
+<span class="nc" id="L241">    }</span>
+
+    @java.lang.Override
+    protected PadPlusServerFutureStub build(
+        io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+<span class="nc" id="L246">      return new PadPlusServerFutureStub(channel, callOptions);</span>
+    }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject&gt; request(
+        wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject request) {
+<span class="nc" id="L253">      return futureUnaryCall(</span>
+<span class="nc" id="L254">          getChannel().newCall(getRequestMethod(), getCallOptions()), request);</span>
+    }
+  }
+
+  private static final int METHODID_REQUEST = 0;
+  private static final int METHODID_INIT = 1;
+
+  private static final class MethodHandlers&lt;Req, Resp&gt; implements
+      io.grpc.stub.ServerCalls.UnaryMethod&lt;Req, Resp&gt;,
+      io.grpc.stub.ServerCalls.ServerStreamingMethod&lt;Req, Resp&gt;,
+      io.grpc.stub.ServerCalls.ClientStreamingMethod&lt;Req, Resp&gt;,
+      io.grpc.stub.ServerCalls.BidiStreamingMethod&lt;Req, Resp&gt; {
+    private final PadPlusServerImplBase serviceImpl;
+    private final int methodId;
+
+<span class="nc" id="L269">    MethodHandlers(PadPlusServerImplBase serviceImpl, int methodId) {</span>
+<span class="nc" id="L270">      this.serviceImpl = serviceImpl;</span>
+<span class="nc" id="L271">      this.methodId = methodId;</span>
+<span class="nc" id="L272">    }</span>
+
+    @java.lang.Override
+    @java.lang.SuppressWarnings(&quot;unchecked&quot;)
+    public void invoke(Req request, io.grpc.stub.StreamObserver&lt;Resp&gt; responseObserver) {
+<span class="nc bnc" id="L277" title="All 3 branches missed.">      switch (methodId) {</span>
+        case METHODID_REQUEST:
+<span class="nc" id="L279">          serviceImpl.request((wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject) request,</span>
+              (io.grpc.stub.StreamObserver&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject&gt;) responseObserver);
+<span class="nc" id="L281">          break;</span>
+        case METHODID_INIT:
+<span class="nc" id="L283">          serviceImpl.init((wechaty.padplus.grpc.PadPlusServerOuterClass.InitConfig) request,</span>
+              (io.grpc.stub.StreamObserver&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse&gt;) responseObserver);
+<span class="nc" id="L285">          break;</span>
+        default:
+<span class="nc" id="L287">          throw new AssertionError();</span>
+      }
+<span class="nc" id="L289">    }</span>
+
+    @java.lang.Override
+    @java.lang.SuppressWarnings(&quot;unchecked&quot;)
+    public io.grpc.stub.StreamObserver&lt;Req&gt; invoke(
+        io.grpc.stub.StreamObserver&lt;Resp&gt; responseObserver) {
+<span class="nc" id="L295">      switch (methodId) {</span>
+        default:
+<span class="nc" id="L297">          throw new AssertionError();</span>
+      }
+    }
+  }
+
+  private static abstract class PadPlusServerBaseDescriptorSupplier
+      implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
+<span class="fc" id="L304">    PadPlusServerBaseDescriptorSupplier() {}</span>
+
+    @java.lang.Override
+    public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
+<span class="nc" id="L308">      return wechaty.padplus.grpc.PadPlusServerOuterClass.getDescriptor();</span>
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Descriptors.ServiceDescriptor getServiceDescriptor() {
+<span class="nc" id="L313">      return getFileDescriptor().findServiceByName(&quot;PadPlusServer&quot;);</span>
+    }
+  }
+
+  private static final class PadPlusServerFileDescriptorSupplier
+      extends PadPlusServerBaseDescriptorSupplier {
+<span class="nc" id="L319">    PadPlusServerFileDescriptorSupplier() {}</span>
+  }
+
+  private static final class PadPlusServerMethodDescriptorSupplier
+      extends PadPlusServerBaseDescriptorSupplier
+      implements io.grpc.protobuf.ProtoMethodDescriptorSupplier {
+    private final String methodName;
+
+<span class="fc" id="L327">    PadPlusServerMethodDescriptorSupplier(String methodName) {</span>
+<span class="fc" id="L328">      this.methodName = methodName;</span>
+<span class="fc" id="L329">    }</span>
+
+    @java.lang.Override
+    public com.google.protobuf.Descriptors.MethodDescriptor getMethodDescriptor() {
+<span class="nc" id="L333">      return getServiceDescriptor().findMethodByName(methodName);</span>
+    }
+  }
+
+  private static volatile io.grpc.ServiceDescriptor serviceDescriptor;
+
+  public static io.grpc.ServiceDescriptor getServiceDescriptor() {
+<span class="nc" id="L340">    io.grpc.ServiceDescriptor result = serviceDescriptor;</span>
+<span class="nc bnc" id="L341" title="All 2 branches missed.">    if (result == null) {</span>
+<span class="nc" id="L342">      synchronized (PadPlusServerGrpc.class) {</span>
+<span class="nc" id="L343">        result = serviceDescriptor;</span>
+<span class="nc bnc" id="L344" title="All 2 branches missed.">        if (result == null) {</span>
+<span class="nc" id="L345">          serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)</span>
+<span class="nc" id="L346">              .setSchemaDescriptor(new PadPlusServerFileDescriptorSupplier())</span>
+<span class="nc" id="L347">              .addMethod(getRequestMethod())</span>
+<span class="nc" id="L348">              .addMethod(getInitMethod())</span>
+<span class="nc" id="L349">              .build();</span>
+        }
+<span class="nc" id="L351">      }</span>
+    }
+<span class="nc" id="L353">    return result;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

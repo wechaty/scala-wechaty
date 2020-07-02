@@ -25,10 +25,10 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
     }
   }
 
-<span class="nc" id="L28">  def addListener[T](event: PuppetEventName.Type, listener: Listener[T],once:Boolean=false): Unit = {</span>
-<span class="nc" id="L29">    listeners.get(event) match {</span>
-<span class="nc bnc" id="L30" title="All 2 branches missed.">      case Some(eventListeners) =&gt; listeners += event -&gt; (eventListeners :+ (listener,once))</span>
-<span class="nc" id="L31">      case _ =&gt; listeners += event -&gt; List((listener,once))</span>
+<span class="fc" id="L28">  def addListener[T](event: PuppetEventName.Type, listener: Listener[T],once:Boolean=false): Unit = {</span>
+<span class="fc" id="L29">    listeners.get(event) match {</span>
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">      case Some(eventListeners) =&gt; listeners += event -&gt; (eventListeners :+ (listener,once))</span>
+<span class="fc" id="L31">      case _ =&gt; listeners += event -&gt; List((listener,once))</span>
     }
   }
 }

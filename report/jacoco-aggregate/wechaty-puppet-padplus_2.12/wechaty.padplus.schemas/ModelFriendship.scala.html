@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ModelFriendship.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.schemas</a> &gt; <span class="el_source">ModelFriendship.scala</span></div><h1>ModelFriendship.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.schemas
+<span class="nc" id="L2">object ModelFriendship {</span>
+
+<span class="nc" id="L4">class PadplusRequestTokenPayload {</span>
+<span class="nc" id="L5">  var full_url:String = _</span>
+<span class="nc" id="L6">  var info:String = _</span>
+<span class="nc" id="L7">  var message:String = _</span>
+<span class="nc" id="L8">  var share_url:String = _</span>
+<span class="nc" id="L9">  var status:Number = _</span>
+}
+
+<span class="nc" id="L12">class PadplusFriendshipPayload {</span>
+<span class="nc" id="L13">  var fromusername:String = _ //    // 'lizhuohuan'</span>
+<span class="nc" id="L14">  var encryptusername:String = _ //    // v1_xxx@stranger'</span>
+<span class="nc" id="L15">  var content:String = _ //    // 'hello'</span>
+<span class="nc" id="L16">  var scene:String = _ //    // scene type</span>
+<span class="nc" id="L17">  var ticket:String = _ //    // 'v2_1a0d2cf325e64b6f74bed09e944529e7cc7a7580cb323475050664566dd0302d89b8e2ed95b596b459cf762d94a0ce606da39babbae0dc26b18a62e079bfc120@stranger',</span>
+}
+
+<span class="nc" id="L20">class FriendshipPayloadBase {</span>
+<span class="nc" id="L21">  var id:String = _</span>
+<span class="nc" id="L22">  var contactId:String = _</span>
+<span class="nc" id="L23">  var hello:String = _</span>
+<span class="nc" id="L24">  var timestamp:Number = _</span>
+}
+
+<span class="nc" id="L27">class FriendshipPayloadConfirm extends FriendshipPayloadBase  {</span>
+//  var type:FriendshipType.Confirm = _
+}
+
+<span class="nc" id="L31">class FriendshipPayloadReceive extends FriendshipPayloadBase  {</span>
+<span class="nc" id="L32">  var stranger:String = _</span>
+<span class="nc" id="L33">  var ticket:String = _</span>
+//  var type:FriendshipType.Receive = _
+}
+
+<span class="nc" id="L37">class FriendshipPayloadVerify extends FriendshipPayloadBase {</span>
+//  var type:FriendshipType.Verify = _
+}
+
+//type FriendshipPayload = FriendshipPayloadConfirm | FriendshipPayloadReceive | FriendshipPayloadVerify
+
+<span class="nc" id="L43">class AddContactGrpcResponse {</span>
+<span class="nc" id="L44">  var status:String = _</span>
+}
+<span class="nc" id="L46"> }</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

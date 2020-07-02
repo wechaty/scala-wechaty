@@ -21,17 +21,17 @@ import scala.util.{Failure, Success, Try}
 <span class="fc" id="L21">  private val countDownLatch = new CountDownLatch(1)</span>
 
 
-<span class="nc" id="L24">  protected def awaitStreamStart()=countDownLatch.await(10,TimeUnit.SECONDS)</span>
+<span class="fc" id="L24">  protected def awaitStreamStart()=countDownLatch.await(10,TimeUnit.SECONDS)</span>
   override def onNext(response: StreamResponse): Unit = {
-<span class="nc bnc" id="L26" title="All 2 branches missed.">    logger.debug(&quot;stream response:{}&quot;,response)</span>
-<span class="nc" id="L27">    countDownLatch.countDown()</span>
-<span class="nc" id="L28">    saveUin(response.getUinBytes)</span>
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">    logger.debug(&quot;stream response:{}&quot;,response)</span>
+<span class="fc" id="L27">    countDownLatch.countDown()</span>
+<span class="fc" id="L28">    saveUin(response.getUinBytes)</span>
 
-<span class="nc" id="L30">    val traceId = response.getTraceId</span>
-<span class="nc bnc" id="L31" title="All 2 branches missed.">    if(!isBlank(traceId)){</span>
-<span class="nc" id="L32">      CallbackHelper.resolveCallBack(traceId,response)</span>
+<span class="fc" id="L30">    val traceId = response.getTraceId</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">    if(!isBlank(traceId)){</span>
+<span class="fc" id="L32">      CallbackHelper.resolveCallBack(traceId,response)</span>
     }else {
-<span class="nc" id="L34">      Try {</span>
+<span class="pc" id="L34">      Try {</span>
 <span class="nc" id="L35">        val partialFunction = sysPartialFunction(response) orElse</span>
 <span class="nc" id="L36">          loginPartialFunction(response) orElse</span>
 <span class="nc" id="L37">          messagePartialFunction(response)</span>
@@ -49,7 +49,7 @@ import scala.util.{Failure, Success, Try}
   }
 
   override def onCompleted(): Unit = {
-<span class="nc bnc" id="L52" title="All 2 branches missed.">    logger.info(&quot;completed&quot;)</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">    logger.info(&quot;completed&quot;)</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

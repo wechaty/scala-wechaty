@@ -33,27 +33,27 @@ import scala.concurrent.Future
   def contactList(): Array[String]
 
   def contactPayload(contactId: String): Future[ContactPayload] = {
-<span class="nc bnc" id="L36" title="All 2 branches missed.">    if (Puppet.isBlank(contactId)) {</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">    if (Puppet.isBlank(contactId)) {</span>
 <span class="nc" id="L37">      throw new IllegalArgumentException(&quot;contact id is blank!&quot;)</span>
     }
 
     /**
       * 1. Try to get from cache first
       */
-<span class="nc" id="L43">    val cachedPayload = this.cacheContactPayload.getIfPresent(contactId)</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">    if (cachedPayload != null) {</span>
+<span class="fc" id="L43">    val cachedPayload = this.cacheContactPayload.getIfPresent(contactId)</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">    if (cachedPayload != null) {</span>
 <span class="nc" id="L45">      return Future.successful(cachedPayload)</span>
     }
 
     /**
       * 2. Cache not found
       */
-<span class="nc" id="L51">    val payloadFuture = this.contactRawPayload(contactId)</span>
+<span class="fc" id="L51">    val payloadFuture = this.contactRawPayload(contactId)</span>
 
-<span class="nc" id="L53">    payloadFuture.map(payload=&gt;{</span>
-<span class="nc" id="L54">      cacheContactPayload.put(contactId, payload)</span>
-<span class="nc bnc" id="L55" title="All 2 branches missed.">      logger.info(&quot;Puppet contactPayload({}) cache SET&quot;, contactId)</span>
-<span class="nc" id="L56">      payload</span>
+<span class="fc" id="L53">    payloadFuture.map(payload=&gt;{</span>
+<span class="fc" id="L54">      cacheContactPayload.put(contactId, payload)</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">      logger.info(&quot;Puppet contactPayload({}) cache SET&quot;, contactId)</span>
+<span class="fc" id="L56">      payload</span>
     })
   }
   def contactPayloadDirty (contactId: String): Unit ={

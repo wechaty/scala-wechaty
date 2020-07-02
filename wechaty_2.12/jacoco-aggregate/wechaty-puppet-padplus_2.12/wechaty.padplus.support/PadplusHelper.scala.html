@@ -30,19 +30,19 @@ import wechaty.puppet.schemas.Puppet._
     }
   }
   def isRoomId (id: String): Boolean ={
-<span class="nc bnc" id="L33" title="All 2 branches missed.">    if (isBlank(id)) {</span>
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">    if (isBlank(id)) {</span>
 <span class="nc" id="L34">      return false</span>
     }
-<span class="nc" id="L36">    &quot;@chatroom$&quot;.r.findFirstMatchIn(id).isDefined</span>
+<span class="fc" id="L36">    &quot;@chatroom$&quot;.r.findFirstMatchIn(id).isDefined</span>
   }
 
 <span class="nc bnc" id="L39" title="All 2 branches missed.">  def isContactId (id: String): Boolean = !isRoomId(id)</span>
 
   def isContactOfficialId (id: String): Boolean ={
-<span class="nc bnc" id="L42" title="All 2 branches missed.">    if (isBlank(id)) {</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">    if (isBlank(id)) {</span>
 <span class="nc" id="L43">    return false</span>
   }
-<span class="nc" id="L45">    &quot;(?i)^gh_&quot;.r.findFirstMatchIn(id).isDefined</span>
+<span class="fc" id="L45">    &quot;(?i)^gh_&quot;.r.findFirstMatchIn(id).isDefined</span>
   }
   def isStrangerV1 (strangerId: String): Boolean ={
 <span class="nc bnc" id="L48" title="All 2 branches missed.">    if (isBlank(strangerId)) {</span>

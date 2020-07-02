@@ -51,16 +51,16 @@ import scala.util.Try
     * contact
     */
   override protected def contactRawPayload(contactId: String): Future[Contact.ContactPayload] = {
-<span class="nc" id="L54">    this.getContact(contactId).map(convertPadplusContactToContactPayload)</span>
+<span class="fc" id="L54">    this.getContact(contactId).map(convertPadplusContactToContactPayload)</span>
   }
 
   protected def getContact(contactId: String): Future[PadplusContactPayload] = {
-<span class="nc" id="L58">    getPadplusContactPayload(contactId) match{</span>
-<span class="nc bnc" id="L59" title="All 2 branches missed.">      case Some(padplusContactPayload) =&gt; Future.successful(padplusContactPayload)</span>
+<span class="fc" id="L58">    getPadplusContactPayload(contactId) match{</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">      case Some(padplusContactPayload) =&gt; Future.successful(padplusContactPayload)</span>
       case _ =&gt;
-<span class="nc" id="L61">        val json = objectMapper.createObjectNode()</span>
-<span class="nc" id="L62">        json.put(&quot;userName&quot;, contactId)</span>
-<span class="nc" id="L63">        asyncRequest[GrpcContactPayload](ApiType.GET_CONTACT,Some(json.toString)).map(convertFromGrpcContact)</span>
+<span class="fc" id="L61">        val json = objectMapper.createObjectNode()</span>
+<span class="fc" id="L62">        json.put(&quot;userName&quot;, contactId)</span>
+<span class="fc" id="L63">        asyncRequest[GrpcContactPayload](ApiType.GET_CONTACT,Some(json.toString)).map(convertFromGrpcContact)</span>
     }
   }
 
@@ -201,56 +201,56 @@ import scala.util.Try
   }
 
   implicit def convertFromGrpcContact (contactPayload: GrpcContactPayload): PadplusContactPayload = {
-<span class="nc" id="L204">    val payload = new PadplusContactPayload</span>
-<span class="nc" id="L205">    payload.alias            = contactPayload.Alias</span>
-<span class="nc" id="L206">    payload.bigHeadUrl       = contactPayload.BigHeadImgUrl</span>
-<span class="nc" id="L207">    payload.city             = contactPayload.City</span>
-<span class="nc" id="L208">    payload.contactFlag      = contactPayload.ContactFlag</span>
-<span class="nc bnc" id="L209" title="All 2 branches missed.">    payload.contactType      = if(Puppet.isBlank(contactPayload.ContactType)) 0 else contactPayload.ContactType.toInt</span>
-<span class="nc" id="L210">    payload.country          = &quot;&quot;</span>
-<span class="nc" id="L211">    payload.nickName         = contactPayload.NickName</span>
-<span class="nc" id="L212">    payload.province         = contactPayload.Province</span>
-<span class="nc" id="L213">    payload.remark           = contactPayload.RemarkName</span>
-<span class="nc" id="L214">    payload.sex              = Contact.ContactGender(contactPayload.Sex.intValue())</span>
-<span class="nc" id="L215">    payload.signature        = contactPayload.Signature</span>
-<span class="nc" id="L216">    payload.smallHeadUrl     = contactPayload.SmallHeadImgUrl</span>
-<span class="nc" id="L217">    payload.stranger         = contactPayload.EncryptUsername</span>
-<span class="nc" id="L218">    payload.tagList          = contactPayload.LabelLists</span>
-<span class="nc" id="L219">    payload.ticket           = &quot;&quot;</span>
-<span class="nc" id="L220">    payload.userName         = contactPayload.UserName</span>
-<span class="nc" id="L221">    payload.verifyFlag       = contactPayload.VerifyFlag</span>
+<span class="fc" id="L204">    val payload = new PadplusContactPayload</span>
+<span class="fc" id="L205">    payload.alias            = contactPayload.Alias</span>
+<span class="fc" id="L206">    payload.bigHeadUrl       = contactPayload.BigHeadImgUrl</span>
+<span class="fc" id="L207">    payload.city             = contactPayload.City</span>
+<span class="fc" id="L208">    payload.contactFlag      = contactPayload.ContactFlag</span>
+<span class="pc bpc" id="L209" title="1 of 2 branches missed.">    payload.contactType      = if(Puppet.isBlank(contactPayload.ContactType)) 0 else contactPayload.ContactType.toInt</span>
+<span class="fc" id="L210">    payload.country          = &quot;&quot;</span>
+<span class="fc" id="L211">    payload.nickName         = contactPayload.NickName</span>
+<span class="fc" id="L212">    payload.province         = contactPayload.Province</span>
+<span class="fc" id="L213">    payload.remark           = contactPayload.RemarkName</span>
+<span class="fc" id="L214">    payload.sex              = Contact.ContactGender(contactPayload.Sex.intValue())</span>
+<span class="fc" id="L215">    payload.signature        = contactPayload.Signature</span>
+<span class="fc" id="L216">    payload.smallHeadUrl     = contactPayload.SmallHeadImgUrl</span>
+<span class="fc" id="L217">    payload.stranger         = contactPayload.EncryptUsername</span>
+<span class="fc" id="L218">    payload.tagList          = contactPayload.LabelLists</span>
+<span class="fc" id="L219">    payload.ticket           = &quot;&quot;</span>
+<span class="fc" id="L220">    payload.userName         = contactPayload.UserName</span>
+<span class="fc" id="L221">    payload.verifyFlag       = contactPayload.VerifyFlag</span>
 
-<span class="nc" id="L223">    payload</span>
+<span class="fc" id="L223">    payload</span>
   }
   implicit def convertPadplusContactToContactPayload(rawPayload:PadplusContactPayload): ContactPayload ={
-<span class="nc bnc" id="L226" title="All 2 branches missed.">    if (isRoomId(rawPayload.userName)) {</span>
+<span class="pc bpc" id="L226" title="1 of 2 branches missed.">    if (isRoomId(rawPayload.userName)) {</span>
 <span class="nc" id="L227">      throw new Error(&quot;Room Object instead of Contact!&quot;)</span>
     }
 
-<span class="nc" id="L230">    var contactType = ContactType.Unknown</span>
-<span class="nc bnc" id="L231" title="All 4 branches missed.">    if (isContactOfficialId(rawPayload.userName) || rawPayload.verifyFlag != 0) {</span>
+<span class="fc" id="L230">    var contactType = ContactType.Unknown</span>
+<span class="pc bpc" id="L231" title="2 of 4 branches missed.">    if (isContactOfficialId(rawPayload.userName) || rawPayload.verifyFlag != 0) {</span>
 <span class="nc" id="L232">      contactType = ContactType.Official</span>
     } else {
-<span class="nc" id="L234">      contactType = ContactType.Personal</span>
+<span class="fc" id="L234">      contactType = ContactType.Personal</span>
     }
-<span class="nc" id="L236">    var friend = false</span>
-<span class="nc bnc" id="L237" title="All 6 branches missed.">    if (rawPayload.contactFlag &gt; 0 &amp;&amp; rawPayload.contactFlag != 0 &amp;&amp; rawPayload.verifyFlag == 0) {</span>
+<span class="fc" id="L236">    var friend = false</span>
+<span class="pc bpc" id="L237" title="5 of 6 branches missed.">    if (rawPayload.contactFlag &gt; 0 &amp;&amp; rawPayload.contactFlag != 0 &amp;&amp; rawPayload.verifyFlag == 0) {</span>
 <span class="nc" id="L238">      friend = true</span>
     }
-<span class="nc" id="L240">    val payload = new ContactPayload</span>
-<span class="nc" id="L241">      payload.alias     = rawPayload.remark</span>
-<span class="nc" id="L242">      payload.avatar    = rawPayload.bigHeadUrl</span>
-<span class="nc" id="L243">      payload.city      = rawPayload.city</span>
-<span class="nc" id="L244">      payload.friend    = friend</span>
-<span class="nc" id="L245">      payload.gender    = rawPayload.sex</span>
-<span class="nc" id="L246">      payload.id        = rawPayload.userName</span>
-<span class="nc" id="L247">      payload.name      = rawPayload.nickName</span>
-<span class="nc" id="L248">      payload.province  = rawPayload.province</span>
-<span class="nc" id="L249">      payload.signature = (rawPayload.signature).replace(&quot;+&quot;, &quot;&quot;)          // Stay+Foolis</span>
-<span class="nc" id="L250">      payload.`type`      = contactType</span>
-<span class="nc" id="L251">      payload.weixin    = rawPayload.alias</span>
+<span class="fc" id="L240">    val payload = new ContactPayload</span>
+<span class="fc" id="L241">      payload.alias     = rawPayload.remark</span>
+<span class="fc" id="L242">      payload.avatar    = rawPayload.bigHeadUrl</span>
+<span class="fc" id="L243">      payload.city      = rawPayload.city</span>
+<span class="fc" id="L244">      payload.friend    = friend</span>
+<span class="fc" id="L245">      payload.gender    = rawPayload.sex</span>
+<span class="fc" id="L246">      payload.id        = rawPayload.userName</span>
+<span class="fc" id="L247">      payload.name      = rawPayload.nickName</span>
+<span class="fc" id="L248">      payload.province  = rawPayload.province</span>
+<span class="fc" id="L249">      payload.signature = (rawPayload.signature).replace(&quot;+&quot;, &quot;&quot;)          // Stay+Foolis</span>
+<span class="fc" id="L250">      payload.`type`      = contactType</span>
+<span class="fc" id="L251">      payload.weixin    = rawPayload.alias</span>
 
-<span class="nc" id="L253">    payload</span>
+<span class="fc" id="L253">    payload</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

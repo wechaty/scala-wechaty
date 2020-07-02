@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>PadplusHelper.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.support</a> &gt; <span class="el_source">PadplusHelper.scala</span></div><h1>PadplusHelper.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.support
+
+import wechaty.padplus.schemas.PadplusEnums.PadplusMessageType
+import wechaty.puppet.schemas.Message.MessageType
+import wechaty.puppet.schemas.Puppet._
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-22
+  */
+<span class="fc" id="L12">trait PadplusHelper {</span>
+  def messageType (rawType: PadplusMessageType.Type): MessageType.Type = {
+<span class="nc" id="L14">    rawType match {</span>
+
+<span class="nc bnc" id="L16" title="All 6 branches missed.">      case PadplusMessageType.Text =&gt; MessageType.Text</span>
+<span class="nc bnc" id="L17" title="All 6 branches missed.">      case PadplusMessageType.Image =&gt; MessageType.Image // console.log(rawPayload)</span>
+<span class="nc bnc" id="L18" title="All 6 branches missed.">      case PadplusMessageType.Voice =&gt; MessageType.Audio // console.log(rawPayload)</span>
+<span class="nc bnc" id="L19" title="All 6 branches missed.">      case PadplusMessageType.Emoticon =&gt; MessageType.Emoticon</span>
+<span class="nc bnc" id="L20" title="All 6 branches missed.">      case PadplusMessageType.App =&gt; MessageType.Attachment</span>
+<span class="nc bnc" id="L21" title="All 6 branches missed.">      case PadplusMessageType.Location =&gt; MessageType.Location</span>
+<span class="nc bnc" id="L22" title="All 6 branches missed.">      case PadplusMessageType.Video =&gt; MessageType.Video // console.log(rawPayload)</span>
+<span class="nc bnc" id="L23" title="All 6 branches missed.">      case PadplusMessageType.Sys =&gt; MessageType.Unknown</span>
+<span class="nc bnc" id="L24" title="All 6 branches missed.">      case PadplusMessageType.ShareCard =&gt; MessageType.Contact</span>
+<span class="nc bnc" id="L25" title="All 6 branches missed.">      case PadplusMessageType.VoipMsg =&gt; MessageType.Unknown</span>
+<span class="nc bnc" id="L26" title="All 6 branches missed.">      case PadplusMessageType.Recalled =&gt; MessageType.Recalled</span>
+<span class="nc bnc" id="L27" title="All 14 branches missed.">      case PadplusMessageType.StatusNotify | PadplusMessageType.SysNotice =&gt; MessageType.Unknown</span>
+      case other =&gt;
+<span class="nc" id="L29">        throw new Error(&quot;unsupported type: &quot; + other + '(' + rawType + ')')</span>
+    }
+  }
+  def isRoomId (id: String): Boolean ={
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">    if (isBlank(id)) {</span>
+<span class="nc" id="L34">      return false</span>
+    }
+<span class="fc" id="L36">    &quot;@chatroom$&quot;.r.findFirstMatchIn(id).isDefined</span>
+  }
+
+<span class="nc bnc" id="L39" title="All 2 branches missed.">  def isContactId (id: String): Boolean = !isRoomId(id)</span>
+
+  def isContactOfficialId (id: String): Boolean ={
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">    if (isBlank(id)) {</span>
+<span class="nc" id="L43">    return false</span>
+  }
+<span class="fc" id="L45">    &quot;(?i)^gh_&quot;.r.findFirstMatchIn(id).isDefined</span>
+  }
+  def isStrangerV1 (strangerId: String): Boolean ={
+<span class="nc bnc" id="L48" title="All 2 branches missed.">    if (isBlank(strangerId)) {</span>
+<span class="nc" id="L49">    return false</span>
+  }
+<span class="nc" id="L51">    &quot;(?i)^v1_&quot;.r.findFirstMatchIn(strangerId).isDefined</span>
+  }
+
+  def isStrangerV2 (strangerId: String): Boolean = {
+<span class="nc bnc" id="L55" title="All 2 branches missed.">    if (isBlank(strangerId)) {</span>
+<span class="nc" id="L56">    return false</span>
+  }
+<span class="nc" id="L58">    &quot;(?i)^v2_&quot;.r.findFirstMatchIn(strangerId).isDefined</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

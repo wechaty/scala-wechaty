@@ -12,7 +12,7 @@
  */
 <span class="fc" id="L13">object ContactType extends Enumeration {</span>
  type Type = Value
-<span class="pc" id="L15">  val Unknown:Type =  Value(0)</span>
+<span class="fc" id="L15">  val Unknown:Type =  Value(0)</span>
 <span class="fc" id="L16">  val Individual:Type =  Value(1)</span>
 <span class="pc" id="L17">  val Official:Type =  Value(2)</span>
 
@@ -20,7 +20,7 @@
    * Huan(202004):
    * @deprecated: use Individual instead
    */
-<span class="pc" id="L23">  val Personal:Type =  Individual</span>
+<span class="fc" id="L23">  val Personal:Type =  Individual</span>
 }
 
 <span class="nc" id="L26">class ContactQueryFilter {</span>
@@ -31,7 +31,7 @@
 }
 
 <span class="pc" id="L33">class ContactPayload {</span>
-<span class="pc" id="L34">  var id:String = _</span>
+<span class="fc" id="L34">  var id:String = _</span>
 <span class="pc" id="L35">  var gender:ContactGender.Type = _</span>
 <span class="pc" id="L36">  var `type`:ContactType.Type = _</span>
 <span class="fc" id="L37">  var name:String = _</span>

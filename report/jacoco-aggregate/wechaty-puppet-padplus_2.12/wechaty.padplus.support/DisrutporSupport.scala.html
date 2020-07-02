@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DisrutporSupport.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.support</a> &gt; <span class="el_source">DisrutporSupport.scala</span></div><h1>DisrutporSupport.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.support
+
+import java.util.concurrent.{Executors, TimeUnit}
+
+import com.lmax.disruptor.dsl.{Disruptor, ProducerType}
+import com.lmax.disruptor.{BusySpinWaitStrategy, EventFactory, EventHandler, ExceptionHandler}
+import com.typesafe.scalalogging.LazyLogging
+import wechaty.puppet.events.EventEmitter
+import wechaty.puppet.schemas.Puppet.PuppetEventName
+import wechaty.puppet.schemas.Puppet.PuppetEventName.Type
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-06-30
+  */
+<span class="fc" id="L17">trait DisrutporSupport extends EventEmitter {</span>
+  self :LazyLogging =&gt;
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">  private class EventDef {</span>
+<span class="nc" id="L20">    var eventName: PuppetEventName.Type = _</span>
+<span class="nc" id="L21">    var value    : Any = _</span>
+  }
+<span class="fc" id="L23">  private var disruptor:Disruptor[EventDef] = _</span>
+  protected def startDisruptor(): Unit ={
+<span class="fc" id="L25">    disruptor = new Disruptor[EventDef](</span>
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">      new EventFactory[EventDef]() {</span>
+        @Override
+        def newInstance():EventDef= {
+<span class="fc" id="L29">          new EventDef()</span>
+        }
+      },
+<span class="fc" id="L32">      1 &lt;&lt; 32,</span>
+<span class="fc" id="L33">      Executors.defaultThreadFactory(),</span>
+<span class="fc" id="L34">      ProducerType.SINGLE,</span>
+<span class="fc" id="L35">      new BusySpinWaitStrategy()</span>
+    )
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">    disruptor.handleEventsWith(new EventHandler[EventDef](){</span>
+      override def onEvent(event: EventDef, sequence: Long, endOfBatch: Boolean): Unit = {
+<span class="nc bnc" id="L39" title="All 2 branches missed.">        logger.debug(&quot;emit event using super {}&quot;,event.eventName)</span>
+<span class="nc" id="L40">        DisrutporSupport.super.emit(event.eventName,event.value)</span>
+      }
+    })
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">    disruptor.setDefaultExceptionHandler(new ExceptionHandler[EventDef] {</span>
+      override def handleEventException(ex: Throwable, sequence: Long, event: EventDef): Unit = {
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        logger.error(ex.getMessage,ex)</span>
+      }
+
+      override def handleOnStartException(ex: Throwable): Unit = {
+<span class="nc" id="L49">        throw ex</span>
+      }
+
+      override def handleOnShutdownException(ex: Throwable): Unit = {
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        logger.error(ex.getMessage,ex)</span>
+      }
+    })
+<span class="fc" id="L56">    disruptor.start()</span>
+  }
+  override def emit[T](eventName: Type, value: T): Unit = {
+<span class="nc bnc" id="L59" title="All 2 branches missed.">    logger.debug(&quot;publish event {}&quot;,eventName)</span>
+<span class="nc" id="L60">    disruptor.publishEvent((event: EventDef, sequence: Long) =&gt; {</span>
+<span class="nc" id="L61">      event.eventName = eventName</span>
+<span class="nc" id="L62">      event.value = value</span>
+    })
+  }
+  protected def shutdownDisruptor(): Unit ={
+<span class="fc" id="L66">    disruptor.shutdown(5,TimeUnit.SECONDS);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

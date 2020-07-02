@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>PadplusEnums.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.schemas</a> &gt; <span class="el_source">PadplusEnums.scala</span></div><h1>PadplusEnums.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.schemas
+<span class="nc" id="L2">object PadplusEnums {</span>
+<span class="nc" id="L3">object QrcodeStatus extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L5">  val Waiting:Type =  Value(0)</span>
+<span class="nc" id="L6">  val Scanned:Type =  Value(1)</span>
+<span class="nc" id="L7">  val Confirmed:Type =  Value(2)</span>
+<span class="nc" id="L8">  val Canceled:Type =  Value(4)</span>
+<span class="nc" id="L9">  val Expired:Type =  Value(3)</span>
+}
+
+<span class="nc" id="L12">object LoginStatus extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L14">  val Logined:Type =  Value(1)</span>
+}
+
+<span class="nc" id="L17">object ContactType extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L19">  val Unknown:Type =  Value(0)</span>
+<span class="nc" id="L20">  val Personal:Type =  Value(99990)</span>
+<span class="nc" id="L21">  val Official:Type =  Value(99991)</span>
+}
+
+<span class="nc" id="L24">object FriendshipType extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L26">  val Unknown:Type =  Value(0)</span>
+<span class="nc" id="L27">  val Confirm:Type =  Value(99990)</span>
+<span class="nc" id="L28">  val Receive:Type =  Value(99991)</span>
+<span class="nc" id="L29">  val Verify:Type =  Value(99992)</span>
+}
+
+<span class="nc" id="L32">object CheckQRCodeStatus extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L34">  val Ignore:Type =  Value(-2)</span>
+<span class="nc" id="L35">  val Unknown:Type =  Value(-1)</span>
+<span class="nc" id="L36">  val WaitScan:Type =  Value(0)</span>
+<span class="nc" id="L37">  val WaitConfirm:Type =  Value(1)</span>
+<span class="nc" id="L38">  val Confirmed:Type =  Value(2)</span>
+<span class="nc" id="L39">  val Timeout:Type =  Value(3)</span>
+<span class="nc" id="L40">  val Cancel:Type =  Value(4)</span>
+}
+
+<span class="nc" id="L43">object RoomAddTypeStatus extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L45">  val Done:Type =  Value(0)</span>
+<span class="nc" id="L46">  val NeedInvite:Type =  Value(-2012)</span>
+<span class="nc" id="L47">  val InviteConfirm:Type =  Value(-2028)</span>
+}
+
+/**
+ * Raw type info:
+ * see more inhttps://ymiao.oss-cn-shanghai.aliyuncs.com/apifile.txt
+ * 2  - 通过搜索邮箱
+ * 3  - 通过微信号搜索
+ * 5  - 通过朋友验证消息
+ * 7  - 通过朋友验证消息(可回复)
+ * 12 - 通过QQ好友添加
+ * 14 - 通过群来源
+ * 15 - 通过搜索手机号
+ * 16 - 通过朋友验证消息
+ * 17 - 通过名片分享
+ * 22 - 通过摇一摇打招呼方式
+ * 25 - 通过漂流瓶
+ * 30 - 通过二维码方式
+ */
+<span class="nc" id="L66">object SearchContactTypeStatus extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L68">  val CONTACT:Type =  Value(17) //    // search by contact card</span>
+<span class="nc" id="L69">  val EMAIL:Type =  Value(2) //     // search by email</span>
+<span class="nc" id="L70">  val FLOAT:Type =  Value(25) //    // search by float bottle</span>
+<span class="nc" id="L71">  val MOBILE:Type =  Value(15) //    // search by mobile number</span>
+<span class="nc" id="L72">  val QQ:Type =  Value(12) //    // search by qq friend</span>
+<span class="nc" id="L73">  val QRCODE:Type =  Value(30) //    // search by scanning qrcode</span>
+<span class="nc" id="L74">  val ROOM:Type =  Value(14) //    // search by room</span>
+<span class="nc" id="L75">  val Searchable:Type =  Value(0)</span>
+<span class="nc" id="L76">  val SHAKE:Type =  Value(22) //    // search by shake and shack</span>
+<span class="nc" id="L77">  val UnSearchable:Type =  Value(-24)</span>
+<span class="nc" id="L78">  val VERIFY:Type =  Value(16) //    // search friend verify</span>
+<span class="nc" id="L79">  val VERIFY_NOREPLY:Type =  Value(5) //     // search by friend verify without reply(朋友验证消息)</span>
+<span class="nc" id="L80">  val VERIFY_REPLY:Type =  Value(7) //     // search by friend verify(朋友验证消息，可回复)</span>
+<span class="nc" id="L81">  val WXID:Type =  Value(3) //     // search by wxid</span>
+}
+
+<span class="nc" id="L84">object PadplusMessageStatus extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L86">  val One:Type =  Value(1)</span>
+}
+
+<span class="nc" id="L89">object PadplusStatus extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L91">  val One:Type =  Value(1)</span>
+}
+
+<span class="nc" id="L94">object PadplusContinue extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L96">  val Done:Type =  Value(0) //    // Load Ready</span>
+<span class="nc" id="L97">  val Go:Type =  Value(1) //    // NOT Load Ready</span>
+}
+
+<span class="nc" id="L100">object PadplusPayloadType extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L102">  val ExpirePadplusToken:Type =  Value(-1113) //  // -1113 when the token is expired</span>
+<span class="nc" id="L103">  val InvalidPadplusToken:Type =  Value(-1111) //  // -1111 when the token pass to Padplus server is invalid</span>
+<span class="nc" id="L104">  val Logout:Type =  Value(-1) //  // -1 when logout</span>
+<span class="nc" id="L105">  val OnlinePadplusToken:Type =  Value(-1112) //  // -1112 when the token has already logged in to wechaty</span>
+}
+
+<span class="nc" id="L108">object WechatAppMessageType extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L110">  val Text:Type =  Value(1)</span>
+<span class="nc" id="L111">  val Img:Type =  Value(2)</span>
+<span class="nc" id="L112">  val Audio:Type =  Value(3)</span>
+<span class="nc" id="L113">  val Video:Type =  Value(4)</span>
+<span class="nc" id="L114">  val Url:Type =  Value(5)</span>
+<span class="nc" id="L115">  val Attach:Type =  Value(6)</span>
+<span class="nc" id="L116">  val Open:Type =  Value(7)</span>
+<span class="nc" id="L117">  val Emoji:Type =  Value(8)</span>
+<span class="nc" id="L118">  val VoiceRemind:Type =  Value(9)</span>
+<span class="nc" id="L119">  val ScanGood:Type =  Value(10)</span>
+<span class="nc" id="L120">  val Good:Type =  Value(13)</span>
+<span class="nc" id="L121">  val Emotion:Type =  Value(15)</span>
+<span class="nc" id="L122">  val CardTicket:Type =  Value(16)</span>
+<span class="nc" id="L123">  val RealtimeShareLocation:Type =  Value(17)</span>
+<span class="nc" id="L124">  val ChatHistory:Type =  Value(19)</span>
+<span class="nc" id="L125">  val MiniProgram:Type =  Value(33)</span>
+<span class="nc" id="L126">  val MiniProgramApp:Type =  Value(36) //   // this is forwardable mini program</span>
+<span class="nc" id="L127">  val GroupNote:Type =  Value(53)</span>
+<span class="nc" id="L128">  val Transfers:Type =  Value(2000)</span>
+<span class="nc" id="L129">  val RedEnvelopes:Type =  Value(2001)</span>
+<span class="nc" id="L130">  val ReaderType:Type =  Value(100001)</span>
+}
+
+<span class="nc" id="L133">object PadplusEmojiType extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L135">  val Unknown:Type =  Value(0)</span>
+<span class="nc" id="L136">  val Static:Type =  Value(1) //     // emoji that does not have animation</span>
+<span class="nc" id="L137">  val Dynamic:Type =  Value(2) //     // emoji with animation</span>
+}
+
+/**
+ * Enum for MsgType values.
+ * @enum {number}
+ * @property {number} TEXT                - MsgType.TEXT                (1)     for TEXT
+ * @property {number} IMAGE               - MsgType.IMAGE               (3)     for IMAGE
+ * @property {number} VOICE               - MsgType.VOICE               (34)    for VOICE
+ * @property {number} VERIFYMSG           - MsgType.VERIFYMSG           (37)    for VERIFYMSG
+ * @property {number} POSSIBLEFRIEND_MSG  - MsgType.POSSIBLEFRIEND_MSG  (40)    for POSSIBLEFRIEND_MSG
+ * @property {number} SHARECARD           - MsgType.SHARECARD           (42)    for SHARECARD
+ * @property {number} VIDEO               - MsgType.VIDEO               (43)    for VIDEO
+ * @property {number} EMOTICON            - MsgType.EMOTICON            (47)    for EMOTICON
+ * @property {number} LOCATION            - MsgType.LOCATION            (48)    for LOCATION
+ * @property {number} APP                 - MsgType.APP                 (49)    for APP         | File, Media Link
+ * @property {number} VOIPMSG             - MsgType.VOIPMSG             (50)    for VOIPMSG
+ * @property {number} STATUSNOTIFY        - MsgType.STATUSNOTIFY        (51)    for STATUSNOTIFY
+ * @property {number} VOIPNOTIFY          - MsgType.VOIPNOTIFY          (52)    for VOIPNOTIFY
+ * @property {number} VOIPINVITE          - MsgType.VOIPINVITE          (53)    for VOIPINVITE
+ * @property {number} MICROVIDEO          - MsgType.MICROVIDEO          (62)    for MICROVIDEO
+ * @property {number} SYSNOTICE           - MsgType.SYSNOTICE           (9999)  for SYSNOTICE
+ * @property {number} SYS                 - MsgType.SYS                 (10000) for SYS         | Change Room Topic, Invite into Room, Kick Off from the room
+ * @property {number} RECALLED            - MsgType.RECALLED            (10002) for RECALLED
+ */
+<span class="nc" id="L162">object PadplusMessageType extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L164">  val Text:Type =  Value(1)</span>
+<span class="nc" id="L165">  val Contact:Type =  Value(2)</span>
+<span class="nc" id="L166">  val Image:Type =  Value(3)</span>
+<span class="nc" id="L167">  val Deleted:Type =  Value(4)</span>
+<span class="nc" id="L168">  val Voice:Type =  Value(34)</span>
+<span class="nc" id="L169">  val SelfAvatar:Type =  Value(35)</span>
+<span class="nc" id="L170">  val VerifyMsg:Type =  Value(37)</span>
+<span class="nc" id="L171">  val PossibleFriendMsg:Type =  Value(40)</span>
+<span class="nc" id="L172">  val ShareCard:Type =  Value(42)</span>
+<span class="nc" id="L173">  val Video:Type =  Value(43)</span>
+<span class="nc" id="L174">  val Emoticon:Type =  Value(47)</span>
+<span class="nc" id="L175">  val Location:Type =  Value(48)</span>
+<span class="nc" id="L176">  val App:Type =  Value(49)</span>
+<span class="nc" id="L177">  val VoipMsg:Type =  Value(50)</span>
+<span class="nc" id="L178">  val StatusNotify:Type =  Value(51)</span>
+<span class="nc" id="L179">  val VoipNotify:Type =  Value(52)</span>
+<span class="nc" id="L180">  val VoipInvite:Type =  Value(53)</span>
+<span class="nc" id="L181">  val MicroVideo:Type =  Value(62)</span>
+<span class="nc" id="L182">  val SelfInfo:Type =  Value(101)</span>
+<span class="nc" id="L183">  val SysNotice:Type =  Value(9999)</span>
+<span class="nc" id="L184">  val Sys:Type =  Value(10000)</span>
+<span class="nc" id="L185">  val Recalled:Type =  Value(10002)</span>
+<span class="nc" id="L186">  val N11_2048:Type =  Value(2048) //   // 2048 = 1 &lt;&lt; 11</span>
+<span class="nc" id="L187">  val N15_32768:Type =  Value(32768) //  // 32768  = 1 &lt;&lt; 15</span>
+}
+
+// TODO: figure out the meaning of the enum values
+<span class="nc" id="L191">object PadplusRoomMemberFlag extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L193">  val Zero:Type =  Value(0)</span>
+<span class="nc" id="L194">  val One:Type =  Value(1)</span>
+<span class="nc" id="L195">  val Eight:Type =  Value(8)</span>
+}
+
+<span class="nc" id="L198">object ContactOperationCmdId extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L200">  val Delete:Type =  Value(7)</span>
+<span class="nc" id="L201">  val Operation:Type =  Value(2)</span>
+}
+
+<span class="nc" id="L204">object ContactOperationBitVal extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L206">  val SaveToContact:Type =  Value(2051)</span>
+<span class="nc" id="L207">  val RemoveFromContact:Type =  Value(2)</span>
+<span class="nc" id="L208">  val Star:Type =  Value(71)</span>
+<span class="nc" id="L209">  val UnStar:Type =  Value(7)</span>
+<span class="nc" id="L210">  val Remark:Type =  Value(7)</span>
+<span class="nc" id="L211">  val BlackList:Type =  Value(15)</span>
+<span class="nc" id="L212">  val UnBlackList:Type =  Value(7)</span>
+}
+
+<span class="nc" id="L215">object GrpcVoiceFormat extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L217">  val Amr:Type =  Value(1)</span>
+<span class="nc" id="L218">  val Mp3:Type =  Value(2)</span>
+<span class="nc" id="L219">  val Wave:Type =  Value(3)</span>
+<span class="nc" id="L220">  val Silk:Type =  Value(4)</span>
+}
+
+<span class="nc" id="L223">object GrpcA8KeyScene extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L225">  val ContactOrRoom:Type =  Value(2)</span>
+<span class="nc" id="L226">  val HistoryReading:Type =  Value(3)</span>
+<span class="nc" id="L227">  val QRCodeLink:Type =  Value(4)</span>
+<span class="nc" id="L228">  val OAAccount:Type =  Value(7)</span>
+}
+
+<span class="nc" id="L231">object AutoLoginError extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L233">  val CALL_FAILED:Type =  Value//('CALL_FAILED')</span>
+<span class="nc" id="L234">  val LOGIN_ERROR:Type =  Value//('LOGIN_ERROR')</span>
+}
+
+<span class="nc" id="L237">object EncryptionServiceError extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L239">  val NO_SESSION:Type =  Value//('NO_SESSION')</span>
+<span class="nc" id="L240">  val INTERNAL_ERROR:Type =  Value//('INTERNAL_ERROR')</span>
+}
+
+<span class="nc" id="L243">object GrpcSelfAvatarType extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L245">  val CURRENT:Type =  Value(1)</span>
+<span class="nc" id="L246">  val OLD:Type =  Value(2)</span>
+}
+
+<span class="nc" id="L249">object CDNFileType extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L251">  val IMAGE:Type =  Value(1)</span>
+<span class="nc" id="L252">  val MID_IMAGE:Type =  Value(2)</span>
+<span class="nc" id="L253">  val VIDEO_THUMBNAIL:Type =  Value(3)</span>
+<span class="nc" id="L254">  val VIDEO:Type =  Value(4)</span>
+<span class="nc" id="L255">  val ATTACHMENT:Type =  Value(5)</span>
+}
+
+<span class="nc" id="L258">object CDNFileMd5Exist extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L260">  val NON_EXIST:Type =  Value(0)</span>
+<span class="nc" id="L261">  val EXIST:Type =  Value(1)</span>
+}
+
+<span class="nc" id="L264">object PadplusErrorType extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L266">  val LOGIN:Type =  Value//('LOGIN')</span>
+<span class="nc" id="L267">  val NO_ID:Type =  Value//('NO_ID')</span>
+<span class="nc" id="L268">  val NO_CACHE:Type =  Value//('NO_CACHE')</span>
+<span class="nc" id="L269">  val EXIT:Type =  Value//('EXIT')</span>
+}
+
+<span class="nc" id="L272">object PadplusAutoLoginErrorType extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L274">  val SELF_LOGOUT:Type =  Value//('SELF_LOGOUT')</span>
+<span class="nc" id="L275">  val TOO_FREQUENT:Type =  Value//('TOO_FREQUENT')</span>
+<span class="nc" id="L276">  val LOGIN_ANOTHER_DEVICE:Type =  Value//('LOGIN_ANOTHER_DEVICE')</span>
+<span class="nc" id="L277">  val LOGIN_ANOTHER_DEVICE_WITH_WARN:Type =  Value//('LOGIN_ANOTHER_DEVICE_WITH_WARN')</span>
+<span class="nc" id="L278">  val SAFETY_LOGOUT:Type =  Value//('SAFETY_LOGOUT')</span>
+<span class="nc" id="L279">  val UNKNOWN:Type =  Value//('UNKNOWN')</span>
+}
+
+<span class="nc" id="L282">object MessageSendType extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L284">  val SELF_SENT:Type =  Value(1)</span>
+<span class="nc" id="L285">  val CONTACT_SENT:Type =  Value(2)</span>
+}
+
+<span class="nc" id="L288">object RequestStatus extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L290">  val Fail=Value(0)</span>
+<span class="nc" id="L291">  val Success=Value(1)</span>
+}
+
+<span class="nc" id="L294">object GrpcMQType extends Enumeration {</span>
+ type Type = Value
+<span class="nc" id="L296">  val RECEIVE_MESSAGE:Type =  Value(2)</span>
+<span class="nc" id="L297">  val CONTACT_INFO_CHANGE:Type =  Value(3)</span>
+<span class="nc" id="L298">  val DELETE_CONTACT:Type =  Value(4)</span>
+<span class="nc" id="L299">  val GET_ROOM_MEMBER:Type =  Value(5)</span>
+<span class="nc" id="L300">  val ROOM_MEMBER_CHANGE:Type =  Value(6)</span>
+<span class="nc" id="L301">  val GET_CONTACT:Type =  Value(7)</span>
+<span class="nc" id="L302">  val ADD_CONTACT:Type =  Value(15)</span>
+<span class="nc" id="L303">  val SYNC:Type =  Value(51)</span>
+<span class="nc" id="L304">  val LOGOUT:Type =  Value(1100)</span>
+}
+<span class="nc" id="L306"> }</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -12,15 +12,15 @@ import wechaty.padplus.schemas.ModelRoom.{PadplusRoomMemberMap, PadplusRoomPaylo
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-07-01
   */
-<span class="nc" id="L15">object CallbackHelper {</span>
+<span class="fc" id="L15">object CallbackHelper {</span>
   private def createPool[T]: Cache[String, T]={
-<span class="nc" id="L17">    Caffeine.newBuilder().maximumSize(1000)</span>
-<span class="nc" id="L18">      .expireAfterWrite(1, TimeUnit.MINUTES)</span>
+<span class="fc" id="L17">    Caffeine.newBuilder().maximumSize(1000)</span>
+<span class="fc" id="L18">      .expireAfterWrite(1, TimeUnit.MINUTES)</span>
       .build()
       .asInstanceOf[Cache[String, T]]
   }
   type TraceRequestCallback = StreamResponse =&gt; Unit
-<span class="nc bnc" id="L23" title="All 4 branches missed.">  lazy val traceCallbacks: Cache[String, TraceRequestCallback] = createPool[TraceRequestCallback]</span>
+<span class="pc bpc" id="L23" title="1 of 4 branches missed.">  lazy val traceCallbacks: Cache[String, TraceRequestCallback] = createPool[TraceRequestCallback]</span>
 
   type ContactCallback = PadplusConversation =&gt; Unit
 <span class="nc bnc" id="L26" title="All 4 branches missed.">  lazy val contactCallbacks: Cache[String, List[ContactCallback]] = createPool[List[ContactCallback]]</span>
@@ -39,14 +39,14 @@ import wechaty.padplus.schemas.ModelRoom.{PadplusRoomMemberMap, PadplusRoomPaylo
 <span class="nc bnc" id="L39" title="All 4 branches missed.">  lazy val roomMemberCallbacks = createPool[List[RoomMemberCallback]]</span>
 
   def pushCallbackToPool (traceId: String, callback: TraceRequestCallback){
-<span class="nc" id="L42">    traceCallbacks.put(traceId,callback)</span>
+<span class="fc" id="L42">    traceCallbacks.put(traceId,callback)</span>
   }
   def resolveCallBack (traceId: String,response:StreamResponse):Unit={
-<span class="nc" id="L45">    val callback = traceCallbacks.getIfPresent(traceId)</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">    if(callback!=null){</span>
-<span class="nc" id="L47">      callback(response)</span>
+<span class="fc" id="L45">    val callback = traceCallbacks.getIfPresent(traceId)</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">    if(callback!=null){</span>
+<span class="fc" id="L47">      callback(response)</span>
     }
-<span class="nc" id="L49">    traceCallbacks.invalidate(traceId)</span>
+<span class="fc" id="L49">    traceCallbacks.invalidate(traceId)</span>
   }
 
   def removeCallback (traceId: String): Unit = {
@@ -145,5 +145,5 @@ import wechaty.padplus.schemas.ModelRoom.{PadplusRoomMemberMap, PadplusRoomPaylo
 <span class="nc" id="L145">      roomMemberCallbacks.invalidate(roomId)</span>
     }
   }
-<span class="nc" id="L148">}</span>
+<span class="fc" id="L148">}</span>
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

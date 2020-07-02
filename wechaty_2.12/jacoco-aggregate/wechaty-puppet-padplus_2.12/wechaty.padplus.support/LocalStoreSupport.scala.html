@@ -23,7 +23,7 @@ import scala.language.implicitConversions
 <span class="fc" id="L23">  private val contactKeyFormat=&quot;CO_%s&quot;</span>
 <span class="fc" id="L24">  private val roomMemberKeyFormat=&quot;RM_%s&quot;</span>
   protected def saveUin(uin:ByteString): Unit ={
-<span class="nc bnc" id="L26" title="All 2 branches missed.">    if(!uin.isEmpty){</span>
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">    if(!uin.isEmpty){</span>
 <span class="nc" id="L27">      store.put(uinKey,uin)</span>
     }
   }
@@ -37,7 +37,7 @@ import scala.language.implicitConversions
 <span class="nc" id="L37">    store.put(contactKeyFormat.format(payload.userName),payload)</span>
   }
   protected def getPadplusContactPayload(contactId:String):Option[PadplusContactPayload] ={
-<span class="nc" id="L40">    store.getObject[PadplusContactPayload](contactKeyFormat.format(contactId))</span>
+<span class="fc" id="L40">    store.getObject[PadplusContactPayload](contactKeyFormat.format(contactId))</span>
   }
   protected def getPadplusMessagePayload(messageId:String): Option[PadplusMessagePayload]={
 <span class="nc" id="L43">    store.getObject[PadplusMessagePayload](messageKeyFormat.format(messageId))</span>

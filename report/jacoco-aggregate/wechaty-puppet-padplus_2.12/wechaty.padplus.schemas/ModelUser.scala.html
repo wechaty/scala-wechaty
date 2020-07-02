@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ModelUser.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.schemas</a> &gt; <span class="el_source">ModelUser.scala</span></div><h1>ModelUser.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.schemas
+
+import wechaty.padplus.schemas.PadplusEnums.{LoginStatus, QrcodeStatus}
+
+<span class="nc" id="L5">object ModelUser {</span>
+
+<span class="nc" id="L7">class PadplusQrcode {</span>
+<span class="nc" id="L8">  var qrcode:String = _</span>
+<span class="nc" id="L9">  var qrcodeId:String = _</span>
+}
+
+<span class="nc" id="L12">class PadplusQrcodeStatus {</span>
+<span class="nc" id="L13">  var headUrl:String = _</span>
+<span class="nc" id="L14">  var nickName:String = _</span>
+<span class="nc" id="L15">  var status:QrcodeStatus.Type = _</span>
+<span class="nc" id="L16">  var userName:String = _</span>
+}
+
+<span class="nc" id="L19">class PadplusQrcodeLogin {</span>
+<span class="nc" id="L20">  var headImgUrl:String = _</span>
+<span class="nc" id="L21">  var nickName:String = _</span>
+<span class="nc" id="L22">  var status:LoginStatus.Type = _</span>
+<span class="nc" id="L23">  var uin:String = _</span>
+<span class="nc" id="L24">  var userName:String = _</span>
+<span class="nc" id="L25">  var verifyFlag:String = _</span>
+}
+
+<span class="nc" id="L28">class GrpcLoginData {</span>
+<span class="nc" id="L29">  var event:String = _</span>
+<span class="nc" id="L30">  var head_url:String = _</span>
+<span class="nc" id="L31">  var loginer:String = _</span>
+<span class="nc" id="L32">  var msg:String = _</span>
+<span class="nc" id="L33">  var nick_name:String = _</span>
+<span class="nc" id="L34">  var qrcodeId:String = _</span>
+<span class="nc" id="L35">  var serverId:String = _</span>
+<span class="nc" id="L36">  var status:Number = _</span>
+<span class="nc" id="L37">  var user_name:String = _</span>
+}
+
+<span class="nc" id="L40">class ScanData {</span>
+<span class="nc" id="L41">  var head_url:String = _</span>
+<span class="nc" id="L42">  var msg:String = _</span>
+<span class="nc" id="L43">  var nick_name:String = _</span>
+<span class="nc" id="L44">  var qrcodeId:String = _</span>
+<span class="nc" id="L45">  var status:Number = _</span>
+<span class="nc" id="L46">  var user_name:String = _</span>
+}
+
+<span class="nc" id="L49">class LogoutGrpcResponse {</span>
+<span class="nc" id="L50">  var code:Number = _</span>
+<span class="nc" id="L51">  var uin:String = _</span>
+<span class="nc" id="L52">  var message:String = _</span>
+<span class="nc" id="L53">  var mqType:Number = _</span>
+}
+<span class="nc" id="L55"> }</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
