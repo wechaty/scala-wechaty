@@ -106,6 +106,7 @@ val requestBuilder2 = RequestObject.newBuilder()
 
     startWithEvent()
     isMocked = true
+    awaitEventCompletion()
   }
 
 }

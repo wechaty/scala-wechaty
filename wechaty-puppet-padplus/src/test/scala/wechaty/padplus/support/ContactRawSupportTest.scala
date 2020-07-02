@@ -37,6 +37,5 @@ class ContactRawSupportTest extends PadplusTestEventBase{
 
     val payload = Await.result(future,10 seconds)
     Assertions.assertEquals("jcai",payload.id)
-    awaitEventCompletion()
   }
 }

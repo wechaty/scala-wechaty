@@ -15,7 +15,7 @@ import wechaty.padplus.schemas.ModelRoom.{PadplusRoomMemberMap, PadplusRoomPaylo
 object CallbackHelper {
   private def createPool[T]: Cache[String, T]={
     Caffeine.newBuilder().maximumSize(1000)
-      .expireAfterWrite(1, TimeUnit.MINUTES)
+      .expireAfterWrite(5, TimeUnit.MINUTES) //按照高原建议设置5~10分钟
       .build()
       .asInstanceOf[Cache[String, T]]
   }
@@ -33,10 +33,10 @@ object CallbackHelper {
   lazy val roomTopicCallbacks: Cache[String, Map[String, RoomTopicCallback]] = createPool[Map[String,RoomTopicCallback]]
 
   type AcceptFriendCallback= () =>Unit
-  lazy val acceptFriendCallbacks = createPool[List[AcceptFriendCallback]]
+  lazy val acceptFriendCallbacks: Cache[String, List[AcceptFriendCallback]] = createPool[List[AcceptFriendCallback]]
 
   type RoomMemberCallback= PadplusRoomMemberMap =>Unit
-  lazy val roomMemberCallbacks = createPool[List[RoomMemberCallback]]
+  lazy val roomMemberCallbacks: Cache[String, List[RoomMemberCallback]] = createPool[List[RoomMemberCallback]]
 
   def pushCallbackToPool (traceId: String, callback: TraceRequestCallback){
     traceCallbacks.put(traceId,callback)
