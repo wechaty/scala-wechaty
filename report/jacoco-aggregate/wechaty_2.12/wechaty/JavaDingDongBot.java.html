@@ -9,7 +9,7 @@
 <span class="nc" id="L9">    WechatyOptions option = new WechatyOptions();</span>
 <span class="nc" id="L10">    Wechaty bot = Wechaty.instance(option);</span>
 <span class="nc" id="L11">    bot</span>
-<span class="nc" id="L12">      .onScan(payload -&gt; System.out.println(String.format(&quot;Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n&quot;, payload.status().toString(), payload.qrcode())))</span>
+<span class="nc" id="L12">      .onScan(payload -&gt; System.out.println(String.format(&quot;Scan QR Code to login: %s\nhttps://wechaty.github.io/qrcode/%s\n&quot;, payload.status().toString(), payload.qrcode())))</span>
 <span class="nc" id="L13">      .onLogin(payload -&gt; System.out.println(String.format(&quot;User %s logined&quot;, payload.id())))</span>
 <span class="nc" id="L14">      .onMessage(message -&gt; {</span>
 //					if (message.payload().type() != Message.MessageType.MessageTypeText() || !message.payload().text().equals(&quot;#ding&quot;)){

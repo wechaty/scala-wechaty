@@ -28,7 +28,7 @@ import wechaty.puppet.schemas.Puppet.PuppetOptions
 <span class="nc" id="L28">        println(message.text)</span>
       })
 <span class="nc" id="L30">      .onScan(payload =&gt; {</span>
-<span class="nc" id="L31">        println(&quot;Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n&quot;.format(payload.status, payload.qrcode))</span>
+<span class="nc" id="L31">        println(&quot;Scan QR Code to login: %s\nhttps://wechaty.github.io/qrcode/%s\n&quot;.format(payload.status, payload.qrcode))</span>
       })
 <span class="nc" id="L33">      .onLogin(payload =&gt; {</span>
 <span class="nc" id="L34">        println(&quot;User %s logined\n&quot;.format(payload.id))</span>

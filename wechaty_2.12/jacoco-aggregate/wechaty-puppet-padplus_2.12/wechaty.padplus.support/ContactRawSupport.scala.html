@@ -85,7 +85,7 @@ import scala.util.Try
 <span class="nc" id="L85">    val result  = multiFormatReader.decode(binaryBitmap, hints);</span>
 <span class="nc" id="L86">    val payload = new EventScanPayload</span>
 <span class="nc" id="L87">      payload.qrcode = result.getText</span>
-<span class="nc bnc" id="L88" title="All 2 branches missed.">      logger.debug(&quot;Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n&quot;.format(payload.status, payload.qrcode))</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">      logger.debug(&quot;Scan QR Code to login: %s\nhttps://wechaty.github.io/qrcode/%s\n&quot;.format(payload.status, payload.qrcode))</span>
 <span class="nc" id="L89">      emit(PuppetEventName.SCAN, payload)</span>
 <span class="nc bnc" id="L90" title="All 4 branches missed.">    case ResponseType.QRCODE_LOGIN =&gt;</span>
 <span class="nc" id="L91">      val loginData             = objectMapper.readValue(response.getData, classOf[GrpcQrCodeLogin])</span>

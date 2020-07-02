@@ -348,7 +348,7 @@ Main bot class.</p><p>A <code>Bot</code> is a WeChat client depends on which pup
                <ol><li class="cmt"><p><caption>The World's Shortest ChatBot Code: 6 lines of Scala</caption>
 val options = new WechaytOptions
 val bot = Wechaty.instance(options)
-bot.onScan(payload =&gt; println(&quot;['https://api.qrserver.com/v1/create-qr-code/?data=',encodeURIComponent(qrcode),'&amp;size=220x220&amp;margin=20',].join(<i>)&quot;))
+bot.onScan(payload =&gt; println(&quot;['https://wechaty.github.io/qrcode/',encodeURIComponent(qrcode),'&amp;size=220x220&amp;margin=20',].join(<i>)&quot;))
 bot.onLogin(user =&gt; println(&quot;User ${user} logged in&quot;))
 bot.onMessage(message =&gt; println(&quot;Message: ${message}&quot;))
 bot.start()</i></p></li></ol>
