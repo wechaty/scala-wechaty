@@ -5,11 +5,16 @@ import java.util.concurrent.{CountDownLatch, Executors, TimeUnit}
 
 import com.typesafe.scalalogging.LazyLogging
 import io.github.wechaty.grpc.PuppetGrpc
-import io.github.wechaty.grpc.puppet.Base
+import io.github.wechaty.grpc.puppet.Contact.ContactPayloadRequest
+import io.github.wechaty.grpc.puppet.{Base, Contact}
 import io.github.wechaty.grpc.puppet.Event.EventRequest
+import io.grpc.stub.ClientCalls.asyncUnaryCall
 import io.grpc.stub.StreamObserver
-import io.grpc.{ManagedChannel, ManagedChannelBuilder}
+import io.grpc.{ClientCall, ManagedChannel, ManagedChannelBuilder}
 import wechaty.hostie.PuppetHostie
+import wechaty.puppet.schemas.Contact.ContactPayload
+
+import scala.concurrent.{Future, Promise}
 
 /**
   *
@@ -23,9 +28,9 @@ trait GrpcSupport {
   private val HEARTBEAT_COUNTER = new AtomicLong()
   private val HOSTIE_KEEPALIVE_TIMEOUT = 15 * 1000L
   private val DEFAULT_WATCHDOG_TIMEOUT = 60L
-  protected var grpcClient: PuppetGrpc.PuppetBlockingStub = _
-  private var eventStream: PuppetGrpc.PuppetStub = _
-  protected var channel: ManagedChannel = _
+  protected var grpcClient     : PuppetGrpc.PuppetBlockingStub = _
+  protected var asyncGrpcClient: PuppetGrpc.PuppetStub         = _
+  protected var channel        : ManagedChannel                = _
 
   protected def startGrpc(endpoint: String): Unit = {
     initChannel(endpoint)
@@ -96,9 +101,9 @@ trait GrpcSupport {
   }
 
   private def startStream() {
-    this.eventStream = PuppetGrpc.newStub(channel)
+    this.asyncGrpcClient = PuppetGrpc.newStub(channel)
     val startRequest = EventRequest.newBuilder().build()
-    this.eventStream.event(startRequest, this)
+    this.asyncGrpcClient.event(startRequest, this)
   }
 
   protected def stopGrpc(): Unit = {
@@ -120,7 +125,7 @@ trait GrpcSupport {
   private def stopStream(): Unit = {
     try {
       val countDownLatch = new CountDownLatch(1)
-      this.eventStream.stop(Base.StopRequest.getDefaultInstance, new StreamObserver[Base.StopResponse] {
+      this.asyncGrpcClient.stop(Base.StopRequest.getDefaultInstance, new StreamObserver[Base.StopResponse] {
         override def onNext(v: Base.StopResponse): Unit = {}
 
         override def onError(throwable: Throwable): Unit = {}
@@ -132,5 +137,25 @@ trait GrpcSupport {
       case e: Throwable =>
         logger.warn("fail to stop stream {}", e.getMessage)
     }
+  }
+
+  type ClientCall[ReqT,RespT]=(ReqT,StreamObserver[RespT])=>Unit
+  type ClientCallback[RespT,T]=RespT => T
+  protected def asyncCall[ReqT,RespT](call: ClientCall[ReqT, RespT], req: ReqT): Unit = {
+    asyncCallback(call,req)(resp=> resp)
+  }
+  protected def asyncCallback[ReqT,RespT,T](call: ClientCall[ReqT, RespT], req: ReqT)(callback:ClientCallback[RespT,T]):Future[T]= {
+    val promise = Promise[T]
+    call(req,new StreamObserver[RespT] {
+      override def onNext(value: RespT): Unit = {
+        val result = callback(value)
+        promise.success(result)
+      }
+      override def onError(t: Throwable): Unit = promise.failure(t)
+      override def onCompleted(): Unit = {
+        if(!promise.isCompleted) promise.failure(new IllegalStateException("server completed"))
+      }
+    })
+    promise.future
   }
 }

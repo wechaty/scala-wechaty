@@ -5,6 +5,9 @@ import com.typesafe.scalalogging.LazyLogging
 import wechaty.puppet.ResourceBox
 import wechaty.puppet.schemas.Contact.ContactPayload
 import wechaty.puppet.schemas.Puppet
+import wechaty.puppet.schemas.Puppet.executionContext
+
+import scala.concurrent.Future
 
 /**
   *
@@ -29,7 +32,7 @@ trait ContactSupport {
 
   def contactList(): Array[String]
 
-  def contactPayload(contactId: String): ContactPayload = {
+  def contactPayload(contactId: String): Future[ContactPayload] = {
     if (Puppet.isBlank(contactId)) {
       throw new IllegalArgumentException("contact id is blank!")
     }
@@ -39,18 +42,19 @@ trait ContactSupport {
       */
     val cachedPayload = this.cacheContactPayload.getIfPresent(contactId)
     if (cachedPayload != null) {
-      return cachedPayload
+      return Future.successful(cachedPayload)
     }
 
     /**
       * 2. Cache not found
       */
-    val payload = this.contactRawPayload(contactId)
+    val payloadFuture = this.contactRawPayload(contactId)
 
-    cacheContactPayload.put(contactId, payload)
-    logger.info("Puppet contactPayload({}) cache SET", contactId)
-
-    payload
+    payloadFuture.map(payload=>{
+      cacheContactPayload.put(contactId, payload)
+      logger.info("Puppet contactPayload({}) cache SET", contactId)
+      payload
+    })
   }
   def contactPayloadDirty (contactId: String): Unit ={
     logger.debug("Puppet contactPayloadDirty({})", contactId)
@@ -60,6 +64,6 @@ trait ContactSupport {
   /**
     * contact
     */
-  protected def contactRawPayload(contactId: String): ContactPayload
+  protected def contactRawPayload(contactId: String): Future[ContactPayload]
 
 }

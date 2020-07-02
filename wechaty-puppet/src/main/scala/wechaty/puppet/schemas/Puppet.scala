@@ -7,12 +7,15 @@ import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import io.github.wechaty.grpc.puppet.Event.EventType
 import io.grpc.ManagedChannel
 
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutor}
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-01
   */
 object Puppet {
+  implicit lazy val executionContext: ExecutionContextExecutor =  ExecutionContext.global
   class PuppetOptions {
     var endPoint: Option[String] = None
     var timeout: Option[Long] = None
@@ -20,7 +23,7 @@ object Puppet {
     var channelOpt:Option[ManagedChannel] = None
     var puppetOptionKey: Option[String] = None
   }
-  lazy val objectMapper = {
+  lazy val objectMapper: ObjectMapper = {
     val om = new ObjectMapper()
     import com.fasterxml.jackson.databind.DeserializationFeature
     om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)

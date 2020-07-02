@@ -9,6 +9,8 @@ import wechaty.puppet.schemas.Contact.ContactPayload
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.support.ContactSupport
 
+import scala.concurrent.Future
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
@@ -80,23 +82,24 @@ trait ContactRawSupport {
     file
   }
 
-  override protected def contactRawPayload(contactID: String): ContactPayload = {
-    val response = grpcClient.contactPayload(ContactPayloadRequest.newBuilder().setId(contactID).build())
-    val contact = new ContactPayload
-    contact.id = response.getId
-    contact.gender = wechaty.puppet.schemas.Contact.ContactGender.apply(response.getGenderValue)
-    contact.`type` = wechaty.puppet.schemas.Contact.ContactType.apply(response.getTypeValue)
-    contact.name = response.getName
-    contact.avatar = response.getAvatar
-    contact.address = response.getAddress
-    contact.alias = response.getAlias
-    contact.city = response.getCity
-    contact.friend = response.getFriend
-    contact.province = response.getProvince
-    contact.signature = response.getSignature
-    contact.star = response.getStar
-    contact.weixin = response.getWeixin
-
-    contact
+  override protected def contactRawPayload(contactID: String): Future[ContactPayload] = {
+    val request = ContactPayloadRequest.newBuilder().setId(contactID).build()
+    asyncCallback(asyncGrpcClient.contactPayload,request){response =>
+      val contact = new ContactPayload
+      contact.id = response.getId
+      contact.gender = wechaty.puppet.schemas.Contact.ContactGender.apply(response.getGenderValue)
+      contact.`type` = wechaty.puppet.schemas.Contact.ContactType.apply(response.getTypeValue)
+      contact.name = response.getName
+      contact.avatar = response.getAvatar
+      contact.address = response.getAddress
+      contact.alias = response.getAlias
+      contact.city = response.getCity
+      contact.friend = response.getFriend
+      contact.province = response.getProvince
+      contact.signature = response.getSignature
+      contact.star = response.getStar
+      contact.weixin = response.getWeixin
+      contact
+    }
   }
 }

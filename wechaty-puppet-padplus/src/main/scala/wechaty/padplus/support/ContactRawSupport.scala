@@ -50,17 +50,17 @@ trait ContactRawSupport {
   /**
     * contact
     */
-  override protected def contactRawPayload(contactId: String): Contact.ContactPayload = {
-    this.getContact(contactId)
+  override protected def contactRawPayload(contactId: String): Future[Contact.ContactPayload] = {
+    this.getContact(contactId).map(convertPadplusContactToContactPayload)
   }
 
-  protected def getContact(contactId: String): PadplusContactPayload = {
+  protected def getContact(contactId: String): Future[PadplusContactPayload] = {
     getPadplusContactPayload(contactId) match{
-      case Some(padplusContactPayload) => padplusContactPayload
+      case Some(padplusContactPayload) => Future.successful(padplusContactPayload)
       case _ =>
         val json = objectMapper.createObjectNode()
         json.put("userName", contactId)
-        syncRequest[GrpcContactPayload](ApiType.GET_CONTACT,Some(json.toString))
+        asyncRequest[GrpcContactPayload](ApiType.GET_CONTACT,Some(json.toString)).map(convertFromGrpcContact)
     }
   }
 

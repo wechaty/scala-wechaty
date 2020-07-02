@@ -6,6 +6,8 @@ import wechaty.puppet.ResourceBox
 import wechaty.puppet.schemas.Contact.{ContactGender, ContactPayload, ContactType}
 import wechaty.puppet.schemas.Puppet
 
+import scala.concurrent.Await
+import scala.concurrent.duration._
 import scala.language.implicitConversions
 
 /**
@@ -21,7 +23,9 @@ import scala.language.implicitConversions
 class Contact(contactId: String)(implicit resolver: PuppetResolver) extends Conversation(contactId) with LazyLogging {
   //  lazy val payload: schemas.Contact.ContactPayload = resolver.puppet.contactPayload(contactId)
   def payload: ContactPayload = {
-    resolver.puppet.contactPayload(contactId)
+    //TODO use async
+    val f = resolver.puppet.contactPayload(contactId)
+    Await.result(f,10 seconds)
   }
 
 
