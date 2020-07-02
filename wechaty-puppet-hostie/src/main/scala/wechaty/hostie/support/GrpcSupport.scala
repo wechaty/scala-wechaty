@@ -140,7 +140,7 @@ trait GrpcSupport {
   }
 
   type ClientCallback[RespT,T]=RespT => T
-  protected def asyncCall[ReqT,RespT](call: MethodDescriptor[ReqT, RespT], req: ReqT): Unit = {
+  protected def asyncCall[ReqT,RespT](call: MethodDescriptor[ReqT, RespT], req: ReqT): Future[RespT]= {
     asyncCallback(call,req)(resp=> resp)
   }
   def asyncCallback[ReqT, RespT,T](callMethod: MethodDescriptor[ReqT, RespT], req: ReqT)(callback:ClientCallback[RespT,T]): Future[T]= {

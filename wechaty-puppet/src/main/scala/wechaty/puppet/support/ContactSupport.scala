@@ -23,14 +23,16 @@ trait ContactSupport {
     * Contact
     *
     */
-  def contactAlias(contactId: String): String
+  protected def contactRawPayload(contactId: String): Future[ContactPayload]
 
-  def contactAlias(contactId: String, alias: String): Unit
+  def contactAlias(contactId: String): Future[String]
 
-  def contactAvatar (contactId: String)                : ResourceBox
-  def contactAvatar (contactId: String, file: ResourceBox) : ResourceBox
+  def contactAlias(contactId: String, alias: String): Future[Unit]
 
-  def contactList(): Array[String]
+  def contactAvatar (contactId: String)                : Future[ResourceBox]
+  def contactAvatar (contactId: String, file: ResourceBox) : Future[ResourceBox]
+
+  def contactList(): Future[Array[String]]
 
   def contactPayload(contactId: String): Future[ContactPayload] = {
     if (Puppet.isBlank(contactId)) {
@@ -61,9 +63,5 @@ trait ContactSupport {
     this.cacheContactPayload.invalidate(contactId)
   }
 
-  /**
-    * contact
-    */
-  protected def contactRawPayload(contactId: String): Future[ContactPayload]
 
 }

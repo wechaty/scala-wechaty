@@ -11,7 +11,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.amazonaws.services.s3.model.{CannedAccessControlList, GeneratePresignedUrlRequest, ObjectMetadata, PutObjectRequest}
 import com.fasterxml.jackson.databind.JsonNode
 import com.typesafe.scalalogging.LazyLogging
-import io.grpc.{ManagedChannel, ManagedChannelBuilder}
+import io.grpc.stub.{ClientCalls, StreamObserver}
+import io.grpc.{ManagedChannel, ManagedChannelBuilder, MethodDescriptor}
 import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.grpc.PadPlusServerGrpc
 import wechaty.padplus.grpc.PadPlusServerOuterClass._
@@ -36,8 +37,8 @@ trait GrpcSupport {
   private val HEARTBEAT_COUNTER = new AtomicLong()
   private val HOSTIE_KEEPALIVE_TIMEOUT = 15 * 1000L
   private val DEFAULT_WATCHDOG_TIMEOUT = 60L
-  protected var grpcClient: PadPlusServerGrpc.PadPlusServerBlockingStub= _
-  private var eventStream: PadPlusServerGrpc.PadPlusServerStub = _
+//  protected var grpcClient: PadPlusServerGrpc.PadPlusServerBlockingStub= _
+  private var asyncGrpcClient: PadPlusServerGrpc.PadPlusServerStub = _
   protected var channel: ManagedChannel = _
   protected implicit val executionContext: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
@@ -93,15 +94,15 @@ trait GrpcSupport {
 
   private def internalStartGrpc() {
     logger.info("start grpc client ....")
-    this.grpcClient = PadPlusServerGrpc.newBlockingStub(channel)
+//    this.grpcClient = PadPlusServerGrpc.newBlockingStub(channel)
+    this.asyncGrpcClient = PadPlusServerGrpc.newStub(channel)
 //    startStream()
     logger.info("start grpc client done")
   }
 
   private[wechaty] def startStream() {
-    this.eventStream = PadPlusServerGrpc.newStub(channel)
     val initConfig = InitConfig.newBuilder().setToken(option.token.get).build()
-    this.eventStream.init(initConfig, this)
+    this.asyncGrpcClient.init(initConfig, this)
   }
 
   protected def stopGrpc(): Unit = {
@@ -110,7 +111,7 @@ trait GrpcSupport {
       stopStream()
 
       //stop grpc client
-      this.grpcClient.request(RequestObject.newBuilder().setApiType(ApiType.CLOSE).setToken(option.token.get).build())
+//      this.grpcClient.request(RequestObject.newBuilder().setApiType(ApiType.CLOSE).setToken(option.token.get).build())
       this.channel.shutdownNow()
     }
   }
@@ -175,18 +176,45 @@ trait GrpcSupport {
       case t if t =:= typeOf[Nothing] =>
       case _ => CallbackHelper.pushCallbackToPool(traceId,callbackDelegate)
     }
-    val response = grpcClient.request(request.build())
-    logger.debug(s"request $apiType response $response")
-
-    if(response.getResult != "success"){
-      //fail?
-      logger.error("fail to request grpc,response {}",response)
-      p.failure(new IllegalAccessException("fail to request ,grpc result:"+response))
+    val future = asyncCall(PadPlusServerGrpc.getRequestMethod,request.build())
+    future.flatMap{rep=>
+      if(rep.getResult != "success"){
+        p.failure(new IllegalAccessException("fail to request ,grpc result:"+rep))
+      }
+      p.future
     }
-
-    p.future
+//    val response = grpcClient.request(request.build())
+//    logger.debug(s"request $apiType response $response")
+//
+//    if(response.getResult != "success"){
+//      //fail?
+//      logger.error("fail to request grpc,response {}",response)
+//      p.failure(new IllegalAccessException("fail to request ,grpc result:"+response))
+//    }
+//
+//    p.future
   }
-    private val ACCESS_KEY_ID = "AKIA3PQY2OQG5FEXWMH6"
+  type ClientCallback[RespT,T]=RespT => T
+  protected def asyncCall[ReqT,RespT](call: MethodDescriptor[ReqT, RespT], req: ReqT): Future[RespT]= {
+    asyncCallback(call,req)(resp => resp)
+  }
+  def asyncCallback[ReqT, RespT,T](callMethod: MethodDescriptor[ReqT, RespT], req: ReqT)(callback:ClientCallback[RespT,T]): Future[T]= {
+    val call = channel.newCall(callMethod,asyncGrpcClient.getCallOptions)
+    val promise = Promise[T]
+    ClientCalls.asyncUnaryCall(call,req,new StreamObserver[RespT] {
+      override def onNext(value: RespT): Unit = {
+        val result = callback(value)
+        promise.success(result)
+      }
+      override def onError(t: Throwable): Unit = promise.failure(t)
+      override def onCompleted(): Unit = {
+        if(!promise.isCompleted) promise.failure(new IllegalStateException("server completed"))
+      }
+    })
+    promise.future
+  }
+
+  private val ACCESS_KEY_ID = "AKIA3PQY2OQG5FEXWMH6"
     private val BUCKET= "macpro-message-file"
     private val EXPIRE_TIME= 3600 * 24 * 3
     private val PATH= "image-message"

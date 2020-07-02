@@ -6,6 +6,7 @@ import com.google.protobuf.ByteString
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.{BinaryBitmap, DecodeHintType, MultiFormatReader}
+import com.typesafe.scalalogging.LazyLogging
 import javax.imageio.ImageIO
 import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.grpc.PadPlusServerOuterClass.{ApiType, ResponseType, StreamResponse}
@@ -29,23 +30,18 @@ import scala.util.Try
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-21
   */
-trait ContactRawSupport {
+trait ContactRawSupport extends LazyLogging{
   self: PuppetPadplus =>
 
-  /**
-    *
-    * Contact
-    *
-    */
-  override def contactAlias(contactId: String): String = ???
+  override def contactAlias(contactId: String): Future[String] = ???
 
-  override def contactAlias(contactId: String, alias: String): Unit = ???
+  override def contactAlias(contactId: String, alias: String): Future[Nothing] = ???
 
-  override def contactAvatar(contactId: String): ResourceBox = ???
+  override def contactAvatar(contactId: String): Future[ResourceBox] = ???
 
-  override def contactAvatar(contactId: String, file: ResourceBox): ResourceBox = ???
+  override def contactAvatar(contactId: String, file: ResourceBox): Future[ResourceBox] = ???
 
-  override def contactList(): Array[String] = ???
+  override def contactList(): Future[Array[String]] = ???
 
   /**
     * contact

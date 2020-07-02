@@ -25,50 +25,53 @@ trait ContactRawSupport {
     * Contact
     *
     */
-  override def contactAlias(contactId: String): String = {
+  override def contactAlias(contactId: String): Future[String] = {
     val request = Contact.ContactAliasRequest.newBuilder()
       .setId(contactId)
       .build()
-    val response = grpcClient.contactAlias(request)
-    response.getAlias.getValue
+    asyncCallback(PuppetGrpc.getContactAliasMethod,request){response=>
+      response.getAlias.getValue
+    }
   }
 
-  override def contactAlias(contactId: String, alias: String): Unit = {
+  override def contactAlias(contactId: String, alias: String): Future[Unit] = {
     val stringValue = StringValue.newBuilder().setValue(alias).build()
     val request = Contact.ContactAliasRequest.newBuilder()
       .setId(contactId)
       .setAlias(stringValue)
       .build()
-    grpcClient.contactAlias(request)
+    asyncCallback(PuppetGrpc.getContactAliasMethod,request){reponse=> }
   }
 
-  override def contactList(): Array[String] = {
+  override def contactList(): Future[Array[String]] = {
     val request = Contact.ContactListRequest.newBuilder().build()
-
-    val response = grpcClient.contactList(request)
-    response.getIdsList.toArray(Array[String]())
+    asyncCallback(PuppetGrpc.getContactListMethod,request){response=>
+      response.getIdsList.toArray(Array[String]())
+    }
   }
 
-  override def contactAvatar(contactId: String): ResourceBox = {
+  override def contactAvatar(contactId: String): Future[ResourceBox] = {
     val request = Contact.ContactAvatarRequest.newBuilder()
       .setId(contactId)
       .build()
 
-    val response = grpcClient.contactAvatar(request)
-    val filebox = response.getFilebox.getValue
-    val root = Puppet.objectMapper.readTree(filebox)
-    val boxType = ResourceBoxType.apply(root.get("boxType").asInt())
-    boxType match{
-      case ResourceBox.ResourceBoxType.Url =>
-        ResourceBox.fromUrl(root.get("remoteUrl").asText())
-      case ResourceBox.ResourceBoxType.Base64 =>
-        ResourceBox.fromBase64(root.get("name").asText(),root.get("base64").asText())
-      case other =>
-        throw new UnsupportedOperationException(s"other ${other} type not supported!")
+    asyncCallback(PuppetGrpc.getContactAvatarMethod,request) { response =>
+      val response = grpcClient.contactAvatar(request)
+      val filebox  = response.getFilebox.getValue
+      val root     = Puppet.objectMapper.readTree(filebox)
+      val boxType  = ResourceBoxType.apply(root.get("boxType").asInt())
+      boxType match {
+        case ResourceBox.ResourceBoxType.Url =>
+          ResourceBox.fromUrl(root.get("remoteUrl").asText())
+        case ResourceBox.ResourceBoxType.Base64 =>
+          ResourceBox.fromBase64(root.get("name").asText(), root.get("base64").asText())
+        case other =>
+          throw new UnsupportedOperationException(s"other ${other} type not supported!")
+      }
     }
   }
 
-  override def contactAvatar(contactId: String, file: ResourceBox): ResourceBox = {
+  override def contactAvatar(contactId: String, file: ResourceBox): Future[ResourceBox] = {
     val toJsonString = file.toJson()
 
     val value = StringValue.newBuilder().setValue(toJsonString)
@@ -78,9 +81,9 @@ trait ContactRawSupport {
       .setFilebox(value)
       .build()
 
-    grpcClient.contactAvatar(request)
-
-    file
+    asyncCallback(PuppetGrpc.getContactAvatarMethod,request){response=>
+      file
+    }
   }
 
   override protected def contactRawPayload(contactID: String): Future[ContactPayload] = {
