@@ -151,56 +151,56 @@ import scala.util.Try
       }
     }
   }
-<span class="nc" id="L154">  protected def asyncRequest[T : TypeTag ](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): Future[T] ={</span>
-<span class="nc" id="L155">    typeOf[T] match {</span>
-<span class="nc bnc" id="L156" title="All 2 branches missed.">      case t if t =:= typeOf[Nothing] =&gt;</span>
+<span class="fc" id="L154">  protected def asyncRequest[T : TypeTag ](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): Future[T] ={</span>
+<span class="fc" id="L155">    typeOf[T] match {</span>
+<span class="pc bpc" id="L156" title="1 of 2 branches missed.">      case t if t =:= typeOf[Nothing] =&gt;</span>
 <span class="nc" id="L157">        throw new IllegalAccessException(&quot;generic type is nothing,maybe you should use asyncRequestNothing !&quot;)</span>
-<span class="nc bnc" id="L158" title="All 2 branches missed.">      case t if t =:= typeOf[RuntimeClass] =&gt;</span>
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">      case t if t =:= typeOf[RuntimeClass] =&gt;</span>
 <span class="nc" id="L159">        throw new IllegalAccessException(&quot;generic type is nothing,maybe you should use asyncRequestNothing !&quot;)</span>
       case other =&gt;
-<span class="nc bnc" id="L161" title="All 2 branches missed.">        logger.debug(s&quot;async request generic type is $other&quot;)</span>
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        logger.debug(s&quot;async request generic type is $other&quot;)</span>
     }
-<span class="nc" id="L163">    val request = RequestObject.newBuilder()</span>
-<span class="nc" id="L164">    request.setToken(option.token.get)</span>
-<span class="nc" id="L165">    uinOpt match{</span>
-<span class="nc bnc" id="L166" title="All 2 branches missed.">      case Some(id) =&gt;</span>
+<span class="fc" id="L163">    val request = RequestObject.newBuilder()</span>
+<span class="fc" id="L164">    request.setToken(option.token.get)</span>
+<span class="fc" id="L165">    uinOpt match{</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">      case Some(id) =&gt;</span>
 <span class="nc" id="L167">        request.setUin(id)</span>
-<span class="nc" id="L168">      case _ =&gt;</span>
+<span class="fc" id="L168">      case _ =&gt;</span>
     }
-<span class="nc" id="L170">    request.setApiType(apiType)</span>
-<span class="nc" id="L171">    data match{</span>
-<span class="nc bnc" id="L172" title="All 4 branches missed.">      case Some(str:String) =&gt;</span>
+<span class="fc" id="L170">    request.setApiType(apiType)</span>
+<span class="fc" id="L171">    data match{</span>
+<span class="pc bpc" id="L172" title="3 of 4 branches missed.">      case Some(str:String) =&gt;</span>
 <span class="nc" id="L173">        request.setParams(str)</span>
-<span class="nc bnc" id="L174" title="All 2 branches missed.">      case Some(d) =&gt;</span>
+<span class="pc bpc" id="L174" title="1 of 2 branches missed.">      case Some(d) =&gt;</span>
 <span class="nc" id="L175">        request.setParams(Puppet.objectMapper.writeValueAsString(d))</span>
-<span class="nc" id="L176">      case _ =&gt;</span>
+<span class="fc" id="L176">      case _ =&gt;</span>
     }
-<span class="nc" id="L178">    val requestId = UUID.randomUUID().toString</span>
-<span class="nc" id="L179">    request.setRequestId(requestId)</span>
-<span class="nc" id="L180">    val traceId= generateTraceId(apiType)</span>
-<span class="nc" id="L181">    request.setTraceId(traceId)</span>
-<span class="nc bnc" id="L182" title="All 2 branches missed.">    logger.debug(&quot;request:{}&quot;,request.build())</span>
+<span class="fc" id="L178">    val requestId = UUID.randomUUID().toString</span>
+<span class="fc" id="L179">    request.setRequestId(requestId)</span>
+<span class="fc" id="L180">    val traceId= generateTraceId(apiType)</span>
+<span class="fc" id="L181">    request.setTraceId(traceId)</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">    logger.debug(&quot;request:{}&quot;,request.build())</span>
 
-<span class="nc" id="L184">    val callbackPromise = Promise[StreamResponse]</span>
-<span class="nc" id="L185">    CallbackHelper.pushCallbackToPool(traceId,callbackPromise)</span>
-<span class="nc" id="L186">    val future = asyncCall(PadPlusServerGrpc.getRequestMethod,request.build())</span>
-<span class="nc" id="L187">    future.flatMap{rep=&gt;</span>
-<span class="nc bnc" id="L188" title="All 6 branches missed.">      if(rep.getResult != &quot;success&quot;){</span>
+<span class="fc" id="L184">    val callbackPromise = Promise[StreamResponse]</span>
+<span class="fc" id="L185">    CallbackHelper.pushCallbackToPool(traceId,callbackPromise)</span>
+<span class="fc" id="L186">    val future = asyncCall(PadPlusServerGrpc.getRequestMethod,request.build())</span>
+<span class="fc" id="L187">    future.flatMap{rep=&gt;</span>
+<span class="pc bpc" id="L188" title="4 of 6 branches missed.">      if(rep.getResult != &quot;success&quot;){</span>
 <span class="nc bnc" id="L189" title="All 2 branches missed.">        logger.warn(&quot;fail to request:{}&quot;,rep)</span>
 <span class="nc" id="L190">        callbackPromise.failure(new IllegalAccessException(&quot;fail to request ,grpc result:&quot;+rep))</span>
       }
-<span class="nc" id="L192">      callbackPromise.future</span>
-<span class="nc" id="L193">    }.map { streamResponse =&gt;</span>
-<span class="nc" id="L194">      typeOf[T] match {</span>
-<span class="nc bnc" id="L195" title="All 2 branches missed.">        case t if t =:= typeOf[JsonNode] =&gt;</span>
+<span class="fc" id="L192">      callbackPromise.future</span>
+<span class="fc" id="L193">    }.map { streamResponse =&gt;</span>
+<span class="fc" id="L194">      typeOf[T] match {</span>
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">        case t if t =:= typeOf[JsonNode] =&gt;</span>
 <span class="nc" id="L196">          Puppet.objectMapper.readTree(streamResponse.getData).asInstanceOf[T]</span>
         case _ =&gt;
           try {
-<span class="nc" id="L199">            Puppet.objectMapper.readValue(streamResponse.getData, classTag.runtimeClass).asInstanceOf[T]</span>
+<span class="pc" id="L199">            Puppet.objectMapper.readValue(streamResponse.getData, classTag.runtimeClass).asInstanceOf[T]</span>
           } catch {
             case e: Throwable =&gt;
 <span class="nc bnc" id="L202" title="All 2 branches missed.">              logger.error(e.getMessage, e)</span>
-<span class="nc" id="L203">              throw e</span>
+<span class="pc" id="L203">              throw e</span>
           }
       }
     }

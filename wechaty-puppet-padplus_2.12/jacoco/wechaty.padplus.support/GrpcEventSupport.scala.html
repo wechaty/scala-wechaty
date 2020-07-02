@@ -28,8 +28,8 @@ import scala.util.{Failure, Success, Try}
 <span class="fc" id="L28">    saveUin(response.getUinBytes)</span>
 
 <span class="fc" id="L30">    val traceId = response.getTraceId</span>
-<span class="pc bpc" id="L31" title="1 of 2 branches missed.">    if(!isBlank(traceId)){</span>
-<span class="nc" id="L32">      CallbackHelper.resolveCallBack(traceId,response)</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">    if(!isBlank(traceId)){</span>
+<span class="fc" id="L32">      CallbackHelper.resolveCallBack(traceId,response)</span>
     }else {
 <span class="pc" id="L34">      Try {</span>
 <span class="fc" id="L35">        val partialFunction = sysPartialFunction(response) orElse</span>
