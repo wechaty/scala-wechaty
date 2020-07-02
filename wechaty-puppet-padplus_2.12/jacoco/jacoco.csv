@@ -127,7 +127,7 @@ wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.CDNFileMd5Exist
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelMessage.PadplusRecallData.BaseResponse,24,0,2,0,4,0,6,0,5,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.internal,LocalStore,28,98,2,2,4,16,5,10,3,10
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,GrpcEventSupport,155,10,14,0,17,3,13,1,6,1
-wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactRawSupport,387,1,42,0,59,1,32,1,11,1
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactRawSupport,404,1,42,0,59,1,34,1,13,1
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,LocalStoreSupport,190,34,3,1,13,9,15,3,13,3
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,PadplusHelper,341,1,90,0,27,1,51,1,6,1
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,CallbackHelper,74,0,0,0,0,0,17,0,17,0

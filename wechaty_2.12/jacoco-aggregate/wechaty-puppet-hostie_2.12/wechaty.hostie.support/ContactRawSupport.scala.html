@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ContactRawSupport.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">wechaty_2.12</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-hostie_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.hostie.support</a> &gt; <span class="el_source">ContactRawSupport.scala</span></div><h1>ContactRawSupport.scala</h1><pre class="source lang-java linenums">package wechaty.hostie.support
 
 import com.google.protobuf.StringValue
+import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Contact
 import io.github.wechaty.grpc.puppet.Contact.ContactPayloadRequest
 import wechaty.puppet.ResourceBox
@@ -9,12 +10,14 @@ import wechaty.puppet.schemas.Contact.ContactPayload
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.support.ContactSupport
 
+import scala.concurrent.Future
+
 /**
   *
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-02
   */
-<span class="fc" id="L17">trait ContactRawSupport {</span>
+<span class="fc" id="L20">trait ContactRawSupport {</span>
   self: GrpcSupport with ContactSupport =&gt;
 
   /**
@@ -23,81 +26,82 @@ import wechaty.puppet.support.ContactSupport
     *
     */
   override def contactAlias(contactId: String): String = {
-<span class="nc" id="L26">    val request = Contact.ContactAliasRequest.newBuilder()</span>
-<span class="nc" id="L27">      .setId(contactId)</span>
+<span class="nc" id="L29">    val request = Contact.ContactAliasRequest.newBuilder()</span>
+<span class="nc" id="L30">      .setId(contactId)</span>
       .build()
-<span class="nc" id="L29">    val response = grpcClient.contactAlias(request)</span>
-<span class="nc" id="L30">    response.getAlias.getValue</span>
+<span class="nc" id="L32">    val response = grpcClient.contactAlias(request)</span>
+<span class="nc" id="L33">    response.getAlias.getValue</span>
   }
 
   override def contactAlias(contactId: String, alias: String): Unit = {
-<span class="fc" id="L34">    val stringValue = StringValue.newBuilder().setValue(alias).build()</span>
-<span class="fc" id="L35">    val request = Contact.ContactAliasRequest.newBuilder()</span>
-<span class="fc" id="L36">      .setId(contactId)</span>
-<span class="fc" id="L37">      .setAlias(stringValue)</span>
+<span class="fc" id="L37">    val stringValue = StringValue.newBuilder().setValue(alias).build()</span>
+<span class="fc" id="L38">    val request = Contact.ContactAliasRequest.newBuilder()</span>
+<span class="fc" id="L39">      .setId(contactId)</span>
+<span class="fc" id="L40">      .setAlias(stringValue)</span>
       .build()
-<span class="fc" id="L39">    grpcClient.contactAlias(request)</span>
+<span class="fc" id="L42">    grpcClient.contactAlias(request)</span>
   }
 
   override def contactList(): Array[String] = {
-<span class="nc" id="L43">    val request = Contact.ContactListRequest.newBuilder().build()</span>
+<span class="nc" id="L46">    val request = Contact.ContactListRequest.newBuilder().build()</span>
 
-<span class="nc" id="L45">    val response = grpcClient.contactList(request)</span>
-<span class="nc" id="L46">    response.getIdsList.toArray(Array[String]())</span>
+<span class="nc" id="L48">    val response = grpcClient.contactList(request)</span>
+<span class="nc" id="L49">    response.getIdsList.toArray(Array[String]())</span>
   }
 
   override def contactAvatar(contactId: String): ResourceBox = {
-<span class="nc" id="L50">    val request = Contact.ContactAvatarRequest.newBuilder()</span>
-<span class="nc" id="L51">      .setId(contactId)</span>
+<span class="nc" id="L53">    val request = Contact.ContactAvatarRequest.newBuilder()</span>
+<span class="nc" id="L54">      .setId(contactId)</span>
       .build()
 
-<span class="nc" id="L54">    val response = grpcClient.contactAvatar(request)</span>
-<span class="nc" id="L55">    val filebox = response.getFilebox.getValue</span>
-<span class="nc" id="L56">    val root = Puppet.objectMapper.readTree(filebox)</span>
-<span class="nc" id="L57">    val boxType = ResourceBoxType.apply(root.get(&quot;boxType&quot;).asInt())</span>
-<span class="nc" id="L58">    boxType match{</span>
-<span class="nc bnc" id="L59" title="All 6 branches missed.">      case ResourceBox.ResourceBoxType.Url =&gt;</span>
-<span class="nc" id="L60">        ResourceBox.fromUrl(root.get(&quot;remoteUrl&quot;).asText())</span>
-<span class="nc bnc" id="L61" title="All 6 branches missed.">      case ResourceBox.ResourceBoxType.Base64 =&gt;</span>
-<span class="nc" id="L62">        ResourceBox.fromBase64(root.get(&quot;name&quot;).asText(),root.get(&quot;base64&quot;).asText())</span>
+<span class="nc" id="L57">    val response = grpcClient.contactAvatar(request)</span>
+<span class="nc" id="L58">    val filebox = response.getFilebox.getValue</span>
+<span class="nc" id="L59">    val root = Puppet.objectMapper.readTree(filebox)</span>
+<span class="nc" id="L60">    val boxType = ResourceBoxType.apply(root.get(&quot;boxType&quot;).asInt())</span>
+<span class="nc" id="L61">    boxType match{</span>
+<span class="nc bnc" id="L62" title="All 6 branches missed.">      case ResourceBox.ResourceBoxType.Url =&gt;</span>
+<span class="nc" id="L63">        ResourceBox.fromUrl(root.get(&quot;remoteUrl&quot;).asText())</span>
+<span class="nc bnc" id="L64" title="All 6 branches missed.">      case ResourceBox.ResourceBoxType.Base64 =&gt;</span>
+<span class="nc" id="L65">        ResourceBox.fromBase64(root.get(&quot;name&quot;).asText(),root.get(&quot;base64&quot;).asText())</span>
       case other =&gt;
-<span class="nc" id="L64">        throw new UnsupportedOperationException(s&quot;other ${other} type not supported!&quot;)</span>
+<span class="nc" id="L67">        throw new UnsupportedOperationException(s&quot;other ${other} type not supported!&quot;)</span>
     }
   }
 
   override def contactAvatar(contactId: String, file: ResourceBox): ResourceBox = {
-<span class="nc" id="L69">    val toJsonString = file.toJson()</span>
+<span class="nc" id="L72">    val toJsonString = file.toJson()</span>
 
-<span class="nc" id="L71">    val value = StringValue.newBuilder().setValue(toJsonString)</span>
+<span class="nc" id="L74">    val value = StringValue.newBuilder().setValue(toJsonString)</span>
 
-<span class="nc" id="L73">    val request = Contact.ContactAvatarRequest.newBuilder()</span>
-<span class="nc" id="L74">      .setId(contactId)</span>
-<span class="nc" id="L75">      .setFilebox(value)</span>
+<span class="nc" id="L76">    val request = Contact.ContactAvatarRequest.newBuilder()</span>
+<span class="nc" id="L77">      .setId(contactId)</span>
+<span class="nc" id="L78">      .setFilebox(value)</span>
       .build()
 
-<span class="nc" id="L78">    grpcClient.contactAvatar(request)</span>
+<span class="nc" id="L81">    grpcClient.contactAvatar(request)</span>
 
-<span class="nc" id="L80">    file</span>
+<span class="nc" id="L83">    file</span>
   }
 
-  override protected def contactRawPayload(contactID: String): ContactPayload = {
-<span class="fc" id="L84">    val response = grpcClient.contactPayload(ContactPayloadRequest.newBuilder().setId(contactID).build())</span>
-<span class="fc" id="L85">    val contact = new ContactPayload</span>
-<span class="fc" id="L86">    contact.id = response.getId</span>
-<span class="fc" id="L87">    contact.gender = wechaty.puppet.schemas.Contact.ContactGender.apply(response.getGenderValue)</span>
-<span class="fc" id="L88">    contact.`type` = wechaty.puppet.schemas.Contact.ContactType.apply(response.getTypeValue)</span>
-<span class="fc" id="L89">    contact.name = response.getName</span>
-<span class="fc" id="L90">    contact.avatar = response.getAvatar</span>
-<span class="fc" id="L91">    contact.address = response.getAddress</span>
-<span class="fc" id="L92">    contact.alias = response.getAlias</span>
-<span class="fc" id="L93">    contact.city = response.getCity</span>
-<span class="fc" id="L94">    contact.friend = response.getFriend</span>
-<span class="fc" id="L95">    contact.province = response.getProvince</span>
-<span class="fc" id="L96">    contact.signature = response.getSignature</span>
-<span class="fc" id="L97">    contact.star = response.getStar</span>
-<span class="fc" id="L98">    contact.weixin = response.getWeixin</span>
-
-<span class="fc" id="L100">    contact</span>
+  override protected def contactRawPayload(contactID: String): Future[ContactPayload] = {
+<span class="fc" id="L87">    val request = ContactPayloadRequest.newBuilder().setId(contactID).build()</span>
+<span class="fc" id="L88">    asyncCallback(PuppetGrpc.getContactPayloadMethod,request){ response =&gt;</span>
+<span class="fc" id="L89">      val contact = new ContactPayload</span>
+<span class="fc" id="L90">      contact.id = response.getId</span>
+<span class="fc" id="L91">      contact.gender = wechaty.puppet.schemas.Contact.ContactGender.apply(response.getGenderValue)</span>
+<span class="fc" id="L92">      contact.`type` = wechaty.puppet.schemas.Contact.ContactType.apply(response.getTypeValue)</span>
+<span class="fc" id="L93">      contact.name = response.getName</span>
+<span class="fc" id="L94">      contact.avatar = response.getAvatar</span>
+<span class="fc" id="L95">      contact.address = response.getAddress</span>
+<span class="fc" id="L96">      contact.alias = response.getAlias</span>
+<span class="fc" id="L97">      contact.city = response.getCity</span>
+<span class="fc" id="L98">      contact.friend = response.getFriend</span>
+<span class="fc" id="L99">      contact.province = response.getProvince</span>
+<span class="fc" id="L100">      contact.signature = response.getSignature</span>
+<span class="fc" id="L101">      contact.star = response.getStar</span>
+<span class="fc" id="L102">      contact.weixin = response.getWeixin</span>
+<span class="fc" id="L103">      contact</span>
+    }
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

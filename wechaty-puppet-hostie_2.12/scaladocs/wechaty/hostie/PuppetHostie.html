@@ -224,7 +224,23 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="wechaty.puppet.events.EventEmitter.Listener" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="wechaty.hostie.support.GrpcSupport.ClientCallback" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ClientCallback[RespT,T]=RespT=&gt;T"></a><a id="ClientCallback[RespT,T]:ClientCallback[RespT,T]"></a>
+      <span class="permalink">
+      <a href="../../wechaty/hostie/PuppetHostie.html#ClientCallback[RespT,T]=RespT=&gt;T" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ClientCallback</span><span class="tparams">[<span name="RespT">RespT</span>, <span name="T">T</span>]</span><span class="result alias"> = (<span class="extype" name="wechaty.hostie.support.GrpcSupport.ClientCallback.RespT">RespT</span>) ⇒ <span class="extype" name="wechaty.hostie.support.GrpcSupport.ClientCallback.T">T</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="support/GrpcSupport.html" class="extype" name="wechaty.hostie.support.GrpcSupport">GrpcSupport</a></dd></dl></div>
+    </li><li name="wechaty.puppet.events.EventEmitter.Listener" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="Listener[T]=T=&gt;Unit"></a><a id="Listener[T]:Listener[T]"></a>
       <span class="permalink">
       <a href="../../wechaty/hostie/PuppetHostie.html#Listener[T]=T=&gt;Unit" title="Permalink">
@@ -328,6 +344,54 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="wechaty.hostie.support.GrpcSupport#asyncCall" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asyncCall[ReqT,RespT](call:io.grpc.MethodDescriptor[ReqT,RespT],req:ReqT):Unit"></a><a id="asyncCall[ReqT,RespT](MethodDescriptor[ReqT,RespT],ReqT):Unit"></a>
+      <span class="permalink">
+      <a href="../../wechaty/hostie/PuppetHostie.html#asyncCall[ReqT,RespT](call:io.grpc.MethodDescriptor[ReqT,RespT],req:ReqT):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asyncCall</span><span class="tparams">[<span name="ReqT">ReqT</span>, <span name="RespT">RespT</span>]</span><span class="params">(<span name="call">call: <span class="extype" name="io.grpc.MethodDescriptor">MethodDescriptor</span>[<span class="extype" name="wechaty.hostie.support.GrpcSupport.asyncCall.ReqT">ReqT</span>, <span class="extype" name="wechaty.hostie.support.GrpcSupport.asyncCall.RespT">RespT</span>]</span>, <span name="req">req: <span class="extype" name="wechaty.hostie.support.GrpcSupport.asyncCall.ReqT">ReqT</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="support/GrpcSupport.html" class="extype" name="wechaty.hostie.support.GrpcSupport">GrpcSupport</a></dd></dl></div>
+    </li><li name="wechaty.hostie.support.GrpcSupport#asyncCallback" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asyncCallback[ReqT,RespT,T](callMethod:io.grpc.MethodDescriptor[ReqT,RespT],req:ReqT)(callback:GrpcSupport.this.ClientCallback[RespT,T]):scala.concurrent.Future[T]"></a><a id="asyncCallback[ReqT,RespT,T](MethodDescriptor[ReqT,RespT],ReqT)(ClientCallback[RespT,T]):Future[T]"></a>
+      <span class="permalink">
+      <a href="../../wechaty/hostie/PuppetHostie.html#asyncCallback[ReqT,RespT,T](callMethod:io.grpc.MethodDescriptor[ReqT,RespT],req:ReqT)(callback:GrpcSupport.this.ClientCallback[RespT,T]):scala.concurrent.Future[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asyncCallback</span><span class="tparams">[<span name="ReqT">ReqT</span>, <span name="RespT">RespT</span>, <span name="T">T</span>]</span><span class="params">(<span name="callMethod">callMethod: <span class="extype" name="io.grpc.MethodDescriptor">MethodDescriptor</span>[<span class="extype" name="wechaty.hostie.support.GrpcSupport.asyncCallback.ReqT">ReqT</span>, <span class="extype" name="wechaty.hostie.support.GrpcSupport.asyncCallback.RespT">RespT</span>]</span>, <span name="req">req: <span class="extype" name="wechaty.hostie.support.GrpcSupport.asyncCallback.ReqT">ReqT</span></span>)</span><span class="params">(<span name="callback">callback: <a href="#ClientCallback[RespT,T]=RespT=&gt;T" class="extmbr" name="wechaty.hostie.PuppetHostie.ClientCallback">ClientCallback</a>[<span class="extype" name="wechaty.hostie.support.GrpcSupport.asyncCallback.RespT">RespT</span>, <span class="extype" name="wechaty.hostie.support.GrpcSupport.asyncCallback.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="wechaty.hostie.support.GrpcSupport.asyncCallback.T">T</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="support/GrpcSupport.html" class="extype" name="wechaty.hostie.support.GrpcSupport">GrpcSupport</a></dd></dl></div>
+    </li><li name="wechaty.hostie.support.GrpcSupport#asyncGrpcClient" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asyncGrpcClient:io.github.wechaty.grpc.PuppetGrpc.PuppetStub"></a><a id="asyncGrpcClient:PuppetStub"></a>
+      <span class="permalink">
+      <a href="../../wechaty/hostie/PuppetHostie.html#asyncGrpcClient:io.github.wechaty.grpc.PuppetGrpc.PuppetStub" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asyncGrpcClient</span><span class="result">: <span class="extype" name="io.github.wechaty.grpc.PuppetGrpc.PuppetStub">PuppetStub</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="support/GrpcSupport.html" class="extype" name="wechaty.hostie.support.GrpcSupport">GrpcSupport</a></dd></dl></div>
     </li><li name="wechaty.hostie.support.GrpcSupport#channel" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="channel:io.grpc.ManagedChannel"></a><a id="channel:ManagedChannel"></a>
       <span class="permalink">
@@ -449,9 +513,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="support/ContactRawSupport.html" class="extype" name="wechaty.hostie.support.ContactRawSupport">ContactRawSupport</a></dd></dl></div>
     </li><li name="wechaty.puppet.support.ContactSupport#contactPayload" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="contactPayload(contactId:String):wechaty.puppet.schemas.Contact.ContactPayload"></a><a id="contactPayload(String):ContactPayload"></a>
+      <a id="contactPayload(contactId:String):scala.concurrent.Future[wechaty.puppet.schemas.Contact.ContactPayload]"></a><a id="contactPayload(String):Future[ContactPayload]"></a>
       <span class="permalink">
-      <a href="../../wechaty/hostie/PuppetHostie.html#contactPayload(contactId:String):wechaty.puppet.schemas.Contact.ContactPayload" title="Permalink">
+      <a href="../../wechaty/hostie/PuppetHostie.html#contactPayload(contactId:String):scala.concurrent.Future[wechaty.puppet.schemas.Contact.ContactPayload]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -460,7 +524,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">contactPayload</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="wechaty.puppet.schemas.Contact.ContactPayload">ContactPayload</span></span>
+        <span class="name">contactPayload</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="wechaty.puppet.schemas.Contact.ContactPayload">ContactPayload</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ContactSupport</dd></dl></div>
@@ -481,9 +545,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ContactSupport</dd></dl></div>
     </li><li name="wechaty.hostie.support.ContactRawSupport#contactRawPayload" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="contactRawPayload(contactID:String):wechaty.puppet.schemas.Contact.ContactPayload"></a><a id="contactRawPayload(String):ContactPayload"></a>
+      <a id="contactRawPayload(contactID:String):scala.concurrent.Future[wechaty.puppet.schemas.Contact.ContactPayload]"></a><a id="contactRawPayload(String):Future[ContactPayload]"></a>
       <span class="permalink">
-      <a href="../../wechaty/hostie/PuppetHostie.html#contactRawPayload(contactID:String):wechaty.puppet.schemas.Contact.ContactPayload" title="Permalink">
+      <a href="../../wechaty/hostie/PuppetHostie.html#contactRawPayload(contactID:String):scala.concurrent.Future[wechaty.puppet.schemas.Contact.ContactPayload]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -492,7 +556,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">contactRawPayload</span><span class="params">(<span name="contactID">contactID: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="wechaty.puppet.schemas.Contact.ContactPayload">ContactPayload</span></span>
+        <span class="name">contactRawPayload</span><span class="params">(<span name="contactID">contactID: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="wechaty.puppet.schemas.Contact.ContactPayload">ContactPayload</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="support/ContactRawSupport.html" class="extype" name="wechaty.hostie.support.ContactRawSupport">ContactRawSupport</a></dd></dl></div>

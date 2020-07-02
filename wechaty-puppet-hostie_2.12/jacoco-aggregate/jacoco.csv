@@ -6,7 +6,7 @@ wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Friendship
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Contact.ContactPayload,94,0,0,0,15,0,27,0,27,0
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventLoginPayload,10,0,0,0,2,0,3,0,3,0
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,RoomInvitation.,8,0,0,0,2,0,2,0,2,0
-wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Puppet,14,0,0,0,0,0,4,0,4,0
+wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Puppet,17,0,0,0,0,0,5,0,5,0
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Friendship.FriendshipPayloadReceive,24,0,0,0,4,0,7,0,7,0
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.WechatAppMessageType.,160,0,0,0,20,0,21,0,21,0
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Puppet.PuppetEventName.,6,138,0,0,0,18,2,17,2,17
@@ -34,7 +34,7 @@ wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Room.RoomM
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.,8,0,0,0,2,0,2,0,2,0
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Image.ImageType.,40,0,0,0,5,0,6,0,6,0
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.EventRoomTopicPayload,38,0,0,0,6,0,11,0,11,0
-wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Puppet.,32,206,8,2,5,22,8,4,3,4
+wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Puppet.,73,218,12,2,6,22,12,4,5,4
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.,8,0,0,0,2,0,2,0,2,0
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Event.BaseEventPayload,10,0,0,0,2,0,3,0,3,0
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Message.WechatMessageType.,192,0,0,0,24,0,25,0,25,0
@@ -52,7 +52,7 @@ wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.support,CacheSuppo
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.support,FriendshipSupport,53,0,4,0,13,0,5,0,3,0
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.support,MessageSupport,429,0,104,0,43,0,56,0,4,0
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.support,RoomMemberSupport,111,0,8,0,18,0,10,0,6,0
-wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.support,ContactSupport,85,0,8,0,13,0,7,0,3,0
+wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.support,ContactSupport,95,0,8,0,14,0,8,0,4,0
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet.support,RoomSupport,147,0,8,0,25,0,12,0,8,0
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.StreamResourceBox,36,0,0,0,4,0,8,0,8,0
 wechaty-puppet-hostie_2.12/wechaty-puppet_2.12,wechaty.puppet,ResourceBox,20,1,0,0,1,1,5,1,5,1

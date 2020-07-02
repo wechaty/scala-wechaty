@@ -5,49 +5,54 @@ import java.util.concurrent.{CountDownLatch, Executors, TimeUnit}
 
 import com.typesafe.scalalogging.LazyLogging
 import io.github.wechaty.grpc.PuppetGrpc
-import io.github.wechaty.grpc.puppet.Base
+import io.github.wechaty.grpc.puppet.Contact.ContactPayloadRequest
+import io.github.wechaty.grpc.puppet.{Base, Contact}
 import io.github.wechaty.grpc.puppet.Event.EventRequest
-import io.grpc.stub.StreamObserver
-import io.grpc.{ManagedChannel, ManagedChannelBuilder}
+import io.grpc.stub.ClientCalls.asyncUnaryCall
+import io.grpc.stub.{ClientCalls, StreamObserver}
+import io.grpc.{ClientCall, ManagedChannel, ManagedChannelBuilder, MethodDescriptor}
 import wechaty.hostie.PuppetHostie
+import wechaty.puppet.schemas.Contact.ContactPayload
+
+import scala.concurrent.{Future, Promise}
 
 /**
   *
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-02
   */
-<span class="fc" id="L19">trait GrpcSupport {</span>
+<span class="fc" id="L24">trait GrpcSupport {</span>
   self: PuppetHostie with ContactRawSupport with MessageRawSupport with LazyLogging =&gt;
-<span class="fc" id="L21">  private val executorService = Executors.newSingleThreadScheduledExecutor()</span>
+<span class="fc" id="L26">  private val executorService = Executors.newSingleThreadScheduledExecutor()</span>
   //from https://github.com/wechaty/java-wechaty/blob/master/wechaty-puppet/src/main/kotlin/Puppet.kt
-<span class="fc" id="L23">  private val HEARTBEAT_COUNTER = new AtomicLong()</span>
-<span class="fc" id="L24">  private val HOSTIE_KEEPALIVE_TIMEOUT = 15 * 1000L</span>
-<span class="fc" id="L25">  private val DEFAULT_WATCHDOG_TIMEOUT = 60L</span>
-  protected var grpcClient: PuppetGrpc.PuppetBlockingStub = _
-  private var eventStream: PuppetGrpc.PuppetStub = _
-  protected var channel: ManagedChannel = _
+<span class="fc" id="L28">  private val HEARTBEAT_COUNTER = new AtomicLong()</span>
+<span class="fc" id="L29">  private val HOSTIE_KEEPALIVE_TIMEOUT = 15 * 1000L</span>
+<span class="fc" id="L30">  private val DEFAULT_WATCHDOG_TIMEOUT = 60L</span>
+  protected var grpcClient     : PuppetGrpc.PuppetBlockingStub = _
+  protected var asyncGrpcClient: PuppetGrpc.PuppetStub         = _
+  protected var channel        : ManagedChannel                = _
 
   protected def startGrpc(endpoint: String): Unit = {
-<span class="fc" id="L31">    initChannel(endpoint)</span>
-<span class="fc" id="L32">    internalStartGrpc()</span>
+<span class="fc" id="L36">    initChannel(endpoint)</span>
+<span class="fc" id="L37">    internalStartGrpc()</span>
     //from https://github.com/wechaty/java-wechaty/blob/master/wechaty-puppet/src/main/kotlin/Puppet.kt
-<span class="fc" id="L34">    executorService.scheduleAtFixedRate(() =&gt; {</span>
-<span class="nc" id="L35">      val seq = HEARTBEAT_COUNTER.incrementAndGet()</span>
+<span class="fc" id="L39">    executorService.scheduleAtFixedRate(() =&gt; {</span>
+<span class="nc" id="L40">      val seq = HEARTBEAT_COUNTER.incrementAndGet()</span>
       try {
-<span class="nc" id="L37">        ding(s&quot;heartbeat ...${seq}&quot;)</span>
+<span class="nc" id="L42">        ding(s&quot;heartbeat ...${seq}&quot;)</span>
       } catch {
         case e: Throwable =&gt;
-<span class="nc bnc" id="L40" title="All 2 branches missed.">          logger.warn(&quot;ding exception:{}&quot;, e.getMessage)</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">          logger.warn(&quot;ding exception:{}&quot;, e.getMessage)</span>
         //ignore any exception
       }
-<span class="fc" id="L43">    }, HOSTIE_KEEPALIVE_TIMEOUT, HOSTIE_KEEPALIVE_TIMEOUT, TimeUnit.MILLISECONDS)</span>
+<span class="fc" id="L48">    }, HOSTIE_KEEPALIVE_TIMEOUT, HOSTIE_KEEPALIVE_TIMEOUT, TimeUnit.MILLISECONDS)</span>
 
   }
 
   protected def initChannel(endpoint: String) = {
-<span class="fc" id="L48">    option.channelOpt match {</span>
-<span class="pc bpc" id="L49" title="1 of 2 branches missed.">      case Some(channel) =&gt;</span>
-<span class="fc" id="L50">        this.channel = channel</span>
+<span class="fc" id="L53">    option.channelOpt match {</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">      case Some(channel) =&gt;</span>
+<span class="fc" id="L55">        this.channel = channel</span>
       case _ =&gt;
         /*
     this.channel = NettyChannelBuilder
@@ -59,79 +64,99 @@ import wechaty.hostie.PuppetHostie
       .enableRetry()
       .usePlaintext().build()
       */
-<span class="nc" id="L62">        this.channel = ManagedChannelBuilder.forTarget(endpoint)</span>
-<span class="nc" id="L63">          .maxInboundMessageSize(1024 * 1024 * 150)</span>
+<span class="nc" id="L67">        this.channel = ManagedChannelBuilder.forTarget(endpoint)</span>
+<span class="nc" id="L68">          .maxInboundMessageSize(1024 * 1024 * 150)</span>
           .usePlaintext().build()
     }
   }
 
   protected def reconnectStream() {
-<span class="nc bnc" id="L69" title="All 2 branches missed.">    logger.info(&quot;reconnect stream stream...&quot;)</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">    logger.info(&quot;reconnect stream stream...&quot;)</span>
     try {
-<span class="nc" id="L71">      stopGrpc()</span>
+<span class="nc" id="L76">      stopGrpc()</span>
     } catch {
       case e: Throwable =&gt;
-<span class="nc bnc" id="L74" title="All 2 branches missed.">        logger.warn(&quot;fail to stop grpc {}&quot;, e.getMessage)</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        logger.warn(&quot;fail to stop grpc {}&quot;, e.getMessage)</span>
     }
-<span class="nc" id="L76">    internalStartGrpc()</span>
-<span class="nc bnc" id="L77" title="All 2 branches missed.">    logger.info(&quot;reconnect stream stream done&quot;)</span>
+<span class="nc" id="L81">    internalStartGrpc()</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">    logger.info(&quot;reconnect stream stream done&quot;)</span>
 
   }
 
   private def internalStartGrpc() {
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">    logger.info(&quot;start grpc client ....&quot;)</span>
-<span class="fc" id="L83">    this.grpcClient = PuppetGrpc.newBlockingStub(channel)</span>
-<span class="fc" id="L84">    startStream()</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">    logger.info(&quot;start grpc client ....&quot;)</span>
+<span class="fc" id="L88">    this.grpcClient = PuppetGrpc.newBlockingStub(channel)</span>
+<span class="fc" id="L89">    startStream()</span>
 
-<span class="fc" id="L86">    this.grpcClient.start(Base.StartRequest.newBuilder().build())</span>
+<span class="fc" id="L91">    this.grpcClient.start(Base.StartRequest.newBuilder().build())</span>
 
-<span class="pc" id="L88">    try{</span>
+<span class="pc" id="L93">    try{</span>
       //sometime the grpc can't work well,so logout before start bot
 //      this.grpcClient.logout(Base.LogoutRequest.newBuilder().build())
     }catch{
       case e:Throwable=&gt;
-<span class="pc bnc" id="L93" title="All 2 branches missed.">        logger.warn(e.getMessage)</span>
+<span class="pc bnc" id="L98" title="All 2 branches missed.">        logger.warn(e.getMessage)</span>
     }
-<span class="pc bpc" id="L95" title="1 of 2 branches missed.">    logger.info(&quot;start grpc client done&quot;)</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">    logger.info(&quot;start grpc client done&quot;)</span>
   }
 
   private def startStream() {
-<span class="fc" id="L99">    this.eventStream = PuppetGrpc.newStub(channel)</span>
-<span class="fc" id="L100">    val startRequest = EventRequest.newBuilder().build()</span>
-<span class="fc" id="L101">    this.eventStream.event(startRequest, this)</span>
+<span class="fc" id="L104">    this.asyncGrpcClient = PuppetGrpc.newStub(channel)</span>
+<span class="fc" id="L105">    val startRequest = EventRequest.newBuilder().build()</span>
+<span class="fc" id="L106">    this.asyncGrpcClient.event(startRequest, this)</span>
   }
 
   protected def stopGrpc(): Unit = {
-<span class="pc bpc" id="L105" title="1 of 2 branches missed.">    logger.info(&quot;shutdown Grpc...&quot;)</span>
-<span class="pc bpc" id="L106" title="1 of 2 branches missed.">    if(option.channelOpt.isEmpty) {  //if no test!</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">    logger.info(&quot;shutdown Grpc...&quot;)</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">    if(option.channelOpt.isEmpty) {  //if no test!</span>
       //stop stream
-<span class="nc" id="L108">      stopStream()</span>
+<span class="nc" id="L113">      stopStream()</span>
 
       //stop grpc client
-<span class="nc" id="L111">      this.grpcClient.stop(Base.StopRequest.getDefaultInstance)</span>
+<span class="nc" id="L116">      this.grpcClient.stop(Base.StopRequest.getDefaultInstance)</span>
 
     }
-<span class="fc" id="L114">    executorService.shutdown()</span>
-<span class="fc" id="L115">    executorService.awaitTermination(5,TimeUnit.SECONDS)</span>
-<span class="fc" id="L116">    this.channel.shutdownNow()</span>
-<span class="fc" id="L117">    this.channel.awaitTermination(5,TimeUnit.SECONDS)</span>
+<span class="fc" id="L119">    executorService.shutdown()</span>
+<span class="fc" id="L120">    executorService.awaitTermination(5,TimeUnit.SECONDS)</span>
+<span class="fc" id="L121">    this.channel.shutdownNow()</span>
+<span class="fc" id="L122">    this.channel.awaitTermination(5,TimeUnit.SECONDS)</span>
   }
 
   private def stopStream(): Unit = {
     try {
-<span class="nc" id="L122">      val countDownLatch = new CountDownLatch(1)</span>
-<span class="nc" id="L123">      this.eventStream.stop(Base.StopRequest.getDefaultInstance, new StreamObserver[Base.StopResponse] {</span>
-<span class="nc" id="L124">        override def onNext(v: Base.StopResponse): Unit = {}</span>
+<span class="nc" id="L127">      val countDownLatch = new CountDownLatch(1)</span>
+<span class="nc" id="L128">      this.asyncGrpcClient.stop(Base.StopRequest.getDefaultInstance, new StreamObserver[Base.StopResponse] {</span>
+<span class="nc" id="L129">        override def onNext(v: Base.StopResponse): Unit = {}</span>
 
-<span class="nc" id="L126">        override def onError(throwable: Throwable): Unit = {}</span>
+<span class="nc" id="L131">        override def onError(throwable: Throwable): Unit = {}</span>
 
-<span class="nc" id="L128">        override def onCompleted(): Unit = {countDownLatch.countDown()}</span>
+<span class="nc" id="L133">        override def onCompleted(): Unit = {countDownLatch.countDown()}</span>
       })
-<span class="nc" id="L130">      countDownLatch.await()</span>
+<span class="nc" id="L135">      countDownLatch.await()</span>
     } catch {
       case e: Throwable =&gt;
-<span class="nc bnc" id="L133" title="All 2 branches missed.">        logger.warn(&quot;fail to stop stream {}&quot;, e.getMessage)</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        logger.warn(&quot;fail to stop stream {}&quot;, e.getMessage)</span>
     }
+  }
+
+  type ClientCallback[RespT,T]=RespT =&gt; T
+  protected def asyncCall[ReqT,RespT](call: MethodDescriptor[ReqT, RespT], req: ReqT): Unit = {
+<span class="nc" id="L144">    asyncCallback(call,req)(resp=&gt; resp)</span>
+  }
+<span class="fc" id="L146">  def asyncCallback[ReqT, RespT,T](callMethod: MethodDescriptor[ReqT, RespT], req: ReqT)(callback:ClientCallback[RespT,T]): Future[T]= {</span>
+<span class="fc" id="L147">    val call = channel.newCall(callMethod,asyncGrpcClient.getCallOptions)</span>
+<span class="fc" id="L148">    val promise = Promise[T]</span>
+<span class="fc" id="L149">    ClientCalls.asyncUnaryCall(call,req,new StreamObserver[RespT] {</span>
+      override def onNext(value: RespT): Unit = {
+<span class="fc" id="L151">        val result = callback(value)</span>
+<span class="fc" id="L152">        promise.success(result)</span>
+      }
+<span class="nc" id="L154">      override def onError(t: Throwable): Unit = promise.failure(t)</span>
+      override def onCompleted(): Unit = {
+<span class="pc bpc" id="L156" title="1 of 2 branches missed.">        if(!promise.isCompleted) promise.failure(new IllegalStateException(&quot;server completed&quot;))</span>
+      }
+    })
+<span class="fc" id="L159">    promise.future</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

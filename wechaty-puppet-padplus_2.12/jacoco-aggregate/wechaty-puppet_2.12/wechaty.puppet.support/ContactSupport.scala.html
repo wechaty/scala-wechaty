@@ -5,15 +5,18 @@ import com.typesafe.scalalogging.LazyLogging
 import wechaty.puppet.ResourceBox
 import wechaty.puppet.schemas.Contact.ContactPayload
 import wechaty.puppet.schemas.Puppet
+import wechaty.puppet.schemas.Puppet.executionContext
+
+import scala.concurrent.Future
 
 /**
   *
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-03
   */
-<span class="fc" id="L14">trait ContactSupport {</span>
+<span class="fc" id="L17">trait ContactSupport {</span>
   self: CacheSupport with LazyLogging =&gt;
-<span class="fc" id="L16">  private[puppet] val cacheContactPayload = createCache().asInstanceOf[Cache[String, ContactPayload]]</span>
+<span class="fc" id="L19">  private[puppet] val cacheContactPayload = createCache().asInstanceOf[Cache[String, ContactPayload]]</span>
 
   /**
     *
@@ -29,38 +32,39 @@ import wechaty.puppet.schemas.Puppet
 
   def contactList(): Array[String]
 
-  def contactPayload(contactId: String): ContactPayload = {
-<span class="nc bnc" id="L33" title="All 2 branches missed.">    if (Puppet.isBlank(contactId)) {</span>
-<span class="nc" id="L34">      throw new IllegalArgumentException(&quot;contact id is blank!&quot;)</span>
+  def contactPayload(contactId: String): Future[ContactPayload] = {
+<span class="nc bnc" id="L36" title="All 2 branches missed.">    if (Puppet.isBlank(contactId)) {</span>
+<span class="nc" id="L37">      throw new IllegalArgumentException(&quot;contact id is blank!&quot;)</span>
     }
 
     /**
       * 1. Try to get from cache first
       */
-<span class="nc" id="L40">    val cachedPayload = this.cacheContactPayload.getIfPresent(contactId)</span>
-<span class="nc bnc" id="L41" title="All 2 branches missed.">    if (cachedPayload != null) {</span>
-<span class="nc" id="L42">      return cachedPayload</span>
+<span class="nc" id="L43">    val cachedPayload = this.cacheContactPayload.getIfPresent(contactId)</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">    if (cachedPayload != null) {</span>
+<span class="nc" id="L45">      return Future.successful(cachedPayload)</span>
     }
 
     /**
       * 2. Cache not found
       */
-<span class="nc" id="L48">    val payload = this.contactRawPayload(contactId)</span>
+<span class="nc" id="L51">    val payloadFuture = this.contactRawPayload(contactId)</span>
 
-<span class="nc" id="L50">    cacheContactPayload.put(contactId, payload)</span>
-<span class="nc bnc" id="L51" title="All 2 branches missed.">    logger.info(&quot;Puppet contactPayload({}) cache SET&quot;, contactId)</span>
-
-<span class="nc" id="L53">    payload</span>
+<span class="nc" id="L53">    payloadFuture.map(payload=&gt;{</span>
+<span class="nc" id="L54">      cacheContactPayload.put(contactId, payload)</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">      logger.info(&quot;Puppet contactPayload({}) cache SET&quot;, contactId)</span>
+<span class="nc" id="L56">      payload</span>
+    })
   }
   def contactPayloadDirty (contactId: String): Unit ={
-<span class="nc bnc" id="L56" title="All 2 branches missed.">    logger.debug(&quot;Puppet contactPayloadDirty({})&quot;, contactId)</span>
-<span class="nc" id="L57">    this.cacheContactPayload.invalidate(contactId)</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">    logger.debug(&quot;Puppet contactPayloadDirty({})&quot;, contactId)</span>
+<span class="nc" id="L61">    this.cacheContactPayload.invalidate(contactId)</span>
   }
 
   /**
     * contact
     */
-  protected def contactRawPayload(contactId: String): ContactPayload
+  protected def contactRawPayload(contactId: String): Future[ContactPayload]
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

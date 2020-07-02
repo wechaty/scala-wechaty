@@ -50,17 +50,17 @@ import scala.util.Try
   /**
     * contact
     */
-  override protected def contactRawPayload(contactId: String): Contact.ContactPayload = {
-<span class="nc" id="L54">    this.getContact(contactId)</span>
+  override protected def contactRawPayload(contactId: String): Future[Contact.ContactPayload] = {
+<span class="nc" id="L54">    this.getContact(contactId).map(convertPadplusContactToContactPayload)</span>
   }
 
-  protected def getContact(contactId: String): PadplusContactPayload = {
+  protected def getContact(contactId: String): Future[PadplusContactPayload] = {
 <span class="nc" id="L58">    getPadplusContactPayload(contactId) match{</span>
-<span class="nc bnc" id="L59" title="All 2 branches missed.">      case Some(padplusContactPayload) =&gt; padplusContactPayload</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">      case Some(padplusContactPayload) =&gt; Future.successful(padplusContactPayload)</span>
       case _ =&gt;
 <span class="nc" id="L61">        val json = objectMapper.createObjectNode()</span>
 <span class="nc" id="L62">        json.put(&quot;userName&quot;, contactId)</span>
-<span class="nc" id="L63">        syncRequest[GrpcContactPayload](ApiType.GET_CONTACT,Some(json.toString))</span>
+<span class="nc" id="L63">        asyncRequest[GrpcContactPayload](ApiType.GET_CONTACT,Some(json.toString)).map(convertFromGrpcContact)</span>
     }
   }
 
