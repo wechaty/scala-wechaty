@@ -9,8 +9,8 @@ import io.github.wechaty.grpc.puppet.Contact.ContactPayloadRequest
 import io.github.wechaty.grpc.puppet.{Base, Contact}
 import io.github.wechaty.grpc.puppet.Event.EventRequest
 import io.grpc.stub.ClientCalls.asyncUnaryCall
-import io.grpc.stub.StreamObserver
-import io.grpc.{ClientCall, ManagedChannel, ManagedChannelBuilder}
+import io.grpc.stub.{ClientCalls, StreamObserver}
+import io.grpc.{ClientCall, ManagedChannel, ManagedChannelBuilder, MethodDescriptor}
 import wechaty.hostie.PuppetHostie
 import wechaty.puppet.schemas.Contact.ContactPayload
 
@@ -139,14 +139,14 @@ trait GrpcSupport {
     }
   }
 
-  type ClientCall[ReqT,RespT]=(ReqT,StreamObserver[RespT])=>Unit
   type ClientCallback[RespT,T]=RespT => T
-  protected def asyncCall[ReqT,RespT](call: ClientCall[ReqT, RespT], req: ReqT): Unit = {
+  protected def asyncCall[ReqT,RespT](call: MethodDescriptor[ReqT, RespT], req: ReqT): Unit = {
     asyncCallback(call,req)(resp=> resp)
   }
-  protected def asyncCallback[ReqT,RespT,T](call: ClientCall[ReqT, RespT], req: ReqT)(callback:ClientCallback[RespT,T]):Future[T]= {
+  def asyncCallback[ReqT, RespT,T](callMethod: MethodDescriptor[ReqT, RespT], req: ReqT)(callback:ClientCallback[RespT,T]): Future[T]= {
+    val call = channel.newCall(callMethod,asyncGrpcClient.getCallOptions)
     val promise = Promise[T]
-    call(req,new StreamObserver[RespT] {
+    ClientCalls.asyncUnaryCall(call,req,new StreamObserver[RespT] {
       override def onNext(value: RespT): Unit = {
         val result = callback(value)
         promise.success(result)

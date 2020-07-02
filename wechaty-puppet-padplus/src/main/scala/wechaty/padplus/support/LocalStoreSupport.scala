@@ -8,6 +8,8 @@ import wechaty.padplus.schemas.ModelMessage.PadplusMessagePayload
 import wechaty.padplus.schemas.ModelRoom.{PadplusRoomMemberMap, PadplusRoomPayload}
 import wechaty.puppet.schemas.Puppet.objectMapper
 
+import scala.language.implicitConversions
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>

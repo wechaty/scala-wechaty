@@ -1,6 +1,7 @@
 package wechaty.hostie.support
 
 import com.google.protobuf.StringValue
+import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Contact
 import io.github.wechaty.grpc.puppet.Contact.ContactPayloadRequest
 import wechaty.puppet.ResourceBox
@@ -84,7 +85,7 @@ trait ContactRawSupport {
 
   override protected def contactRawPayload(contactID: String): Future[ContactPayload] = {
     val request = ContactPayloadRequest.newBuilder().setId(contactID).build()
-    asyncCallback(asyncGrpcClient.contactPayload,request){response =>
+    asyncCallback(PuppetGrpc.getContactPayloadMethod,request){ response =>
       val contact = new ContactPayload
       contact.id = response.getId
       contact.gender = wechaty.puppet.schemas.Contact.ContactGender.apply(response.getGenderValue)
