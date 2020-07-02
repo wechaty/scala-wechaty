@@ -11,7 +11,7 @@ import javax.imageio.ImageIO
 import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.grpc.PadPlusServerOuterClass.{ApiType, ResponseType, StreamResponse}
 import wechaty.padplus.schemas.GrpcSchemas.GrpcQrCodeLogin
-import wechaty.padplus.schemas.ModelContact.{GrpcContactPayload, PadplusContactPayload}
+import wechaty.padplus.schemas.ModelContact.{GetContactSelfInfoGrpcResponse, GrpcContactPayload, PadplusContactPayload}
 import wechaty.padplus.schemas.ModelRoom.GrpcRoomPayload
 import wechaty.padplus.schemas.ModelUser.ScanData
 import wechaty.padplus.schemas.PadplusEnums.QrcodeStatus
@@ -60,6 +60,9 @@ trait ContactRawSupport extends LazyLogging{
         json.put("userName", contactId)
         asyncRequestNothing(ApiType.GET_CONTACT,Some(json.toString)).flatMap(_=>promise.future)
     }
+  }
+  def getContactSelfInfo():Future[GetContactSelfInfoGrpcResponse]={
+    asyncRequest[GetContactSelfInfoGrpcResponse](ApiType.GET_CONTACT_SELF_INFO)
   }
 
   protected def loginPartialFunction(response: StreamResponse): PartialFunction[ResponseType, Unit] = {

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.{Assertions, Test}
 import wechaty.padplus.PadplusTestEventBase
 import wechaty.padplus.grpc.PadPlusServerGrpc
 import wechaty.padplus.grpc.PadPlusServerOuterClass.{ResponseObject, ResponseType}
-import wechaty.padplus.schemas.ModelContact.GrpcContactPayload
+import wechaty.padplus.schemas.ModelContact.{GetContactSelfInfoGrpcResponse, GrpcContactPayload}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -54,5 +54,21 @@ class ContactRawSupportTest extends PadplusTestEventBase{
         Assertions.fail("can't reach here")
       case Failure(e) =>
     }
+  }
+  @Test
+  def testGetContactSelfInfo: Unit ={
+    val responseBuilder = ResponseObject.newBuilder.setResult("success")
+    stubFor(unaryMethod(PadPlusServerGrpc.getRequestMethod)
+      .willReturn(responseBuilder.build())
+    )
+
+    val future   = instance.getContactSelfInfo()
+
+    val grpcContact = new GetContactSelfInfoGrpcResponse
+    grpcContact.userName="jcai"
+    mockEvent(ResponseType.CONTACT_SELF_INFO_GET ->grpcContact)
+
+    val payload   = Await.result(future,10 seconds)
+    Assertions.assertEquals("jcai",payload.userName)
   }
 }
