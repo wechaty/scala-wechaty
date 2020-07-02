@@ -15,7 +15,7 @@ import wechaty.padplus.schemas.ModelRoom.{PadplusRoomMemberMap, PadplusRoomPaylo
 <span class="fc" id="L15">object CallbackHelper {</span>
   private def createPool[T]: Cache[String, T]={
 <span class="fc" id="L17">    Caffeine.newBuilder().maximumSize(1000)</span>
-<span class="fc" id="L18">      .expireAfterWrite(1, TimeUnit.MINUTES)</span>
+<span class="fc" id="L18">      .expireAfterWrite(5, TimeUnit.MINUTES) //按照高原建议设置5~10分钟</span>
       .build()
       .asInstanceOf[Cache[String, T]]
   }
@@ -33,10 +33,10 @@ import wechaty.padplus.schemas.ModelRoom.{PadplusRoomMemberMap, PadplusRoomPaylo
 <span class="nc bnc" id="L33" title="All 4 branches missed.">  lazy val roomTopicCallbacks: Cache[String, Map[String, RoomTopicCallback]] = createPool[Map[String,RoomTopicCallback]]</span>
 
   type AcceptFriendCallback= () =&gt;Unit
-<span class="nc bnc" id="L36" title="All 4 branches missed.">  lazy val acceptFriendCallbacks = createPool[List[AcceptFriendCallback]]</span>
+<span class="nc bnc" id="L36" title="All 4 branches missed.">  lazy val acceptFriendCallbacks: Cache[String, List[AcceptFriendCallback]] = createPool[List[AcceptFriendCallback]]</span>
 
   type RoomMemberCallback= PadplusRoomMemberMap =&gt;Unit
-<span class="nc bnc" id="L39" title="All 4 branches missed.">  lazy val roomMemberCallbacks = createPool[List[RoomMemberCallback]]</span>
+<span class="nc bnc" id="L39" title="All 4 branches missed.">  lazy val roomMemberCallbacks: Cache[String, List[RoomMemberCallback]] = createPool[List[RoomMemberCallback]]</span>
 
   def pushCallbackToPool (traceId: String, callback: TraceRequestCallback){
 <span class="fc" id="L42">    traceCallbacks.put(traceId,callback)</span>
