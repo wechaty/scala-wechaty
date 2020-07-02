@@ -85,7 +85,7 @@ trait ContactRawSupport {
     val result  = multiFormatReader.decode(binaryBitmap, hints);
     val payload = new EventScanPayload
       payload.qrcode = result.getText
-      logger.debug("Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n".format(payload.status, payload.qrcode))
+      logger.debug("Scan QR Code to login: %s\nhttps://wechaty.github.io/qrcode/%s\n".format(payload.status, payload.qrcode))
       emit(PuppetEventName.SCAN, payload)
     case ResponseType.QRCODE_LOGIN =>
       val loginData             = objectMapper.readValue(response.getData, classOf[GrpcQrCodeLogin])

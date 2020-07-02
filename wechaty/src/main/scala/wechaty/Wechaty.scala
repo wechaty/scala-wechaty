@@ -29,7 +29,7 @@ import scala.language.implicitConversions;
   * @example <caption>The World's Shortest ChatBot Code: 6 lines of Scala</caption>
   * val options = new WechaytOptions
   * val bot = Wechaty.instance(options)
-  * bot.onScan(payload => println("['https://api.qrserver.com/v1/create-qr-code/?data=',encodeURIComponent(qrcode),'&size=220x220&margin=20',].join('')"))
+  * bot.onScan(payload => println("['https://wechaty.github.io/qrcode/',encodeURIComponent(qrcode),'&size=220x220&margin=20',].join('')"))
   * bot.onLogin(user => println("User ${user} logged in"))
   * bot.onMessage(message => println("Message: ${message}"))
   * bot.start()

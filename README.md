@@ -49,7 +49,7 @@ package wechaty
 object DingDongBot {
   def main(args: Array[String]): Unit = {
     Wechaty.instance()
-      .onScan(payload     => { println("Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n".format(payload.status, payload.qrcode)) })
+      .onScan(payload     => { println("Scan QR Code to login: %s\nhttps://wechaty.github.io/qrcode/%s\n".format(payload.status, payload.qrcode)) })
       .onLogin(payload    => { println("User %s logined\n".format(payload.id)) })
       .onMessage(message  => { println(message) })
       .start()

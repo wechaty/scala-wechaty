@@ -9,7 +9,7 @@ public class JavaDingDongBot {
     WechatyOptions option = new WechatyOptions();
     Wechaty bot = Wechaty.instance(option);
     bot
-      .onScan(payload -> System.out.println(String.format("Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n", payload.status().toString(), payload.qrcode())))
+      .onScan(payload -> System.out.println(String.format("Scan QR Code to login: %s\nhttps://wechaty.github.io/qrcode/%s\n", payload.status().toString(), payload.qrcode())))
       .onLogin(payload -> System.out.println(String.format("User %s logined", payload.id())))
       .onMessage(message -> {
 //					if (message.payload().type() != Message.MessageType.MessageTypeText() || !message.payload().text().equals("#ding")){
