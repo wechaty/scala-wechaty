@@ -167,7 +167,7 @@ wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,DisrutporSuppor
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,DisrutporSupport..anon.new EventFactory() {...},2,14,1,1,0,2,1,2,0,2
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,DisrutporSupport..anon.new ExceptionHandler() {...},46,8,5,1,3,1,6,1,3,1
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,MessageRawSupport,393,7,32,0,71,2,30,2,14,2
-wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,GrpcSupport,352,569,36,24,32,81,34,20,7,17
+wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus.support,GrpcSupport,316,605,34,26,30,83,33,21,7,17
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus,Configuration,6,0,0,0,0,0,2,0,2,0
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus,PuppetPadplus..anonfun.sysPartialFunction.new Serializable() {...},17,33,3,3,0,3,3,3,1,2
 wechaty_2.12/wechaty-puppet-padplus_2.12,wechaty.padplus,PuppetPadplus.,10,0,0,0,1,0,3,0,3,0
