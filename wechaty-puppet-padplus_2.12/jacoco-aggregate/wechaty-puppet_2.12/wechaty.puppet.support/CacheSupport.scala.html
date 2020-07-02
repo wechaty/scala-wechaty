@@ -7,10 +7,10 @@ import com.github.benmanes.caffeine.cache.Caffeine
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-21
   */
-<span class="nc" id="L10">trait CacheSupport {</span>
+<span class="fc" id="L10">trait CacheSupport {</span>
   protected def createCache()= {
     //TODO optimize lru cache
-<span class="nc" id="L13">    Caffeine.newBuilder().maximumSize(100).build()</span>
+<span class="fc" id="L13">    Caffeine.newBuilder().maximumSize(100).build()</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

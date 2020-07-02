@@ -13,13 +13,13 @@ import wechaty.puppet.schemas.Puppet.objectMapper
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-22
   */
-<span class="nc" id="L16">trait LocalStoreSupport {</span>
+<span class="fc" id="L16">trait LocalStoreSupport {</span>
   self:PuppetPadplus=&gt;
   protected var store:LocalStore =  _
-<span class="nc" id="L19">  private val uinKey = ByteString.copyFromUtf8(&quot;uin&quot;)</span>
-<span class="nc" id="L20">  private val messageKeyFormat=&quot;MS_%s&quot;</span>
-<span class="nc" id="L21">  private val contactKeyFormat=&quot;CO_%s&quot;</span>
-<span class="nc" id="L22">  private val roomMemberKeyFormat=&quot;RM_%s&quot;</span>
+<span class="fc" id="L19">  private val uinKey = ByteString.copyFromUtf8(&quot;uin&quot;)</span>
+<span class="fc" id="L20">  private val messageKeyFormat=&quot;MS_%s&quot;</span>
+<span class="fc" id="L21">  private val contactKeyFormat=&quot;CO_%s&quot;</span>
+<span class="fc" id="L22">  private val roomMemberKeyFormat=&quot;RM_%s&quot;</span>
   protected def saveUin(uin:ByteString): Unit ={
 <span class="nc bnc" id="L24" title="All 2 branches missed.">    if(!uin.isEmpty){</span>
 <span class="nc" id="L25">      store.put(uinKey,uin)</span>
@@ -60,12 +60,12 @@ import wechaty.puppet.schemas.Puppet.objectMapper
   }
 
   protected def startLocalStore(): Unit ={
-<span class="nc" id="L63">    store = new LocalStore(storePath)</span>
-<span class="nc" id="L64">    store.start()</span>
+<span class="fc" id="L63">    store = new LocalStore(storePath)</span>
+<span class="fc" id="L64">    store.start()</span>
   }
   protected def stopLocalStore(): Unit ={
-<span class="nc bnc" id="L67" title="All 2 branches missed.">    if(store != null)</span>
-<span class="nc" id="L68">      store.close()</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">    if(store != null)</span>
+<span class="fc" id="L68">      store.close()</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

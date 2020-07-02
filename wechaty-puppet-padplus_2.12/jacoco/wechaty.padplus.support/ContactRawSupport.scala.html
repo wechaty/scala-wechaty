@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContactRawSupport.scala</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.support</a> &gt; <span class="el_source">ContactRawSupport.scala</span></div><h1>ContactRawSupport.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.support
 
 import java.util
-import java.util.concurrent.TimeUnit
 
-import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
 import com.google.protobuf.ByteString
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource
 import com.google.zxing.common.HybridBinarizer
@@ -22,7 +20,7 @@ import wechaty.puppet.schemas.Event.{EventLoginPayload, EventScanPayload}
 import wechaty.puppet.schemas.Puppet._
 import wechaty.puppet.schemas.{Contact, Puppet}
 
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.Future
 import scala.language.implicitConversions
 import scala.util.Try
 
@@ -31,99 +29,100 @@ import scala.util.Try
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-21
   */
-<span class="nc" id="L34">trait ContactRawSupport {</span>
+<span class="fc" id="L32">trait ContactRawSupport {</span>
   self: PuppetPadplus =&gt;
-  protected lazy val contactPromises: Cache[String, List[Promise[PadplusContactPayload]]] = {
-<span class="nc" id="L37">    Caffeine.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.MINUTES).build().asInstanceOf[Cache[String, List[Promise[PadplusContactPayload]]]]</span>
-  }
 
   /**
     *
     * Contact
     *
     */
-<span class="nc" id="L45">  override def contactAlias(contactId: String): String = ???</span>
+<span class="nc" id="L40">  override def contactAlias(contactId: String): String = ???</span>
 
-<span class="nc" id="L47">  override def contactAlias(contactId: String, alias: String): Unit = ???</span>
+<span class="nc" id="L42">  override def contactAlias(contactId: String, alias: String): Unit = ???</span>
 
-<span class="nc" id="L49">  override def contactAvatar(contactId: String): ResourceBox = ???</span>
+<span class="nc" id="L44">  override def contactAvatar(contactId: String): ResourceBox = ???</span>
 
-<span class="nc" id="L51">  override def contactAvatar(contactId: String, file: ResourceBox): ResourceBox = ???</span>
+<span class="nc" id="L46">  override def contactAvatar(contactId: String, file: ResourceBox): ResourceBox = ???</span>
 
-<span class="nc" id="L53">  override def contactList(): Array[String] = ???</span>
+<span class="nc" id="L48">  override def contactList(): Array[String] = ???</span>
 
   /**
     * contact
     */
   override protected def contactRawPayload(contactId: String): Contact.ContactPayload = {
-<span class="nc" id="L59">    this.getContact(contactId)</span>
+<span class="nc" id="L54">    this.getContact(contactId)</span>
   }
 
   protected def getContact(contactId: String): PadplusContactPayload = {
-<span class="nc" id="L63">    val json = objectMapper.createObjectNode()</span>
-<span class="nc" id="L64">    json.put(&quot;userName&quot;, contactId)</span>
-<span class="nc" id="L65">    syncRequest[GrpcContactPayload](ApiType.GET_CONTACT,Some(json.toString))</span>
+<span class="nc" id="L58">    getPadplusContactPayload(contactId) match{</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">      case Some(padplusContactPayload) =&gt; padplusContactPayload</span>
+      case _ =&gt;
+<span class="nc" id="L61">        val json = objectMapper.createObjectNode()</span>
+<span class="nc" id="L62">        json.put(&quot;userName&quot;, contactId)</span>
+<span class="nc" id="L63">        syncRequest[GrpcContactPayload](ApiType.GET_CONTACT,Some(json.toString))</span>
+    }
   }
 
-<span class="nc bnc" id="L68" title="All 2 branches missed.">  protected def loginPartialFunction(response: StreamResponse): PartialFunction[ResponseType, Unit] = {</span>
-<span class="nc bnc" id="L69" title="All 4 branches missed.">    case ResponseType.QRCODE_SCAN =&gt;</span>
-<span class="nc" id="L70">      onQrcodeScan(response)</span>
-<span class="nc bnc" id="L71" title="All 4 branches missed.">    case ResponseType.LOGIN_QRCODE =&gt;</span>
-<span class="nc" id="L72">      val qrcodeData = objectMapper.readTree(response.getData)</span>
-<span class="nc bnc" id="L73" title="All 2 branches missed.">      logger.debug(&quot;qrcode:&quot;,response.getData)</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">  protected def loginPartialFunction(response: StreamResponse): PartialFunction[ResponseType, Unit] = {</span>
+<span class="nc bnc" id="L68" title="All 4 branches missed.">    case ResponseType.QRCODE_SCAN =&gt;</span>
+<span class="nc" id="L69">      onQrcodeScan(response)</span>
+<span class="nc bnc" id="L70" title="All 4 branches missed.">    case ResponseType.LOGIN_QRCODE =&gt;</span>
+<span class="nc" id="L71">      val qrcodeData = objectMapper.readTree(response.getData)</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">      logger.debug(&quot;qrcode:&quot;,response.getData)</span>
 
-<span class="nc" id="L75">      val base64            = qrcodeData.get(&quot;qrcode&quot;).asText().replaceAll(&quot;\r|\n&quot;, &quot;&quot;)</span>
-<span class="nc" id="L76">      val fileBox           = ResourceBox.fromBase64(s&quot;qrcode${(Math.random() * 10000).intValue()}.png&quot;, base64)</span>
+<span class="nc" id="L74">      val base64            = qrcodeData.get(&quot;qrcode&quot;).asText().replaceAll(&quot;\r|\n&quot;, &quot;&quot;)</span>
+<span class="nc" id="L75">      val fileBox           = ResourceBox.fromBase64(s&quot;qrcode${(Math.random() * 10000).intValue()}.png&quot;, base64)</span>
       //解析二维码的类
-<span class="nc" id="L78">      val multiFormatReader = new MultiFormatReader();</span>
+<span class="nc" id="L77">      val multiFormatReader = new MultiFormatReader();</span>
       //要解析的二维码的图片
-<span class="nc" id="L80">      val bufferedImage     = ImageIO.read(fileBox.toStream);</span>
-<span class="nc" id="L81">      val binaryBitmap      = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(bufferedImage)));</span>
+<span class="nc" id="L79">      val bufferedImage     = ImageIO.read(fileBox.toStream);</span>
+<span class="nc" id="L80">      val binaryBitmap      = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(bufferedImage)));</span>
       //二维码的参数设置
-<span class="nc" id="L83">      val hints             = new util.HashMap[DecodeHintType, String]();</span>
-<span class="nc" id="L84">      hints.put(DecodeHintType.CHARACTER_SET, &quot;utf-8&quot;); //设置二维码的编码</span>
+<span class="nc" id="L82">      val hints             = new util.HashMap[DecodeHintType, String]();</span>
+<span class="nc" id="L83">      hints.put(DecodeHintType.CHARACTER_SET, &quot;utf-8&quot;); //设置二维码的编码</span>
     //得到解析结果,
-<span class="nc" id="L86">    val result  = multiFormatReader.decode(binaryBitmap, hints);</span>
-<span class="nc" id="L87">    val payload = new EventScanPayload</span>
-<span class="nc" id="L88">      payload.qrcode = result.getText</span>
-<span class="nc bnc" id="L89" title="All 2 branches missed.">      logger.debug(&quot;Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n&quot;.format(payload.status, payload.qrcode))</span>
-<span class="nc" id="L90">      emit(PuppetEventName.SCAN, payload)</span>
-<span class="nc bnc" id="L91" title="All 4 branches missed.">    case ResponseType.QRCODE_LOGIN =&gt;</span>
-<span class="nc" id="L92">      val loginData             = objectMapper.readValue(response.getData, classOf[GrpcQrCodeLogin])</span>
-<span class="nc" id="L93">      this.selfId = Some(loginData.userName)</span>
-<span class="nc" id="L94">      this.saveUin(ByteString.copyFromUtf8(loginData.uin))</span>
-<span class="nc" id="L95">      val padplusContactPayload = new PadplusContactPayload</span>
-<span class="nc" id="L96">      padplusContactPayload.alias = loginData.alias</span>
-<span class="nc" id="L97">      padplusContactPayload.bigHeadUrl = loginData.headImgUrl</span>
-<span class="nc" id="L98">      padplusContactPayload.nickName = loginData.nickName</span>
-<span class="nc" id="L99">      padplusContactPayload.sex = ContactGender.Unknown</span>
-<span class="nc" id="L100">      padplusContactPayload.userName = loginData.userName</span>
-<span class="nc" id="L101">      padplusContactPayload.verifyFlag = 0</span>
-<span class="nc" id="L102">      savePadplusContactPayload( padplusContactPayload)</span>
-<span class="nc" id="L103">      val eventLoginPayload = new EventLoginPayload</span>
-<span class="nc" id="L104">      eventLoginPayload.contactId = padplusContactPayload.userName</span>
-<span class="nc" id="L105">      emit(PuppetEventName.LOGIN, eventLoginPayload)</span>
+<span class="nc" id="L85">    val result  = multiFormatReader.decode(binaryBitmap, hints);</span>
+<span class="nc" id="L86">    val payload = new EventScanPayload</span>
+<span class="nc" id="L87">      payload.qrcode = result.getText</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">      logger.debug(&quot;Scan QR Code to login: %s\nhttps://api.qrserver.com/v1/create-qr-code/?data=%s\n&quot;.format(payload.status, payload.qrcode))</span>
+<span class="nc" id="L89">      emit(PuppetEventName.SCAN, payload)</span>
+<span class="nc bnc" id="L90" title="All 4 branches missed.">    case ResponseType.QRCODE_LOGIN =&gt;</span>
+<span class="nc" id="L91">      val loginData             = objectMapper.readValue(response.getData, classOf[GrpcQrCodeLogin])</span>
+<span class="nc" id="L92">      this.selfId = Some(loginData.userName)</span>
+<span class="nc" id="L93">      this.saveUin(ByteString.copyFromUtf8(loginData.uin))</span>
+<span class="nc" id="L94">      val padplusContactPayload = new PadplusContactPayload</span>
+<span class="nc" id="L95">      padplusContactPayload.alias = loginData.alias</span>
+<span class="nc" id="L96">      padplusContactPayload.bigHeadUrl = loginData.headImgUrl</span>
+<span class="nc" id="L97">      padplusContactPayload.nickName = loginData.nickName</span>
+<span class="nc" id="L98">      padplusContactPayload.sex = ContactGender.Unknown</span>
+<span class="nc" id="L99">      padplusContactPayload.userName = loginData.userName</span>
+<span class="nc" id="L100">      padplusContactPayload.verifyFlag = 0</span>
+<span class="nc" id="L101">      savePadplusContactPayload( padplusContactPayload)</span>
+<span class="nc" id="L102">      val eventLoginPayload = new EventLoginPayload</span>
+<span class="nc" id="L103">      eventLoginPayload.contactId = padplusContactPayload.userName</span>
+<span class="nc" id="L104">      emit(PuppetEventName.LOGIN, eventLoginPayload)</span>
 
-<span class="nc" id="L107">      Future {</span>
-<span class="nc" id="L108">        getContact(padplusContactPayload.userName)</span>
+<span class="nc" id="L106">      Future {</span>
+<span class="nc" id="L107">        getContact(padplusContactPayload.userName)</span>
       }
-<span class="nc bnc" id="L110" title="All 4 branches missed.">    case ResponseType.AUTO_LOGIN =&gt;</span>
-<span class="nc bnc" id="L111" title="All 2 branches missed.">      logger.debug(&quot;response data:{}&quot;, response.getData)</span>
-<span class="nc" id="L112">      val autoLoginData = objectMapper.readTree(response.getData)</span>
-<span class="nc bnc" id="L113" title="All 2 branches missed.">      if (autoLoginData.get(&quot;online&quot;).asBoolean()) {</span>
-<span class="nc" id="L114">        val wechatUser = autoLoginData.get(&quot;wechatUser&quot;)</span>
+<span class="nc bnc" id="L109" title="All 4 branches missed.">    case ResponseType.AUTO_LOGIN =&gt;</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">      logger.debug(&quot;response data:{}&quot;, response.getData)</span>
+<span class="nc" id="L111">      val autoLoginData = objectMapper.readTree(response.getData)</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">      if (autoLoginData.get(&quot;online&quot;).asBoolean()) {</span>
+<span class="nc" id="L113">        val wechatUser = autoLoginData.get(&quot;wechatUser&quot;)</span>
 
-<span class="nc bnc" id="L116" title="All 2 branches missed.">        if (wechatUser != null) {</span>
-<span class="nc" id="L117">          val rawContactPayload = new PadplusContactPayload</span>
-<span class="nc bnc" id="L118" title="All 2 branches missed.">          if (wechatUser.has(&quot;alias&quot;))</span>
-<span class="nc" id="L119">            rawContactPayload.alias = wechatUser.get(&quot;alias&quot;).asText(&quot;&quot;)</span>
-<span class="nc" id="L120">          rawContactPayload.bigHeadUrl = wechatUser.get(&quot;headImgUrl&quot;).asText()</span>
-<span class="nc" id="L121">          rawContactPayload.nickName = wechatUser.get(&quot;nickName&quot;).asText()</span>
-<span class="nc" id="L122">          rawContactPayload.sex = ContactGender.Unknown</span>
-<span class="nc" id="L123">          rawContactPayload.userName = wechatUser.get(&quot;userName&quot;).asText()</span>
-<span class="nc" id="L124">          savePadplusContactPayload(rawContactPayload)</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        if (wechatUser != null) {</span>
+<span class="nc" id="L116">          val rawContactPayload = new PadplusContactPayload</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">          if (wechatUser.has(&quot;alias&quot;))</span>
+<span class="nc" id="L118">            rawContactPayload.alias = wechatUser.get(&quot;alias&quot;).asText(&quot;&quot;)</span>
+<span class="nc" id="L119">          rawContactPayload.bigHeadUrl = wechatUser.get(&quot;headImgUrl&quot;).asText()</span>
+<span class="nc" id="L120">          rawContactPayload.nickName = wechatUser.get(&quot;nickName&quot;).asText()</span>
+<span class="nc" id="L121">          rawContactPayload.sex = ContactGender.Unknown</span>
+<span class="nc" id="L122">          rawContactPayload.userName = wechatUser.get(&quot;userName&quot;).asText()</span>
+<span class="nc" id="L123">          savePadplusContactPayload(rawContactPayload)</span>
           // &quot;{\&quot;uin\&quot;:1213374243,\&quot;online\&quot;:true,\&quot;wechatUser\&quot;:{\&quot;headImgUrl\&quot;:\&quot;http://wx.qlogo.cn/mmhead/ver_1/iag5D2R2U9ibgTW2eh7XUbPTHqpEMP2DhSpXSBeQYzEPWgEmLIx5IDibwicGh4fTh4IibkL4hNianoiaTzXmVORnm1O4ZjhxfPosKzkMPSwic8Iicylk/0\&quot;,\&quot;nickName\&quot;:\&quot;\351\230\277\350\224\241\&quot;,\&quot;uin\&quot;:1213374243,\&quot;userName\&quot;:\&quot;wxid_gbk03zsepqny22\&quot;,\&quot;alias\&quot;:\&quot;\&quot;,\&quot;verifyFlag\&quot;:0}}&quot;
-<span class="nc" id="L126">          selfId = Some(rawContactPayload.userName)</span>
+<span class="nc" id="L125">          selfId = Some(rawContactPayload.userName)</span>
         }
 
 //        contactSelfInfo { padplusContact =&gt;
@@ -135,18 +134,18 @@ import scala.util.Try
 //          emit(PuppetEventName.LOGIN, eventLoginPayload)
 //        }
       } else {
-<span class="nc" id="L138">        deleteUin()</span>
-<span class="nc" id="L139">        asyncRequest(ApiType.GET_QRCODE)</span>
+<span class="nc" id="L137">        deleteUin()</span>
+<span class="nc" id="L138">        asyncRequest(ApiType.GET_QRCODE)</span>
       }
-<span class="nc bnc" id="L141" title="All 12 branches missed.">    case ResponseType.CONTACT_LIST | ResponseType.CONTACT_MODIFY =&gt;</span>
-<span class="nc" id="L142">      val data = response.getData</span>
-<span class="nc bnc" id="L143" title="All 2 branches missed.">      if(!isBlank(data)){</span>
-<span class="nc" id="L144">        val root = objectMapper.readTree(data)</span>
-<span class="nc" id="L145">        val userName = root.get(&quot;UserName&quot;).asText()</span>
-<span class="nc bnc" id="L146" title="All 2 branches missed.">        if(isRoomId(userName)){</span>
-<span class="nc" id="L147">          val roomTry=Try {</span>
-<span class="nc" id="L148">            val grpcRoomPayload = objectMapper.readValue(data, classOf[GrpcRoomPayload])</span>
-<span class="nc" id="L149">            val roomPayload     = convertRoomFromGrpc(grpcRoomPayload)</span>
+<span class="nc bnc" id="L140" title="All 12 branches missed.">    case ResponseType.CONTACT_LIST | ResponseType.CONTACT_MODIFY =&gt;</span>
+<span class="nc" id="L141">      val data = response.getData</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">      if(!isBlank(data)){</span>
+<span class="nc" id="L143">        val root = objectMapper.readTree(data)</span>
+<span class="nc" id="L144">        val userName = root.get(&quot;UserName&quot;).asText()</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        if(isRoomId(userName)){</span>
+<span class="nc" id="L146">          val roomTry=Try {</span>
+<span class="nc" id="L147">            val grpcRoomPayload = objectMapper.readValue(data, classOf[GrpcRoomPayload])</span>
+<span class="nc" id="L148">            val roomPayload     = convertRoomFromGrpc(grpcRoomPayload)</span>
             /* //TODO process room members
             const roomMembers = briefRoomMemberParser(roomPayload.members)
             const _roomMembers = await this.cacheManager.getRoomMember(roomPayload.chatroomId)
@@ -158,36 +157,36 @@ import scala.util.Try
             throw new PadplusError(PadplusErrorType.NO_CACHE, `CONTACT_MODIFY`)
           }
            */
-<span class="nc" id="L161">            savePadplusRoomPayload(roomPayload)</span>
+<span class="nc" id="L160">            savePadplusRoomPayload(roomPayload)</span>
 
-<span class="nc" id="L163">            roomPayload</span>
+<span class="nc" id="L162">            roomPayload</span>
           }
-<span class="nc" id="L165">          val roomCallback=roomPromises.getIfPresent(userName)</span>
-<span class="nc bnc" id="L166" title="All 2 branches missed.">          if(roomCallback != null)</span>
-<span class="nc" id="L167">            roomCallback.foreach(_.complete(roomTry))</span>
+          //TODO use Try instance to avoid memory leak
+<span class="nc bnc" id="L165" title="All 2 branches missed.">          if(roomTry.isSuccess)</span>
+<span class="nc" id="L166">            CallbackHelper.resolveRoomCallBack(userName,roomTry.get)</span>
 
         }else{
-<span class="nc" id="L170">          val result:Try[PadplusContactPayload] = Try {</span>
-<span class="nc" id="L171">            val contact               = objectMapper.readValue(data, classOf[GrpcContactPayload])</span>
-<span class="nc" id="L172">            val padplusContactPayload = convertFromGrpcContact(contact)</span>
-<span class="nc" id="L173">            savePadplusContactPayload(padplusContactPayload)</span>
-<span class="nc" id="L174">            padplusContactPayload</span>
+<span class="nc" id="L169">          val result:Try[PadplusContactPayload] = Try {</span>
+<span class="nc" id="L170">            val contact               = objectMapper.readValue(data, classOf[GrpcContactPayload])</span>
+<span class="nc" id="L171">            val padplusContactPayload = convertFromGrpcContact(contact)</span>
+<span class="nc" id="L172">            savePadplusContactPayload(padplusContactPayload)</span>
+<span class="nc" id="L173">            padplusContactPayload</span>
           }
-<span class="nc" id="L176">          val callbacks =contactPromises.getIfPresent(userName)</span>
-<span class="nc bnc" id="L177" title="All 2 branches missed.">          if(callbacks!=null){</span>
-<span class="nc" id="L178">            callbacks.foreach(_.complete(result))</span>
-          }
+
+          //TODO use Try instance to avoid memory leak
+<span class="nc bnc" id="L177" title="All 2 branches missed.">          if(result.isSuccess)</span>
+<span class="nc" id="L178">            CallbackHelper.resolveContactCallBack(userName,result.get)</span>
         }
       }
   }
 
   private def onQrcodeScan(response: StreamResponse): Unit = {
-<span class="nc" id="L185">    val scanRawData = response.getData()</span>
-<span class="nc" id="L186">    val scanData    = objectMapper.readValue(scanRawData, classOf[ScanData])</span>
-<span class="nc" id="L187">    QrcodeStatus(scanData.status.intValue()) match {</span>
-<span class="nc bnc" id="L188" title="All 6 branches missed.">      case QrcodeStatus.Scanned =&gt;</span>
+<span class="nc" id="L184">    val scanRawData = response.getData()</span>
+<span class="nc" id="L185">    val scanData    = objectMapper.readValue(scanRawData, classOf[ScanData])</span>
+<span class="nc" id="L186">    QrcodeStatus(scanData.status.intValue()) match {</span>
+<span class="nc bnc" id="L187" title="All 6 branches missed.">      case QrcodeStatus.Scanned =&gt;</span>
 
-<span class="nc bnc" id="L190" title="All 6 branches missed.">      case QrcodeStatus.Confirmed =&gt;</span>
+<span class="nc bnc" id="L189" title="All 6 branches missed.">      case QrcodeStatus.Confirmed =&gt;</span>
 //        contactSelfInfo { padplusContact =&gt;
 //          selfId = Some(padplusContact.userName)
 //          logger.debug(&quot;contactSelf:{}&quot;, padplusContact)
@@ -196,62 +195,62 @@ import scala.util.Try
 //          eventLoginPayload.contactId = padplusContact.userName
 //          emit(PuppetEventName.LOGIN, eventLoginPayload)
 //        }
-<span class="nc bnc" id="L199" title="All 14 branches missed.">      case QrcodeStatus.Canceled | QrcodeStatus.Expired =&gt;</span>
+<span class="nc bnc" id="L198" title="All 14 branches missed.">      case QrcodeStatus.Canceled | QrcodeStatus.Expired =&gt;</span>
 
     }
   }
 
   implicit def convertFromGrpcContact (contactPayload: GrpcContactPayload): PadplusContactPayload = {
-<span class="nc" id="L205">    val payload = new PadplusContactPayload</span>
-<span class="nc" id="L206">    payload.alias            = contactPayload.Alias</span>
-<span class="nc" id="L207">    payload.bigHeadUrl       = contactPayload.BigHeadImgUrl</span>
-<span class="nc" id="L208">    payload.city             = contactPayload.City</span>
-<span class="nc" id="L209">    payload.contactFlag      = contactPayload.ContactFlag</span>
-<span class="nc bnc" id="L210" title="All 2 branches missed.">    payload.contactType      = if(Puppet.isBlank(contactPayload.ContactType)) 0 else contactPayload.ContactType.toInt</span>
-<span class="nc" id="L211">    payload.country          = &quot;&quot;</span>
-<span class="nc" id="L212">    payload.nickName         = contactPayload.NickName</span>
-<span class="nc" id="L213">    payload.province         = contactPayload.Province</span>
-<span class="nc" id="L214">    payload.remark           = contactPayload.RemarkName</span>
-<span class="nc" id="L215">    payload.sex              = Contact.ContactGender(contactPayload.Sex.intValue())</span>
-<span class="nc" id="L216">    payload.signature        = contactPayload.Signature</span>
-<span class="nc" id="L217">    payload.smallHeadUrl     = contactPayload.SmallHeadImgUrl</span>
-<span class="nc" id="L218">    payload.stranger         = contactPayload.EncryptUsername</span>
-<span class="nc" id="L219">    payload.tagList          = contactPayload.LabelLists</span>
-<span class="nc" id="L220">    payload.ticket           = &quot;&quot;</span>
-<span class="nc" id="L221">    payload.userName         = contactPayload.UserName</span>
-<span class="nc" id="L222">    payload.verifyFlag       = contactPayload.VerifyFlag</span>
+<span class="nc" id="L204">    val payload = new PadplusContactPayload</span>
+<span class="nc" id="L205">    payload.alias            = contactPayload.Alias</span>
+<span class="nc" id="L206">    payload.bigHeadUrl       = contactPayload.BigHeadImgUrl</span>
+<span class="nc" id="L207">    payload.city             = contactPayload.City</span>
+<span class="nc" id="L208">    payload.contactFlag      = contactPayload.ContactFlag</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">    payload.contactType      = if(Puppet.isBlank(contactPayload.ContactType)) 0 else contactPayload.ContactType.toInt</span>
+<span class="nc" id="L210">    payload.country          = &quot;&quot;</span>
+<span class="nc" id="L211">    payload.nickName         = contactPayload.NickName</span>
+<span class="nc" id="L212">    payload.province         = contactPayload.Province</span>
+<span class="nc" id="L213">    payload.remark           = contactPayload.RemarkName</span>
+<span class="nc" id="L214">    payload.sex              = Contact.ContactGender(contactPayload.Sex.intValue())</span>
+<span class="nc" id="L215">    payload.signature        = contactPayload.Signature</span>
+<span class="nc" id="L216">    payload.smallHeadUrl     = contactPayload.SmallHeadImgUrl</span>
+<span class="nc" id="L217">    payload.stranger         = contactPayload.EncryptUsername</span>
+<span class="nc" id="L218">    payload.tagList          = contactPayload.LabelLists</span>
+<span class="nc" id="L219">    payload.ticket           = &quot;&quot;</span>
+<span class="nc" id="L220">    payload.userName         = contactPayload.UserName</span>
+<span class="nc" id="L221">    payload.verifyFlag       = contactPayload.VerifyFlag</span>
 
-<span class="nc" id="L224">    payload</span>
+<span class="nc" id="L223">    payload</span>
   }
   implicit def convertPadplusContactToContactPayload(rawPayload:PadplusContactPayload): ContactPayload ={
-<span class="nc bnc" id="L227" title="All 2 branches missed.">    if (isRoomId(rawPayload.userName)) {</span>
-<span class="nc" id="L228">      throw new Error(&quot;Room Object instead of Contact!&quot;)</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">    if (isRoomId(rawPayload.userName)) {</span>
+<span class="nc" id="L227">      throw new Error(&quot;Room Object instead of Contact!&quot;)</span>
     }
 
-<span class="nc" id="L231">    var contactType = ContactType.Unknown</span>
-<span class="nc bnc" id="L232" title="All 4 branches missed.">    if (isContactOfficialId(rawPayload.userName) || rawPayload.verifyFlag != 0) {</span>
-<span class="nc" id="L233">      contactType = ContactType.Official</span>
+<span class="nc" id="L230">    var contactType = ContactType.Unknown</span>
+<span class="nc bnc" id="L231" title="All 4 branches missed.">    if (isContactOfficialId(rawPayload.userName) || rawPayload.verifyFlag != 0) {</span>
+<span class="nc" id="L232">      contactType = ContactType.Official</span>
     } else {
-<span class="nc" id="L235">      contactType = ContactType.Personal</span>
+<span class="nc" id="L234">      contactType = ContactType.Personal</span>
     }
-<span class="nc" id="L237">    var friend = false</span>
-<span class="nc bnc" id="L238" title="All 6 branches missed.">    if (rawPayload.contactFlag &gt; 0 &amp;&amp; rawPayload.contactFlag != 0 &amp;&amp; rawPayload.verifyFlag == 0) {</span>
-<span class="nc" id="L239">      friend = true</span>
+<span class="nc" id="L236">    var friend = false</span>
+<span class="nc bnc" id="L237" title="All 6 branches missed.">    if (rawPayload.contactFlag &gt; 0 &amp;&amp; rawPayload.contactFlag != 0 &amp;&amp; rawPayload.verifyFlag == 0) {</span>
+<span class="nc" id="L238">      friend = true</span>
     }
-<span class="nc" id="L241">    val payload = new ContactPayload</span>
-<span class="nc" id="L242">      payload.alias     = rawPayload.remark</span>
-<span class="nc" id="L243">      payload.avatar    = rawPayload.bigHeadUrl</span>
-<span class="nc" id="L244">      payload.city      = rawPayload.city</span>
-<span class="nc" id="L245">      payload.friend    = friend</span>
-<span class="nc" id="L246">      payload.gender    = rawPayload.sex</span>
-<span class="nc" id="L247">      payload.id        = rawPayload.userName</span>
-<span class="nc" id="L248">      payload.name      = rawPayload.nickName</span>
-<span class="nc" id="L249">      payload.province  = rawPayload.province</span>
-<span class="nc" id="L250">      payload.signature = (rawPayload.signature).replace(&quot;+&quot;, &quot;&quot;)          // Stay+Foolis</span>
-<span class="nc" id="L251">      payload.`type`      = contactType</span>
-<span class="nc" id="L252">      payload.weixin    = rawPayload.alias</span>
+<span class="nc" id="L240">    val payload = new ContactPayload</span>
+<span class="nc" id="L241">      payload.alias     = rawPayload.remark</span>
+<span class="nc" id="L242">      payload.avatar    = rawPayload.bigHeadUrl</span>
+<span class="nc" id="L243">      payload.city      = rawPayload.city</span>
+<span class="nc" id="L244">      payload.friend    = friend</span>
+<span class="nc" id="L245">      payload.gender    = rawPayload.sex</span>
+<span class="nc" id="L246">      payload.id        = rawPayload.userName</span>
+<span class="nc" id="L247">      payload.name      = rawPayload.nickName</span>
+<span class="nc" id="L248">      payload.province  = rawPayload.province</span>
+<span class="nc" id="L249">      payload.signature = (rawPayload.signature).replace(&quot;+&quot;, &quot;&quot;)          // Stay+Foolis</span>
+<span class="nc" id="L250">      payload.`type`      = contactType</span>
+<span class="nc" id="L251">      payload.weixin    = rawPayload.alias</span>
 
-<span class="nc" id="L254">    payload</span>
+<span class="nc" id="L253">    payload</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

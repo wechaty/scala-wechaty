@@ -119,6 +119,10 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="wechaty.padplus">padplus</a></dd></dl></div>
     </li><li class="current-entities indented3">
                         <span class="separator"></span>
+                        <a class="object" href="CallbackHelper$.html" title=""></a>
+                        <a href="CallbackHelper$.html" title="">CallbackHelper</a>
+                      </li><li class="current-entities indented3">
+                        <span class="separator"></span>
                         <a class="trait" href="ContactRawSupport.html" title=""></a>
                         <a href="ContactRawSupport.html" title="">ContactRawSupport</a>
                       </li><li class="current-entities indented3">
@@ -240,26 +244,7 @@
         <div id="allMembers">
         
 
-        <div id="types" class="types members">
-              <h3>Type Members</h3>
-              <ol><li name="wechaty.padplus.support.GrpcSupport.CallbackType" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="CallbackType=wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse=&gt;Unit"></a><a id="CallbackType:(GrpcSupport.this)#CallbackType"></a>
-      <span class="permalink">
-      <a href="../../../wechaty/padplus/support/GrpcSupport.html#CallbackType=wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse=&gt;Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">type</span>
-      </span>
-      <span class="symbol">
-        <span class="name">CallbackType</span><span class="result alias"> = (<span class="extype" name="wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse">StreamResponse</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      
-      
-    </li></ol>
-            </div>
+        
 
         
 
@@ -343,22 +328,6 @@
       </span>
       <span class="symbol">
         <span class="name">asyncRequest</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="apiType">apiType: <span class="extype" name="wechaty.padplus.grpc.PadPlusServerOuterClass.ApiType">ApiType</span></span>, <span name="data">data: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Any">Any</span>] = <span class="symbol">None</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.reflect.api.TypeTags.TypeTag">scala.reflect.api.JavaUniverse.TypeTag</span>[<span class="extype" name="wechaty.padplus.support.GrpcSupport.asyncRequest.T">T</span>]</span>, <span name="classTag">classTag: <span class="extype" name="scala.reflect.ClassTag">ClassTag</span>[<span class="extype" name="wechaty.padplus.support.GrpcSupport.asyncRequest.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="wechaty.padplus.support.GrpcSupport.asyncRequest.T">T</span>]</span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
-    </li><li name="wechaty.padplus.support.GrpcSupport#callbackPool" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="callbackPool:com.github.benmanes.caffeine.cache.Cache[String,GrpcSupport.this.CallbackType]"></a><a id="callbackPool:Cache[String,(GrpcSupport.this)#CallbackType]"></a>
-      <span class="permalink">
-      <a href="../../../wechaty/padplus/support/GrpcSupport.html#callbackPool:com.github.benmanes.caffeine.cache.Cache[String,GrpcSupport.this.CallbackType]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">lazy val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">callbackPool</span><span class="result">: <span class="extype" name="com.github.benmanes.caffeine.cache.Cache">Cache</span>[<span class="extype" name="scala.Predef.String">String</span>, (<a href="" class="extype" name="wechaty.padplus.support.GrpcSupport">GrpcSupport</a>.this)#<span class="extype" name="wechaty.padplus.support.GrpcSupport.CallbackType">CallbackType</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
@@ -472,6 +441,22 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="wechaty.padplus.support.GrpcSupport#generateTraceId" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="generateTraceId(apiType:wechaty.padplus.grpc.PadPlusServerOuterClass.ApiType):String"></a><a id="generateTraceId(ApiType):String"></a>
+      <span class="permalink">
+      <a href="../../../wechaty/padplus/support/GrpcSupport.html#generateTraceId(apiType:wechaty.padplus.grpc.PadPlusServerOuterClass.ApiType):String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">generateTraceId</span><span class="params">(<span name="apiType">apiType: <span class="extype" name="wechaty.padplus.grpc.PadPlusServerOuterClass.ApiType">ApiType</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">

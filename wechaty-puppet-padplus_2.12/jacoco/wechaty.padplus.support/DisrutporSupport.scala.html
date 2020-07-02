@@ -14,33 +14,33 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName.Type
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-30
   */
-<span class="nc" id="L17">trait DisrutporSupport extends EventEmitter {</span>
+<span class="fc" id="L17">trait DisrutporSupport extends EventEmitter {</span>
   self :LazyLogging =&gt;
-<span class="nc bnc" id="L19" title="All 2 branches missed.">  private class EventDef {</span>
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">  private class EventDef {</span>
 <span class="nc" id="L20">    var eventName: PuppetEventName.Type = _</span>
 <span class="nc" id="L21">    var value    : Any = _</span>
   }
-<span class="nc" id="L23">  private var disruptor:Disruptor[EventDef] = _</span>
-  def startDisruptor(): Unit ={
-<span class="nc" id="L25">    disruptor = new Disruptor[EventDef](</span>
-<span class="nc bnc" id="L26" title="All 2 branches missed.">      new EventFactory[EventDef]() {</span>
+<span class="fc" id="L23">  private var disruptor:Disruptor[EventDef] = _</span>
+  protected def startDisruptor(): Unit ={
+<span class="fc" id="L25">    disruptor = new Disruptor[EventDef](</span>
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">      new EventFactory[EventDef]() {</span>
         @Override
         def newInstance():EventDef= {
-<span class="nc" id="L29">          new EventDef()</span>
+<span class="fc" id="L29">          new EventDef()</span>
         }
       },
-<span class="nc" id="L32">      1 &lt;&lt; 32,</span>
-<span class="nc" id="L33">      Executors.defaultThreadFactory(),</span>
-<span class="nc" id="L34">      ProducerType.SINGLE,</span>
-<span class="nc" id="L35">      new BusySpinWaitStrategy()</span>
+<span class="fc" id="L32">      1 &lt;&lt; 32,</span>
+<span class="fc" id="L33">      Executors.defaultThreadFactory(),</span>
+<span class="fc" id="L34">      ProducerType.SINGLE,</span>
+<span class="fc" id="L35">      new BusySpinWaitStrategy()</span>
     )
-<span class="nc bnc" id="L37" title="All 2 branches missed.">    disruptor.handleEventsWith(new EventHandler[EventDef](){</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">    disruptor.handleEventsWith(new EventHandler[EventDef](){</span>
       override def onEvent(event: EventDef, sequence: Long, endOfBatch: Boolean): Unit = {
 <span class="nc bnc" id="L39" title="All 2 branches missed.">        logger.debug(&quot;emit event using super {}&quot;,event.eventName)</span>
 <span class="nc" id="L40">        DisrutporSupport.super.emit(event.eventName,event.value)</span>
       }
     })
-<span class="nc bnc" id="L43" title="All 2 branches missed.">    disruptor.setDefaultExceptionHandler(new ExceptionHandler[EventDef] {</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">    disruptor.setDefaultExceptionHandler(new ExceptionHandler[EventDef] {</span>
       override def handleEventException(ex: Throwable, sequence: Long, event: EventDef): Unit = {
 <span class="nc bnc" id="L45" title="All 2 branches missed.">        logger.error(ex.getMessage,ex)</span>
       }
@@ -53,7 +53,7 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName.Type
 <span class="nc bnc" id="L53" title="All 2 branches missed.">        logger.error(ex.getMessage,ex)</span>
       }
     })
-<span class="nc" id="L56">    disruptor.start()</span>
+<span class="fc" id="L56">    disruptor.start()</span>
   }
   override def emit[T](eventName: Type, value: T): Unit = {
 <span class="nc bnc" id="L59" title="All 2 branches missed.">    logger.debug(&quot;publish event {}&quot;,eventName)</span>
@@ -63,7 +63,7 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName.Type
     })
   }
   protected def shutdownDisruptor(): Unit ={
-<span class="nc" id="L66">    disruptor.shutdown(5,TimeUnit.SECONDS);</span>
+<span class="fc" id="L66">    disruptor.shutdown(5,TimeUnit.SECONDS);</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

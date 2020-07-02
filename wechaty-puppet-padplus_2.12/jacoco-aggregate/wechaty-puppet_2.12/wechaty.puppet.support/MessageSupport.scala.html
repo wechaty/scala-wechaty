@@ -14,9 +14,9 @@ import wechaty.puppet.{Puppet, ResourceBox}
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-03
   */
-<span class="nc" id="L17">trait MessageSupport {</span>
+<span class="fc" id="L17">trait MessageSupport {</span>
   self: LazyLogging with Puppet =&gt;
-<span class="nc" id="L19">  private[puppet] val cacheMessagePayload = createCache().asInstanceOf[Cache[String, MessagePayload]]</span>
+<span class="fc" id="L19">  private[puppet] val cacheMessagePayload = createCache().asInstanceOf[Cache[String, MessagePayload]]</span>
 
   /**
     * message

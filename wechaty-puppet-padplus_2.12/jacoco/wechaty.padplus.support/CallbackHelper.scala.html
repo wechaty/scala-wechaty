@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CallbackHelper.scala</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.support</a> &gt; <span class="el_source">CallbackHelper.scala</span></div><h1>CallbackHelper.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.support
+
+import java.util.concurrent.TimeUnit
+
+import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
+import wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse
+import wechaty.padplus.schemas.ModelContact.{PadplusContactPayload, PadplusConversation}
+import wechaty.padplus.schemas.ModelRoom.{PadplusRoomMemberMap, PadplusRoomPayload}
+
+/**
+  *
+  * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
+  * @since 2020-07-01
+  */
+<span class="nc" id="L15">object CallbackHelper {</span>
+  private def createPool[T]: Cache[String, T]={
+<span class="nc" id="L17">    Caffeine.newBuilder().maximumSize(1000)</span>
+<span class="nc" id="L18">      .expireAfterWrite(1, TimeUnit.MINUTES)</span>
+      .build()
+      .asInstanceOf[Cache[String, T]]
+  }
+  type TraceRequestCallback = StreamResponse =&gt; Unit
+<span class="nc bnc" id="L23" title="All 4 branches missed.">  lazy val traceCallbacks: Cache[String, TraceRequestCallback] = createPool[TraceRequestCallback]</span>
+
+  type ContactCallback = PadplusConversation =&gt; Unit
+<span class="nc bnc" id="L26" title="All 4 branches missed.">  lazy val contactCallbacks: Cache[String, List[ContactCallback]] = createPool[List[ContactCallback]]</span>
+
+  type ContactAliasCallback = () =&gt;  Unit
+<span class="nc bnc" id="L29" title="All 4 branches missed.">  lazy val contactAliasCallbacks: Cache[String, Map[String, ContactAliasCallback]] = createPool[Map[String,ContactAliasCallback]]</span>
+
+
+  type RoomTopicCallback= ()=&gt;Unit
+<span class="nc bnc" id="L33" title="All 4 branches missed.">  lazy val roomTopicCallbacks: Cache[String, Map[String, RoomTopicCallback]] = createPool[Map[String,RoomTopicCallback]]</span>
+
+  type AcceptFriendCallback= () =&gt;Unit
+<span class="nc bnc" id="L36" title="All 4 branches missed.">  lazy val acceptFriendCallbacks = createPool[List[AcceptFriendCallback]]</span>
+
+  type RoomMemberCallback= PadplusRoomMemberMap =&gt;Unit
+<span class="nc bnc" id="L39" title="All 4 branches missed.">  lazy val roomMemberCallbacks = createPool[List[RoomMemberCallback]]</span>
+
+  def pushCallbackToPool (traceId: String, callback: TraceRequestCallback){
+<span class="nc" id="L42">    traceCallbacks.put(traceId,callback)</span>
+  }
+  def resolveCallBack (traceId: String,response:StreamResponse):Unit={
+<span class="nc" id="L45">    val callback = traceCallbacks.getIfPresent(traceId)</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">    if(callback!=null){</span>
+<span class="nc" id="L47">      callback(response)</span>
+    }
+<span class="nc" id="L49">    traceCallbacks.invalidate(traceId)</span>
+  }
+
+  def removeCallback (traceId: String): Unit = {
+<span class="nc" id="L53">    traceCallbacks.invalidate(traceId)</span>
+  }
+
+  private def pushListCallback[T](cache:Cache[String,List[T]],key:String,callback:T): Unit ={
+<span class="nc" id="L57">      val callbackList = cache.getIfPresent(key)</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">      if(callbackList == null){</span>
+<span class="nc" id="L59">        cache.put(key,List(callback))</span>
+      }else{
+<span class="nc" id="L61">        cache.put(key,callbackList :+ callback)</span>
+      }
+  }
+
+  def pushContactCallback ( contactId: String, callback: ContactCallback) {
+<span class="nc" id="L66">    pushListCallback(contactCallbacks,contactId,callback)</span>
+  }
+
+  def resolveContactCallBack (contactId: String, data: PadplusContactPayload) {
+<span class="nc" id="L70">    val callbackList = contactCallbacks.getIfPresent(contactId)</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">    if(callbackList != null){</span>
+<span class="nc" id="L72">      callbackList.foreach(f=&gt;f(data))</span>
+    }
+
+<span class="nc" id="L75">    this.resolveContactAliasCallback(contactId, data.remark)</span>
+<span class="nc" id="L76">    this.resolveAcceptFriendCallback(contactId)</span>
+<span class="nc" id="L77">    contactCallbacks.invalidate(contactId)</span>
+  }
+
+  def resolveRoomCallBack (roomId: String, data: PadplusRoomPayload) {
+<span class="nc" id="L81">    val callbackList = contactCallbacks.getIfPresent(roomId)</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">    if(callbackList != null){</span>
+<span class="nc" id="L83">      callbackList.foreach(f=&gt;f(data))</span>
+    }
+<span class="nc" id="L85">    this.resolveRoomTopicCallback(data.chatroomId, data.nickName)</span>
+<span class="nc" id="L86">    contactCallbacks.invalidate(roomId)</span>
+  }
+
+  private def pushMapCallback[T](cache:Cache[String,Map[String,T]],key:String,mapKey:String,callback:T): Unit ={
+<span class="nc" id="L90">    val callbacks = cache.getIfPresent(key)</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">    if(callbacks == null){</span>
+<span class="nc" id="L92">      cache.put(key,Map(mapKey-&gt;callback))</span>
+    }else{
+<span class="nc" id="L94">      cache.put(key,callbacks + (mapKey-&gt;callback))</span>
+    }
+  }
+  def pushContactAliasCallback (contactId: String, alias: String, callback:ContactAliasCallback): Unit = {
+<span class="nc" id="L98">    pushMapCallback(contactAliasCallbacks,contactId,alias,callback)</span>
+  }
+  private def resolveMapCallback(cache:Cache[String,Map[String,()=&gt;Unit]],key: String, mapKey: String) {
+<span class="nc" id="L101">    val callbacks = cache.getIfPresent(key)</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">    if(callbacks != null){</span>
+<span class="nc" id="L103">      val callbackOpt = callbacks.get(mapKey)</span>
+<span class="nc" id="L104">      callbackOpt.foreach{f=&gt;</span>
+<span class="nc" id="L105">        f()</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">        if(callbacks.size == 1)</span>
+<span class="nc" id="L107">          cache.invalidate(key)</span>
+        else
+<span class="nc bnc" id="L109" title="All 8 branches missed.">          cache.put(key,callbacks.filterNot{case (key,_) =&gt; key == mapKey})</span>
+      }
+    }
+  }
+  private def resolveContactAliasCallback (contactId: String, alias: String) {
+<span class="nc" id="L114">    resolveMapCallback(contactAliasCallbacks,contactId,alias)</span>
+  }
+
+  def pushRoomTopicCallback (roomId: String, topic: String, callback: RoomTopicCallback) {
+<span class="nc" id="L118">    pushMapCallback(roomTopicCallbacks,roomId,topic,callback)</span>
+  }
+
+  private def resolveRoomTopicCallback (roomId: String, topic: String) {
+<span class="nc" id="L122">    resolveMapCallback(roomTopicCallbacks,roomId,topic)</span>
+  }
+
+  def pushAcceptFriendCallback (contactId: String, callback: AcceptFriendCallback) {
+<span class="nc" id="L126">    pushListCallback(acceptFriendCallbacks,contactId,callback)</span>
+  }
+
+  private def resolveAcceptFriendCallback (contactId: String) {
+<span class="nc" id="L130">    val callbacks = acceptFriendCallbacks.getIfPresent(contactId)</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">    if(callbacks != null){</span>
+<span class="nc" id="L132">      callbacks.foreach(cb=&gt;cb())</span>
+<span class="nc" id="L133">      acceptFriendCallbacks.invalidate(contactId)</span>
+    }
+  }
+
+  def pushRoomMemberCallback (roomId: String, callback: RoomMemberCallback): Unit ={
+<span class="nc" id="L138">    pushListCallback(roomMemberCallbacks,roomId,callback)</span>
+  }
+
+  def resolveRoomMemberCallback (roomId: String, memberList: PadplusRoomMemberMap) {
+<span class="nc" id="L142">    val callbacks = roomMemberCallbacks.getIfPresent(roomId)</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">    if(callbacks != null){</span>
+<span class="nc" id="L144">      callbacks.foreach(cb=&gt;cb(memberList))</span>
+<span class="nc" id="L145">      roomMemberCallbacks.invalidate(roomId)</span>
+    }
+  }
+<span class="nc" id="L148">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

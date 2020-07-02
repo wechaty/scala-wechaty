@@ -9,9 +9,9 @@ import wechaty.puppet.schemas.RoomInvitation.RoomInvitationPayload
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-06
   */
-<span class="nc" id="L12">trait RoomInvitationSupport {</span>
+<span class="fc" id="L12">trait RoomInvitationSupport {</span>
   self:Puppet =&gt;
-<span class="nc" id="L14">  private[puppet] val cacheRoomInvitationPayload = createCache().asInstanceOf[Cache[String, RoomInvitationPayload]]</span>
+<span class="fc" id="L14">  private[puppet] val cacheRoomInvitationPayload = createCache().asInstanceOf[Cache[String, RoomInvitationPayload]]</span>
 
   def roomInvitationAccept(roomInvitationId: String): Unit
 

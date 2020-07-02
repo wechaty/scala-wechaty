@@ -38,24 +38,24 @@ public final class PadPlusServerGrpc {
   public static io.grpc.MethodDescriptor&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject,
       wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject&gt; getRequestMethod() {
     io.grpc.MethodDescriptor&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject, wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject&gt; getRequestMethod;
-<span class="nc bnc" id="L41" title="All 2 branches missed.">    if ((getRequestMethod = PadPlusServerGrpc.getRequestMethod) == null) {</span>
-<span class="nc" id="L42">      synchronized (PadPlusServerGrpc.class) {</span>
-<span class="nc bnc" id="L43" title="All 2 branches missed.">        if ((getRequestMethod = PadPlusServerGrpc.getRequestMethod) == null) {</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">    if ((getRequestMethod = PadPlusServerGrpc.getRequestMethod) == null) {</span>
+<span class="fc" id="L42">      synchronized (PadPlusServerGrpc.class) {</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if ((getRequestMethod = PadPlusServerGrpc.getRequestMethod) == null) {</span>
           PadPlusServerGrpc.getRequestMethod = getRequestMethod =
-<span class="nc" id="L45">              io.grpc.MethodDescriptor.&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject, wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject&gt;newBuilder()</span>
-<span class="nc" id="L46">              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)</span>
-<span class="nc" id="L47">              .setFullMethodName(generateFullMethodName(SERVICE_NAME, &quot;Request&quot;))</span>
-<span class="nc" id="L48">              .setSampledToLocalTracing(true)</span>
-<span class="nc" id="L49">              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(</span>
-<span class="nc" id="L50">                  wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject.getDefaultInstance()))</span>
-<span class="nc" id="L51">              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(</span>
-<span class="nc" id="L52">                  wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject.getDefaultInstance()))</span>
-<span class="nc" id="L53">              .setSchemaDescriptor(new PadPlusServerMethodDescriptorSupplier(&quot;Request&quot;))</span>
-<span class="nc" id="L54">              .build();</span>
+<span class="fc" id="L45">              io.grpc.MethodDescriptor.&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject, wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject&gt;newBuilder()</span>
+<span class="fc" id="L46">              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)</span>
+<span class="fc" id="L47">              .setFullMethodName(generateFullMethodName(SERVICE_NAME, &quot;Request&quot;))</span>
+<span class="fc" id="L48">              .setSampledToLocalTracing(true)</span>
+<span class="fc" id="L49">              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(</span>
+<span class="fc" id="L50">                  wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject.getDefaultInstance()))</span>
+<span class="fc" id="L51">              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(</span>
+<span class="fc" id="L52">                  wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject.getDefaultInstance()))</span>
+<span class="fc" id="L53">              .setSchemaDescriptor(new PadPlusServerMethodDescriptorSupplier(&quot;Request&quot;))</span>
+<span class="fc" id="L54">              .build();</span>
         }
-<span class="nc" id="L56">      }</span>
+<span class="fc" id="L56">      }</span>
     }
-<span class="nc" id="L58">    return getRequestMethod;</span>
+<span class="fc" id="L58">    return getRequestMethod;</span>
   }
 
   private static volatile io.grpc.MethodDescriptor&lt;wechaty.padplus.grpc.PadPlusServerOuterClass.InitConfig,
@@ -108,14 +108,14 @@ public final class PadPlusServerGrpc {
    */
   public static PadPlusServerBlockingStub newBlockingStub(
       io.grpc.Channel channel) {
-<span class="nc" id="L111">    io.grpc.stub.AbstractStub.StubFactory&lt;PadPlusServerBlockingStub&gt; factory =</span>
-<span class="nc" id="L112">      new io.grpc.stub.AbstractStub.StubFactory&lt;PadPlusServerBlockingStub&gt;() {</span>
+<span class="fc" id="L111">    io.grpc.stub.AbstractStub.StubFactory&lt;PadPlusServerBlockingStub&gt; factory =</span>
+<span class="fc" id="L112">      new io.grpc.stub.AbstractStub.StubFactory&lt;PadPlusServerBlockingStub&gt;() {</span>
         @java.lang.Override
         public PadPlusServerBlockingStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
-<span class="nc" id="L115">          return new PadPlusServerBlockingStub(channel, callOptions);</span>
+<span class="fc" id="L115">          return new PadPlusServerBlockingStub(channel, callOptions);</span>
         }
       };
-<span class="nc" id="L118">    return PadPlusServerBlockingStub.newStub(factory, channel);</span>
+<span class="fc" id="L118">    return PadPlusServerBlockingStub.newStub(factory, channel);</span>
   }
 
   /**
@@ -207,8 +207,8 @@ public final class PadPlusServerGrpc {
   public static final class PadPlusServerBlockingStub extends io.grpc.stub.AbstractBlockingStub&lt;PadPlusServerBlockingStub&gt; {
     private PadPlusServerBlockingStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
-<span class="nc" id="L210">      super(channel, callOptions);</span>
-<span class="nc" id="L211">    }</span>
+<span class="fc" id="L210">      super(channel, callOptions);</span>
+<span class="fc" id="L211">    }</span>
 
     @java.lang.Override
     protected PadPlusServerBlockingStub build(
@@ -301,7 +301,7 @@ public final class PadPlusServerGrpc {
 
   private static abstract class PadPlusServerBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
-<span class="nc" id="L304">    PadPlusServerBaseDescriptorSupplier() {}</span>
+<span class="fc" id="L304">    PadPlusServerBaseDescriptorSupplier() {}</span>
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
@@ -324,9 +324,9 @@ public final class PadPlusServerGrpc {
       implements io.grpc.protobuf.ProtoMethodDescriptorSupplier {
     private final String methodName;
 
-<span class="nc" id="L327">    PadPlusServerMethodDescriptorSupplier(String methodName) {</span>
-<span class="nc" id="L328">      this.methodName = methodName;</span>
-<span class="nc" id="L329">    }</span>
+<span class="fc" id="L327">    PadPlusServerMethodDescriptorSupplier(String methodName) {</span>
+<span class="fc" id="L328">      this.methodName = methodName;</span>
+<span class="fc" id="L329">    }</span>
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.MethodDescriptor getMethodDescriptor() {

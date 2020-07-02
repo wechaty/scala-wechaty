@@ -9,9 +9,9 @@ import wechaty.puppet.schemas.Friendship.FriendshipPayload
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-06
   */
-<span class="nc" id="L12">trait FriendshipSupport {</span>
+<span class="fc" id="L12">trait FriendshipSupport {</span>
   self : Puppet =&gt;
-<span class="nc" id="L14">  private[puppet] val cacheFriendshipPayload = createCache().asInstanceOf[Cache[String, FriendshipPayload]]</span>
+<span class="fc" id="L14">  private[puppet] val cacheFriendshipPayload = createCache().asInstanceOf[Cache[String, FriendshipPayload]]</span>
 
   /**
     *

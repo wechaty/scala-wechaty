@@ -8,9 +8,9 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-02
   */
-<span class="nc" id="L11">trait EventEmitter {</span>
+<span class="fc" id="L11">trait EventEmitter {</span>
   type Listener[T] = T =&gt; Unit
-<span class="nc" id="L13">  private var listeners: Map[PuppetEventName.Type, List[(Listener[_],Boolean)]] = Map()</span>
+<span class="fc" id="L13">  private var listeners: Map[PuppetEventName.Type, List[(Listener[_],Boolean)]] = Map()</span>
 
   def emit[T](event: PuppetEventName.Type, data: T):Unit={
 <span class="nc" id="L16">    val eventListenerOpts = listeners.get(event)</span>

@@ -66,12 +66,12 @@ import wechaty.hostie.PuppetHostie
   }
 
   protected def reconnectStream() {
-<span class="nc bnc" id="L69" title="All 2 branches missed.">    logger.info(&quot;reconnect stream stream...&quot;)</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">    logger.info(&quot;reconnect stream stream...&quot;)</span>
     try {
-<span class="nc" id="L71">      stopGrpc()</span>
+<span class="pc" id="L71">      stopGrpc()</span>
     } catch {
       case e: Throwable =&gt;
-<span class="nc bnc" id="L74" title="All 2 branches missed.">        logger.warn(&quot;fail to stop grpc {}&quot;, e.getMessage)</span>
+<span class="pc bnc" id="L74" title="All 2 branches missed.">        logger.warn(&quot;fail to stop grpc {}&quot;, e.getMessage)</span>
     }
 <span class="nc" id="L76">    internalStartGrpc()</span>
 <span class="nc bnc" id="L77" title="All 2 branches missed.">    logger.info(&quot;reconnect stream stream done&quot;)</span>

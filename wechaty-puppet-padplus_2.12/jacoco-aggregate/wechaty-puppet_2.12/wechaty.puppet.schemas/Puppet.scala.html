@@ -13,12 +13,12 @@ import io.grpc.ManagedChannel
   * @since 2020-06-01
   */
 <span class="fc" id="L15">object Puppet {</span>
-<span class="nc" id="L16">  class PuppetOptions {</span>
-<span class="nc" id="L17">    var endPoint: Option[String] = None</span>
-<span class="nc" id="L18">    var timeout: Option[Long] = None</span>
-<span class="nc" id="L19">    var token: Option[String] = None</span>
-<span class="nc" id="L20">    var channelOpt:Option[ManagedChannel] = None</span>
-<span class="nc" id="L21">    var puppetOptionKey: Option[String] = None</span>
+<span class="fc" id="L16">  class PuppetOptions {</span>
+<span class="fc" id="L17">    var endPoint: Option[String] = None</span>
+<span class="pc" id="L18">    var timeout: Option[Long] = None</span>
+<span class="pc" id="L19">    var token: Option[String] = None</span>
+<span class="fc" id="L20">    var channelOpt:Option[ManagedChannel] = None</span>
+<span class="pc" id="L21">    var puppetOptionKey: Option[String] = None</span>
   }
 <span class="pc bpc" id="L23" title="2 of 4 branches missed.">  lazy val objectMapper = {</span>
 <span class="fc" id="L24">    val om = new ObjectMapper()</span>

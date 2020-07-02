@@ -1,65 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>RoomRawSupport.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">wechaty_2.12</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-padplus_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.padplus.support</a> &gt; <span class="el_source">RoomRawSupport.scala</span></div><h1>RoomRawSupport.scala</h1><pre class="source lang-java linenums">package wechaty.padplus.support
 
-import java.util.concurrent.TimeUnit
-
-import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
 import wechaty.padplus.schemas.ModelRoom.{GrpcRoomPayload, PadplusMemberBrief, PadplusRoomPayload}
 import wechaty.puppet.ResourceBox
 import wechaty.puppet.schemas.{Puppet, Room}
 import wechaty.puppet.support.RoomSupport
-
-import scala.concurrent.Promise
 
 /**
   *
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-22
   */
-<span class="nc" id="L18">trait RoomRawSupport {</span>
+<span class="fc" id="L13">trait RoomRawSupport {</span>
   self:RoomSupport =&gt;
-  protected lazy val roomPromises: Cache[String, List[Promise[PadplusRoomPayload]]] = {
-<span class="nc" id="L21">    Caffeine.newBuilder().maximumSize(1000).expireAfterWrite(1, TimeUnit.MINUTES).build()</span>
-      .asInstanceOf[Cache[String, List[Promise[PadplusRoomPayload]]]]
-  }
 
-<span class="nc" id="L25">  override def roomAdd(roomId: String, contactId: String): Unit = ???</span>
+<span class="nc" id="L16">  override def roomAdd(roomId: String, contactId: String): Unit = ???</span>
 
-<span class="nc" id="L27">  override def roomAvatar(roomId: String): ResourceBox = ???</span>
+<span class="nc" id="L18">  override def roomAvatar(roomId: String): ResourceBox = ???</span>
 
-<span class="nc" id="L29">  override def roomCreate(contactIdList: Array[String], topic: String): String = ???</span>
+<span class="nc" id="L20">  override def roomCreate(contactIdList: Array[String], topic: String): String = ???</span>
 
-<span class="nc" id="L31">  override def roomDel(roomId: String, contactId: String): Unit = ???</span>
+<span class="nc" id="L22">  override def roomDel(roomId: String, contactId: String): Unit = ???</span>
 
-<span class="nc" id="L33">  override def roomList(): Array[String] = ???</span>
+<span class="nc" id="L24">  override def roomList(): Array[String] = ???</span>
 
-<span class="nc" id="L35">  override def roomQRCode(roomId: String): String = ???</span>
+<span class="nc" id="L26">  override def roomQRCode(roomId: String): String = ???</span>
 
-<span class="nc" id="L37">  override def roomQuit(roomId: String): Unit = ???</span>
+<span class="nc" id="L28">  override def roomQuit(roomId: String): Unit = ???</span>
 
-<span class="nc" id="L39">  override def roomTopic(roomId: String): String = ???</span>
+<span class="nc" id="L30">  override def roomTopic(roomId: String): String = ???</span>
 
-<span class="nc" id="L41">  override def roomTopic(roomId: String, topic: String): Unit = ???</span>
+<span class="nc" id="L32">  override def roomTopic(roomId: String, topic: String): Unit = ???</span>
 
-<span class="nc" id="L43">  override protected def roomRawPayload(roomId: String): Room.RoomPayload = ???</span>
+<span class="nc" id="L34">  override protected def roomRawPayload(roomId: String): Room.RoomPayload = ???</span>
 
   def convertRoomFromGrpc(room: GrpcRoomPayload): PadplusRoomPayload = {
-<span class="nc" id="L46">    val members=Puppet.objectMapper.readValue(room.ExtInfo,classOf[Array[PadplusMemberBrief]])</span>
-<span class="nc" id="L47">    val roomPayload = new PadplusRoomPayload</span>
-<span class="nc" id="L48">    roomPayload.alias          = room.Alias</span>
-<span class="nc" id="L49">    roomPayload.bigHeadUrl     = room.BigHeadImgUrl</span>
-<span class="nc" id="L50">    roomPayload.chatRoomOwner  = room.ChatRoomOwner</span>
-<span class="nc" id="L51">    roomPayload.chatroomId     = room.UserName</span>
-<span class="nc" id="L52">    roomPayload.chatroomVersion= room.ChatroomVersion</span>
-<span class="nc" id="L53">    roomPayload.contactType    = room.ContactType</span>
-<span class="nc" id="L54">    roomPayload.memberCount    = members.length</span>
-<span class="nc" id="L55">    roomPayload.members        = members</span>
-<span class="nc" id="L56">    roomPayload.nickName       = room.NickName</span>
-<span class="nc" id="L57">    roomPayload.smallHeadUrl   = room.SmallHeadImgUrl</span>
-<span class="nc" id="L58">    roomPayload.stranger       = room.EncryptUsername</span>
-<span class="nc" id="L59">    roomPayload.tagList        = room.LabelLists</span>
-<span class="nc" id="L60">    roomPayload.ticket         = room.Ticket</span>
+<span class="nc" id="L37">    val members=Puppet.objectMapper.readValue(room.ExtInfo,classOf[Array[PadplusMemberBrief]])</span>
+<span class="nc" id="L38">    val roomPayload = new PadplusRoomPayload</span>
+<span class="nc" id="L39">    roomPayload.alias          = room.Alias</span>
+<span class="nc" id="L40">    roomPayload.bigHeadUrl     = room.BigHeadImgUrl</span>
+<span class="nc" id="L41">    roomPayload.chatRoomOwner  = room.ChatRoomOwner</span>
+<span class="nc" id="L42">    roomPayload.chatroomId     = room.UserName</span>
+<span class="nc" id="L43">    roomPayload.chatroomVersion= room.ChatroomVersion</span>
+<span class="nc" id="L44">    roomPayload.contactType    = room.ContactType</span>
+<span class="nc" id="L45">    roomPayload.memberCount    = members.length</span>
+<span class="nc" id="L46">    roomPayload.members        = members</span>
+<span class="nc" id="L47">    roomPayload.nickName       = room.NickName</span>
+<span class="nc" id="L48">    roomPayload.smallHeadUrl   = room.SmallHeadImgUrl</span>
+<span class="nc" id="L49">    roomPayload.stranger       = room.EncryptUsername</span>
+<span class="nc" id="L50">    roomPayload.tagList        = room.LabelLists</span>
+<span class="nc" id="L51">    roomPayload.ticket         = room.Ticket</span>
 
-<span class="nc" id="L62">    roomPayload</span>
+<span class="nc" id="L53">    roomPayload</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

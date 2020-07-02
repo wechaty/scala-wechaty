@@ -4,128 +4,129 @@ import wechaty.puppet.schemas.Contact.ContactGender
 
 <span class="nc" id="L5">object ModelContact {</span>
 
-<span class="nc" id="L7">class PadplusContactPayload {</span>
-<span class="nc" id="L8">  var alias:String = _</span>
-<span class="nc" id="L9">  var contactType:Number = _</span>
-<span class="nc" id="L10">  var tagList:String = _</span>
-<span class="nc" id="L11">  var bigHeadUrl:String = _ //                      // &quot;http://wx.qlogo.cn/mmhead/ver_1/xfCMmibHH74xGLoyeDFJadrZXX3eOEznPefiaCa3iczxZGMwPtDuSbRQKx3Xdm18un303mf0NFia3USY2nO2VEYILw/0&quot;,</span>
-<span class="nc" id="L12">  var city:String = _ //                      // 'Haidian'</span>
-<span class="nc" id="L13">  var country:String = _ //                      // &quot;CN&quot;</span>
-<span class="nc" id="L14">  var nickName:String = _ //                      // &quot;梦君君&quot;, Contact: 用户昵称， Room: 群昵称</span>
-<span class="nc" id="L15">  var province:String = _ //                      // &quot;Beijing&quot;,</span>
-<span class="nc" id="L16">  var remark:String = _ //                      // &quot;女儿&quot;,</span>
-<span class="nc" id="L17">  var sex:ContactGender.Type = _</span>
-<span class="nc" id="L18">  var signature:String = _ //                      // &quot;且行且珍惜&quot;,</span>
-<span class="nc" id="L19">  var smallHeadUrl:String = _</span>
-<span class="nc" id="L20">  var stranger:String = _ //                      // 用户v1码，从未加过好友则为空 &quot;v1_0468f2cd3f0efe7ca2589d57c3f9ba952a3789e41b6e78ee00ed53d1e6096b88@stranger&quot;</span>
-<span class="nc" id="L21">  var ticket:String = _ //                      // 用户v2码，如果非空则为单向好友(非对方好友) 'v2_xxx@stranger'</span>
-<span class="nc" id="L22">  var userName:String = _ //                      // &quot;mengjunjun001&quot; | &quot;qq512436430&quot; Unique name</span>
-<span class="nc" id="L23">  var verifyFlag:Int = _</span>
-<span class="nc" id="L24">  var contactFlag:Int= _</span>
+  trait PadplusConversation
+<span class="nc" id="L8">class PadplusContactPayload extends PadplusConversation{</span>
+<span class="nc" id="L9">  var alias:String = _</span>
+<span class="nc" id="L10">  var contactType:Number = _</span>
+<span class="nc" id="L11">  var tagList:String = _</span>
+<span class="nc" id="L12">  var bigHeadUrl:String = _ //                      // &quot;http://wx.qlogo.cn/mmhead/ver_1/xfCMmibHH74xGLoyeDFJadrZXX3eOEznPefiaCa3iczxZGMwPtDuSbRQKx3Xdm18un303mf0NFia3USY2nO2VEYILw/0&quot;,</span>
+<span class="nc" id="L13">  var city:String = _ //                      // 'Haidian'</span>
+<span class="nc" id="L14">  var country:String = _ //                      // &quot;CN&quot;</span>
+<span class="nc" id="L15">  var nickName:String = _ //                      // &quot;梦君君&quot;, Contact: 用户昵称， Room: 群昵称</span>
+<span class="nc" id="L16">  var province:String = _ //                      // &quot;Beijing&quot;,</span>
+<span class="nc" id="L17">  var remark:String = _ //                      // &quot;女儿&quot;,</span>
+<span class="nc" id="L18">  var sex:ContactGender.Type = _</span>
+<span class="nc" id="L19">  var signature:String = _ //                      // &quot;且行且珍惜&quot;,</span>
+<span class="nc" id="L20">  var smallHeadUrl:String = _</span>
+<span class="nc" id="L21">  var stranger:String = _ //                      // 用户v1码，从未加过好友则为空 &quot;v1_0468f2cd3f0efe7ca2589d57c3f9ba952a3789e41b6e78ee00ed53d1e6096b88@stranger&quot;</span>
+<span class="nc" id="L22">  var ticket:String = _ //                      // 用户v2码，如果非空则为单向好友(非对方好友) 'v2_xxx@stranger'</span>
+<span class="nc" id="L23">  var userName:String = _ //                      // &quot;mengjunjun001&quot; | &quot;qq512436430&quot; Unique name</span>
+<span class="nc" id="L24">  var verifyFlag:Int = _</span>
+<span class="nc" id="L25">  var contactFlag:Int= _</span>
 }
 
-<span class="nc" id="L27">class GrpcContactPayload {</span>
-<span class="nc" id="L28">  var Alias:String = _</span>
-<span class="nc" id="L29">  var BigHeadImgUrl:String = _</span>
-<span class="nc" id="L30">  var ChatRoomOwner:String = _</span>
-<span class="nc" id="L31">  var ChatroomVersion:Int= _</span>
-<span class="nc" id="L32">  var City:String = _</span>
-<span class="nc" id="L33">  var ContactFlag:Int= _</span>
-<span class="nc" id="L34">  var ContactType:String = _</span>
-<span class="nc" id="L35">  var EncryptUsername:String = _</span>
-<span class="nc" id="L36">  var ExtInfo:String = _</span>
-<span class="nc" id="L37">  var ExtInfoExt:String = _</span>
-<span class="nc" id="L38">  var HeadImgUrl:String = _</span>
-<span class="nc" id="L39">  var LabelLists:String = _</span>
-<span class="nc" id="L40">  var MsgType:Int= _</span>
-<span class="nc" id="L41">  var NickName:String = _</span>
-<span class="nc" id="L42">  var Province:String = _</span>
-<span class="nc" id="L43">  var PYInitial:String = _</span>
-<span class="nc" id="L44">  var PYQuanPin:String = _</span>
-<span class="nc" id="L45">  var Remark:String = _</span>
-<span class="nc" id="L46">  var RemarkName:String = _</span>
-<span class="nc" id="L47">  var RemarkPYInitial:String = _</span>
-<span class="nc" id="L48">  var RemarkPYQuanPin:String = _</span>
-<span class="nc" id="L49">  var Seq:String = _</span>
-<span class="nc" id="L50">  var Sex:Int= _</span>
-<span class="nc" id="L51">  var Signature:String = _</span>
-<span class="nc" id="L52">  var SmallHeadImgUrl:String = _</span>
-<span class="nc" id="L53">  var Type7:String = _</span>
-<span class="nc" id="L54">  var Uin:Int= _</span>
-<span class="nc" id="L55">  var UserName:String = _</span>
-<span class="nc" id="L56">  var VerifyFlag:Int= _</span>
-<span class="nc" id="L57">  var wechatUserName:String = _</span>
+<span class="nc" id="L28">class GrpcContactPayload {</span>
+<span class="nc" id="L29">  var Alias:String = _</span>
+<span class="nc" id="L30">  var BigHeadImgUrl:String = _</span>
+<span class="nc" id="L31">  var ChatRoomOwner:String = _</span>
+<span class="nc" id="L32">  var ChatroomVersion:Int= _</span>
+<span class="nc" id="L33">  var City:String = _</span>
+<span class="nc" id="L34">  var ContactFlag:Int= _</span>
+<span class="nc" id="L35">  var ContactType:String = _</span>
+<span class="nc" id="L36">  var EncryptUsername:String = _</span>
+<span class="nc" id="L37">  var ExtInfo:String = _</span>
+<span class="nc" id="L38">  var ExtInfoExt:String = _</span>
+<span class="nc" id="L39">  var HeadImgUrl:String = _</span>
+<span class="nc" id="L40">  var LabelLists:String = _</span>
+<span class="nc" id="L41">  var MsgType:Int= _</span>
+<span class="nc" id="L42">  var NickName:String = _</span>
+<span class="nc" id="L43">  var Province:String = _</span>
+<span class="nc" id="L44">  var PYInitial:String = _</span>
+<span class="nc" id="L45">  var PYQuanPin:String = _</span>
+<span class="nc" id="L46">  var Remark:String = _</span>
+<span class="nc" id="L47">  var RemarkName:String = _</span>
+<span class="nc" id="L48">  var RemarkPYInitial:String = _</span>
+<span class="nc" id="L49">  var RemarkPYQuanPin:String = _</span>
+<span class="nc" id="L50">  var Seq:String = _</span>
+<span class="nc" id="L51">  var Sex:Int= _</span>
+<span class="nc" id="L52">  var Signature:String = _</span>
+<span class="nc" id="L53">  var SmallHeadImgUrl:String = _</span>
+<span class="nc" id="L54">  var Type7:String = _</span>
+<span class="nc" id="L55">  var Uin:Int= _</span>
+<span class="nc" id="L56">  var UserName:String = _</span>
+<span class="nc" id="L57">  var VerifyFlag:Int= _</span>
+<span class="nc" id="L58">  var wechatUserName:String = _</span>
 }
 
-<span class="nc" id="L60">class GrpcSearchContact {</span>
-<span class="nc" id="L61">  var avatar:String = _</span>
-<span class="nc" id="L62">  var v1:String = _</span>
-<span class="nc" id="L63">  var v2:String = _</span>
-<span class="nc" id="L64">  var searchId:String = _</span>
-<span class="nc" id="L65">  var nickName:String = _</span>
-<span class="nc" id="L66">  var wxid:String = _</span>
-<span class="nc" id="L67">  var message:String = _</span>
-<span class="nc" id="L68">  var status:String = _</span>
+<span class="nc" id="L61">class GrpcSearchContact {</span>
+<span class="nc" id="L62">  var avatar:String = _</span>
+<span class="nc" id="L63">  var v1:String = _</span>
+<span class="nc" id="L64">  var v2:String = _</span>
+<span class="nc" id="L65">  var searchId:String = _</span>
+<span class="nc" id="L66">  var nickName:String = _</span>
+<span class="nc" id="L67">  var wxid:String = _</span>
+<span class="nc" id="L68">  var message:String = _</span>
+<span class="nc" id="L69">  var status:String = _</span>
 }
 
-<span class="nc" id="L71">class GrpcDeleteContact {</span>
-<span class="nc" id="L72">  var field:String = _</span>
-<span class="nc" id="L73">  var loginer:String = _</span>
-<span class="nc" id="L74">  var mqType:Number = _</span>
-<span class="nc" id="L75">  var source:String = _</span>
-<span class="nc" id="L76">  var uin:String = _</span>
-<span class="nc" id="L77">  var userName:String = _</span>
+<span class="nc" id="L72">class GrpcDeleteContact {</span>
+<span class="nc" id="L73">  var field:String = _</span>
+<span class="nc" id="L74">  var loginer:String = _</span>
+<span class="nc" id="L75">  var mqType:Number = _</span>
+<span class="nc" id="L76">  var source:String = _</span>
+<span class="nc" id="L77">  var uin:String = _</span>
+<span class="nc" id="L78">  var userName:String = _</span>
 }
 
-<span class="nc" id="L80">class ContactQrcodeGrpcResponse {</span>
-<span class="nc" id="L81">  var status:Number = _</span>
-<span class="nc" id="L82">  var message:String = _</span>
-<span class="nc" id="L83">  var loginer:String = _</span>
-<span class="nc" id="L84">  var uin:String = _</span>
-<span class="nc" id="L85">  var userName:String = _</span>
-<span class="nc" id="L86">  var queueName:String = _</span>
-<span class="nc" id="L87">  var qrcodeBuf:String = _</span>
-<span class="nc" id="L88">  var style:Number = _</span>
+<span class="nc" id="L81">class ContactQrcodeGrpcResponse {</span>
+<span class="nc" id="L82">  var status:Number = _</span>
+<span class="nc" id="L83">  var message:String = _</span>
+<span class="nc" id="L84">  var loginer:String = _</span>
+<span class="nc" id="L85">  var uin:String = _</span>
+<span class="nc" id="L86">  var userName:String = _</span>
+<span class="nc" id="L87">  var queueName:String = _</span>
+<span class="nc" id="L88">  var qrcodeBuf:String = _</span>
+<span class="nc" id="L89">  var style:Number = _</span>
 }
 
-<span class="nc" id="L91">class SetContactSelfInfoGrpcResponse {</span>
-<span class="nc" id="L92">  var status:Number = _</span>
-<span class="nc" id="L93">  var message:String = _</span>
-<span class="nc" id="L94">  var loginer:String = _</span>
-<span class="nc" id="L95">  var uin:String = _</span>
-<span class="nc" id="L96">  var userName:String = _</span>
-<span class="nc" id="L97">  var queueName:String = _</span>
-<span class="nc" id="L98">  var updateData:ContactSelfUpdateInfo = _</span>
+<span class="nc" id="L92">class SetContactSelfInfoGrpcResponse {</span>
+<span class="nc" id="L93">  var status:Number = _</span>
+<span class="nc" id="L94">  var message:String = _</span>
+<span class="nc" id="L95">  var loginer:String = _</span>
+<span class="nc" id="L96">  var uin:String = _</span>
+<span class="nc" id="L97">  var userName:String = _</span>
+<span class="nc" id="L98">  var queueName:String = _</span>
+<span class="nc" id="L99">  var updateData:ContactSelfUpdateInfo = _</span>
 }
 
-<span class="nc" id="L101">class ContactSelfUpdateInfo {</span>
-<span class="nc" id="L102">  var nickName:String = _</span>
-<span class="nc" id="L103">  var sex:Number = _</span>
-<span class="nc" id="L104">  var area:String = _</span>
-<span class="nc" id="L105">  var signature:String = _</span>
+<span class="nc" id="L102">class ContactSelfUpdateInfo {</span>
+<span class="nc" id="L103">  var nickName:String = _</span>
+<span class="nc" id="L104">  var sex:Number = _</span>
+<span class="nc" id="L105">  var area:String = _</span>
+<span class="nc" id="L106">  var signature:String = _</span>
 }
 
-<span class="nc" id="L108">class GetContactSelfInfoGrpcResponse {</span>
-<span class="nc" id="L109">  var alias:String = _</span>
-<span class="nc" id="L110">  var bigHeadImg:String = _</span>
-<span class="nc" id="L111">  var bindEmail:String = _</span>
-<span class="nc" id="L112">  var bindMobile:String = _</span>
-<span class="nc" id="L113">  var bindQQ:Number = _</span>
-<span class="nc" id="L114">  var bytes:String = _</span>
-<span class="nc" id="L115">  var city:String = _</span>
-<span class="nc" id="L116">  var country:String = _</span>
-<span class="nc" id="L117">  var loginer:String = _</span>
-<span class="nc" id="L118">  var message:String = _</span>
-<span class="nc" id="L119">  var nickName:String = _</span>
-<span class="nc" id="L120">  var province:String = _</span>
-<span class="nc" id="L121">  var queueName:String = _</span>
-<span class="nc" id="L122">  var sex:Int= _</span>
-<span class="nc" id="L123">  var signature:String = _</span>
-<span class="nc" id="L124">  var smallHeadImg:String = _</span>
-<span class="nc" id="L125">  var snsBGImg:String = _</span>
-<span class="nc" id="L126">  var status:Number = _</span>
-<span class="nc" id="L127">  var uin:String = _</span>
-<span class="nc" id="L128">  var userName:String = _</span>
+<span class="nc" id="L109">class GetContactSelfInfoGrpcResponse {</span>
+<span class="nc" id="L110">  var alias:String = _</span>
+<span class="nc" id="L111">  var bigHeadImg:String = _</span>
+<span class="nc" id="L112">  var bindEmail:String = _</span>
+<span class="nc" id="L113">  var bindMobile:String = _</span>
+<span class="nc" id="L114">  var bindQQ:Number = _</span>
+<span class="nc" id="L115">  var bytes:String = _</span>
+<span class="nc" id="L116">  var city:String = _</span>
+<span class="nc" id="L117">  var country:String = _</span>
+<span class="nc" id="L118">  var loginer:String = _</span>
+<span class="nc" id="L119">  var message:String = _</span>
+<span class="nc" id="L120">  var nickName:String = _</span>
+<span class="nc" id="L121">  var province:String = _</span>
+<span class="nc" id="L122">  var queueName:String = _</span>
+<span class="nc" id="L123">  var sex:Int= _</span>
+<span class="nc" id="L124">  var signature:String = _</span>
+<span class="nc" id="L125">  var smallHeadImg:String = _</span>
+<span class="nc" id="L126">  var snsBGImg:String = _</span>
+<span class="nc" id="L127">  var status:Number = _</span>
+<span class="nc" id="L128">  var uin:String = _</span>
+<span class="nc" id="L129">  var userName:String = _</span>
 }
-<span class="nc" id="L130"> }</span>
+<span class="nc" id="L131"> }</span>
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

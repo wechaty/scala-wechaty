@@ -10,61 +10,57 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.amazonaws.services.s3.model.{CannedAccessControlList, GeneratePresignedUrlRequest, ObjectMetadata, PutObjectRequest}
 import com.fasterxml.jackson.databind.JsonNode
-import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
 import com.typesafe.scalalogging.LazyLogging
 import io.grpc.{ManagedChannel, ManagedChannelBuilder}
 import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.grpc.PadPlusServerGrpc
 import wechaty.padplus.grpc.PadPlusServerOuterClass._
+import wechaty.padplus.support.CallbackHelper.TraceRequestCallback
 import wechaty.puppet.schemas.Puppet
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future, Promise}
 import scala.reflect.ClassTag
 import scala.reflect.runtime.universe._
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 
 /**
   *
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-21
   */
-<span class="nc" id="L32">trait GrpcSupport {</span>
+<span class="fc" id="L32">trait GrpcSupport {</span>
   self: PuppetPadplus with LazyLogging =&gt;
-<span class="nc" id="L34">  private val executorService = Executors.newSingleThreadScheduledExecutor()</span>
+<span class="fc" id="L34">  private val executorService = Executors.newSingleThreadScheduledExecutor()</span>
   //from https://github.com/wechaty/java-wechaty/blob/master/wechaty-puppet/src/main/kotlin/Puppet.kt
-<span class="nc" id="L36">  private val HEARTBEAT_COUNTER = new AtomicLong()</span>
-<span class="nc" id="L37">  private val HOSTIE_KEEPALIVE_TIMEOUT = 15 * 1000L</span>
-<span class="nc" id="L38">  private val DEFAULT_WATCHDOG_TIMEOUT = 60L</span>
+<span class="fc" id="L36">  private val HEARTBEAT_COUNTER = new AtomicLong()</span>
+<span class="fc" id="L37">  private val HOSTIE_KEEPALIVE_TIMEOUT = 15 * 1000L</span>
+<span class="fc" id="L38">  private val DEFAULT_WATCHDOG_TIMEOUT = 60L</span>
   protected var grpcClient: PadPlusServerGrpc.PadPlusServerBlockingStub= _
   private var eventStream: PadPlusServerGrpc.PadPlusServerStub = _
   protected var channel: ManagedChannel = _
-<span class="nc" id="L42">  protected implicit val executionContext: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global</span>
-  type CallbackType = StreamResponse =&gt; Unit
-  protected lazy val callbackPool                           = {
-<span class="nc" id="L45">    Caffeine.newBuilder().maximumSize(1000).expireAfterWrite(1,TimeUnit.MINUTES).build().asInstanceOf[Cache[String,CallbackType]]</span>
-  }
+<span class="fc" id="L42">  protected implicit val executionContext: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global</span>
 
 
   protected def startGrpc(endpoint: String): Unit = {
-<span class="nc" id="L50">    initChannel(endpoint)</span>
-<span class="nc" id="L51">    internalStartGrpc()</span>
+<span class="fc" id="L46">    initChannel(endpoint)</span>
+<span class="fc" id="L47">    internalStartGrpc()</span>
     //from https://github.com/wechaty/java-wechaty/blob/master/wechaty-puppet/src/main/kotlin/Puppet.kt
-<span class="nc" id="L53">    executorService.scheduleAtFixedRate(() =&gt; {</span>
-<span class="nc" id="L54">      val seq = HEARTBEAT_COUNTER.incrementAndGet()</span>
+<span class="fc" id="L49">    executorService.scheduleAtFixedRate(() =&gt; {</span>
+<span class="nc" id="L50">      val seq = HEARTBEAT_COUNTER.incrementAndGet()</span>
       try {
-<span class="nc" id="L56">        asyncRequest(ApiType.HEARTBEAT)</span>
+<span class="nc" id="L52">        asyncRequest(ApiType.HEARTBEAT)</span>
       } catch {
         case e: Throwable =&gt;
-<span class="nc bnc" id="L59" title="All 2 branches missed.">          logger.warn(&quot;ding exception:{}&quot;, e.getMessage)</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">          logger.warn(&quot;ding exception:{}&quot;, e.getMessage)</span>
         //ignore any exception
       }
-<span class="nc" id="L62">    }, HOSTIE_KEEPALIVE_TIMEOUT, HOSTIE_KEEPALIVE_TIMEOUT, TimeUnit.MILLISECONDS)</span>
+<span class="fc" id="L58">    }, HOSTIE_KEEPALIVE_TIMEOUT, HOSTIE_KEEPALIVE_TIMEOUT, TimeUnit.MILLISECONDS)</span>
   }
   protected def initChannel(endpoint: String) = {
-<span class="nc" id="L65">    option.channelOpt match {</span>
-<span class="nc bnc" id="L66" title="All 2 branches missed.">      case Some(channel) =&gt;</span>
-<span class="nc" id="L67">        this.channel = channel</span>
+<span class="fc" id="L61">    option.channelOpt match {</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">      case Some(channel) =&gt;</span>
+<span class="fc" id="L63">        this.channel = channel</span>
       case _ =&gt;
         /*
     this.channel = NettyChannelBuilder
@@ -76,139 +72,142 @@ import scala.util.{Failure, Success, Try}
       .enableRetry()
       .usePlaintext().build()
       */
-<span class="nc" id="L79">        this.channel = ManagedChannelBuilder.forTarget(endpoint)</span>
-<span class="nc" id="L80">          .maxInboundMessageSize(1024 * 1024 * 150)</span>
+<span class="nc" id="L75">        this.channel = ManagedChannelBuilder.forTarget(endpoint)</span>
+<span class="nc" id="L76">          .maxInboundMessageSize(1024 * 1024 * 150)</span>
           .usePlaintext().build()
     }
   }
 
   protected def reconnectStream() {
-<span class="nc bnc" id="L86" title="All 2 branches missed.">    logger.info(&quot;reconnect stream stream...&quot;)</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">    logger.info(&quot;reconnect stream stream...&quot;)</span>
     try {
-<span class="nc" id="L88">      stopGrpc()</span>
+<span class="nc" id="L84">      stopGrpc()</span>
     } catch {
       case e: Throwable =&gt;
-<span class="nc bnc" id="L91" title="All 2 branches missed.">        logger.warn(&quot;fail to stop grpc {}&quot;, e.getMessage)</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        logger.warn(&quot;fail to stop grpc {}&quot;, e.getMessage)</span>
     }
-<span class="nc" id="L93">    internalStartGrpc()</span>
-<span class="nc bnc" id="L94" title="All 2 branches missed.">    logger.info(&quot;reconnect stream stream done&quot;)</span>
+<span class="nc" id="L89">    internalStartGrpc()</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">    logger.info(&quot;reconnect stream stream done&quot;)</span>
 
   }
 
   private def internalStartGrpc() {
-<span class="nc bnc" id="L99" title="All 2 branches missed.">    logger.info(&quot;start grpc client ....&quot;)</span>
-<span class="nc" id="L100">    this.grpcClient = PadPlusServerGrpc.newBlockingStub(channel)</span>
-<span class="nc" id="L101">    startStream()</span>
-<span class="nc bnc" id="L102" title="All 2 branches missed.">    logger.info(&quot;start grpc client done&quot;)</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">    logger.info(&quot;start grpc client ....&quot;)</span>
+<span class="fc" id="L96">    this.grpcClient = PadPlusServerGrpc.newBlockingStub(channel)</span>
+//    startStream()
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">    logger.info(&quot;start grpc client done&quot;)</span>
   }
 
-  private def startStream() {
-<span class="nc" id="L106">    this.eventStream = PadPlusServerGrpc.newStub(channel)</span>
-<span class="nc" id="L107">    val initConfig = InitConfig.newBuilder().setToken(option.token.get).build()</span>
-<span class="nc" id="L108">    this.eventStream.init(initConfig, this)</span>
+  private[wechaty] def startStream() {
+<span class="nc" id="L102">    this.eventStream = PadPlusServerGrpc.newStub(channel)</span>
+<span class="nc" id="L103">    val initConfig = InitConfig.newBuilder().setToken(option.token.get).build()</span>
+<span class="nc" id="L104">    this.eventStream.init(initConfig, this)</span>
   }
 
   protected def stopGrpc(): Unit = {
-<span class="nc bnc" id="L112" title="All 2 branches missed.">    if(option.channelOpt.isEmpty) {  //if no test!</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">    if(option.channelOpt.isEmpty) {  //if no test!</span>
       //stop stream
-<span class="nc" id="L114">      stopStream()</span>
+<span class="nc" id="L110">      stopStream()</span>
 
       //stop grpc client
-<span class="nc" id="L117">      this.grpcClient.request(RequestObject.newBuilder().setApiType(ApiType.CLOSE).setToken(option.token.get).build())</span>
-<span class="nc" id="L118">      this.channel.shutdownNow()</span>
+<span class="nc" id="L113">      this.grpcClient.request(RequestObject.newBuilder().setApiType(ApiType.CLOSE).setToken(option.token.get).build())</span>
+<span class="nc" id="L114">      this.channel.shutdownNow()</span>
     }
   }
 
-<span class="nc" id="L122">  private def stopStream(): Unit = {</span>
+<span class="nc" id="L118">  private def stopStream(): Unit = {</span>
     //do nothing
   }
-<span class="nc" id="L125">  protected def syncRequest[T:TypeTag](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): T ={</span>
-<span class="nc" id="L126">    val future= asyncRequest[T](apiType,data)</span>
-<span class="nc" id="L127">    Await.result(future, 10 seconds)</span>
+<span class="nc" id="L121">  protected def syncRequest[T:TypeTag](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): T ={</span>
+<span class="nc" id="L122">    val future= asyncRequest[T](apiType,data)</span>
+<span class="nc" id="L123">    Await.result(future, 10 seconds)</span>
   }
-<span class="nc" id="L129">  protected def asyncRequest[T : TypeTag ](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): Future[T] ={</span>
-<span class="nc" id="L130">    val request = RequestObject.newBuilder()</span>
-<span class="nc" id="L131">    request.setToken(option.token.get)</span>
-<span class="nc" id="L132">    uinOpt match{</span>
-<span class="nc bnc" id="L133" title="All 2 branches missed.">      case Some(id) =&gt;</span>
-<span class="nc" id="L134">        request.setUin(id)</span>
-<span class="nc" id="L135">      case _ =&gt;</span>
+  protected def generateTraceId(apiType:ApiType): String={
+<span class="nc" id="L126">    UUID.randomUUID().toString</span>
+  }
+<span class="nc" id="L128">  protected def asyncRequest[T : TypeTag ](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): Future[T] ={</span>
+<span class="nc" id="L129">    val request = RequestObject.newBuilder()</span>
+<span class="nc" id="L130">    request.setToken(option.token.get)</span>
+<span class="nc" id="L131">    uinOpt match{</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">      case Some(id) =&gt;</span>
+<span class="nc" id="L133">        request.setUin(id)</span>
+<span class="nc" id="L134">      case _ =&gt;</span>
     }
-<span class="nc" id="L137">    request.setApiType(apiType)</span>
-<span class="nc" id="L138">    data match{</span>
-<span class="nc bnc" id="L139" title="All 4 branches missed.">      case Some(str:String) =&gt;</span>
-<span class="nc" id="L140">        request.setParams(str)</span>
-<span class="nc bnc" id="L141" title="All 2 branches missed.">      case Some(d) =&gt;</span>
-<span class="nc" id="L142">        request.setParams(Puppet.objectMapper.writeValueAsString(d))</span>
-<span class="nc" id="L143">      case _ =&gt;</span>
+<span class="nc" id="L136">    request.setApiType(apiType)</span>
+<span class="nc" id="L137">    data match{</span>
+<span class="nc bnc" id="L138" title="All 4 branches missed.">      case Some(str:String) =&gt;</span>
+<span class="nc" id="L139">        request.setParams(str)</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">      case Some(d) =&gt;</span>
+<span class="nc" id="L141">        request.setParams(Puppet.objectMapper.writeValueAsString(d))</span>
+<span class="nc" id="L142">      case _ =&gt;</span>
     }
-<span class="nc" id="L145">    val requestId = UUID.randomUUID().toString</span>
-<span class="nc" id="L146">    request.setRequestId(requestId)</span>
-<span class="nc" id="L147">    val traceId= UUID.randomUUID().toString</span>
-<span class="nc" id="L148">    request.setTraceId(traceId)</span>
-<span class="nc bnc" id="L149" title="All 2 branches missed.">    logger.debug(&quot;request:{}&quot;,request.build())</span>
-<span class="nc" id="L150">    val p = Promise[T]()</span>
+//    val requestId = UUID.randomUUID().toString
+//    request.setRequestId(requestId)
+<span class="nc" id="L146">    val traceId= generateTraceId(apiType)</span>
+<span class="nc" id="L147">    request.setTraceId(traceId)</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">    logger.debug(&quot;request:{}&quot;,request.build())</span>
+<span class="nc" id="L149">    val p = Promise[T]()</span>
 
-<span class="nc" id="L152">    val callbackDelegate:CallbackType=(streamResponse:StreamResponse)=&gt;{</span>
-<span class="nc bnc" id="L153" title="All 2 branches missed.">      if(p.isCompleted){</span>
-<span class="nc bnc" id="L154" title="All 2 branches missed.">        logger.warn(&quot;promise is completed ,{}&quot;,p)</span>
+<span class="nc" id="L151">    val callbackDelegate:TraceRequestCallback=(streamResponse:StreamResponse)=&gt;{</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">      if(p.isCompleted){</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">        logger.warn(&quot;promise is completed ,{}&quot;,p)</span>
       }else {
-<span class="nc" id="L156">        p.complete(Try {</span>
-<span class="nc" id="L157">          typeOf[T] match{</span>
-<span class="nc bnc" id="L158" title="All 2 branches missed.">            case t if t =:= typeOf[Nothing] =&gt;</span>
-<span class="nc" id="L159">              null.asInstanceOf[T]</span>
-<span class="nc bnc" id="L160" title="All 2 branches missed.">            case t if t =:= typeOf[JsonNode] =&gt;</span>
-<span class="nc" id="L161">              Puppet.objectMapper.readTree(streamResponse.getData).asInstanceOf[T]</span>
+<span class="nc" id="L155">        p.complete(Try {</span>
+<span class="nc" id="L156">          typeOf[T] match{</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">            case t if t =:= typeOf[Nothing] =&gt;</span>
+<span class="nc" id="L158">              null.asInstanceOf[T]</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">            case t if t =:= typeOf[JsonNode] =&gt;</span>
+<span class="nc" id="L160">              Puppet.objectMapper.readTree(streamResponse.getData).asInstanceOf[T]</span>
             case _ =&gt;
               try {
-<span class="nc" id="L164">                Puppet.objectMapper.readValue(streamResponse.getData, classTag.runtimeClass).asInstanceOf[T]</span>
+<span class="nc" id="L163">                Puppet.objectMapper.readValue(streamResponse.getData, classTag.runtimeClass).asInstanceOf[T]</span>
               }catch{
                 case e:Throwable =&gt;
-<span class="nc bnc" id="L167" title="All 2 branches missed.">                  logger.error(e.getMessage,e)</span>
-<span class="nc" id="L168">                  throw e</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">                  logger.error(e.getMessage,e)</span>
+<span class="nc" id="L167">                  throw e</span>
               }
           }
         })
       }
     }
     //过滤不需要返回
-<span class="nc" id="L175">    typeOf[T] match{</span>
-<span class="nc bnc" id="L176" title="All 2 branches missed.">      case t if t =:= typeOf[Nothing] =&gt;</span>
-<span class="nc" id="L177">      case _ =&gt; callbackPool.put(traceId,callbackDelegate)</span>
+<span class="nc" id="L174">    typeOf[T] match{</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">      case t if t =:= typeOf[Nothing] =&gt;</span>
+<span class="nc" id="L176">      case _ =&gt; CallbackHelper.pushCallbackToPool(traceId,callbackDelegate)</span>
     }
-<span class="nc" id="L179">    val response = grpcClient.request(request.build())</span>
-<span class="nc bnc" id="L180" title="All 2 branches missed.">    logger.debug(s&quot;request $apiType response $response&quot;)</span>
+<span class="nc" id="L178">    val response = grpcClient.request(request.build())</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">    logger.debug(s&quot;request $apiType response $response&quot;)</span>
 
-<span class="nc bnc" id="L182" title="All 6 branches missed.">    if(response.getResult != &quot;success&quot;){</span>
+<span class="nc bnc" id="L181" title="All 6 branches missed.">    if(response.getResult != &quot;success&quot;){</span>
       //fail?
-<span class="nc bnc" id="L184" title="All 2 branches missed.">      logger.error(&quot;fail to request grpc,response {}&quot;,response)</span>
-<span class="nc" id="L185">      p.failure(new IllegalAccessException(&quot;fail to request ,grpc result:&quot;+response))</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">      logger.error(&quot;fail to request grpc,response {}&quot;,response)</span>
+<span class="nc" id="L184">      p.failure(new IllegalAccessException(&quot;fail to request ,grpc result:&quot;+response))</span>
     }
 
-<span class="nc" id="L188">    p.future</span>
+<span class="nc" id="L187">    p.future</span>
   }
-<span class="nc" id="L190">    private val ACCESS_KEY_ID = &quot;AKIA3PQY2OQG5FEXWMH6&quot;</span>
-<span class="nc" id="L191">    private val BUCKET= &quot;macpro-message-file&quot;</span>
-<span class="nc" id="L192">    private val EXPIRE_TIME= 3600 * 24 * 3</span>
-<span class="nc" id="L193">    private val PATH= &quot;image-message&quot;</span>
-<span class="nc" id="L194">    private val SECRET_ACCESS_KEY= &quot;jw7Deo+W8l4FTOL2BXd/VubTJjt1mhm55sRhnsEn&quot;</span>
+<span class="fc" id="L189">    private val ACCESS_KEY_ID = &quot;AKIA3PQY2OQG5FEXWMH6&quot;</span>
+<span class="fc" id="L190">    private val BUCKET= &quot;macpro-message-file&quot;</span>
+<span class="fc" id="L191">    private val EXPIRE_TIME= 3600 * 24 * 3</span>
+<span class="fc" id="L192">    private val PATH= &quot;image-message&quot;</span>
+<span class="fc" id="L193">    private val SECRET_ACCESS_KEY= &quot;jw7Deo+W8l4FTOL2BXd/VubTJjt1mhm55sRhnsEn&quot;</span>
 //  private val s3 = new AmazonS3Client(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY));
-<span class="nc" id="L196">    private val s3=AmazonS3ClientBuilder.standard()</span>
-<span class="nc" id="L197">    .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY)))</span>
+<span class="fc" id="L195">    private val s3=AmazonS3ClientBuilder.standard()</span>
+<span class="fc" id="L196">    .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY)))</span>
   .enablePayloadSigning()
-<span class="nc" id="L199">      .withRegion(Regions.CN_NORTHWEST_1).build(); // 此处根据自己的 s3 地区位置改变</span>
+<span class="fc" id="L198">      .withRegion(Regions.CN_NORTHWEST_1).build(); // 此处根据自己的 s3 地区位置改变</span>
 
   def uploadFile (filename: String, stream: InputStream) {
 //    ACL: &quot;public-read&quot;,
 //    const s3 = new AWS.S3({ region: &quot;cn-northwest-1&quot;, signatureVersion: &quot;v4&quot; })
-<span class="nc" id="L204">    val meta = new ObjectMetadata</span>
-<span class="nc" id="L205">    val key=PATH+&quot;/&quot;+filename</span>
-<span class="nc" id="L206">    val params = new PutObjectRequest(BUCKET,key,stream,meta)</span>
-<span class="nc" id="L207">    val result = s3.putObject(params.withCannedAcl(CannedAccessControlList.PublicRead));</span>
+<span class="nc" id="L203">    val meta = new ObjectMetadata</span>
+<span class="nc" id="L204">    val key=PATH+&quot;/&quot;+filename</span>
+<span class="nc" id="L205">    val params = new PutObjectRequest(BUCKET,key,stream,meta)</span>
+<span class="nc" id="L206">    val result = s3.putObject(params.withCannedAcl(CannedAccessControlList.PublicRead));</span>
     //获取一个request
-<span class="nc" id="L209">    val urlRequest = new GeneratePresignedUrlRequest( BUCKET, key);</span>
+<span class="nc" id="L208">    val urlRequest = new GeneratePresignedUrlRequest( BUCKET, key);</span>
     //生成公用的url
-<span class="nc" id="L211">    s3.generatePresignedUrl(urlRequest);</span>
+<span class="nc" id="L210">    s3.generatePresignedUrl(urlRequest);</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

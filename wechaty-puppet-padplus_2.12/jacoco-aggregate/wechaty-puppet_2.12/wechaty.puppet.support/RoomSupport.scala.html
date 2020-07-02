@@ -11,9 +11,9 @@ import wechaty.puppet.schemas.Room.{RoomPayload, RoomQueryFilter}
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-06
   */
-<span class="nc" id="L14">trait RoomSupport {</span>
+<span class="fc" id="L14">trait RoomSupport {</span>
   self:Puppet with LazyLogging =&gt;
-<span class="nc" id="L16">  private[puppet] val cacheRoomPayload = createCache().asInstanceOf[Cache[String, RoomPayload]]</span>
+<span class="fc" id="L16">  private[puppet] val cacheRoomPayload = createCache().asInstanceOf[Cache[String, RoomPayload]]</span>
 
   def roomAdd(roomId: String, contactId: String): Unit
 
