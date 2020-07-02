@@ -5,6 +5,9 @@ import wechaty.plugins.RoomConnector._
 import wechaty.user.{Message, Room}
 import wechaty.{Wechaty, WechatyPlugin}
 
+import scala.concurrent.duration._
+import scala.concurrent.Await
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
@@ -22,7 +25,7 @@ object RoomConnector {
   type RoomMessageMapper = (/* from room */Room,Message,/* to room */Room) => Option[Message]
   val  DEFAULT_MESSAGE_SENDER:RoomMessageMapper=(_,msg,_) => Some(msg)
 }
-class RoomConnector(config: RoomConnectorConfig) extends WechatyPlugin with LazyLogging {
+class RoomConnector(config: RoomConnectorConfig,/*only for test*/isWait:Boolean=false) extends WechatyPlugin with LazyLogging {
   override def install(wechaty: Wechaty): Unit = {
     implicit val resolver: Wechaty = wechaty
     wechaty.onOnceMessage(message => {
@@ -35,7 +38,9 @@ class RoomConnector(config: RoomConnectorConfig) extends WechatyPlugin with Lazy
             toRooms foreach { toRoom =>
               config.mapper(fromRoom, roomMessage, toRoom) match {
                 case Some(msg) =>
-                  msg.forward(toRoom)
+                  val future = msg.forward(toRoom)
+                  if(isWait)
+                    Await.result(future,10 seconds)
                 case _ => //filtered,so don't forward message
               }
             }

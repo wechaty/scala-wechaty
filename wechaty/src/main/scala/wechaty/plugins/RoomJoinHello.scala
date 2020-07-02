@@ -3,13 +3,16 @@ package wechaty.plugins
 import com.typesafe.scalalogging.LazyLogging
 import wechaty.{Wechaty, WechatyPlugin}
 
+import scala.concurrent.duration._
+import scala.concurrent.Await
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-23
   */
 case class RoomJoinHelloConfig( var rooms:Array[String]=Array() ,hello:String="welcome")
-class RoomJoinHello(config:RoomJoinHelloConfig) extends WechatyPlugin with LazyLogging{
+class RoomJoinHello(config:RoomJoinHelloConfig,/*only for test*/isWait:Boolean=false) extends WechatyPlugin with LazyLogging{
   override def install(wechaty: Wechaty): Unit = {
     implicit val resolver:Wechaty = wechaty
     wechaty.onOnceMessage(message=>{
@@ -20,7 +23,11 @@ class RoomJoinHello(config:RoomJoinHelloConfig) extends WechatyPlugin with LazyL
           PluginHelper.executeWithNotThrow("RoomJoinHello") {
             if (list == null || list.isEmpty) {
               logger.warn("invitee list is empty")
-            } else room.say(config.hello, list)
+            } else {
+              val future = room.say(config.hello, list)
+              if(isWait)
+                Await.result(future,10 seconds)
+            }
           }
         }
       })

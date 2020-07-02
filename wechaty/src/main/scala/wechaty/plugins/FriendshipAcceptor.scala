@@ -8,13 +8,16 @@ import wechaty.puppet.schemas.Puppet._
 import wechaty.user.Contact
 import wechaty.{Wechaty, WechatyPlugin}
 
+import scala.concurrent.duration._
+import scala.concurrent.Await
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
   * @since 2020-06-19
   */
 case class FriendshipAcceptorConfig( var greeting:String = "we are friends now!",var waitSeconds:Int=0, var keywordOpt:Option[String]=None)
-class FriendshipAcceptor(config:FriendshipAcceptorConfig) extends WechatyPlugin with StrictLogging{
+class FriendshipAcceptor(config:FriendshipAcceptorConfig,/*for test*/isWait:Boolean=false) extends WechatyPlugin with StrictLogging{
   private def isMatchKeyword(str: String): Boolean ={
     logger.debug("keyword:{} hello:{} ",config.keywordOpt,str)
     config.keywordOpt match{
@@ -29,7 +32,9 @@ class FriendshipAcceptor(config:FriendshipAcceptorConfig) extends WechatyPlugin 
     }
   }
   private def doGreeting(contact: Contact): Unit ={
-    contact.say(config.greeting)
+    val future = contact.say(config.greeting)
+    if(isWait)
+      Await.result(future,10 seconds)
   }
   override def install(wechaty: Wechaty): Unit = {
     wechaty.onFriendAdd(friendship => {

@@ -15,7 +15,7 @@ class FriendshipAcceptorTest extends TestBase{
   @Test
   def test_add: Unit ={
     val config = FriendshipAcceptorConfig()
-    instance.use(new FriendshipAcceptor(config))
+    instance.use(new FriendshipAcceptor(config,isWait = true))
 
     mockFriendshipAdd()
     emitFriendshipAddPayloadEvent()
@@ -46,7 +46,7 @@ class FriendshipAcceptorTest extends TestBase{
   @Test
   def testGreetings: Unit ={
     val config = FriendshipAcceptorConfig()
-    instance.use(new FriendshipAcceptor(config))
+    instance.use(new FriendshipAcceptor(config,isWait = true))
     config.greeting="你好"
 
     mockFriendshipAdd(payloadType = FriendshipType.FRIENDSHIP_TYPE_CONFIRM)

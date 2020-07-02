@@ -62,7 +62,7 @@ class DingDongTest extends TestBase{
   def test_plugin: Unit ={
     val config = new DingDongConfig
     config.room = true
-    instance.use(new DingDongPlugin(config))
+    instance.use(new DingDongPlugin(config,isWait = true))
     mockRoomMessage("#ding")
     mockMessageSendText()
 

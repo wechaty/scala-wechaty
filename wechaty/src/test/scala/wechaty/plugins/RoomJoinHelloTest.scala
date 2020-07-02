@@ -15,7 +15,7 @@ import wechaty.puppet.schemas.Puppet.PuppetEventName
 class RoomJoinHelloTest extends TestBase{
   @Test
   def test_join: Unit ={
-    val roomJoinHello = new RoomJoinHello(RoomJoinHelloConfig(rooms = Array("roomId"),hello = "hello world!"))
+    val roomJoinHello = new RoomJoinHello(RoomJoinHelloConfig(rooms = Array("roomId"),hello = "hello world!"),isWait=true)
     roomJoinHello.install(instance)
 
     mockRoomMessage(roomId = "from")

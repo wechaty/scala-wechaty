@@ -180,7 +180,7 @@ class Message(messageId:String)(implicit resolver: PuppetResolver) extends LazyL
       case _ =>  false
     }
   }
-  def forward (to: Conversation): Unit = {
+  def forward (to: Conversation): Future[String]= {
     resolver.puppet.messageForward(to.id, this.messageId)
   }
   /**

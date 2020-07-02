@@ -15,7 +15,7 @@ class RoomConnectorTest extends TestBase{
   def test_connector: Unit ={
     val connectorConfig = RoomConnectorConfig(Array("from"),Array("to"))
     connectorConfig.blacklist = _ => true
-    instance.use(new RoomConnector(connectorConfig))
+    instance.use(new RoomConnector(connectorConfig,isWait = true))
 
     mockRoomMessage(roomId = "from")
     mockMessageSendText()

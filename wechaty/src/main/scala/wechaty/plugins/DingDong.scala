@@ -1,5 +1,6 @@
 package wechaty.plugins
 
+import com.typesafe.scalalogging.LazyLogging
 import wechaty.user.Message
 import wechaty.{Wechaty, WechatyPlugin}
 
@@ -37,7 +38,7 @@ case class DingDongConfig(
     */
   var dingReg:String="^#ding$",
 )
-class DingDongPlugin(config:DingDongConfig,/*only for test*/isWait:Boolean=false) extends WechatyPlugin{
+class DingDongPlugin(config:DingDongConfig,/*only for test*/isWait:Boolean=false) extends WechatyPlugin with LazyLogging{
   private val DONG="dong"
   private val DING_REGEXP=("("+config.dingReg+")").r
   private def isMatch(message: Message): Boolean ={
