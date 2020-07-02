@@ -108,14 +108,14 @@ public final class PadPlusServerGrpc {
    */
   public static PadPlusServerBlockingStub newBlockingStub(
       io.grpc.Channel channel) {
-<span class="fc" id="L111">    io.grpc.stub.AbstractStub.StubFactory&lt;PadPlusServerBlockingStub&gt; factory =</span>
-<span class="fc" id="L112">      new io.grpc.stub.AbstractStub.StubFactory&lt;PadPlusServerBlockingStub&gt;() {</span>
+<span class="nc" id="L111">    io.grpc.stub.AbstractStub.StubFactory&lt;PadPlusServerBlockingStub&gt; factory =</span>
+<span class="nc" id="L112">      new io.grpc.stub.AbstractStub.StubFactory&lt;PadPlusServerBlockingStub&gt;() {</span>
         @java.lang.Override
         public PadPlusServerBlockingStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
-<span class="fc" id="L115">          return new PadPlusServerBlockingStub(channel, callOptions);</span>
+<span class="nc" id="L115">          return new PadPlusServerBlockingStub(channel, callOptions);</span>
         }
       };
-<span class="fc" id="L118">    return PadPlusServerBlockingStub.newStub(factory, channel);</span>
+<span class="nc" id="L118">    return PadPlusServerBlockingStub.newStub(factory, channel);</span>
   }
 
   /**
@@ -207,8 +207,8 @@ public final class PadPlusServerGrpc {
   public static final class PadPlusServerBlockingStub extends io.grpc.stub.AbstractBlockingStub&lt;PadPlusServerBlockingStub&gt; {
     private PadPlusServerBlockingStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
-<span class="fc" id="L210">      super(channel, callOptions);</span>
-<span class="fc" id="L211">    }</span>
+<span class="nc" id="L210">      super(channel, callOptions);</span>
+<span class="nc" id="L211">    }</span>
 
     @java.lang.Override
     protected PadPlusServerBlockingStub build(
@@ -219,8 +219,8 @@ public final class PadPlusServerGrpc {
     /**
      */
     public wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseObject request(wechaty.padplus.grpc.PadPlusServerOuterClass.RequestObject request) {
-<span class="fc" id="L222">      return blockingUnaryCall(</span>
-<span class="fc" id="L223">          getChannel(), getRequestMethod(), getCallOptions(), request);</span>
+<span class="nc" id="L222">      return blockingUnaryCall(</span>
+<span class="nc" id="L223">          getChannel(), getRequestMethod(), getCallOptions(), request);</span>
     }
 
     /**

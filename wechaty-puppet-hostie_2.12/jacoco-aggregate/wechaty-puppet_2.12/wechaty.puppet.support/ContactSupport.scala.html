@@ -23,48 +23,46 @@ import scala.concurrent.Future
     * Contact
     *
     */
-  def contactAlias(contactId: String): String
+  protected def contactRawPayload(contactId: String): Future[ContactPayload]
 
-  def contactAlias(contactId: String, alias: String): Unit
+  def contactAlias(contactId: String): Future[String]
 
-  def contactAvatar (contactId: String)                : ResourceBox
-  def contactAvatar (contactId: String, file: ResourceBox) : ResourceBox
+  def contactAlias(contactId: String, alias: String): Future[Unit]
 
-  def contactList(): Array[String]
+  def contactAvatar (contactId: String)                : Future[ResourceBox]
+  def contactAvatar (contactId: String, file: ResourceBox) : Future[ResourceBox]
+
+  def contactList(): Future[Array[String]]
 
   def contactPayload(contactId: String): Future[ContactPayload] = {
-<span class="nc bnc" id="L36" title="All 2 branches missed.">    if (Puppet.isBlank(contactId)) {</span>
-<span class="nc" id="L37">      throw new IllegalArgumentException(&quot;contact id is blank!&quot;)</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">    if (Puppet.isBlank(contactId)) {</span>
+<span class="nc" id="L39">      throw new IllegalArgumentException(&quot;contact id is blank!&quot;)</span>
     }
 
     /**
       * 1. Try to get from cache first
       */
-<span class="nc" id="L43">    val cachedPayload = this.cacheContactPayload.getIfPresent(contactId)</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">    if (cachedPayload != null) {</span>
-<span class="nc" id="L45">      return Future.successful(cachedPayload)</span>
+<span class="nc" id="L45">    val cachedPayload = this.cacheContactPayload.getIfPresent(contactId)</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">    if (cachedPayload != null) {</span>
+<span class="nc" id="L47">      return Future.successful(cachedPayload)</span>
     }
 
     /**
       * 2. Cache not found
       */
-<span class="nc" id="L51">    val payloadFuture = this.contactRawPayload(contactId)</span>
+<span class="nc" id="L53">    val payloadFuture = this.contactRawPayload(contactId)</span>
 
-<span class="nc" id="L53">    payloadFuture.map(payload=&gt;{</span>
-<span class="nc" id="L54">      cacheContactPayload.put(contactId, payload)</span>
-<span class="nc bnc" id="L55" title="All 2 branches missed.">      logger.info(&quot;Puppet contactPayload({}) cache SET&quot;, contactId)</span>
-<span class="nc" id="L56">      payload</span>
+<span class="nc" id="L55">    payloadFuture.map(payload=&gt;{</span>
+<span class="nc" id="L56">      cacheContactPayload.put(contactId, payload)</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">      logger.info(&quot;Puppet contactPayload({}) cache SET&quot;, contactId)</span>
+<span class="nc" id="L58">      payload</span>
     })
   }
   def contactPayloadDirty (contactId: String): Unit ={
-<span class="nc bnc" id="L60" title="All 2 branches missed.">    logger.debug(&quot;Puppet contactPayloadDirty({})&quot;, contactId)</span>
-<span class="nc" id="L61">    this.cacheContactPayload.invalidate(contactId)</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">    logger.debug(&quot;Puppet contactPayloadDirty({})&quot;, contactId)</span>
+<span class="nc" id="L63">    this.cacheContactPayload.invalidate(contactId)</span>
   }
 
-  /**
-    * contact
-    */
-  protected def contactRawPayload(contactId: String): Future[ContactPayload]
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

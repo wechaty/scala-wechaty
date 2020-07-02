@@ -184,7 +184,7 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">ContactRawSupport</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <span class="name">ContactRawSupport</span><span class="result"> extends <span class="extype" name="com.typesafe.scalalogging.LazyLogging">LazyLogging</span></span>
       </span>
       </h4>
 
@@ -193,7 +193,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="com.typesafe.scalalogging.LazyLogging">LazyLogging</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
             <span class="toggle">
               Known Subclasses
@@ -224,7 +224,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="wechaty.padplus.support.ContactRawSupport"><span>ContactRawSupport</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="wechaty.padplus.support.ContactRawSupport"><span>ContactRawSupport</span></li><li class="in" name="com.typesafe.scalalogging.LazyLogging"><span>LazyLogging</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -340,9 +340,9 @@
               
         </dd></dl></div>
     </li><li name="wechaty.padplus.support.ContactRawSupport#contactAlias" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="contactAlias(contactId:String,alias:String):Unit"></a><a id="contactAlias(String,String):Unit"></a>
+      <a id="contactAlias(contactId:String,alias:String):scala.concurrent.Future[Nothing]"></a><a id="contactAlias(String,String):Future[Nothing]"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/ContactRawSupport.html#contactAlias(contactId:String,alias:String):Unit" title="Permalink">
+      <a href="../../../wechaty/padplus/support/ContactRawSupport.html#contactAlias(contactId:String,alias:String):scala.concurrent.Future[Nothing]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -351,14 +351,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">contactAlias</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="alias">alias: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+        <span class="name">contactAlias</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="alias">alias: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Nothing">Nothing</span>]</span>
       </span>
       
       
     </li><li name="wechaty.padplus.support.ContactRawSupport#contactAlias" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="contactAlias(contactId:String):String"></a><a id="contactAlias(String):String"></a>
+      <a id="contactAlias(contactId:String):scala.concurrent.Future[String]"></a><a id="contactAlias(String):Future[String]"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/ContactRawSupport.html#contactAlias(contactId:String):String" title="Permalink">
+      <a href="../../../wechaty/padplus/support/ContactRawSupport.html#contactAlias(contactId:String):scala.concurrent.Future[String]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -367,30 +367,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">contactAlias</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      
-      <p class="shortcomment cmt">Contact</p>
-    </li><li name="wechaty.padplus.support.ContactRawSupport#contactAvatar" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="contactAvatar(contactId:String,file:wechaty.puppet.ResourceBox):wechaty.puppet.ResourceBox"></a><a id="contactAvatar(String,ResourceBox):ResourceBox"></a>
-      <span class="permalink">
-      <a href="../../../wechaty/padplus/support/ContactRawSupport.html#contactAvatar(contactId:String,file:wechaty.puppet.ResourceBox):wechaty.puppet.ResourceBox" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">contactAvatar</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="file">file: <span class="extype" name="wechaty.puppet.ResourceBox">ResourceBox</span></span>)</span><span class="result">: <span class="extype" name="wechaty.puppet.ResourceBox">ResourceBox</span></span>
+        <span class="name">contactAlias</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       
       
     </li><li name="wechaty.padplus.support.ContactRawSupport#contactAvatar" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="contactAvatar(contactId:String):wechaty.puppet.ResourceBox"></a><a id="contactAvatar(String):ResourceBox"></a>
+      <a id="contactAvatar(contactId:String,file:wechaty.puppet.ResourceBox):scala.concurrent.Future[wechaty.puppet.ResourceBox]"></a><a id="contactAvatar(String,ResourceBox):Future[ResourceBox]"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/ContactRawSupport.html#contactAvatar(contactId:String):wechaty.puppet.ResourceBox" title="Permalink">
+      <a href="../../../wechaty/padplus/support/ContactRawSupport.html#contactAvatar(contactId:String,file:wechaty.puppet.ResourceBox):scala.concurrent.Future[wechaty.puppet.ResourceBox]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -399,14 +383,30 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">contactAvatar</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="wechaty.puppet.ResourceBox">ResourceBox</span></span>
+        <span class="name">contactAvatar</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="file">file: <span class="extype" name="wechaty.puppet.ResourceBox">ResourceBox</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="wechaty.puppet.ResourceBox">ResourceBox</span>]</span>
+      </span>
+      
+      
+    </li><li name="wechaty.padplus.support.ContactRawSupport#contactAvatar" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="contactAvatar(contactId:String):scala.concurrent.Future[wechaty.puppet.ResourceBox]"></a><a id="contactAvatar(String):Future[ResourceBox]"></a>
+      <span class="permalink">
+      <a href="../../../wechaty/padplus/support/ContactRawSupport.html#contactAvatar(contactId:String):scala.concurrent.Future[wechaty.puppet.ResourceBox]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">contactAvatar</span><span class="params">(<span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="wechaty.puppet.ResourceBox">ResourceBox</span>]</span>
       </span>
       
       
     </li><li name="wechaty.padplus.support.ContactRawSupport#contactList" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="contactList():Array[String]"></a>
+      <a id="contactList():scala.concurrent.Future[Array[String]]"></a><a id="contactList():Future[Array[String]]"></a>
       <span class="permalink">
-      <a href="../../../wechaty/padplus/support/ContactRawSupport.html#contactList():Array[String]" title="Permalink">
+      <a href="../../../wechaty/padplus/support/ContactRawSupport.html#contactList():scala.concurrent.Future[Array[String]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -415,7 +415,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">contactList</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">contactList</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]]</span>
       </span>
       
       
@@ -593,6 +593,25 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.typesafe.scalalogging.LazyLogging#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logger:com.typesafe.scalalogging.Logger"></a><a id="logger:Logger"></a>
+      <span class="permalink">
+      <a href="../../../wechaty/padplus/support/ContactRawSupport.html#logger:com.typesafe.scalalogging.Logger" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logger</span><span class="result">: <span class="extype" name="com.typesafe.scalalogging.Logger">Logger</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>LazyLogging</dd><dt>Annotations</dt><dd>
+                <span class="name">@transient</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="wechaty.padplus.support.ContactRawSupport#loginPartialFunction" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loginPartialFunction(response:wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse):PartialFunction[wechaty.padplus.grpc.PadPlusServerOuterClass.ResponseType,Unit]"></a><a id="loginPartialFunction(StreamResponse):PartialFunction[ResponseType,Unit]"></a>
       <span class="permalink">
@@ -773,7 +792,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="com.typesafe.scalalogging.LazyLogging">
+              <h3>Inherited from <span class="extype" name="com.typesafe.scalalogging.LazyLogging">LazyLogging</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>

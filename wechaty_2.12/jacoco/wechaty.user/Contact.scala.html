@@ -6,7 +6,7 @@ import wechaty.puppet.ResourceBox
 import wechaty.puppet.schemas.Contact.{ContactGender, ContactPayload, ContactType}
 import wechaty.puppet.schemas.Puppet
 
-import scala.concurrent.Await
+import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 import scala.language.implicitConversions
 
@@ -193,7 +193,7 @@ import scala.language.implicitConversions
 <span class="nc" id="L193">    else this.payload.city</span>
   }
 
-  def avatar: ResourceBox =  {
+  def avatar: Future[ResourceBox] =  {
 <span class="nc" id="L197">    resolver.puppet.contactAvatar(this.id)</span>
   }
 
