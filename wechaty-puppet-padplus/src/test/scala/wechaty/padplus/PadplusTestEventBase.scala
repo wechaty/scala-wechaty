@@ -1,9 +1,11 @@
 package wechaty.padplus
 
+import java.io.File
 import java.util.concurrent.{CountDownLatch, TimeUnit}
 
 import com.typesafe.scalalogging.LazyLogging
 import io.grpc.{ManagedChannel, ManagedChannelBuilder}
+import org.apache.commons.io.FileUtils
 import org.grpcmock.GrpcMock
 import org.grpcmock.GrpcMock._
 import org.grpcmock.junit5.GrpcMockExtension
@@ -30,6 +32,8 @@ class PadplusTestEventBase extends LazyLogging{
 
   @BeforeEach
   def setupChannel(): Unit = {
+    val storePath="/tmp/store"
+    FileUtils.deleteQuietly(new File(storePath))
     isMocked = false
     countDownLatch = new CountDownLatch(1)
     serverChannel = ManagedChannelBuilder.forAddress("localhost", GrpcMock.getGlobalPort).usePlaintext.build
@@ -39,14 +43,12 @@ class PadplusTestEventBase extends LazyLogging{
     options.channelOpt = Some(serverChannel) //using test channel
     options.token=Some("token")
 
-    instance = new PuppetPadplus(options){
+    instance = new PuppetPadplus(options,storePath){
       override protected def generateTraceId(apiType: ApiType): String = {
         apiType match{
           case ApiType.INIT | ApiType.HEARTBEAT => apiType.getNumber.toString
-          case ApiType.GET_CONTACT => ResponseType.CONTACT_SEARCH.getNumber.toString
           case _ =>
-            apiType.getNumber.toString
-//            super.generateTraceId(apiType)
+            super.generateTraceId(apiType)
         }
       }
       override protected def getUin: Option[String] = {
@@ -96,7 +98,7 @@ val requestBuilder2 = RequestObject.newBuilder()
     val eventResponses = tmpResponses.map{case (event,payload) =>
       val eventResponse = StreamResponse.newBuilder()
       eventResponse.setResponseType(event)
-      eventResponse.setTraceId(event.getNumber.toString)
+//      eventResponse.setTraceId(event.getNumber.toString)
       eventResponse.setData(Puppet.objectMapper.writeValueAsString(payload))
       eventResponse.build()
     }

@@ -21,7 +21,7 @@ import wechaty.puppet.schemas.Event.{EventLoginPayload, EventScanPayload}
 import wechaty.puppet.schemas.Puppet._
 import wechaty.puppet.schemas.{Contact, Puppet}
 
-import scala.concurrent.Future
+import scala.concurrent.{Future, Promise}
 import scala.language.implicitConversions
 import scala.util.Try
 
@@ -54,9 +54,11 @@ trait ContactRawSupport extends LazyLogging{
     getPadplusContactPayload(contactId) match{
       case Some(padplusContactPayload) => Future.successful(padplusContactPayload)
       case _ =>
+        val promise = Promise[PadplusContactPayload]
+        CallbackHelper.pushContactCallback(contactId,promise)
         val json = objectMapper.createObjectNode()
         json.put("userName", contactId)
-        asyncRequest[GrpcContactPayload](ApiType.GET_CONTACT,Some(json.toString)).map(convertFromGrpcContact)
+        asyncRequestNothing(ApiType.GET_CONTACT,Some(json.toString)).flatMap(_=>promise.future)
     }
   }
 
@@ -138,6 +140,7 @@ trait ContactRawSupport extends LazyLogging{
       if(!isBlank(data)){
         val root = objectMapper.readTree(data)
         val userName = root.get("UserName").asText()
+        logger.trace("response data:{}",data)
         if(isRoomId(userName)){
           val roomTry=Try {
             val grpcRoomPayload = objectMapper.readValue(data, classOf[GrpcRoomPayload])
@@ -157,9 +160,7 @@ trait ContactRawSupport extends LazyLogging{
 
             roomPayload
           }
-          //TODO use Try instance to avoid memory leak
-          if(roomTry.isSuccess)
-            CallbackHelper.resolveRoomCallBack(userName,roomTry.get)
+          CallbackHelper.resolveRoomCallBack(userName,roomTry)
 
         }else{
           val result:Try[PadplusContactPayload] = Try {
@@ -169,9 +170,7 @@ trait ContactRawSupport extends LazyLogging{
             padplusContactPayload
           }
 
-          //TODO use Try instance to avoid memory leak
-          if(result.isSuccess)
-            CallbackHelper.resolveContactCallBack(userName,result.get)
+          CallbackHelper.resolveContactCallBack(userName,result)
         }
       }
   }

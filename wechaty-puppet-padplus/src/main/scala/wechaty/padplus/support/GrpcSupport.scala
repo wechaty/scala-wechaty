@@ -126,7 +126,38 @@ trait GrpcSupport {
   protected def generateTraceId(apiType:ApiType): String={
     UUID.randomUUID().toString
   }
+  //can't create Promise[Nothing] instance,so use the method create Future[Unit]
+  protected def asyncRequestNothing(apiType: ApiType,data:Option[Any]=None): Future[Unit] ={
+    val request = RequestObject.newBuilder()
+    request.setToken(option.token.get)
+    uinOpt match{
+      case Some(id) =>
+        request.setUin(id)
+      case _ =>
+    }
+    request.setApiType(apiType)
+    data match{
+      case Some(str:String) =>
+        request.setParams(str)
+      case Some(d) =>
+        request.setParams(Puppet.objectMapper.writeValueAsString(d))
+      case _ =>
+    }
+
+    val future = asyncCall(PadPlusServerGrpc.getRequestMethod,request.build())
+    future.map{rep=>
+      if(rep.getResult != "success"){
+        logger.warn("fail to request {}",rep)
+        throw new IllegalAccessException("fail to request ,grpc result:"+rep)
+      }
+    }
+  }
   protected def asyncRequest[T : TypeTag ](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): Future[T] ={
+    typeOf[T] match {
+      case t if t =:= typeOf[Nothing] =>
+        throw new IllegalAccessException("generic type is nothing,maybe you should use asyncRequestNothing !")
+      case _ =>
+    }
     val request = RequestObject.newBuilder()
     request.setToken(option.token.get)
     uinOpt match{
@@ -147,53 +178,31 @@ trait GrpcSupport {
     val traceId= generateTraceId(apiType)
     request.setTraceId(traceId)
     logger.debug("request:{}",request.build())
-    val p = Promise[T]()
 
-    val callbackDelegate:TraceRequestCallback=(streamResponse:StreamResponse)=>{
-      if(p.isCompleted){
-        logger.warn("promise is completed ,{}",p)
-      }else {
-        p.complete(Try {
-          typeOf[T] match{
-            case t if t =:= typeOf[Nothing] =>
-              null.asInstanceOf[T]
-            case t if t =:= typeOf[JsonNode] =>
-              Puppet.objectMapper.readTree(streamResponse.getData).asInstanceOf[T]
-            case _ =>
-              try {
-                Puppet.objectMapper.readValue(streamResponse.getData, classTag.runtimeClass).asInstanceOf[T]
-              }catch{
-                case e:Throwable =>
-                  logger.error(e.getMessage,e)
-                  throw e
-              }
-          }
-        })
-      }
-    }
-    //过滤不需要返回
-    typeOf[T] match{
-      case t if t =:= typeOf[Nothing] =>
-      case _ => CallbackHelper.pushCallbackToPool(traceId,callbackDelegate)
-    }
+    val callbackPromise = Promise[StreamResponse]
+    CallbackHelper.pushCallbackToPool(traceId,callbackPromise)
     val future = asyncCall(PadPlusServerGrpc.getRequestMethod,request.build())
     future.flatMap{rep=>
       if(rep.getResult != "success"){
-        p.failure(new IllegalAccessException("fail to request ,grpc result:"+rep))
+        callbackPromise.failure(new IllegalAccessException("fail to request ,grpc result:"+rep))
       }
-      p.future
+      callbackPromise.future
+    }.map { streamResponse =>
+      typeOf[T] match {
+        case t if t =:= typeOf[JsonNode] =>
+          Puppet.objectMapper.readTree(streamResponse.getData).asInstanceOf[T]
+        case _ =>
+          try {
+            Puppet.objectMapper.readValue(streamResponse.getData, classTag.runtimeClass).asInstanceOf[T]
+          } catch {
+            case e: Throwable =>
+              logger.error(e.getMessage, e)
+              throw e
+          }
+      }
     }
-//    val response = grpcClient.request(request.build())
-//    logger.debug(s"request $apiType response $response")
-//
-//    if(response.getResult != "success"){
-//      //fail?
-//      logger.error("fail to request grpc,response {}",response)
-//      p.failure(new IllegalAccessException("fail to request ,grpc result:"+response))
-//    }
-//
-//    p.future
   }
+
   type ClientCallback[RespT,T]=RespT => T
   protected def asyncCall[ReqT,RespT](call: MethodDescriptor[ReqT, RespT], req: ReqT): Future[RespT]= {
     asyncCallback(call,req)(resp => resp)

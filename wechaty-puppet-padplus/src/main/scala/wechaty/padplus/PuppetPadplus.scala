@@ -46,9 +46,9 @@ class PuppetPadplus(val option:PuppetOptions,val storePath:String="/tmp/padplus"
       case Some(str) =>
         uinOpt = Some(str)
         logger.debug("found uin in local store:{}",str)
-        asyncRequest(ApiType.INIT)
+        asyncRequestNothing(ApiType.INIT)
       case _ =>
-        asyncRequest(ApiType.GET_QRCODE)
+        asyncRequestNothing(ApiType.GET_QRCODE)
     }
   }
   def stop(): Unit = {

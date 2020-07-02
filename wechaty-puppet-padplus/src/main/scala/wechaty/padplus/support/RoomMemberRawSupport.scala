@@ -8,6 +8,8 @@ import wechaty.puppet.schemas.Room
 import wechaty.puppet.schemas.Room.RoomMemberPayload
 import wechaty.puppet.support.RoomMemberSupport
 
+import scala.util.Try
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
@@ -63,16 +65,19 @@ trait RoomMemberRawSupport {
   }
   protected def roomMemberPartialFunction(response:StreamResponse):PartialFunction[ResponseType,Unit]={
     case ResponseType.ROOM_MEMBER_LIST =>
-      val roomMemberList= objectMapper.readValue(response.getData,classOf[GrpcRoomMemberList])
-      val roomId = roomMemberList.roomId
-      val membersStr = roomMemberList.membersJson
-      val membersList =objectMapper.readValue(membersStr,classOf[Array[GrpcRoomMemberPayload]])
-      val data=membersList.map(x=> x.UserName-> convertToPadplusRoomMemberPayload(x)).toMap
-      val padplusRoomMemberMap = new PadplusRoomMemberMap
-      padplusRoomMemberMap.members = data
-      savePadplusRoomMembers(roomId,padplusRoomMemberMap)
+      val roomMemberList       = objectMapper.readValue(response.getData, classOf[GrpcRoomMemberList])
+      val roomId               = roomMemberList.roomId
+      val roomMembers = Try {
+        val membersStr           = roomMemberList.membersJson
+        val membersList          = objectMapper.readValue(membersStr, classOf[Array[GrpcRoomMemberPayload]])
+        val data                 = membersList.map(x => x.UserName -> convertToPadplusRoomMemberPayload(x)).toMap
+        val padplusRoomMemberMap = new PadplusRoomMemberMap
+        padplusRoomMemberMap.members = data
+        savePadplusRoomMembers(roomId, padplusRoomMemberMap)
+        padplusRoomMemberMap
+      }
 
 
-      CallbackHelper.resolveRoomMemberCallback(roomId,padplusRoomMemberMap)
+      CallbackHelper.resolveRoomMemberCallback(roomId,roomMembers)
   }
 }

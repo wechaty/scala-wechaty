@@ -4,8 +4,11 @@ import java.util.concurrent.TimeUnit
 
 import com.github.benmanes.caffeine.cache.{Cache, Caffeine}
 import wechaty.padplus.grpc.PadPlusServerOuterClass.StreamResponse
-import wechaty.padplus.schemas.ModelContact.{PadplusContactPayload, PadplusConversation}
+import wechaty.padplus.schemas.ModelContact.PadplusContactPayload
 import wechaty.padplus.schemas.ModelRoom.{PadplusRoomMemberMap, PadplusRoomPayload}
+
+import scala.concurrent.Promise
+import scala.util.{Success, Try}
 
 /**
   *
@@ -19,23 +22,25 @@ object CallbackHelper {
       .build()
       .asInstanceOf[Cache[String, T]]
   }
-  type TraceRequestCallback = StreamResponse => Unit
+  type TraceRequestCallback = Promise[StreamResponse]
   lazy val traceCallbacks: Cache[String, TraceRequestCallback] = createPool[TraceRequestCallback]
 
-  type ContactCallback = PadplusConversation => Unit
-  lazy val contactCallbacks: Cache[String, List[ContactCallback]] = createPool[List[ContactCallback]]
+  type ContactPromise= Promise[PadplusContactPayload]
+  lazy val contactCallbacks: Cache[String, List[ContactPromise]] = createPool[List[ContactPromise]]
+  type RoomPromise= Promise[PadplusRoomPayload]
+  lazy val roomCallbacks: Cache[String, List[RoomPromise]] = createPool[List[RoomPromise]]
 
-  type ContactAliasCallback = () =>  Unit
+  type ContactAliasCallback = Promise[Unit]
   lazy val contactAliasCallbacks: Cache[String, Map[String, ContactAliasCallback]] = createPool[Map[String,ContactAliasCallback]]
 
 
-  type RoomTopicCallback= ()=>Unit
+  type RoomTopicCallback= Promise[Unit]
   lazy val roomTopicCallbacks: Cache[String, Map[String, RoomTopicCallback]] = createPool[Map[String,RoomTopicCallback]]
 
-  type AcceptFriendCallback= () =>Unit
+  type AcceptFriendCallback= Promise[Unit]
   lazy val acceptFriendCallbacks: Cache[String, List[AcceptFriendCallback]] = createPool[List[AcceptFriendCallback]]
 
-  type RoomMemberCallback= PadplusRoomMemberMap =>Unit
+  type RoomMemberCallback= Promise[PadplusRoomMemberMap]
   lazy val roomMemberCallbacks: Cache[String, List[RoomMemberCallback]] = createPool[List[RoomMemberCallback]]
 
   def pushCallbackToPool (traceId: String, callback: TraceRequestCallback){
@@ -44,7 +49,7 @@ object CallbackHelper {
   def resolveCallBack (traceId: String,response:StreamResponse):Unit={
     val callback = traceCallbacks.getIfPresent(traceId)
     if(callback!=null){
-      callback(response)
+      callback.success(response)
     }
     traceCallbacks.invalidate(traceId)
   }
@@ -61,32 +66,42 @@ object CallbackHelper {
         cache.put(key,callbackList :+ callback)
       }
   }
+  private def resolveListCallBack[T] (cache:Cache[String,List[Promise[T]]],key: String, data: Try[T]) {
+    val callbackList = cache.getIfPresent(key)
+    if (callbackList != null) {
+      callbackList.foreach(f => f.complete(data))
+      cache.invalidate(key)
+    }
+  }
 
-  def pushContactCallback ( contactId: String, callback: ContactCallback) {
+  def pushContactCallback ( contactId: String, callback:ContactPromise) {
     pushListCallback(contactCallbacks,contactId,callback)
   }
 
-  def resolveContactCallBack (contactId: String, data: PadplusContactPayload) {
-    val callbackList = contactCallbacks.getIfPresent(contactId)
-    if(callbackList != null){
-      callbackList.foreach(f=>f(data))
-    }
+  def resolveContactCallBack (contactId: String, data: Try[PadplusContactPayload]) {
+    resolveListCallBack(contactCallbacks,contactId,data)
 
-    this.resolveContactAliasCallback(contactId, data.remark)
-    this.resolveAcceptFriendCallback(contactId)
-    contactCallbacks.invalidate(contactId)
+    data match{
+      case Success(value) =>
+        this.resolveContactAliasCallback(contactId, value.remark)
+        this.resolveAcceptFriendCallback(contactId)
+      case _ =>
+    }
   }
 
-  def resolveRoomCallBack (roomId: String, data: PadplusRoomPayload) {
-    val callbackList = contactCallbacks.getIfPresent(roomId)
-    if(callbackList != null){
-      callbackList.foreach(f=>f(data))
+  def pushRoomCallback ( roomId: String, callback:RoomPromise) {
+    pushListCallback(roomCallbacks,roomId,callback)
+  }
+  def resolveRoomCallBack (roomId: String, data: Try[PadplusRoomPayload]) {
+    resolveListCallBack(roomCallbacks,roomId,data)
+    data match{
+      case Success(value) =>
+        this.resolveRoomTopicCallback(value.chatroomId, value.nickName)
+      case _ => //do nothing
     }
-    this.resolveRoomTopicCallback(data.chatroomId, data.nickName)
-    contactCallbacks.invalidate(roomId)
   }
 
-  private def pushMapCallback[T](cache:Cache[String,Map[String,T]],key:String,mapKey:String,callback:T): Unit ={
+  private def pushMapCallback[T](cache:Cache[String,Map[String,Promise[T]]],key:String,mapKey:String,callback:Promise[T]): Unit ={
     val callbacks = cache.getIfPresent(key)
     if(callbacks == null){
       cache.put(key,Map(mapKey->callback))
@@ -97,12 +112,12 @@ object CallbackHelper {
   def pushContactAliasCallback (contactId: String, alias: String, callback:ContactAliasCallback): Unit = {
     pushMapCallback(contactAliasCallbacks,contactId,alias,callback)
   }
-  private def resolveMapCallback(cache:Cache[String,Map[String,()=>Unit]],key: String, mapKey: String) {
+  private def resolveMapCallback(cache:Cache[String,Map[String,Promise[Unit]]],key: String, mapKey: String) {
     val callbacks = cache.getIfPresent(key)
     if(callbacks != null){
       val callbackOpt = callbacks.get(mapKey)
       callbackOpt.foreach{f=>
-        f()
+        f.success({})
         if(callbacks.size == 1)
           cache.invalidate(key)
         else
@@ -127,22 +142,14 @@ object CallbackHelper {
   }
 
   private def resolveAcceptFriendCallback (contactId: String) {
-    val callbacks = acceptFriendCallbacks.getIfPresent(contactId)
-    if(callbacks != null){
-      callbacks.foreach(cb=>cb())
-      acceptFriendCallbacks.invalidate(contactId)
-    }
+    resolveListCallBack(acceptFriendCallbacks,contactId,Try[Unit]({}))
   }
 
   def pushRoomMemberCallback (roomId: String, callback: RoomMemberCallback): Unit ={
     pushListCallback(roomMemberCallbacks,roomId,callback)
   }
 
-  def resolveRoomMemberCallback (roomId: String, memberList: PadplusRoomMemberMap) {
-    val callbacks = roomMemberCallbacks.getIfPresent(roomId)
-    if(callbacks != null){
-      callbacks.foreach(cb=>cb(memberList))
-      roomMemberCallbacks.invalidate(roomId)
-    }
+  def resolveRoomMemberCallback (roomId: String, memberList: Try[PadplusRoomMemberMap]) {
+    resolveListCallBack(roomMemberCallbacks,roomId,memberList)
   }
 }

@@ -1,6 +1,9 @@
 package wechaty.padplus.support
 
+import java.io.File
+
 import com.google.protobuf.ByteString
+import org.apache.commons.io.FileUtils
 import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.internal.LocalStore
 import wechaty.padplus.schemas.ModelContact.PadplusContactPayload
@@ -68,5 +71,10 @@ trait LocalStoreSupport {
   protected def stopLocalStore(): Unit ={
     if(store != null)
       store.close()
+  }
+  private[wechaty] def resetLocalStore(): Unit ={
+    stopLocalStore()
+    FileUtils.deleteDirectory(new File(storePath))
+    startLocalStore()
   }
 }
