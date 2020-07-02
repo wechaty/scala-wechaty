@@ -1,7 +1,14 @@
 package wechaty.padplus.support
 
-import org.junit.jupiter.api.Test
+import org.grpcmock.GrpcMock.{stubFor, unaryMethod}
+import org.junit.jupiter.api.{Assertions, Test}
 import wechaty.padplus.PadplusTestEventBase
+import wechaty.padplus.grpc.PadPlusServerGrpc
+import wechaty.padplus.grpc.PadPlusServerOuterClass.{ResponseObject, ResponseType}
+import wechaty.padplus.schemas.ModelContact.GrpcContactPayload
+
+import scala.concurrent.Await
+import scala.concurrent.duration._
 
 
 
@@ -14,18 +21,14 @@ class ContactRawSupportTest extends PadplusTestEventBase{
 
   @Test
   def testGetContact: Unit ={
-    /*
     val responseBuilder = ResponseObject.newBuilder.setResult("success")
     stubFor(unaryMethod(PadPlusServerGrpc.getRequestMethod)
       .willReturn(responseBuilder.build())
     )
 
-    val future = Future[ContactPayload] {
-      val contactId = "contactId"
-      instance.contactPayload(contactId)
-    }
+    val contactId = "contactId"
+    val future = instance.contactPayload(contactId)
 
-    Thread.sleep(TimeUnit.SECONDS.toMillis(2))
 
     val grpcContact = new GrpcContactPayload
     grpcContact.UserName="jcai"
@@ -35,7 +38,5 @@ class ContactRawSupportTest extends PadplusTestEventBase{
     val payload = Await.result(future,10 seconds)
     Assertions.assertEquals("jcai",payload.id)
     awaitEventCompletion()
-
-     */
   }
 }
