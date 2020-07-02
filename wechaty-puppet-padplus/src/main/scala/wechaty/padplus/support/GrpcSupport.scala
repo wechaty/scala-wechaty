@@ -16,14 +16,12 @@ import io.grpc.{ManagedChannel, ManagedChannelBuilder, MethodDescriptor}
 import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.grpc.PadPlusServerGrpc
 import wechaty.padplus.grpc.PadPlusServerOuterClass._
-import wechaty.padplus.support.CallbackHelper.TraceRequestCallback
 import wechaty.puppet.schemas.Puppet
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future, Promise}
 import scala.reflect.ClassTag
 import scala.reflect.runtime.universe._
-import scala.util.Try
 
 /**
   *
@@ -32,15 +30,15 @@ import scala.util.Try
   */
 trait GrpcSupport {
   self: PuppetPadplus with LazyLogging =>
-  private val executorService = Executors.newSingleThreadScheduledExecutor()
+  private            val executorService                                       = Executors.newSingleThreadScheduledExecutor()
   //from https://github.com/wechaty/java-wechaty/blob/master/wechaty-puppet/src/main/kotlin/Puppet.kt
-  private val HEARTBEAT_COUNTER = new AtomicLong()
-  private val HOSTIE_KEEPALIVE_TIMEOUT = 15 * 1000L
-  private val DEFAULT_WATCHDOG_TIMEOUT = 60L
-//  protected var grpcClient: PadPlusServerGrpc.PadPlusServerBlockingStub= _
-  private var asyncGrpcClient: PadPlusServerGrpc.PadPlusServerStub = _
-  protected var channel: ManagedChannel = _
-  protected implicit val executionContext: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
+  private            val HEARTBEAT_COUNTER                                     = new AtomicLong()
+  private            val HOSTIE_KEEPALIVE_TIMEOUT                              = 15 * 1000L
+  private            val DEFAULT_WATCHDOG_TIMEOUT                              = 60L
+  //  protected var grpcClient: PadPlusServerGrpc.PadPlusServerBlockingStub= _
+  private   var asyncGrpcClient          : PadPlusServerGrpc.PadPlusServerStub = _
+  protected var channel                  : ManagedChannel                      = _
+  protected implicit val executionContext: ExecutionContext                    = scala.concurrent.ExecutionContext.Implicits.global
 
 
   protected def startGrpc(endpoint: String): Unit = {
@@ -57,6 +55,7 @@ trait GrpcSupport {
       }
     }, HOSTIE_KEEPALIVE_TIMEOUT, HOSTIE_KEEPALIVE_TIMEOUT, TimeUnit.MILLISECONDS)
   }
+
   protected def initChannel(endpoint: String) = {
     option.channelOpt match {
       case Some(channel) =>
@@ -93,9 +92,9 @@ trait GrpcSupport {
 
   private def internalStartGrpc() {
     logger.info("start grpc client ....")
-//    this.grpcClient = PadPlusServerGrpc.newBlockingStub(channel)
+    //    this.grpcClient = PadPlusServerGrpc.newBlockingStub(channel)
     this.asyncGrpcClient = PadPlusServerGrpc.newStub(channel)
-//    startStream()
+    //    startStream()
     logger.info("start grpc client done")
   }
 
@@ -105,12 +104,12 @@ trait GrpcSupport {
   }
 
   protected def stopGrpc(): Unit = {
-    if(option.channelOpt.isEmpty) {  //if no test!
+    if (option.channelOpt.isEmpty) { //if no test!
       //stop stream
       stopStream()
 
       //stop grpc client
-//      this.grpcClient.request(RequestObject.newBuilder().setApiType(ApiType.CLOSE).setToken(option.token.get).build())
+      //      this.grpcClient.request(RequestObject.newBuilder().setApiType(ApiType.CLOSE).setToken(option.token.get).build())
       this.channel.shutdownNow()
     }
   }
@@ -118,40 +117,44 @@ trait GrpcSupport {
   private def stopStream(): Unit = {
     //do nothing
   }
-  protected def syncRequest[T:TypeTag](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): T ={
-    val future= asyncRequest[T](apiType,data)
+
+  protected def syncRequest[T: TypeTag](apiType: ApiType, data: Option[Any] = None)(implicit classTag: ClassTag[T]): T = {
+    val future = asyncRequest[T](apiType, data)
     Await.result(future, 10 seconds)
   }
-  protected def generateTraceId(apiType:ApiType): String={
+
+  protected def generateTraceId(apiType: ApiType): String = {
     UUID.randomUUID().toString
   }
+
   //can't create Promise[Nothing] instance,so use the method create Future[Unit]
-  protected def asyncRequestNothing(apiType: ApiType,data:Option[Any]=None): Future[Unit] ={
+  protected def asyncRequestNothing(apiType: ApiType, data: Option[Any] = None): Future[Unit] = {
     val request = RequestObject.newBuilder()
     request.setToken(option.token.get)
-    uinOpt match{
+    uinOpt match {
       case Some(id) =>
         request.setUin(id)
       case _ =>
     }
     request.setApiType(apiType)
-    data match{
-      case Some(str:String) =>
+    data match {
+      case Some(str: String) =>
         request.setParams(str)
       case Some(d) =>
         request.setParams(Puppet.objectMapper.writeValueAsString(d))
       case _ =>
     }
 
-    val future = asyncCall(PadPlusServerGrpc.getRequestMethod,request.build())
-    future.map{rep=>
-      if(rep.getResult != "success"){
-        logger.warn("fail to request {}",rep)
-        throw new IllegalAccessException("fail to request ,grpc result:"+rep)
+    val future = asyncCall(PadPlusServerGrpc.getRequestMethod, request.build())
+    future.map { rep =>
+      if (rep.getResult != "success") {
+        logger.warn("fail to request {}", rep)
+        throw new IllegalAccessException("fail to request ,grpc result:" + rep)
       }
     }
   }
-  protected def asyncRequest[T : TypeTag ](apiType: ApiType,data:Option[Any]=None)(implicit classTag: ClassTag[T]): Future[T] ={
+
+  protected def asyncRequest[T: TypeTag](apiType: ApiType, data: Option[Any] = None)(implicit classTag: ClassTag[T]): Future[T] = {
     typeOf[T] match {
       case t if t =:= typeOf[Nothing] =>
         throw new IllegalAccessException("generic type is nothing,maybe you should use asyncRequestNothing !")
@@ -162,14 +165,14 @@ trait GrpcSupport {
     }
     val request = RequestObject.newBuilder()
     request.setToken(option.token.get)
-    uinOpt match{
+    uinOpt match {
       case Some(id) =>
         request.setUin(id)
       case _ =>
     }
     request.setApiType(apiType)
-    data match{
-      case Some(str:String) =>
+    data match {
+      case Some(str: String) =>
         request.setParams(str)
       case Some(d) =>
         request.setParams(Puppet.objectMapper.writeValueAsString(d))
@@ -177,17 +180,17 @@ trait GrpcSupport {
     }
     val requestId = UUID.randomUUID().toString
     request.setRequestId(requestId)
-    val traceId= generateTraceId(apiType)
+    val traceId = generateTraceId(apiType)
     request.setTraceId(traceId)
-    logger.debug("request:{}",request.build())
+    logger.debug("request:{}", request.build())
 
     val callbackPromise = Promise[StreamResponse]
-    CallbackHelper.pushCallbackToPool(traceId,callbackPromise)
-    val future = asyncCall(PadPlusServerGrpc.getRequestMethod,request.build())
-    future.flatMap{rep=>
-      if(rep.getResult != "success"){
-        logger.warn("fail to request:{}",rep)
-        callbackPromise.failure(new IllegalAccessException("fail to request ,grpc result:"+rep))
+    CallbackHelper.pushCallbackToPool(traceId, callbackPromise)
+    val future = asyncCall(PadPlusServerGrpc.getRequestMethod, request.build())
+    future.flatMap { rep =>
+      if (rep.getResult != "success") {
+        logger.warn("fail to request:{}", rep)
+        callbackPromise.failure(new IllegalAccessException("fail to request ,grpc result:" + rep))
       }
       callbackPromise.future
     }.map { streamResponse =>
@@ -206,46 +209,50 @@ trait GrpcSupport {
     }
   }
 
-  type ClientCallback[RespT,T]=RespT => T
-  protected def asyncCall[ReqT,RespT](call: MethodDescriptor[ReqT, RespT], req: ReqT): Future[RespT]= {
-    asyncCallback(call,req)(resp => resp)
+  type ClientCallback[RespT, T] = RespT => T
+
+  protected def asyncCall[ReqT, RespT](call: MethodDescriptor[ReqT, RespT], req: ReqT): Future[RespT] = {
+    asyncCallback(call, req)(resp => resp)
   }
-  def asyncCallback[ReqT, RespT,T](callMethod: MethodDescriptor[ReqT, RespT], req: ReqT)(callback:ClientCallback[RespT,T]): Future[T]= {
-    val call = channel.newCall(callMethod,asyncGrpcClient.getCallOptions)
+
+  def asyncCallback[ReqT, RespT, T](callMethod: MethodDescriptor[ReqT, RespT], req: ReqT)(callback: ClientCallback[RespT, T]): Future[T] = {
+    val call    = channel.newCall(callMethod, asyncGrpcClient.getCallOptions)
     val promise = Promise[T]
-    ClientCalls.asyncUnaryCall(call,req,new StreamObserver[RespT] {
+    ClientCalls.asyncUnaryCall(call, req, new StreamObserver[RespT] {
       override def onNext(value: RespT): Unit = {
         val result = callback(value)
         promise.success(result)
       }
+
       override def onError(t: Throwable): Unit = promise.failure(t)
+
       override def onCompleted(): Unit = {
-        if(!promise.isCompleted) promise.failure(new IllegalStateException("server completed"))
+        if (!promise.isCompleted) promise.failure(new IllegalStateException("server completed"))
       }
     })
     promise.future
   }
 
-  private val ACCESS_KEY_ID = "AKIA3PQY2OQG5FEXWMH6"
-    private val BUCKET= "macpro-message-file"
-    private val EXPIRE_TIME= 3600 * 24 * 3
-    private val PATH= "image-message"
-    private val SECRET_ACCESS_KEY= "jw7Deo+W8l4FTOL2BXd/VubTJjt1mhm55sRhnsEn"
-//  private val s3 = new AmazonS3Client(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY));
-    private val s3=AmazonS3ClientBuilder.standard()
+  private val ACCESS_KEY_ID     = "AKIA3PQY2OQG5FEXWMH6"
+  private val BUCKET            = "macpro-message-file"
+  private val EXPIRE_TIME       = 3600 * 24 * 3
+  private val PATH              = "image-message"
+  private val SECRET_ACCESS_KEY = "jw7Deo+W8l4FTOL2BXd/VubTJjt1mhm55sRhnsEn"
+  //  private val s3 = new AmazonS3Client(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY));
+  private val s3                = AmazonS3ClientBuilder.standard()
     .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY)))
-  .enablePayloadSigning()
-      .withRegion(Regions.CN_NORTHWEST_1).build(); // 此处根据自己的 s3 地区位置改变
+    .enablePayloadSigning()
+    .withRegion(Regions.CN_NORTHWEST_1).build(); // 此处根据自己的 s3 地区位置改变
 
-  def uploadFile (filename: String, stream: InputStream) {
-//    ACL: "public-read",
-//    const s3 = new AWS.S3({ region: "cn-northwest-1", signatureVersion: "v4" })
-    val meta = new ObjectMetadata
-    val key=PATH+"/"+filename
-    val params = new PutObjectRequest(BUCKET,key,stream,meta)
-    val result = s3.putObject(params.withCannedAcl(CannedAccessControlList.PublicRead));
+  def uploadFile(filename: String, stream: InputStream) {
+    //    ACL: "public-read",
+    //    const s3 = new AWS.S3({ region: "cn-northwest-1", signatureVersion: "v4" })
+    val meta       = new ObjectMetadata
+    val key        = PATH + "/" + filename
+    val params     = new PutObjectRequest(BUCKET, key, stream, meta)
+    val result     = s3.putObject(params.withCannedAcl(CannedAccessControlList.PublicRead));
     //获取一个request
-    val urlRequest = new GeneratePresignedUrlRequest( BUCKET, key);
+    val urlRequest = new GeneratePresignedUrlRequest(BUCKET, key);
     //生成公用的url
     s3.generatePresignedUrl(urlRequest);
   }
