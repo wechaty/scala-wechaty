@@ -10,184 +10,186 @@ import wechaty.puppet.schemas.Puppet._
 import wechaty.puppet.schemas.Puppet
 import wechaty.puppet.{ResourceBox, schemas}
 
+import scala.concurrent.Future
+
 
 /**
   * wrap MessagePayload
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-02
   */
-<span class="pc bpc" id="L19" title="1 of 4 branches missed.">class Message(messageId:String)(implicit resolver: PuppetResolver) extends LazyLogging{</span>
-<span class="fc" id="L20">  private val MENTION_MEMBER_PATTERN= (&quot;@([^\u2005^\u0020^$]+)&quot;)</span>
-<span class="pc bpc" id="L21" title="1 of 4 branches missed.">  lazy val payload: schemas.Message.MessagePayload = {</span>
-<span class="fc" id="L22">    resolver</span>
+<span class="pc bpc" id="L21" title="1 of 4 branches missed.">class Message(messageId:String)(implicit resolver: PuppetResolver) extends LazyLogging{</span>
+<span class="fc" id="L22">  private val MENTION_MEMBER_PATTERN= (&quot;@([^\u2005^\u0020^$]+)&quot;)</span>
+<span class="pc bpc" id="L23" title="1 of 4 branches missed.">  lazy val payload: schemas.Message.MessagePayload = {</span>
+<span class="fc" id="L24">    resolver</span>
       .puppet
-<span class="fc" id="L24">      .messagePayload(messageId)</span>
+<span class="fc" id="L26">      .messagePayload(messageId)</span>
   }
   private def sayId: String ={
-<span class="pc bpc" id="L27" title="1 of 2 branches missed.">    if(!Puppet.isBlank(payload.roomId)) payload.roomId</span>
-<span class="nc bnc" id="L28" title="All 2 branches missed.">    else if(!Puppet.isBlank(payload.fromId)) payload.fromId</span>
-<span class="pc" id="L29">    else throw new IllegalStateException(&quot;roomid and fromid both is null&quot;)</span>
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">    if(!Puppet.isBlank(payload.roomId)) payload.roomId</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">    else if(!Puppet.isBlank(payload.fromId)) payload.fromId</span>
+<span class="pc" id="L31">    else throw new IllegalStateException(&quot;roomid and fromid both is null&quot;)</span>
   }
 
   override def toString: String = {
-<span class="nc bnc" id="L33" title="All 2 branches missed.">    if(payload != null) payload.text</span>
-<span class="nc" id="L34">    else &quot;Message&quot;</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">    if(payload != null) payload.text</span>
+<span class="nc" id="L36">    else &quot;Message&quot;</span>
   }
   def talker:Contact ={
-<span class="nc" id="L37">    this.from</span>
+<span class="nc" id="L39">    this.from</span>
   }
 
   def conversation : Conversation = {
-<span class="nc" id="L41">    room match{</span>
-<span class="nc bnc" id="L42" title="All 2 branches missed.">      case Some(r) =&gt; r</span>
-<span class="nc" id="L43">      case _ =&gt; this.from</span>
+<span class="nc" id="L43">    room match{</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">      case Some(r) =&gt; r</span>
+<span class="nc" id="L45">      case _ =&gt; this.from</span>
     }
   }
   private def assertPayload(): Unit ={
-<span class="pc bpc" id="L47" title="1 of 2 branches missed.">    if (this.payload == null) {</span>
-<span class="nc" id="L48">      throw new Error(&quot;no payload&quot;)</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">    if (this.payload == null) {</span>
+<span class="nc" id="L50">      throw new Error(&quot;no payload&quot;)</span>
     }
   }
 
   def from: Contact ={
-<span class="fc" id="L53">    assertPayload()</span>
-<span class="fc" id="L54">    val fromId = this.payload.fromId</span>
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">    if (Puppet.isBlank(fromId)) null</span>
-<span class="pc" id="L56">    else new Contact(fromId)</span>
+<span class="fc" id="L55">    assertPayload()</span>
+<span class="fc" id="L56">    val fromId = this.payload.fromId</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">    if (Puppet.isBlank(fromId)) null</span>
+<span class="pc" id="L58">    else new Contact(fromId)</span>
   }
 
   def to : Contact ={
-<span class="nc" id="L60">    assertPayload()</span>
+<span class="nc" id="L62">    assertPayload()</span>
 
-<span class="nc" id="L62">    val toId = this.payload.toId</span>
-<span class="nc bnc" id="L63" title="All 2 branches missed.">    if (Puppet.isBlank(toId)) null</span>
-<span class="nc" id="L64">    else new Contact(toId)</span>
+<span class="nc" id="L64">    val toId = this.payload.toId</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">    if (Puppet.isBlank(toId)) null</span>
+<span class="nc" id="L66">    else new Contact(toId)</span>
   }
 
   def room:Option[Room] ={
-<span class="fc" id="L68">    assertPayload()</span>
-<span class="fc" id="L69">    val roomId = this.payload.roomId</span>
-<span class="pc bpc" id="L70" title="1 of 2 branches missed.">    if (isBlank(roomId)) None</span>
-<span class="fc" id="L71">    else Room.load(roomId)</span>
+<span class="fc" id="L70">    assertPayload()</span>
+<span class="fc" id="L71">    val roomId = this.payload.roomId</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">    if (isBlank(roomId)) None</span>
+<span class="fc" id="L73">    else Room.load(roomId)</span>
   }
 
 
   def text : String ={
-<span class="fc" id="L76">    assertPayload()</span>
-<span class="fc" id="L77">    this.payload.text</span>
+<span class="fc" id="L78">    assertPayload()</span>
+<span class="fc" id="L79">    this.payload.text</span>
   }
 
   def toRecalled: Message= {
-<span class="nc bnc" id="L81" title="All 6 branches missed.">    if (this.`type` != MessageType.Recalled) {</span>
-<span class="nc" id="L82">      throw new Error(&quot;Can not call toRecalled() on message which is not recalled type.&quot;)</span>
+<span class="nc bnc" id="L83" title="All 6 branches missed.">    if (this.`type` != MessageType.Recalled) {</span>
+<span class="nc" id="L84">      throw new Error(&quot;Can not call toRecalled() on message which is not recalled type.&quot;)</span>
     }
-<span class="nc" id="L84">    val originalMessageId = this.text</span>
-<span class="nc bnc" id="L85" title="All 2 branches missed.">    if (originalMessageId == null) {</span>
-<span class="nc" id="L86">      throw new Error(&quot;Can not find recalled message&quot;)</span>
+<span class="nc" id="L86">    val originalMessageId = this.text</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">    if (originalMessageId == null) {</span>
+<span class="nc" id="L88">      throw new Error(&quot;Can not find recalled message&quot;)</span>
     }
-<span class="nc" id="L88">    new Message(originalMessageId)</span>
+<span class="nc" id="L90">    new Message(originalMessageId)</span>
   }
 
-  def say(text:String): Message = {
-<span class="fc" id="L92">    resolver.puppet.messageSendText(sayId,text)</span>
+  def say(text:String): Future[Message] = {
+<span class="fc" id="L94">    resolver.puppet.messageSendText(sayId,text)</span>
   }
   def say(contact: Contact): Message = {
-<span class="nc" id="L95">    resolver.puppet.messageSendContact(sayId,contact.id)</span>
+<span class="nc" id="L97">    resolver.puppet.messageSendContact(sayId,contact.id)</span>
   }
   def say(resourceBox:ResourceBox): Message ={
-<span class="nc" id="L98">    resolver.puppet.messageSendFile(sayId,resourceBox)</span>
+<span class="nc" id="L100">    resolver.puppet.messageSendFile(sayId,resourceBox)</span>
   }
   def say(urlLink: UrlLink) :Message = {
-<span class="nc" id="L101">    resolver.puppet.messageSendUrl(sayId,urlLink.payload)</span>
+<span class="nc" id="L103">    resolver.puppet.messageSendUrl(sayId,urlLink.payload)</span>
   }
   def say(mp:MiniProgram) :Message = {
-<span class="nc" id="L104">    resolver.puppet.messageSendMiniProgram(</span>
-<span class="nc" id="L105">      sayId,</span>
-<span class="nc" id="L106">      mp.payload,</span>
+<span class="nc" id="L106">    resolver.puppet.messageSendMiniProgram(</span>
+<span class="nc" id="L107">      sayId,</span>
+<span class="nc" id="L108">      mp.payload,</span>
     )
   }
 
   def recall (): Boolean = {
-<span class="nc" id="L111">    resolver.puppet.messageRecall(messageId)</span>
+<span class="nc" id="L113">    resolver.puppet.messageRecall(messageId)</span>
   }
   def `type`: MessageType.Type={
-<span class="fc" id="L114">    assertPayload()</span>
-<span class="fc" id="L115">    this.payload.`type`</span>
+<span class="fc" id="L116">    assertPayload()</span>
+<span class="fc" id="L117">    this.payload.`type`</span>
   }
 
   def self (): Boolean = {
-<span class="fc" id="L119">    val userIdOpt = resolver.puppet.selfIdOpt()</span>
-<span class="fc" id="L120">    userIdOpt match{</span>
-<span class="pc bpc" id="L121" title="1 of 2 branches missed.">      case Some(userId) =&gt;</span>
-<span class="fc" id="L122">        val from = this.from</span>
-<span class="pc bpc" id="L123" title="7 of 8 branches missed.">        from != null &amp;&amp; from.id == userId</span>
+<span class="fc" id="L121">    val userIdOpt = resolver.puppet.selfIdOpt()</span>
+<span class="fc" id="L122">    userIdOpt match{</span>
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">      case Some(userId) =&gt;</span>
+<span class="fc" id="L124">        val from = this.from</span>
+<span class="pc bpc" id="L125" title="7 of 8 branches missed.">        from != null &amp;&amp; from.id == userId</span>
       case _ =&gt;
-<span class="nc" id="L125">        false</span>
+<span class="nc" id="L127">        false</span>
     }
   }
 
   def mentionList: Array[Contact]= {
-<span class="fc" id="L130">    val room = this.room</span>
-<span class="pc bpc" id="L131" title="5 of 8 branches missed.">    if (this.`type` != MessageType.Text || room == null) {</span>
-<span class="nc" id="L132">      return Array()</span>
+<span class="fc" id="L132">    val room = this.room</span>
+<span class="pc bpc" id="L133" title="5 of 8 branches missed.">    if (this.`type` != MessageType.Text || room == null) {</span>
+<span class="nc" id="L134">      return Array()</span>
     }
 
     /**
       * Use mention list if mention list is available
       * otherwise, process the message and get the mention list
       */
-<span class="pc bpc" id="L139" title="3 of 6 branches missed.">    if (this.payload != null &amp;&amp; this.payload.mentionIdList != null &amp;&amp; this.payload.mentionIdList.length &gt; 0) {</span>
-<span class="nc" id="L140">      this.payload.mentionIdList.map(new Contact(_))</span>
+<span class="pc bpc" id="L141" title="3 of 6 branches missed.">    if (this.payload != null &amp;&amp; this.payload.mentionIdList != null &amp;&amp; this.payload.mentionIdList.length &gt; 0) {</span>
+<span class="nc" id="L142">      this.payload.mentionIdList.map(new Contact(_))</span>
     } else {
-<span class="fc" id="L142">      val reg = MENTION_MEMBER_PATTERN.r</span>
-<span class="fc" id="L143">      val it = reg.findAllMatchIn(text)</span>
-<span class="fc" id="L144">      it.map(_.group(1)).map(new Contact(_)).toArray</span>
+<span class="fc" id="L144">      val reg = MENTION_MEMBER_PATTERN.r</span>
+<span class="fc" id="L145">      val it = reg.findAllMatchIn(text)</span>
+<span class="fc" id="L146">      it.map(_.group(1)).map(new Contact(_)).toArray</span>
 
     }
   }
 
   def mentionText (): String= {
-<span class="fc" id="L150">    val text = this.text</span>
-<span class="fc" id="L151">    val room = this.room</span>
+<span class="fc" id="L152">    val text = this.text</span>
+<span class="fc" id="L153">    val room = this.room</span>
 
-<span class="fc" id="L153">    val list = this.mentionList</span>
+<span class="fc" id="L155">    val list = this.mentionList</span>
 
-<span class="pc bpc" id="L155" title="2 of 6 branches missed.">    if (room.isEmpty || list == null || list.length == 0) {</span>
-<span class="fc" id="L156">      return text</span>
+<span class="pc bpc" id="L157" title="2 of 6 branches missed.">    if (room.isEmpty || list == null || list.length == 0) {</span>
+<span class="fc" id="L158">      return text</span>
     }
 
-<span class="fc" id="L159">    val toAliasName = (member: Contact) =&gt; {</span>
-<span class="fc" id="L160">      room.get.alias(member).getOrElse(member.name)</span>
+<span class="fc" id="L161">    val toAliasName = (member: Contact) =&gt; {</span>
+<span class="fc" id="L162">      room.get.alias(member).getOrElse(member.name)</span>
     }
 
-<span class="pc bpc" id="L163" title="1 of 2 branches missed.">    logger.debug(s&quot;message text:$text mentionsList:$list&quot;)</span>
-<span class="fc" id="L164">    val mentionNameList = list.map(toAliasName)</span>
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">    logger.debug(s&quot;message text:$text mentionsList:$list&quot;)</span>
+<span class="fc" id="L166">    val mentionNameList = list.map(toAliasName)</span>
 
-<span class="fc" id="L166">    val textWithoutMention = mentionNameList.foldLeft(text)((prev, cur) =&gt; {</span>
-<span class="fc" id="L167">      val escapedCur = cur</span>
-<span class="fc" id="L168">      val regex = &quot;@\\Q&quot;+escapedCur+&quot;\\E(\\u2005|\\u0020|$)&quot;</span>
-<span class="fc" id="L169">      prev.replaceFirst(regex,&quot;&quot;)</span>
+<span class="fc" id="L168">    val textWithoutMention = mentionNameList.foldLeft(text)((prev, cur) =&gt; {</span>
+<span class="fc" id="L169">      val escapedCur = cur</span>
+<span class="fc" id="L170">      val regex = &quot;@\\Q&quot;+escapedCur+&quot;\\E(\\u2005|\\u0020|$)&quot;</span>
+<span class="fc" id="L171">      prev.replaceFirst(regex,&quot;&quot;)</span>
     })
 
-<span class="fc" id="L172">    textWithoutMention.trim()</span>
+<span class="fc" id="L174">    textWithoutMention.trim()</span>
   }
   def mentionSelf (): Boolean =  {
-<span class="nc" id="L175">    resolver.puppet.selfIdOpt() match{</span>
-<span class="nc bnc" id="L176" title="All 2 branches missed.">      case Some(selfId) =&gt;</span>
-<span class="nc bnc" id="L177" title="All 6 branches missed.">        mentionList.exists(_.id == selfId)</span>
-<span class="nc" id="L178">      case _ =&gt;  false</span>
+<span class="nc" id="L177">    resolver.puppet.selfIdOpt() match{</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">      case Some(selfId) =&gt;</span>
+<span class="nc bnc" id="L179" title="All 6 branches missed.">        mentionList.exists(_.id == selfId)</span>
+<span class="nc" id="L180">      case _ =&gt;  false</span>
     }
   }
-  def forward (to: Conversation): Unit = {
-<span class="fc" id="L182">    resolver.puppet.messageForward(to.id, this.messageId)</span>
+  def forward (to: Conversation): Future[String]= {
+<span class="fc" id="L184">    resolver.puppet.messageForward(to.id, this.messageId)</span>
   }
   /**
     * Message sent date
     */
   def date: Date ={
-<span class="nc" id="L188">    assertPayload()</span>
-<span class="nc" id="L189">    val timestamp = this.payload.timestamp</span>
-<span class="nc" id="L190">    timestampToDate(timestamp)</span>
+<span class="nc" id="L190">    assertPayload()</span>
+<span class="nc" id="L191">    val timestamp = this.payload.timestamp</span>
+<span class="nc" id="L192">    timestampToDate(timestamp)</span>
   }
 
   /**
@@ -199,9 +201,9 @@ import wechaty.puppet.{ResourceBox, schemas}
     * @returns {number}
     */
   def age:Long={
-<span class="nc" id="L202">    val ageMilliseconds = System.currentTimeMillis() - this.date.getTime()</span>
-<span class="nc" id="L203">    val ageSeconds = Math.floor(ageMilliseconds / 1000)</span>
-<span class="nc" id="L204">    ageSeconds.longValue()</span>
+<span class="nc" id="L204">    val ageMilliseconds = System.currentTimeMillis() - this.date.getTime()</span>
+<span class="nc" id="L205">    val ageSeconds = Math.floor(ageMilliseconds / 1000)</span>
+<span class="nc" id="L206">    ageSeconds.longValue()</span>
   }
 
 
@@ -218,16 +220,16 @@ import wechaty.puppet.{ResourceBox, schemas}
     * fileBox.toFile(fileName)
     */
   def toResourceBox (): ResourceBox= {
-<span class="nc bnc" id="L221" title="All 6 branches missed.">    if (this.`type` == MessageType.Text) {</span>
-<span class="nc" id="L222">    throw new Error(&quot;text message no file&quot;)</span>
+<span class="nc bnc" id="L223" title="All 6 branches missed.">    if (this.`type` == MessageType.Text) {</span>
+<span class="nc" id="L224">    throw new Error(&quot;text message no file&quot;)</span>
     }
-<span class="nc" id="L224">    resolver.puppet.messageFile(this.messageId)</span>
+<span class="nc" id="L226">    resolver.puppet.messageFile(this.messageId)</span>
   }
   def toImage (): Image ={
-<span class="nc bnc" id="L227" title="All 6 branches missed.">    if (this.`type` != MessageType.Image) {</span>
-<span class="nc" id="L228">      throw new Error(&quot;not a image type message. type: &quot;+this.`type`)</span>
+<span class="nc bnc" id="L229" title="All 6 branches missed.">    if (this.`type` != MessageType.Image) {</span>
+<span class="nc" id="L230">      throw new Error(&quot;not a image type message. type: &quot;+this.`type`)</span>
     }
-<span class="nc" id="L230">    new Image(this.messageId)</span>
+<span class="nc" id="L232">    new Image(this.messageId)</span>
   }
 
   /**
@@ -238,47 +240,47 @@ import wechaty.puppet.{ResourceBox, schemas}
     * @returns {Promise&lt;Contact&gt;}
     */
   def toContact (): Contact ={
-<span class="nc bnc" id="L241" title="All 6 branches missed.">    if (this.`type` != MessageType.Contact) {</span>
-<span class="nc" id="L242">      throw new Error(&quot;message not a ShareCard&quot;)</span>
+<span class="nc bnc" id="L243" title="All 6 branches missed.">    if (this.`type` != MessageType.Contact) {</span>
+<span class="nc" id="L244">      throw new Error(&quot;message not a ShareCard&quot;)</span>
     }
 
-<span class="nc" id="L245">    val contactId = resolver.puppet.messageContact(this.messageId)</span>
+<span class="nc" id="L247">    val contactId = resolver.puppet.messageContact(this.messageId)</span>
 
-<span class="nc bnc" id="L247" title="All 2 branches missed.">    if (Puppet.isBlank(contactId)) {</span>
-<span class="nc" id="L248">    throw new Error(s&quot;can not get Contact id by message: ${contactId}&quot;)</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">    if (Puppet.isBlank(contactId)) {</span>
+<span class="nc" id="L250">    throw new Error(s&quot;can not get Contact id by message: ${contactId}&quot;)</span>
     }
 
-<span class="nc" id="L251">    new Contact(contactId)</span>
+<span class="nc" id="L253">    new Contact(contactId)</span>
   }
 
   def toUrlLink (): UrlLink= {
-<span class="nc" id="L255">    assertPayload()</span>
-<span class="nc bnc" id="L256" title="All 6 branches missed.">    if (this.`type` != MessageType.Url) {</span>
-<span class="nc" id="L257">      throw new Error(&quot;message not a Url Link&quot;)</span>
+<span class="nc" id="L257">    assertPayload()</span>
+<span class="nc bnc" id="L258" title="All 6 branches missed.">    if (this.`type` != MessageType.Url) {</span>
+<span class="nc" id="L259">      throw new Error(&quot;message not a Url Link&quot;)</span>
     }
 
-<span class="nc" id="L260">    val urlPayload = resolver.puppet.messageUrl(this.messageId)</span>
-<span class="nc bnc" id="L261" title="All 2 branches missed.">    if (urlPayload == null) {</span>
-<span class="nc" id="L262">    throw new Error(s&quot;no url payload for message ${this.messageId}&quot;)</span>
+<span class="nc" id="L262">    val urlPayload = resolver.puppet.messageUrl(this.messageId)</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">    if (urlPayload == null) {</span>
+<span class="nc" id="L264">    throw new Error(s&quot;no url payload for message ${this.messageId}&quot;)</span>
     }
 
-<span class="nc" id="L265">    new UrlLink(urlPayload)</span>
+<span class="nc" id="L267">    new UrlLink(urlPayload)</span>
   }
 
   def toMiniProgram (): MiniProgram= {
-<span class="nc" id="L269">    assertPayload()</span>
+<span class="nc" id="L271">    assertPayload()</span>
 
-<span class="nc bnc" id="L271" title="All 6 branches missed.">    if (this.`type` != MessageType.MiniProgram) {</span>
-<span class="nc" id="L272">      throw new Error(&quot;message not a MiniProgram&quot;)</span>
+<span class="nc bnc" id="L273" title="All 6 branches missed.">    if (this.`type` != MessageType.MiniProgram) {</span>
+<span class="nc" id="L274">      throw new Error(&quot;message not a MiniProgram&quot;)</span>
     }
 
-<span class="nc" id="L275">    val miniProgramPayload = resolver.puppet.messageMiniProgram(this.messageId)</span>
+<span class="nc" id="L277">    val miniProgramPayload = resolver.puppet.messageMiniProgram(this.messageId)</span>
 
-<span class="nc bnc" id="L277" title="All 2 branches missed.">    if (miniProgramPayload == null) {</span>
-<span class="nc" id="L278">      throw new Error(s&quot;no miniProgram payload for message ${this.messageId}&quot;)</span>
+<span class="nc bnc" id="L279" title="All 2 branches missed.">    if (miniProgramPayload == null) {</span>
+<span class="nc" id="L280">      throw new Error(s&quot;no miniProgram payload for message ${this.messageId}&quot;)</span>
     }
 
-<span class="nc" id="L281">    new MiniProgram(miniProgramPayload)</span>
+<span class="nc" id="L283">    new MiniProgram(miniProgramPayload)</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

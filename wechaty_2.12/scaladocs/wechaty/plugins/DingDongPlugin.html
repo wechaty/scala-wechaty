@@ -168,7 +168,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">DingDongPlugin</span><span class="result"> extends <a href="../WechatyPlugin.html" class="extype" name="wechaty.WechatyPlugin">WechatyPlugin</a></span>
+        <span class="name">DingDongPlugin</span><span class="result"> extends <a href="../WechatyPlugin.html" class="extype" name="wechaty.WechatyPlugin">WechatyPlugin</a> with <span class="extype" name="com.typesafe.scalalogging.LazyLogging">LazyLogging</span></span>
       </span>
       </h4>
 
@@ -177,7 +177,7 @@
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="../WechatyPlugin.html" class="extype" name="wechaty.WechatyPlugin">WechatyPlugin</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="com.typesafe.scalalogging.LazyLogging">LazyLogging</span>, <a href="../WechatyPlugin.html" class="extype" name="wechaty.WechatyPlugin">WechatyPlugin</a>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -203,7 +203,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="wechaty.plugins.DingDongPlugin"><span>DingDongPlugin</span></li><li class="in" name="wechaty.WechatyPlugin"><span>WechatyPlugin</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="wechaty.plugins.DingDongPlugin"><span>DingDongPlugin</span></li><li class="in" name="com.typesafe.scalalogging.LazyLogging"><span>LazyLogging</span></li><li class="in" name="wechaty.WechatyPlugin"><span>WechatyPlugin</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -224,9 +224,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="wechaty.plugins.DingDongPlugin#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(config:wechaty.plugins.DingDongConfig):wechaty.plugins.DingDongPlugin"></a><a id="&lt;init&gt;:DingDongPlugin"></a>
+      <a id="&lt;init&gt;(config:wechaty.plugins.DingDongConfig,isWait:Boolean):wechaty.plugins.DingDongPlugin"></a><a id="&lt;init&gt;:DingDongPlugin"></a>
       <span class="permalink">
-      <a href="../../wechaty/plugins/DingDongPlugin.html#&lt;init&gt;(config:wechaty.plugins.DingDongConfig):wechaty.plugins.DingDongPlugin" title="Permalink">
+      <a href="../../wechaty/plugins/DingDongPlugin.html#&lt;init&gt;(config:wechaty.plugins.DingDongConfig,isWait:Boolean):wechaty.plugins.DingDongPlugin" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -235,7 +235,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">DingDongPlugin</span><span class="params">(<span name="config">config: <a href="DingDongConfig.html" class="extype" name="wechaty.plugins.DingDongConfig">DingDongConfig</a></span>)</span>
+        <span class="name">DingDongPlugin</span><span class="params">(<span name="config">config: <a href="DingDongConfig.html" class="extype" name="wechaty.plugins.DingDongConfig">DingDongConfig</a></span>, <span name="isWait">isWait: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span>
       </span>
       
       
@@ -461,6 +461,25 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.typesafe.scalalogging.LazyLogging#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logger:com.typesafe.scalalogging.Logger"></a><a id="logger:Logger"></a>
+      <span class="permalink">
+      <a href="../../wechaty/plugins/DingDongPlugin.html#logger:com.typesafe.scalalogging.Logger" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logger</span><span class="result">: <span class="extype" name="com.typesafe.scalalogging.Logger">Logger</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>LazyLogging</dd><dt>Annotations</dt><dd>
+                <span class="name">@transient</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -625,7 +644,9 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="wechaty.WechatyPlugin">
+        <div class="parent" name="com.typesafe.scalalogging.LazyLogging">
+              <h3>Inherited from <span class="extype" name="com.typesafe.scalalogging.LazyLogging">LazyLogging</span></h3>
+            </div><div class="parent" name="wechaty.WechatyPlugin">
               <h3>Inherited from <a href="../WechatyPlugin.html" class="extype" name="wechaty.WechatyPlugin">WechatyPlugin</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>

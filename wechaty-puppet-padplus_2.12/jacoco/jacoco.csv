@@ -1,5 +1,5 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcMessagePayload,178,0,0,0,27,0,51,0,51,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcMessagePayload,0,178,0,0,0,27,0,51,0,51
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.AutoLoginError.,22,0,0,0,3,0,4,0,4,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelRoom.GrpcRoomPayload,220,0,0,0,33,0,63,0,63,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcContactOperationOption,31,0,0,0,6,0,9,0,9,0
@@ -18,7 +18,7 @@ wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelFriendship.FriendshipPa
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelRoom.PadplusRoomPayload,94,0,0,0,14,0,27,0,27,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelRoom.PadplusRoomInviteEvent,52,0,0,0,9,0,15,0,15,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcRoomRawPayload,108,0,0,0,17,0,31,0,31,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelMessage.PadplusMessagePayload,150,0,0,0,23,0,43,0,43,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelMessage.PadplusMessagePayload,0,150,0,0,0,23,0,43,0,43
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcDeletedPayload,17,0,0,0,4,0,5,0,5,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelContact.SetContactSelfInfoGrpcResponse,52,0,0,0,9,0,15,0,15,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcGetCdnDnsPayload.snsCdn,38,0,2,0,6,0,10,0,9,0
@@ -93,7 +93,7 @@ wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.EncryptionServi
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelEvent.RoomTopicEvent,31,0,0,0,6,0,9,0,9,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcGetCdnDnsPayload,10,0,0,0,3,0,3,0,3,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcGetCdnDnsPayload.dnsCdn,38,0,2,0,6,0,10,0,9,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.PadplusMessageType.,200,0,0,0,25,0,26,0,26,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.PadplusMessageType.,0,200,0,0,0,25,0,26,0,26
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelFriendship.FriendshipPayloadBase,31,0,0,0,6,0,9,0,9,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.WechatAppMessageType.,176,0,0,0,22,0,23,0,23,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelRoom.GrpcCreateRoomData,31,0,0,0,6,0,9,0,9,0
@@ -128,12 +128,12 @@ wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelMessage.PadplusRecallDa
 wechaty-puppet-padplus_2.12,wechaty.padplus.internal,LocalStore,20,106,1,3,3,17,3,12,2,11
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,GrpcEventSupport,58,107,9,5,3,17,8,6,2,5
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactRawSupport,156,263,36,6,14,49,27,9,6,9
-wechaty-puppet-padplus_2.12,wechaty.padplus.support,LocalStoreSupport,146,90,2,2,12,13,12,7,10,7
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,LocalStoreSupport,122,114,2,2,11,14,11,8,9,8
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,GrpcSupport..anon.new StreamObserver() {...},15,25,1,1,1,6,2,3,1,3
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,PadplusHelper,311,31,88,2,23,5,49,3,4,3
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,CallbackHelper,82,0,0,0,0,0,19,0,19,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,RoomMemberRawSupport..anonfun.roomMemberPartialFunction.new Serializable() {...},129,0,6,0,13,0,8,0,5,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.support,MessageRawSupport..typecreator1.new TypeCreator() {...},51,0,0,0,1,0,2,0,2,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,MessageRawSupport..typecreator1.new TypeCreator() {...},0,51,0,0,0,1,0,2,0,2
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactSelfRawSupport..typecreator1.new TypeCreator() {...},51,0,0,0,1,0,2,0,2,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,RoomRawSupport,97,1,0,0,26,1,11,1,11,1
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,GrpcSupport..typecreator2.new TypeCreator() {...},0,14,0,0,0,1,0,2,0,2
@@ -144,19 +144,19 @@ wechaty-puppet-padplus_2.12,wechaty.padplus.support,DisrutporSupport,1,82,1,1,0,
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,MessageRawSupport..anonfun.messagePartialFunction.new Serializable() {...},68,11,5,1,7,1,5,1,2,1
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,CallbackHelper.,338,312,35,17,27,31,42,26,20,22
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,RoomMemberRawSupport..typecreator1.new TypeCreator() {...},51,0,0,0,1,0,2,0,2,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.support,RoomMemberRawSupport,180,0,2,0,30,0,11,0,10,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,RoomMemberRawSupport,193,0,2,0,31,0,12,0,11,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,DisrutporSupport.EventDef,2,22,1,1,0,4,1,5,0,5
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactSelfRawSupport,128,1,0,0,24,1,7,1,7,1
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,ContactRawSupport..typecreator1.new TypeCreator() {...},0,51,0,0,0,1,0,2,0,2
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,DisrutporSupport..anon.new EventHandler() {...},3,40,2,2,0,3,2,2,0,2
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,DisrutporSupport..anon.new EventFactory() {...},2,14,1,1,0,2,1,2,0,2
 wechaty-puppet-padplus_2.12,wechaty.padplus.support,DisrutporSupport..anon.new ExceptionHandler() {...},46,8,5,1,3,1,6,1,3,1
-wechaty-puppet-padplus_2.12,wechaty.padplus.support,MessageRawSupport,393,7,32,0,71,2,30,2,14,2
-wechaty-puppet-padplus_2.12,wechaty.padplus.support,GrpcSupport,316,605,34,26,30,83,33,21,7,17
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,MessageRawSupport,229,182,31,1,41,33,28,5,12,5
+wechaty-puppet-padplus_2.12,wechaty.padplus.support,GrpcSupport,256,623,30,28,25,83,29,22,5,17
 wechaty-puppet-padplus_2.12,wechaty.padplus,Configuration,6,0,0,0,0,0,2,0,2,0
 wechaty-puppet-padplus_2.12,wechaty.padplus,PuppetPadplus..anonfun.sysPartialFunction.new Serializable() {...},17,33,3,3,0,3,3,3,1,2
 wechaty-puppet-padplus_2.12,wechaty.padplus,PuppetPadplus.,10,0,0,0,1,0,3,0,3,0
-wechaty-puppet-padplus_2.12,wechaty.padplus,PuppetPadplus,388,466,4,6,20,18,104,87,100,86
+wechaty-puppet-padplus_2.12,wechaty.padplus,PuppetPadplus,363,482,4,6,20,18,98,91,94,90
 wechaty-puppet-padplus_2.12,wechaty.padplus,TestMain,4,0,0,0,0,0,1,0,1,0
 wechaty-puppet-padplus_2.12,wechaty.padplus,TestMain.,71,0,4,0,9,0,7,0,5,0
 wechaty-puppet-padplus_2.12,wechaty.padplus,Configuration.,116,0,12,0,10,0,12,0,6,0
@@ -165,18 +165,18 @@ wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerGrpc,49,91,6,6,16,
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.InitConfig.new AbstractParser() {...},0,10,0,0,0,2,0,2,0,2
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.ResponseObject.new AbstractParser() {...},0,10,0,0,0,2,0,2,0,2
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass,4,119,0,0,3,13,2,2,2,2
-wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.ApiType,82,419,34,3,37,48,36,9,3,7
+wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.ApiType,80,421,33,4,36,49,35,10,3,7
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.InitConfig.Builder,241,66,24,4,71,23,37,5,23,5
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerGrpc.MethodHandlers,38,0,3,0,13,0,5,0,3,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerGrpc.PadPlusServerBaseDescriptorSupplier,7,3,0,0,2,1,2,1,2,1
-wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.RequestObject,504,521,90,62,132,146,82,48,26,25
+wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.RequestObject,501,524,89,63,131,147,81,49,26,25
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.ApiType.new Internal.EnumLiteMap() {...},3,3,0,0,1,1,1,1,1,1
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerGrpc.PadPlusServerMethodDescriptorSupplier,6,6,0,0,1,3,1,1,1,1
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.StreamResponse,530,372,90,41,138,108,84,32,26,22
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.StreamResponse.Builder,682,153,77,11,196,47,86,8,43,7
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerGrpc.PadPlusServerImplBase,31,0,0,0,13,0,4,0,4,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerGrpc.PadPlusServerStub,16,15,0,0,4,5,2,2,2,2
-wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.ResponseType,74,375,30,3,33,44,32,9,3,7
+wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.ResponseType,72,377,29,4,32,45,31,10,3,7
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.RequestObject.new AbstractParser() {...},0,10,0,0,0,2,0,2,0,2
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.StreamResponse.new AbstractParser() {...},0,10,0,0,0,2,0,2,0,2
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerGrpc.PadPlusServerFileDescriptorSupplier,3,0,0,0,1,0,1,0,1,0

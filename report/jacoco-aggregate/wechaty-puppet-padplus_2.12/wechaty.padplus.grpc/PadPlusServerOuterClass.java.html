@@ -314,7 +314,7 @@ public final class PadPlusServerOuterClass {
      * @return The enum associated with the given numeric wire value.
      */
     public static ApiType forNumber(int value) {
-<span class="pc bpc" id="L317" title="32 of 35 branches missed.">      switch (value) {</span>
+<span class="pc bpc" id="L317" title="31 of 35 branches missed.">      switch (value) {</span>
 <span class="nc" id="L318">        case 0: return GET_QRCODE;</span>
 <span class="nc" id="L319">        case 1: return RECONNECT;</span>
 <span class="nc" id="L320">        case 2: return LOGOUT;</span>
@@ -340,7 +340,7 @@ public final class PadPlusServerOuterClass {
 <span class="nc" id="L340">        case 34: return GET_ROOM_ANNOUNCEMENT;</span>
 <span class="nc" id="L341">        case 35: return GET_ROOM_QRCODE;</span>
 <span class="nc" id="L342">        case 36: return ACCEPT_ROOM_INVITATION;</span>
-<span class="nc" id="L343">        case 50: return SEND_MESSAGE;</span>
+<span class="fc" id="L343">        case 50: return SEND_MESSAGE;</span>
 <span class="nc" id="L344">        case 51: return SEND_FILE;</span>
 <span class="nc" id="L345">        case 52: return REVOKE_MESSAGE;</span>
 <span class="nc" id="L346">        case 53: return GET_MESSAGE_MEDIA;</span>
@@ -666,8 +666,8 @@ public final class PadPlusServerOuterClass {
      * @return The enum associated with the given numeric wire value.
      */
     public static ResponseType forNumber(int value) {
-<span class="pc bpc" id="L669" title="28 of 31 branches missed.">      switch (value) {</span>
-<span class="nc" id="L670">        case 0: return REQUEST_RESPONSE;</span>
+<span class="pc bpc" id="L669" title="27 of 31 branches missed.">      switch (value) {</span>
+<span class="fc" id="L670">        case 0: return REQUEST_RESPONSE;</span>
 <span class="fc" id="L671">        case 1: return DISCONNECT;</span>
 <span class="nc" id="L672">        case 2: return INVALID_TOKEN;</span>
 <span class="nc" id="L673">        case 3: return LOGIN_DEVICE_INFO;</span>
@@ -1153,8 +1153,8 @@ public final class PadPlusServerOuterClass {
     @java.lang.Override
     public java.lang.String getParams() {
 <span class="fc" id="L1155">      java.lang.Object ref = params_;</span>
-<span class="pc bpc" id="L1156" title="1 of 2 branches missed.">      if (ref instanceof java.lang.String) {</span>
-<span class="nc" id="L1157">        return (java.lang.String) ref;</span>
+<span class="fc bfc" id="L1156" title="All 2 branches covered.">      if (ref instanceof java.lang.String) {</span>
+<span class="fc" id="L1157">        return (java.lang.String) ref;</span>
       } else {
 <span class="fc" id="L1159">        com.google.protobuf.ByteString bs = </span>
             (com.google.protobuf.ByteString) ref;

@@ -662,9 +662,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="support/MessageSupport.html" class="extype" name="wechaty.puppet.support.MessageSupport">MessageSupport</a></dd></dl></div>
     </li><li name="wechaty.puppet.support.MessageSupport#messageSendText" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="messageSendText(conversationId:String,text:String,mentionIdList:Array[String]):String"></a><a id="messageSendText(String,String,Array[String]):String"></a>
+      <a id="messageSendText(conversationId:String,text:String,mentionIdList:Array[String]):scala.concurrent.Future[String]"></a><a id="messageSendText(String,String,Array[String]):Future[String]"></a>
       <span class="permalink">
-      <a href="../../wechaty/puppet/Puppet.html#messageSendText(conversationId:String,text:String,mentionIdList:Array[String]):String" title="Permalink">
+      <a href="../../wechaty/puppet/Puppet.html#messageSendText(conversationId:String,text:String,mentionIdList:Array[String]):scala.concurrent.Future[String]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -673,7 +673,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">messageSendText</span><span class="params">(<span name="conversationId">conversationId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="text">text: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="mentionIdList">mentionIdList: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Array()</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">messageSendText</span><span class="params">(<span name="conversationId">conversationId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="text">text: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="mentionIdList">mentionIdList: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Array()</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="support/MessageSupport.html" class="extype" name="wechaty.puppet.support.MessageSupport">MessageSupport</a></dd></dl></div>
@@ -870,9 +870,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="support/RoomMemberSupport.html" class="extype" name="wechaty.puppet.support.RoomMemberSupport">RoomMemberSupport</a></dd></dl></div>
     </li><li name="wechaty.puppet.support.RoomMemberSupport#roomMemberRawPayload" visbl="prt" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="roomMemberRawPayload(roomId:String,contactId:String):wechaty.puppet.schemas.Room.RoomMemberPayload"></a><a id="roomMemberRawPayload(String,String):RoomMemberPayload"></a>
+      <a id="roomMemberRawPayload(roomId:String,contactId:String):scala.concurrent.Future[wechaty.puppet.schemas.Room.RoomMemberPayload]"></a><a id="roomMemberRawPayload(String,String):Future[RoomMemberPayload]"></a>
       <span class="permalink">
-      <a href="../../wechaty/puppet/Puppet.html#roomMemberRawPayload(roomId:String,contactId:String):wechaty.puppet.schemas.Room.RoomMemberPayload" title="Permalink">
+      <a href="../../wechaty/puppet/Puppet.html#roomMemberRawPayload(roomId:String,contactId:String):scala.concurrent.Future[wechaty.puppet.schemas.Room.RoomMemberPayload]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -881,7 +881,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">roomMemberRawPayload</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="schemas/Room$$RoomMemberPayload.html" class="extype" name="wechaty.puppet.schemas.Room.RoomMemberPayload">RoomMemberPayload</a></span>
+        <span class="name">roomMemberRawPayload</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="contactId">contactId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<a href="schemas/Room$$RoomMemberPayload.html" class="extype" name="wechaty.puppet.schemas.Room.RoomMemberPayload">RoomMemberPayload</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="support/RoomMemberSupport.html" class="extype" name="wechaty.puppet.support.RoomMemberSupport">RoomMemberSupport</a></dd></dl></div>
@@ -1392,9 +1392,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="wechaty.puppet.support.MessageSupport#messageForward" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="messageForward(conversationId:String,messageId:String):String"></a><a id="messageForward(String,String):String"></a>
+      <a id="messageForward(conversationId:String,messageId:String):scala.concurrent.Future[String]"></a><a id="messageForward(String,String):Future[String]"></a>
       <span class="permalink">
-      <a href="../../wechaty/puppet/Puppet.html#messageForward(conversationId:String,messageId:String):String" title="Permalink">
+      <a href="../../wechaty/puppet/Puppet.html#messageForward(conversationId:String,messageId:String):scala.concurrent.Future[String]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1403,7 +1403,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">messageForward</span><span class="params">(<span name="conversationId">conversationId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="messageId">messageId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">messageForward</span><span class="params">(<span name="conversationId">conversationId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="messageId">messageId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="support/MessageSupport.html" class="extype" name="wechaty.puppet.support.MessageSupport">MessageSupport</a></dd></dl></div>
@@ -1494,9 +1494,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="support/RoomInvitationSupport.html" class="extype" name="wechaty.puppet.support.RoomInvitationSupport">RoomInvitationSupport</a></dd></dl></div>
     </li><li name="wechaty.puppet.support.RoomMemberSupport#roomMemberPayload" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="roomMemberPayload(roomId:String,memberId:String):wechaty.puppet.schemas.Room.RoomMemberPayload"></a><a id="roomMemberPayload(String,String):RoomMemberPayload"></a>
+      <a id="roomMemberPayload(roomId:String,memberId:String):scala.concurrent.Future[wechaty.puppet.schemas.Room.RoomMemberPayload]"></a><a id="roomMemberPayload(String,String):Future[RoomMemberPayload]"></a>
       <span class="permalink">
-      <a href="../../wechaty/puppet/Puppet.html#roomMemberPayload(roomId:String,memberId:String):wechaty.puppet.schemas.Room.RoomMemberPayload" title="Permalink">
+      <a href="../../wechaty/puppet/Puppet.html#roomMemberPayload(roomId:String,memberId:String):scala.concurrent.Future[wechaty.puppet.schemas.Room.RoomMemberPayload]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1505,7 +1505,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">roomMemberPayload</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="memberId">memberId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="schemas/Room$$RoomMemberPayload.html" class="extype" name="wechaty.puppet.schemas.Room.RoomMemberPayload">RoomMemberPayload</a></span>
+        <span class="name">roomMemberPayload</span><span class="params">(<span name="roomId">roomId: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="memberId">memberId: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.concurrent.Future">Future</span>[<a href="schemas/Room$$RoomMemberPayload.html" class="extype" name="wechaty.puppet.schemas.Room.RoomMemberPayload">RoomMemberPayload</a>]</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="support/RoomMemberSupport.html" class="extype" name="wechaty.puppet.support.RoomMemberSupport">RoomMemberSupport</a></dd></dl></div>

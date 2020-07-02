@@ -50,8 +50,8 @@ wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.schemas,Contact.C
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,RoomInvitationSupport,13,6,0,0,2,2,2,1,2,1
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,CacheSupport,0,6,0,0,0,2,0,2,0,2
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,FriendshipSupport,47,6,4,0,11,2,4,1,2,1
-wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,MessageSupport,423,6,104,0,41,2,55,1,3,1
-wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,RoomMemberSupport,105,6,8,0,16,2,9,1,5,1
+wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,MessageSupport,453,6,104,0,46,2,55,1,3,1
+wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,RoomMemberSupport,94,6,6,0,14,2,9,1,6,1
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,ContactSupport,37,58,5,3,4,10,5,3,1,3
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet.support,RoomSupport,141,6,8,0,23,2,11,1,7,1
 wechaty-puppet-padplus_2.12/wechaty-puppet_2.12,wechaty.puppet,ResourceBox.StreamResourceBox,36,0,0,0,4,0,8,0,8,0

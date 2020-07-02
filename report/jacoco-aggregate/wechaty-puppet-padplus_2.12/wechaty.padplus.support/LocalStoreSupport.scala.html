@@ -46,7 +46,7 @@ import scala.language.implicitConversions
 <span class="nc" id="L46">    store.getObject[PadplusMessagePayload](messageKeyFormat.format(messageId))</span>
   }
   protected def savePadplusMessagePayload(padplusMessagePayload: PadplusMessagePayload): Unit ={
-<span class="nc" id="L49">    store.put(messageKeyFormat.format(padplusMessagePayload.msgId),padplusMessagePayload)</span>
+<span class="fc" id="L49">    store.put(messageKeyFormat.format(padplusMessagePayload.msgId),padplusMessagePayload)</span>
   }
   protected def savePadplusRoomPayload(roomPayload:PadplusRoomPayload): Unit ={
 <span class="nc" id="L52">    store.put(roomPayload.chatroomId,roomPayload)</span>

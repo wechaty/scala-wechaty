@@ -118,10 +118,10 @@ import scala.reflect.runtime.universe._
     //do nothing
   }
 
-<span class="nc" id="L121">  protected def syncRequest[T: TypeTag](apiType: ApiType, data: Option[Any] = None)(implicit classTag: ClassTag[T]): T = {</span>
-<span class="nc" id="L122">    val future = asyncRequest[T](apiType, data)</span>
-<span class="nc" id="L123">    Await.result(future, 10 seconds)</span>
-  }
+//  protected def syncRequest[T: TypeTag](apiType: ApiType, data: Option[Any] = None)(implicit classTag: ClassTag[T]): T = {
+//    val future = asyncRequest[T](apiType, data)
+//    Await.result(future, 10 seconds)
+//  }
 
   protected def generateTraceId(apiType: ApiType): String = {
 <span class="nc" id="L127">    UUID.randomUUID().toString</span>
@@ -172,8 +172,8 @@ import scala.reflect.runtime.universe._
     }
 <span class="fc" id="L173">    request.setApiType(apiType)</span>
 <span class="fc" id="L174">    data match {</span>
-<span class="pc bpc" id="L175" title="3 of 4 branches missed.">      case Some(str: String) =&gt;</span>
-<span class="nc" id="L176">        request.setParams(str)</span>
+<span class="pc bpc" id="L175" title="1 of 4 branches missed.">      case Some(str: String) =&gt;</span>
+<span class="fc" id="L176">        request.setParams(str)</span>
 <span class="pc bpc" id="L177" title="1 of 2 branches missed.">      case Some(d) =&gt;</span>
 <span class="nc" id="L178">        request.setParams(Puppet.objectMapper.writeValueAsString(d))</span>
 <span class="fc" id="L179">      case _ =&gt;</span>
@@ -198,13 +198,7 @@ import scala.reflect.runtime.universe._
 <span class="pc bpc" id="L198" title="1 of 2 branches missed.">        case t if t =:= typeOf[JsonNode] =&gt;</span>
 <span class="nc" id="L199">          Puppet.objectMapper.readTree(streamResponse.getData).asInstanceOf[T]</span>
         case _ =&gt;
-          try {
-<span class="pc" id="L202">            Puppet.objectMapper.readValue(streamResponse.getData, classTag.runtimeClass).asInstanceOf[T]</span>
-          } catch {
-            case e: Throwable =&gt;
-<span class="nc bnc" id="L205" title="All 2 branches missed.">              logger.error(e.getMessage, e)</span>
-<span class="pc" id="L206">              throw e</span>
-          }
+<span class="fc" id="L201">          Puppet.objectMapper.readValue(streamResponse.getData, classTag.runtimeClass).asInstanceOf[T]</span>
       }
     }
   }
@@ -212,49 +206,49 @@ import scala.reflect.runtime.universe._
   type ClientCallback[RespT, T] = RespT =&gt; T
 
   protected def asyncCall[ReqT, RespT](call: MethodDescriptor[ReqT, RespT], req: ReqT): Future[RespT] = {
-<span class="fc" id="L215">    asyncCallback(call, req)(resp =&gt; resp)</span>
+<span class="fc" id="L209">    asyncCallback(call, req)(resp =&gt; resp)</span>
   }
 
-<span class="fc" id="L218">  def asyncCallback[ReqT, RespT, T](callMethod: MethodDescriptor[ReqT, RespT], req: ReqT)(callback: ClientCallback[RespT, T]): Future[T] = {</span>
-<span class="fc" id="L219">    val call    = channel.newCall(callMethod, asyncGrpcClient.getCallOptions)</span>
-<span class="fc" id="L220">    val promise = Promise[T]</span>
-<span class="fc" id="L221">    ClientCalls.asyncUnaryCall(call, req, new StreamObserver[RespT] {</span>
+<span class="fc" id="L212">  def asyncCallback[ReqT, RespT, T](callMethod: MethodDescriptor[ReqT, RespT], req: ReqT)(callback: ClientCallback[RespT, T]): Future[T] = {</span>
+<span class="fc" id="L213">    val call    = channel.newCall(callMethod, asyncGrpcClient.getCallOptions)</span>
+<span class="fc" id="L214">    val promise = Promise[T]</span>
+<span class="fc" id="L215">    ClientCalls.asyncUnaryCall(call, req, new StreamObserver[RespT] {</span>
       override def onNext(value: RespT): Unit = {
-<span class="fc" id="L223">        val result = callback(value)</span>
-<span class="fc" id="L224">        promise.success(result)</span>
+<span class="fc" id="L217">        val result = callback(value)</span>
+<span class="fc" id="L218">        promise.success(result)</span>
       }
 
-<span class="nc" id="L227">      override def onError(t: Throwable): Unit = promise.failure(t)</span>
+<span class="nc" id="L221">      override def onError(t: Throwable): Unit = promise.failure(t)</span>
 
       override def onCompleted(): Unit = {
-<span class="pc bpc" id="L230" title="1 of 2 branches missed.">        if (!promise.isCompleted) promise.failure(new IllegalStateException(&quot;server completed&quot;))</span>
+<span class="pc bpc" id="L224" title="1 of 2 branches missed.">        if (!promise.isCompleted) promise.failure(new IllegalStateException(&quot;server completed&quot;))</span>
       }
     })
-<span class="fc" id="L233">    promise.future</span>
+<span class="fc" id="L227">    promise.future</span>
   }
 
-<span class="fc" id="L236">  private val ACCESS_KEY_ID     = &quot;AKIA3PQY2OQG5FEXWMH6&quot;</span>
-<span class="fc" id="L237">  private val BUCKET            = &quot;macpro-message-file&quot;</span>
-<span class="fc" id="L238">  private val EXPIRE_TIME       = 3600 * 24 * 3</span>
-<span class="fc" id="L239">  private val PATH              = &quot;image-message&quot;</span>
-<span class="fc" id="L240">  private val SECRET_ACCESS_KEY = &quot;jw7Deo+W8l4FTOL2BXd/VubTJjt1mhm55sRhnsEn&quot;</span>
+<span class="fc" id="L230">  private val ACCESS_KEY_ID     = &quot;AKIA3PQY2OQG5FEXWMH6&quot;</span>
+<span class="fc" id="L231">  private val BUCKET            = &quot;macpro-message-file&quot;</span>
+<span class="fc" id="L232">  private val EXPIRE_TIME       = 3600 * 24 * 3</span>
+<span class="fc" id="L233">  private val PATH              = &quot;image-message&quot;</span>
+<span class="fc" id="L234">  private val SECRET_ACCESS_KEY = &quot;jw7Deo+W8l4FTOL2BXd/VubTJjt1mhm55sRhnsEn&quot;</span>
   //  private val s3 = new AmazonS3Client(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY));
-<span class="fc" id="L242">  private val s3                = AmazonS3ClientBuilder.standard()</span>
-<span class="fc" id="L243">    .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY)))</span>
+<span class="fc" id="L236">  private val s3                = AmazonS3ClientBuilder.standard()</span>
+<span class="fc" id="L237">    .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY)))</span>
     .enablePayloadSigning()
-<span class="fc" id="L245">    .withRegion(Regions.CN_NORTHWEST_1).build(); // 此处根据自己的 s3 地区位置改变</span>
+<span class="fc" id="L239">    .withRegion(Regions.CN_NORTHWEST_1).build(); // 此处根据自己的 s3 地区位置改变</span>
 
   def uploadFile(filename: String, stream: InputStream) {
     //    ACL: &quot;public-read&quot;,
     //    const s3 = new AWS.S3({ region: &quot;cn-northwest-1&quot;, signatureVersion: &quot;v4&quot; })
-<span class="nc" id="L250">    val meta       = new ObjectMetadata</span>
-<span class="nc" id="L251">    val key        = PATH + &quot;/&quot; + filename</span>
-<span class="nc" id="L252">    val params     = new PutObjectRequest(BUCKET, key, stream, meta)</span>
-<span class="nc" id="L253">    val result     = s3.putObject(params.withCannedAcl(CannedAccessControlList.PublicRead));</span>
+<span class="nc" id="L244">    val meta       = new ObjectMetadata</span>
+<span class="nc" id="L245">    val key        = PATH + &quot;/&quot; + filename</span>
+<span class="nc" id="L246">    val params     = new PutObjectRequest(BUCKET, key, stream, meta)</span>
+<span class="nc" id="L247">    val result     = s3.putObject(params.withCannedAcl(CannedAccessControlList.PublicRead));</span>
     //获取一个request
-<span class="nc" id="L255">    val urlRequest = new GeneratePresignedUrlRequest(BUCKET, key);</span>
+<span class="nc" id="L249">    val urlRequest = new GeneratePresignedUrlRequest(BUCKET, key);</span>
     //生成公用的url
-<span class="nc" id="L257">    s3.generatePresignedUrl(urlRequest);</span>
+<span class="nc" id="L251">    s3.generatePresignedUrl(urlRequest);</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

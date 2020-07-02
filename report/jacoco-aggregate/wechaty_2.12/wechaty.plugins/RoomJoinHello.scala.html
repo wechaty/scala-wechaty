@@ -3,28 +3,35 @@
 import com.typesafe.scalalogging.LazyLogging
 import wechaty.{Wechaty, WechatyPlugin}
 
+import scala.concurrent.duration._
+import scala.concurrent.Await
+
 /**
   *
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-23
   */
-<span class="pc bnc" id="L11" title="All 23 branches missed.">case class RoomJoinHelloConfig( var rooms:Array[String]=Array() ,hello:String=&quot;welcome&quot;)</span>
-<span class="pc bpc" id="L12" title="1 of 4 branches missed.">class RoomJoinHello(config:RoomJoinHelloConfig) extends WechatyPlugin with LazyLogging{</span>
+<span class="pc bnc" id="L14" title="All 23 branches missed.">case class RoomJoinHelloConfig( var rooms:Array[String]=Array() ,hello:String=&quot;welcome&quot;)</span>
+<span class="pc bpc" id="L15" title="1 of 4 branches missed.">class RoomJoinHello(config:RoomJoinHelloConfig,/*only for test*/isWait:Boolean=false) extends WechatyPlugin with LazyLogging{</span>
   override def install(wechaty: Wechaty): Unit = {
-<span class="fc" id="L14">    implicit val resolver:Wechaty = wechaty</span>
-<span class="fc" id="L15">    wechaty.onOnceMessage(message=&gt;{</span>
-<span class="pc bpc" id="L16" title="1 of 2 branches missed.">      logger.info(&quot;install RoomJoinHello Plugin....&quot;)</span>
-<span class="fc" id="L17">      val rooms = PluginHelper.findRooms(config.rooms)</span>
-<span class="fc" id="L18">      rooms.foreach(room=&gt;{</span>
-<span class="pc bpc" id="L19" title="1 of 2 branches missed.">        room.onJoin{case (list,_,_)=&gt;</span>
-<span class="fc" id="L20">          PluginHelper.executeWithNotThrow(&quot;RoomJoinHello&quot;) {</span>
-<span class="pc bpc" id="L21" title="1 of 4 branches missed.">            if (list == null || list.isEmpty) {</span>
-<span class="pc bpc" id="L22" title="1 of 2 branches missed.">              logger.warn(&quot;invitee list is empty&quot;)</span>
-<span class="fc" id="L23">            } else room.say(config.hello, list)</span>
+<span class="fc" id="L17">    implicit val resolver:Wechaty = wechaty</span>
+<span class="fc" id="L18">    wechaty.onOnceMessage(message=&gt;{</span>
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">      logger.info(&quot;install RoomJoinHello Plugin....&quot;)</span>
+<span class="fc" id="L20">      val rooms = PluginHelper.findRooms(config.rooms)</span>
+<span class="fc" id="L21">      rooms.foreach(room=&gt;{</span>
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">        room.onJoin{case (list,_,_)=&gt;</span>
+<span class="fc" id="L23">          PluginHelper.executeWithNotThrow(&quot;RoomJoinHello&quot;) {</span>
+<span class="pc bpc" id="L24" title="1 of 4 branches missed.">            if (list == null || list.isEmpty) {</span>
+<span class="pc bpc" id="L25" title="1 of 2 branches missed.">              logger.warn(&quot;invitee list is empty&quot;)</span>
+            } else {
+<span class="fc" id="L27">              val future = room.say(config.hello, list)</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">              if(isWait)</span>
+<span class="fc" id="L29">                Await.result(future,10 seconds)</span>
+            }
           }
         }
       })
-<span class="pc bpc" id="L27" title="1 of 2 branches missed.">      logger.info(&quot;install RoomJoinHello Plugin done&quot;)</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">      logger.info(&quot;install RoomJoinHello Plugin done&quot;)</span>
     })
   }
 }

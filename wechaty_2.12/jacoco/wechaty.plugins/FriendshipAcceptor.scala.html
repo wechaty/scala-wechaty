@@ -8,48 +8,53 @@ import wechaty.puppet.schemas.Puppet._
 import wechaty.user.Contact
 import wechaty.{Wechaty, WechatyPlugin}
 
+import scala.concurrent.duration._
+import scala.concurrent.Await
+
 /**
   *
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-19
   */
-<span class="pc bnc" id="L16" title="All 30 branches missed.">case class FriendshipAcceptorConfig( var greeting:String = &quot;we are friends now!&quot;,var waitSeconds:Int=0, var keywordOpt:Option[String]=None)</span>
-<span class="fc" id="L17">class FriendshipAcceptor(config:FriendshipAcceptorConfig) extends WechatyPlugin with StrictLogging{</span>
+<span class="pc bnc" id="L19" title="All 30 branches missed.">case class FriendshipAcceptorConfig( var greeting:String = &quot;we are friends now!&quot;,var waitSeconds:Int=0, var keywordOpt:Option[String]=None)</span>
+<span class="pc" id="L20">class FriendshipAcceptor(config:FriendshipAcceptorConfig,/*for test*/isWait:Boolean=false) extends WechatyPlugin with StrictLogging{</span>
   private def isMatchKeyword(str: String): Boolean ={
-<span class="pc bpc" id="L19" title="1 of 2 branches missed.">    logger.debug(&quot;keyword:{} hello:{} &quot;,config.keywordOpt,str)</span>
-<span class="fc" id="L20">    config.keywordOpt match{</span>
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">    logger.debug(&quot;keyword:{} hello:{} &quot;,config.keywordOpt,str)</span>
+<span class="fc" id="L23">    config.keywordOpt match{</span>
         //use contains simply
         //TODO use complex function or regexp to match string
         // see https://github.com/wechaty/wechaty-plugin-contrib/blob/05cfec3606480d2f2a544ac4e742a967bcaec2b4/src/matchers/string-matcher.ts#L9
-<span class="fc bfc" id="L24" title="All 2 branches covered.">      case Some(keyword) =&gt;</span>
-<span class="pc bpc" id="L25" title="1 of 2 branches missed.">        if(isBlank(str)){false}</span>
-<span class="fc" id="L26">        else str.contains(keyword) //simple use contains</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">      case Some(keyword) =&gt;</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        if(isBlank(str)){false}</span>
+<span class="fc" id="L29">        else str.contains(keyword) //simple use contains</span>
       case _ =&gt;
-<span class="fc" id="L28">        true</span>
+<span class="fc" id="L31">        true</span>
     }
   }
   private def doGreeting(contact: Contact): Unit ={
-<span class="fc" id="L32">    contact.say(config.greeting)</span>
+<span class="fc" id="L35">    val future = contact.say(config.greeting)</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">    if(isWait)</span>
+<span class="fc" id="L37">      Await.result(future,10 seconds)</span>
   }
   override def install(wechaty: Wechaty): Unit = {
-<span class="fc" id="L35">    wechaty.onFriendAdd(friendship =&gt; {</span>
-<span class="fc" id="L36">      PluginHelper.executeWithNotThrow(&quot;FriendshipAcceptor&quot;) {</span>
+<span class="fc" id="L40">    wechaty.onFriendAdd(friendship =&gt; {</span>
+<span class="fc" id="L41">      PluginHelper.executeWithNotThrow(&quot;FriendshipAcceptor&quot;) {</span>
 
-<span class="fc" id="L38">        friendship.payload match {</span>
-<span class="fc bfc" id="L39" title="All 2 branches covered.">          case _: FriendshipPayloadReceive =&gt;</span>
-<span class="fc" id="L40">            val hello = friendship.hello()</span>
-<span class="fc bfc" id="L41" title="All 2 branches covered.">            if (isMatchKeyword(hello)) {</span>
-<span class="pc bpc" id="L42" title="1 of 2 branches missed.">              if(config.waitSeconds &gt;0)</span>
-<span class="nc" id="L43">                Thread.sleep(TimeUnit.SECONDS.toMillis(config.waitSeconds))</span>
-<span class="fc" id="L44">              friendship.accept()</span>
+<span class="fc" id="L43">        friendship.payload match {</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">          case _: FriendshipPayloadReceive =&gt;</span>
+<span class="fc" id="L45">            val hello = friendship.hello()</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">            if (isMatchKeyword(hello)) {</span>
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">              if(config.waitSeconds &gt;0)</span>
+<span class="nc" id="L48">                Thread.sleep(TimeUnit.SECONDS.toMillis(config.waitSeconds))</span>
+<span class="fc" id="L49">              friendship.accept()</span>
             }
-<span class="pc bpc" id="L46" title="1 of 2 branches missed.">          case _: FriendshipPayloadConfirm =&gt;</span>
-<span class="fc" id="L47">            val contact = friendship.contact()</span>
-<span class="fc" id="L48">            doGreeting(contact)</span>
-<span class="nc bnc" id="L49" title="All 2 branches missed.">          case _: FriendshipPayloadVerify =&gt;</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">          case _: FriendshipPayloadConfirm =&gt;</span>
+<span class="fc" id="L52">            val contact = friendship.contact()</span>
+<span class="fc" id="L53">            doGreeting(contact)</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">          case _: FriendshipPayloadVerify =&gt;</span>
           // This is for when we send a message to others, but they did not accept us as a friend.
           case _ =&gt;
-<span class="nc" id="L52">            throw new Error(&quot;friendshipType unknown: &quot; + friendship.`type`)</span>
+<span class="nc" id="L57">            throw new Error(&quot;friendshipType unknown: &quot; + friendship.`type`)</span>
         }
       }
     })

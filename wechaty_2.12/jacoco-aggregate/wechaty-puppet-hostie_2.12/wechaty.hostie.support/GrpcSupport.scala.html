@@ -141,7 +141,7 @@ import scala.concurrent.{Future, Promise}
 
   type ClientCallback[RespT,T]=RespT =&gt; T
   protected def asyncCall[ReqT,RespT](call: MethodDescriptor[ReqT, RespT], req: ReqT): Future[RespT]= {
-<span class="nc" id="L144">    asyncCallback(call,req)(resp=&gt; resp)</span>
+<span class="fc" id="L144">    asyncCallback(call,req)(resp=&gt; resp)</span>
   }
 <span class="fc" id="L146">  def asyncCallback[ReqT, RespT,T](callMethod: MethodDescriptor[ReqT, RespT], req: ReqT)(callback:ClientCallback[RespT,T]): Future[T]= {</span>
 <span class="fc" id="L147">    val call = channel.newCall(callMethod,asyncGrpcClient.getCallOptions)</span>

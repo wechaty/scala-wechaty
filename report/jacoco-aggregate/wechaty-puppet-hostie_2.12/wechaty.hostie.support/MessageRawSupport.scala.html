@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>MessageRawSupport.scala</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">report</a> &gt; <a href="../index.html" class="el_bundle">wechaty-puppet-hostie_2.12</a> &gt; <a href="index.source.html" class="el_package">wechaty.hostie.support</a> &gt; <span class="el_source">MessageRawSupport.scala</span></div><h1>MessageRawSupport.scala</h1><pre class="source lang-java linenums">package wechaty.hostie.support
 
 import com.typesafe.scalalogging.LazyLogging
+import io.github.wechaty.grpc.PuppetGrpc
 import io.github.wechaty.grpc.puppet.Base.DingRequest
 import io.github.wechaty.grpc.puppet.Message
 import io.github.wechaty.grpc.puppet.Message.MessagePayloadRequest
@@ -9,162 +10,164 @@ import wechaty.puppet.schemas.Image.ImageType.Type
 import wechaty.puppet.schemas.Message.{MessagePayload, MessageType}
 import wechaty.puppet.schemas.MiniProgram.MiniProgramPayload
 import wechaty.puppet.schemas.Puppet
-import wechaty.puppet.schemas.Puppet.objectMapper
+import wechaty.puppet.schemas.Puppet._
 import wechaty.puppet.schemas.UrlLink.UrlLinkPayload
 import wechaty.puppet.support.MessageSupport
+
+import scala.concurrent.Future
 
 /**
   *
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-02
   */
-<span class="fc" id="L21">trait MessageRawSupport {</span>
+<span class="fc" id="L24">trait MessageRawSupport {</span>
   self: LazyLogging with GrpcSupport with MessageSupport =&gt;
   /**
     * message
     */
   override def messageContact(messageId: String): String = {
-<span class="nc" id="L27">    val request  = Message.MessageContactRequest.newBuilder()</span>
-<span class="nc" id="L28">      .setId(messageId)</span>
+<span class="nc" id="L30">    val request  = Message.MessageContactRequest.newBuilder()</span>
+<span class="nc" id="L31">      .setId(messageId)</span>
       .build()
-<span class="nc" id="L30">    val response = grpcClient.messageContact(request)</span>
-<span class="nc" id="L31">    response.getId</span>
+<span class="nc" id="L33">    val response = grpcClient.messageContact(request)</span>
+<span class="nc" id="L34">    response.getId</span>
   }
 
-<span class="fc" id="L34">  var count = 0</span>
+<span class="fc" id="L37">  var count = 0</span>
 
   override def messageFile(messageId: String): ResourceBox = {
-<span class="fc" id="L37">    val request  = Message.MessageFileRequest.newBuilder().setId(messageId).build()</span>
-<span class="fc" id="L38">    val response = grpcClient.messageFile(request)</span>
-<span class="fc" id="L39">    ResourceBox.fromJson(response.getFilebox)</span>
+<span class="fc" id="L40">    val request  = Message.MessageFileRequest.newBuilder().setId(messageId).build()</span>
+<span class="fc" id="L41">    val response = grpcClient.messageFile(request)</span>
+<span class="fc" id="L42">    ResourceBox.fromJson(response.getFilebox)</span>
   }
 
   override def messageMiniProgram(messageId: String): MiniProgramPayload = {
-<span class="nc" id="L43">    val request = Message.MessageMiniProgramRequest.newBuilder()</span>
-<span class="nc" id="L44">      .setId(messageId)</span>
+<span class="nc" id="L46">    val request = Message.MessageMiniProgramRequest.newBuilder()</span>
+<span class="nc" id="L47">      .setId(messageId)</span>
       .build()
 
-<span class="nc" id="L47">    val response    = grpcClient.messageMiniProgram(request)</span>
-<span class="nc" id="L48">    val miniProgram = response.getMiniProgram</span>
-<span class="nc bnc" id="L49" title="All 2 branches missed.">    logger.debug(&quot;MP json:{}&quot;, miniProgram)</span>
-<span class="nc" id="L50">    Puppet.objectMapper.readValue(miniProgram, classOf[MiniProgramPayload])</span>
+<span class="nc" id="L50">    val response    = grpcClient.messageMiniProgram(request)</span>
+<span class="nc" id="L51">    val miniProgram = response.getMiniProgram</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">    logger.debug(&quot;MP json:{}&quot;, miniProgram)</span>
+<span class="nc" id="L53">    Puppet.objectMapper.readValue(miniProgram, classOf[MiniProgramPayload])</span>
   }
 
   override def messageUrl(messageId: String): UrlLinkPayload = {
-<span class="nc" id="L54">    val request = Message.MessageUrlRequest.newBuilder()</span>
-<span class="nc" id="L55">      .setId(messageId)</span>
+<span class="nc" id="L57">    val request = Message.MessageUrlRequest.newBuilder()</span>
+<span class="nc" id="L58">      .setId(messageId)</span>
       .build()
 
-<span class="nc" id="L58">    val response = grpcClient.messageUrl(request)</span>
-<span class="nc" id="L59">    val urlLink  = response.getUrlLink</span>
-<span class="nc" id="L60">    Puppet.objectMapper.readValue(urlLink, classOf[UrlLinkPayload])</span>
+<span class="nc" id="L61">    val response = grpcClient.messageUrl(request)</span>
+<span class="nc" id="L62">    val urlLink  = response.getUrlLink</span>
+<span class="nc" id="L63">    Puppet.objectMapper.readValue(urlLink, classOf[UrlLinkPayload])</span>
 
   }
 
   override def messageSendContact(conversationId: String, contactId: String): String = {
-<span class="nc" id="L65">    val request = Message.MessageSendContactRequest.newBuilder()</span>
-<span class="nc" id="L66">      .setContactId(contactId)</span>
-<span class="nc" id="L67">      .setConversationId(conversationId)</span>
+<span class="nc" id="L68">    val request = Message.MessageSendContactRequest.newBuilder()</span>
+<span class="nc" id="L69">      .setContactId(contactId)</span>
+<span class="nc" id="L70">      .setConversationId(conversationId)</span>
       .build()
 
 
-<span class="nc" id="L71">    val response = grpcClient.messageSendContact(request)</span>
-<span class="nc" id="L72">    response.getId.getValue</span>
+<span class="nc" id="L74">    val response = grpcClient.messageSendContact(request)</span>
+<span class="nc" id="L75">    response.getId.getValue</span>
   }
 
   override def messageSendFile(conversationId: String, file: ResourceBox): String = {
-<span class="fc" id="L76">    val fileJson = file.toJson()</span>
+<span class="fc" id="L79">    val fileJson = file.toJson()</span>
 
-<span class="fc" id="L78">    val request = Message.MessageSendFileRequest.newBuilder()</span>
-<span class="fc" id="L79">      .setConversationId(conversationId)</span>
-<span class="fc" id="L80">      .setFilebox(fileJson)</span>
+<span class="fc" id="L81">    val request = Message.MessageSendFileRequest.newBuilder()</span>
+<span class="fc" id="L82">      .setConversationId(conversationId)</span>
+<span class="fc" id="L83">      .setFilebox(fileJson)</span>
       .build()
 
-<span class="fc" id="L83">    val response = grpcClient.messageSendFile(request)</span>
-<span class="fc" id="L84">    response.getId.getValue</span>
+<span class="fc" id="L86">    val response = grpcClient.messageSendFile(request)</span>
+<span class="fc" id="L87">    response.getId.getValue</span>
   }
 
   override def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgramPayload): String = {
-<span class="nc" id="L88">    val request = Message.MessageSendMiniProgramRequest.newBuilder()</span>
-<span class="nc" id="L89">      .setConversationId(conversationId)</span>
-<span class="nc" id="L90">      .setMiniProgram(objectMapper.writeValueAsString(miniProgramPayload))</span>
+<span class="nc" id="L91">    val request = Message.MessageSendMiniProgramRequest.newBuilder()</span>
+<span class="nc" id="L92">      .setConversationId(conversationId)</span>
+<span class="nc" id="L93">      .setMiniProgram(objectMapper.writeValueAsString(miniProgramPayload))</span>
       .build()
 
-<span class="nc" id="L93">    val response = grpcClient.messageSendMiniProgram(request)</span>
-<span class="nc" id="L94">    response.getId.getValue</span>
+<span class="nc" id="L96">    val response = grpcClient.messageSendMiniProgram(request)</span>
+<span class="nc" id="L97">    response.getId.getValue</span>
   }
 
-  override def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]): String = {
+  override def messageSendText(conversationId: String, text: String, mentionIdList: Array[String]): Future[String] = {
     import scala.collection.JavaConverters._
-<span class="fc" id="L99">    val request = Message.MessageSendTextRequest.newBuilder()</span>
-<span class="fc" id="L100">      .setConversationId(conversationId)</span>
-<span class="fc" id="L101">      .setText(text)</span>
-<span class="fc" id="L102">      .addAllMentonalIds(asJavaIterable(mentionIdList.toIterable))</span>
+<span class="fc" id="L102">    val request = Message.MessageSendTextRequest.newBuilder()</span>
+<span class="fc" id="L103">      .setConversationId(conversationId)</span>
+<span class="fc" id="L104">      .setText(text)</span>
+<span class="fc" id="L105">      .addAllMentonalIds(asJavaIterable(mentionIdList.toIterable))</span>
       .build()
 
-<span class="fc" id="L105">    val response = grpcClient.messageSendText(request)</span>
-<span class="fc" id="L106">    response.getId.getValue</span>
+<span class="fc" id="L108">    asyncCall(PuppetGrpc.getMessageSendTextMethod,request)</span>
+<span class="fc" id="L109">      .map(response=&gt;response.getId.getValue)</span>
   }
 
   override def messageSendUrl(conversationId: String, urlLinkPayload: UrlLinkPayload): String = {
-<span class="nc" id="L110">    val request = Message.MessageSendUrlRequest.newBuilder()</span>
-<span class="nc" id="L111">      .setConversationId(conversationId)</span>
-<span class="nc" id="L112">      .setUrlLink(objectMapper.writeValueAsString(urlLinkPayload))</span>
+<span class="nc" id="L113">    val request = Message.MessageSendUrlRequest.newBuilder()</span>
+<span class="nc" id="L114">      .setConversationId(conversationId)</span>
+<span class="nc" id="L115">      .setUrlLink(objectMapper.writeValueAsString(urlLinkPayload))</span>
       .build()
 
-<span class="nc" id="L115">    val response = grpcClient.messageSendUrl(request)</span>
-<span class="nc" id="L116">    response.getId.getValue</span>
+<span class="nc" id="L118">    val response = grpcClient.messageSendUrl(request)</span>
+<span class="nc" id="L119">    response.getId.getValue</span>
   }
 
   override def messageRecall(messageId: String): Boolean = {
-<span class="nc" id="L120">    val request = Message.MessageRecallRequest.newBuilder()</span>
-<span class="nc" id="L121">      .setId(messageId)</span>
+<span class="nc" id="L123">    val request = Message.MessageRecallRequest.newBuilder()</span>
+<span class="nc" id="L124">      .setId(messageId)</span>
       .build()
 
-<span class="nc" id="L124">    val response = grpcClient.messageRecall(request)</span>
-<span class="nc" id="L125">    response.getSuccess</span>
+<span class="nc" id="L127">    val response = grpcClient.messageRecall(request)</span>
+<span class="nc" id="L128">    response.getSuccess</span>
   }
 
 
   override protected def messageRawPayload(id: String): MessagePayload = {
-<span class="pc bpc" id="L130" title="1 of 2 branches missed.">    logger.info(&quot;PuppetHostie MessagePayload({})&quot;, id)</span>
-<span class="fc" id="L131">    val response = grpcClient.messagePayload(MessagePayloadRequest.newBuilder().setId(id).build())</span>
-<span class="pc bpc" id="L132" title="1 of 2 branches missed.">    logger.info(&quot;message payload:{}&quot;, response)</span>
-<span class="fc" id="L133">    val messagePayload = new MessagePayload</span>
-<span class="fc" id="L134">    messagePayload.id = response.getId</span>
-<span class="fc" id="L135">    messagePayload.mentionIdList = response.getMentionIdsList.toArray(Array[String]())</span>
-<span class="fc" id="L136">    messagePayload.filename = response.getFilename</span>
-<span class="fc" id="L137">    messagePayload.text = response.getText</span>
-<span class="fc" id="L138">    messagePayload.timestamp = response.getTimestamp</span>
-<span class="pc bpc" id="L139" title="1 of 2 branches missed.">    if (response.getTypeValue &gt; MessageType.Video.id)</span>
-<span class="nc" id="L140">      messagePayload.`type` = MessageType.Unknown</span>
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">    logger.info(&quot;PuppetHostie MessagePayload({})&quot;, id)</span>
+<span class="fc" id="L134">    val response = grpcClient.messagePayload(MessagePayloadRequest.newBuilder().setId(id).build())</span>
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">    logger.info(&quot;message payload:{}&quot;, response)</span>
+<span class="fc" id="L136">    val messagePayload = new MessagePayload</span>
+<span class="fc" id="L137">    messagePayload.id = response.getId</span>
+<span class="fc" id="L138">    messagePayload.mentionIdList = response.getMentionIdsList.toArray(Array[String]())</span>
+<span class="fc" id="L139">    messagePayload.filename = response.getFilename</span>
+<span class="fc" id="L140">    messagePayload.text = response.getText</span>
+<span class="fc" id="L141">    messagePayload.timestamp = response.getTimestamp</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">    if (response.getTypeValue &gt; MessageType.Video.id)</span>
+<span class="nc" id="L143">      messagePayload.`type` = MessageType.Unknown</span>
     else
-<span class="fc" id="L142">      messagePayload.`type` = MessageType.apply(response.getTypeValue)</span>
+<span class="fc" id="L145">      messagePayload.`type` = MessageType.apply(response.getTypeValue)</span>
 
-<span class="fc" id="L144">    messagePayload.fromId = response.getFromId</span>
-<span class="fc" id="L145">    messagePayload.roomId = response.getRoomId</span>
-<span class="fc" id="L146">    messagePayload.toId = response.getToId</span>
+<span class="fc" id="L147">    messagePayload.fromId = response.getFromId</span>
+<span class="fc" id="L148">    messagePayload.roomId = response.getRoomId</span>
+<span class="fc" id="L149">    messagePayload.toId = response.getToId</span>
 
-<span class="fc" id="L148">    messagePayload</span>
+<span class="fc" id="L151">    messagePayload</span>
   }
 
 
   override def messageImage(messageId: String, imageType: Type): ResourceBox = {
-<span class="nc" id="L153">    val request = Message.MessageImageRequest.newBuilder()</span>
-<span class="nc" id="L154">    request.setId(messageId)</span>
-<span class="nc" id="L155">    request.setType(Message.ImageType.forNumber(imageType.id))</span>
+<span class="nc" id="L156">    val request = Message.MessageImageRequest.newBuilder()</span>
+<span class="nc" id="L157">    request.setId(messageId)</span>
+<span class="nc" id="L158">    request.setType(Message.ImageType.forNumber(imageType.id))</span>
 
 
-<span class="nc" id="L158">    val response = this.grpcClient.messageImage(request.build())</span>
-<span class="nc bnc" id="L159" title="All 2 branches missed.">    logger.debug(&quot;image response:{}&quot;, response)</span>
+<span class="nc" id="L161">    val response = this.grpcClient.messageImage(request.build())</span>
+<span class="nc bnc" id="L162" title="All 2 branches missed.">    logger.debug(&quot;image response:{}&quot;, response)</span>
 
-<span class="nc" id="L161">    val jsonText = response.getFilebox</span>
-<span class="nc" id="L162">    ResourceBox.fromJson(jsonText)</span>
+<span class="nc" id="L164">    val jsonText = response.getFilebox</span>
+<span class="nc" id="L165">    ResourceBox.fromJson(jsonText)</span>
   }
 
   override protected def ding(data: String): Unit = {
-<span class="nc" id="L166">    val request = DingRequest.newBuilder().setData(data).build()</span>
-<span class="nc" id="L167">    grpcClient.ding(request)</span>
+<span class="nc" id="L169">    val request = DingRequest.newBuilder().setData(data).build()</span>
+<span class="nc" id="L170">    grpcClient.ding(request)</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

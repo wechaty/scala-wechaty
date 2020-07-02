@@ -9,13 +9,15 @@ import wechaty.puppet.schemas.Puppet.{PuppetEventName, PuppetOptions}
 import wechaty.puppet.schemas._
 import wechaty.puppet.support.ContactSupport
 
+import scala.concurrent.Future
+
 /**
   *
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-21
   */
-<span class="pc bpc" id="L17" title="1 of 4 branches missed.">class PuppetPadplus(val option:PuppetOptions,val storePath:String=&quot;/tmp/padplus&quot;)</span>
-<span class="fc" id="L18">  extends Puppet</span>
+<span class="pc bpc" id="L19" title="1 of 4 branches missed.">class PuppetPadplus(val option:PuppetOptions,val storePath:String=&quot;/tmp/padplus&quot;)</span>
+<span class="fc" id="L20">  extends Puppet</span>
     with ContactRawSupport
     with ContactSelfRawSupport
     with ContactSupport
@@ -27,42 +29,42 @@ import wechaty.puppet.support.ContactSupport
     with LocalStoreSupport
     with DisrutporSupport
     with LazyLogging {
-<span class="fc" id="L30">  protected var uinOpt:Option[String]=None</span>
+<span class="fc" id="L32">  protected var uinOpt:Option[String]=None</span>
   private[wechaty] def startGrpc(): Unit ={
-<span class="fc" id="L32">    startLocalStore()</span>
-<span class="fc" id="L33">    startDisruptor()</span>
-<span class="fc" id="L34">    startGrpc(option.endPoint.get)</span>
+<span class="fc" id="L34">    startLocalStore()</span>
+<span class="fc" id="L35">    startDisruptor()</span>
+<span class="fc" id="L36">    startGrpc(option.endPoint.get)</span>
   }
   def start(): Unit ={
-<span class="nc" id="L37">    startGrpc()</span>
-<span class="nc" id="L38">    startAwaitStream()</span>
+<span class="nc" id="L39">    startGrpc()</span>
+<span class="nc" id="L40">    startAwaitStream()</span>
   }
   private[wechaty] def startAwaitStream(): Unit ={
-<span class="fc" id="L41">    startStream()</span>
+<span class="fc" id="L43">    startStream()</span>
     //waiting stream start....
-<span class="pc bpc" id="L43" title="1 of 2 branches missed.">    logger.info(&quot;waiting stream start....&quot;)</span>
-<span class="fc" id="L44">    awaitStreamStart()</span>
-<span class="fc" id="L45">    getUin match{</span>
-<span class="pc bpc" id="L46" title="1 of 2 branches missed.">      case Some(str) =&gt;</span>
-<span class="fc" id="L47">        uinOpt = Some(str)</span>
-<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        logger.debug(&quot;found uin in local store:{}&quot;,str)</span>
-<span class="fc" id="L49">        asyncRequestNothing(ApiType.INIT)</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">    logger.info(&quot;waiting stream start....&quot;)</span>
+<span class="fc" id="L46">    awaitStreamStart()</span>
+<span class="fc" id="L47">    getUin match{</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">      case Some(str) =&gt;</span>
+<span class="fc" id="L49">        uinOpt = Some(str)</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        logger.debug(&quot;found uin in local store:{}&quot;,str)</span>
+<span class="fc" id="L51">        asyncRequestNothing(ApiType.INIT)</span>
       case _ =&gt;
-<span class="nc" id="L51">        asyncRequestNothing(ApiType.GET_QRCODE)</span>
+<span class="nc" id="L53">        asyncRequestNothing(ApiType.GET_QRCODE)</span>
     }
   }
   def stop(): Unit = {
-<span class="fc" id="L55">    shutdownDisruptor()</span>
-<span class="fc" id="L56">    stopGrpc()</span>
-<span class="fc" id="L57">    stopLocalStore()</span>
+<span class="fc" id="L57">    shutdownDisruptor()</span>
+<span class="fc" id="L58">    stopGrpc()</span>
+<span class="fc" id="L59">    stopLocalStore()</span>
   }
-<span class="pc bpc" id="L59" title="1 of 2 branches missed.">  protected def sysPartialFunction(response: StreamResponse): PartialFunction[ResponseType, Unit] = {</span>
-<span class="pc bpc" id="L60" title="2 of 4 branches missed.">    case ResponseType.DISCONNECT =&gt;</span>
-<span class="pc" id="L61">      emit(PuppetEventName.RESET,new EventResetPayload)</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">  protected def sysPartialFunction(response: StreamResponse): PartialFunction[ResponseType, Unit] = {</span>
+<span class="pc bpc" id="L62" title="2 of 4 branches missed.">    case ResponseType.DISCONNECT =&gt;</span>
+<span class="pc" id="L63">      emit(PuppetEventName.RESET,new EventResetPayload)</span>
   }
 
 
-<span class="nc" id="L65">  override def selfIdOpt(): Option[String] = selfId</span>
+<span class="nc" id="L67">  override def selfIdOpt(): Option[String] = selfId</span>
 
 
 
@@ -71,47 +73,46 @@ import wechaty.puppet.support.ContactSupport
     * Friendship
     *
     */
-<span class="nc" id="L74">  override def friendshipAccept(friendshipId: String): Unit = ???</span>
+<span class="nc" id="L76">  override def friendshipAccept(friendshipId: String): Unit = ???</span>
 
-<span class="nc" id="L76">  override def friendshipAdd(contactId: String, hello: String): Unit = ???</span>
+<span class="nc" id="L78">  override def friendshipAdd(contactId: String, hello: String): Unit = ???</span>
 
-<span class="nc" id="L78">  override def friendshipSearchPhone(phone: String): String = ???</span>
+<span class="nc" id="L80">  override def friendshipSearchPhone(phone: String): String = ???</span>
 
-<span class="nc" id="L80">  override def friendshipSearchWeixin(weixin: String): String = ???</span>
+<span class="nc" id="L82">  override def friendshipSearchWeixin(weixin: String): String = ???</span>
 
-<span class="nc" id="L82">  override protected def friendshipRawPayload(friendshipId: String): Friendship.FriendshipPayload = ???</span>
+<span class="nc" id="L84">  override protected def friendshipRawPayload(friendshipId: String): Friendship.FriendshipPayload = ???</span>
 
   /**
     *
     * RoomMember
     *
     */
-<span class="nc" id="L89">  override def roomAnnounce(roomId: String): String = ???</span>
+<span class="nc" id="L91">  override def roomAnnounce(roomId: String): String = ???</span>
 
-<span class="nc" id="L91">  override def roomAnnounce(roomId: String, text: String): Unit = ???</span>
+<span class="nc" id="L93">  override def roomAnnounce(roomId: String, text: String): Unit = ???</span>
 
-<span class="nc" id="L93">  override def roomMemberList(roomId: String): Array[String] = ???</span>
+<span class="nc" id="L95">  override def roomMemberList(roomId: String): Array[String] = ???</span>
 
-  override protected def roomMemberRawPayload(roomId: String, contactId: String): Room.RoomMemberPayload = {
-    //TODO
-<span class="nc" id="L97">    null</span>
+  override protected def roomMemberRawPayload(roomId: String, contactId: String): Future[Room.RoomMemberPayload] = {
+<span class="nc" id="L98">    ???</span>
   }
 
 
 
-<span class="nc" id="L102">  override def roomInvitationAccept(roomInvitationId: String): Unit = ???</span>
+<span class="nc" id="L103">  override def roomInvitationAccept(roomInvitationId: String): Unit = ???</span>
 
-<span class="nc" id="L104">  override protected def roomInvitationRawPayload(roomInvitationId: String): RoomInvitation.RoomInvitationPayload = ???</span>
+<span class="nc" id="L105">  override protected def roomInvitationRawPayload(roomInvitationId: String): RoomInvitation.RoomInvitationPayload = ???</span>
 
-<span class="nc" id="L106">  override def tagContactAdd(tagId: String, contactId: String): Unit = ???</span>
+<span class="nc" id="L107">  override def tagContactAdd(tagId: String, contactId: String): Unit = ???</span>
 
-<span class="nc" id="L108">  override def tagContactDelete(tagId: String): Unit = ???</span>
+<span class="nc" id="L109">  override def tagContactDelete(tagId: String): Unit = ???</span>
 
-<span class="nc" id="L110">  override def tagContactList(contactId: String): Array[String] = ???</span>
+<span class="nc" id="L111">  override def tagContactList(contactId: String): Array[String] = ???</span>
 
-<span class="nc" id="L112">  override def tagContactList(): Array[String] = ???</span>
+<span class="nc" id="L113">  override def tagContactList(): Array[String] = ???</span>
 
-<span class="nc" id="L114">  override def tagContactRemove(tagId: String, contactId: String): Unit = ???</span>
+<span class="nc" id="L115">  override def tagContactRemove(tagId: String, contactId: String): Unit = ???</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -5,7 +5,9 @@ import java.util.function.Consumer
 import wechaty.Wechaty.PuppetResolver
 import wechaty.puppet.schemas.Event.{EventFriendshipPayload, EventLoginPayload, EventLogoutPayload, EventMessagePayload, EventRoomInvitePayload, EventRoomJoinPayload, EventScanPayload}
 import wechaty.user.{Contact, ContactSelf, Friendship, Message, Room, RoomInvitation}
+import wechaty.puppet.schemas.Puppet._
 
+import scala.concurrent.Future
 import scala.language.implicitConversions
 
 /**
@@ -13,45 +15,46 @@ import scala.language.implicitConversions
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-04
   */
-<span class="fc" id="L16">object ImplicitHelper {</span>
+<span class="fc" id="L18">object ImplicitHelper {</span>
   private[wechaty] implicit def toEventScanPayload(eventScanListener: Consumer[EventScanPayload])(implicit puppet: PuppetResolver): EventScanPayload=&gt; Unit = {
-<span class="fc" id="L18">    eventScanPayload: EventScanPayload =&gt; { eventScanListener.accept(eventScanPayload) }</span>
+<span class="fc" id="L20">    eventScanPayload: EventScanPayload =&gt; { eventScanListener.accept(eventScanPayload) }</span>
   }
 
   private[wechaty] implicit def toMessage(messageListener: Consumer[Message])(implicit puppet: PuppetResolver): EventMessagePayload =&gt; Unit = {
-<span class="fc" id="L22">    messagePayload: EventMessagePayload =&gt; { messageListener.accept(new Message(messagePayload.messageId)) }</span>
+<span class="fc" id="L24">    messagePayload: EventMessagePayload =&gt; { messageListener.accept(new Message(messagePayload.messageId)) }</span>
   }
   private[wechaty] implicit def toMessage(messageListener: Message =&gt; Unit)(implicit puppet: PuppetResolver): EventMessagePayload =&gt; Unit = {
-<span class="nc" id="L25">    messagePayload: EventMessagePayload =&gt; { messageListener(new Message(messagePayload.messageId)) }</span>
+<span class="nc" id="L27">    messagePayload: EventMessagePayload =&gt; { messageListener(new Message(messagePayload.messageId)) }</span>
   }
 
-<span class="fc" id="L28">  private [wechaty] implicit def toMessage(messageId: String)(implicit puppetResolver: PuppetResolver) = new Message(messageId)</span>
+<span class="fc" id="L30">  private [wechaty] implicit def toMessage(messageId: String)(implicit puppetResolver: PuppetResolver) = new Message(messageId)</span>
+<span class="fc" id="L31">  private [wechaty] implicit def toMessage(messageId: Future[String])(implicit puppetResolver: PuppetResolver):Future[Message] = messageId.map(toMessage)</span>
 
   private[wechaty] implicit def toContactSelf(contactListener: Consumer[ContactSelf])(implicit puppet: PuppetResolver): EventLoginPayload =&gt; Unit = {
-<span class="fc" id="L31">    payload: EventLoginPayload =&gt; { contactListener.accept(new ContactSelf(payload.contactId)) }</span>
+<span class="fc" id="L34">    payload: EventLoginPayload =&gt; { contactListener.accept(new ContactSelf(payload.contactId)) }</span>
   }
   private[wechaty] implicit def toContact(contactListener: Consumer[Contact])(implicit puppet: PuppetResolver): EventLoginPayload =&gt; Unit = {
-<span class="nc" id="L34">    payload: EventLoginPayload =&gt; { contactListener.accept(new Contact(payload.contactId)) }</span>
+<span class="nc" id="L37">    payload: EventLoginPayload =&gt; { contactListener.accept(new Contact(payload.contactId)) }</span>
   }
   private[wechaty] implicit def toFriendship(friendshipListener: Consumer[Friendship])(implicit puppet: PuppetResolver): EventFriendshipPayload =&gt; Unit = {
-<span class="fc" id="L37">    payload: EventFriendshipPayload =&gt; { friendshipListener.accept(new Friendship(payload.friendshipId)) }</span>
+<span class="fc" id="L40">    payload: EventFriendshipPayload =&gt; { friendshipListener.accept(new Friendship(payload.friendshipId)) }</span>
   }
   private[wechaty] implicit def toRoomJoinPayload(roomJoinListener: (Option[Room],Contact,Array[Contact])=&gt;Unit)(implicit puppet: PuppetResolver): EventRoomJoinPayload =&gt; Unit = {
-<span class="nc" id="L40">    payload: EventRoomJoinPayload =&gt; {</span>
-<span class="nc" id="L41">      val inviteeList = payload.inviteeIdList.map(new Contact(_))</span>
-<span class="nc" id="L42">      roomJoinListener(Room.load(payload.roomId),new Contact(payload.inviterId),inviteeList)</span>
+<span class="nc" id="L43">    payload: EventRoomJoinPayload =&gt; {</span>
+<span class="nc" id="L44">      val inviteeList = payload.inviteeIdList.map(new Contact(_))</span>
+<span class="nc" id="L45">      roomJoinListener(Room.load(payload.roomId),new Contact(payload.inviterId),inviteeList)</span>
     }
   }
 
   private[wechaty] implicit def toInvite(roomInvitation: RoomInvitation =&gt;Unit)(implicit puppet: PuppetResolver): EventRoomInvitePayload =&gt; Unit = {
-<span class="fc" id="L47">    payload: EventRoomInvitePayload =&gt; {</span>
-<span class="fc" id="L48">      roomInvitation.apply(new RoomInvitation(payload.roomInvitationId))</span>
+<span class="fc" id="L50">    payload: EventRoomInvitePayload =&gt; {</span>
+<span class="fc" id="L51">      roomInvitation.apply(new RoomInvitation(payload.roomInvitationId))</span>
     }
   }
 
   private[wechaty] implicit def logoutToContact(contactListener: Consumer[Contact])(implicit puppet: PuppetResolver): EventLogoutPayload =&gt; Unit = {
-<span class="nc" id="L53">    payload: EventLogoutPayload =&gt; { contactListener.accept(new Contact(payload.contactId)) }</span>
+<span class="nc" id="L56">    payload: EventLogoutPayload =&gt; { contactListener.accept(new Contact(payload.contactId)) }</span>
   }
 
-<span class="fc" id="L56">}</span>
+<span class="fc" id="L59">}</span>
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
