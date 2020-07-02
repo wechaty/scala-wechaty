@@ -2,7 +2,7 @@
 
 [![Scala CI](https://github.com/wechaty/scala-wechaty/workflows/Scala%20CI/badge.svg)](https://github.com/wechaty/scala-wechaty/actions?query=workflow%3A%22Scala+CI%22)
 
-![Scala Wechaty](https://wechaty.github.io/scala-wechaty/images/scala-wechaty.png)
+![Scala Wechaty](docs/images/scala-wechaty.png)
 
 [![Scala Wechaty Getting Started](https://img.shields.io/badge/Scala%20Wechaty-Getting%20Started-890)](https://github.com/wechaty/scala-wechaty-getting-started)
 [![Scala 2.13](https://img.shields.io/badge/scala-2.13+-890.svg)](https://www.scala-lang.org/)
