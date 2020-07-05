@@ -146,17 +146,20 @@ import scala.concurrent.{Future, Promise}
 <span class="fc" id="L146">  def asyncCallback[ReqT, RespT,T](callMethod: MethodDescriptor[ReqT, RespT], req: ReqT)(callback:ClientCallback[RespT,T]): Future[T]= {</span>
 <span class="fc" id="L147">    val call = channel.newCall(callMethod,asyncGrpcClient.getCallOptions)</span>
 <span class="fc" id="L148">    val promise = Promise[T]</span>
-<span class="fc" id="L149">    ClientCalls.asyncUnaryCall(call,req,new StreamObserver[RespT] {</span>
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">    ClientCalls.asyncUnaryCall(call,req,new StreamObserver[RespT] {</span>
       override def onNext(value: RespT): Unit = {
 <span class="fc" id="L151">        val result = callback(value)</span>
 <span class="fc" id="L152">        promise.success(result)</span>
       }
-<span class="nc" id="L154">      override def onError(t: Throwable): Unit = promise.failure(t)</span>
+      override def onError(t: Throwable): Unit = {
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        logger.error(t.getMessage,t)</span>
+<span class="nc" id="L156">        promise.failure(t)</span>
+      }
       override def onCompleted(): Unit = {
-<span class="pc bpc" id="L156" title="1 of 2 branches missed.">        if(!promise.isCompleted) promise.failure(new IllegalStateException(&quot;server completed&quot;))</span>
+<span class="pc bpc" id="L159" title="1 of 2 branches missed.">        if(!promise.isCompleted) promise.failure(new IllegalStateException(&quot;server completed&quot;))</span>
       }
     })
-<span class="fc" id="L159">    promise.future</span>
+<span class="fc" id="L162">    promise.future</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

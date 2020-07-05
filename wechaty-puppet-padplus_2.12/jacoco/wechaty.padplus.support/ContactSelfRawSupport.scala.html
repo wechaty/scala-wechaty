@@ -6,49 +6,50 @@ import wechaty.padplus.schemas.ModelContact.{GetContactSelfInfoGrpcResponse, Pad
 import wechaty.puppet.schemas.Contact.ContactGender
 import wechaty.puppet.support.ContactSelfSupport
 
+import scala.concurrent.Future
+
 /**
   *
   * @author &lt;a href=&quot;mailto:jcai@ganshane.com&quot;&gt;Jun Tsai&lt;/a&gt;
   * @since 2020-06-22
   */
-<span class="fc" id="L14">trait ContactSelfRawSupport {</span>
+<span class="fc" id="L16">trait ContactSelfRawSupport {</span>
   self :GrpcSupport with LazyLogging with ContactSelfSupport =&gt;
   /**
     *
     * ContactSelf
     *
     */
-<span class="nc" id="L21">  override def contactSelfName(name: String): Unit = ???</span>
+<span class="nc" id="L23">  override def contactSelfName(name: String): Unit = ???</span>
 
-<span class="nc" id="L23">  override def contactSelfQRCode(): String = ???</span>
+<span class="nc" id="L25">  override def contactSelfQRCode(): String = ???</span>
 
-<span class="nc" id="L25">  override def contactSelfSignature(signature: String): Unit = ???</span>
+<span class="nc" id="L27">  override def contactSelfSignature(signature: String): Unit = ???</span>
 
-<span class="nc" id="L27">  override def logout(): Unit = ???</span>
+<span class="nc" id="L29">  override def logout(): Unit = ???</span>
 
-  def contactSelfInfo(callback:PadplusContactPayload=&gt;Unit):Unit={
-//    asyncRequest[GetContactSelfInfoGrpcResponse](ApiType.GET_CONTACT_SELF_INFO)
-<span class="nc" id="L31">    asyncRequest[GetContactSelfInfoGrpcResponse](ApiType.GET_CONTACT_SELF_INFO).map{ contactPayload =&gt;</span>
-<span class="nc" id="L32">        val payload = new PadplusContactPayload</span>
-<span class="nc" id="L33">        payload.alias = contactPayload.alias;</span>
-<span class="nc" id="L34">        payload.bigHeadUrl = contactPayload.bigHeadImg;</span>
-<span class="nc" id="L35">        payload.city = contactPayload.city</span>
-<span class="nc" id="L36">        payload.contactFlag = 3</span>
-<span class="nc" id="L37">        payload.contactType = 0</span>
-<span class="nc" id="L38">        payload.country = contactPayload.country</span>
-<span class="nc" id="L39">        payload.nickName = contactPayload.nickName</span>
-<span class="nc" id="L40">        payload.province = contactPayload.province</span>
-<span class="nc" id="L41">        payload.remark = &quot;&quot;</span>
-<span class="nc" id="L42">        payload.sex = ContactGender(contactPayload.sex)</span>
-<span class="nc" id="L43">        payload.signature = contactPayload.signature</span>
-<span class="nc" id="L44">        payload.smallHeadUrl = contactPayload.smallHeadImg</span>
-<span class="nc" id="L45">        payload.stranger = &quot;&quot;</span>
-<span class="nc" id="L46">        payload.tagList = &quot;&quot;</span>
-<span class="nc" id="L47">        payload.ticket = &quot;&quot;</span>
-<span class="nc" id="L48">        payload.userName = contactPayload.userName</span>
-<span class="nc" id="L49">        payload.verifyFlag = 0</span>
-<span class="nc" id="L50">        callback(payload)</span>
-    }
+  def contactSelfInfo():Future[PadplusContactPayload]={
+<span class="fc" id="L32">    asyncRequest[GetContactSelfInfoGrpcResponse](ApiType.GET_CONTACT_SELF_INFO).map(response =&gt;{</span>
+<span class="fc" id="L33">      val payload = new PadplusContactPayload</span>
+<span class="fc" id="L34">      payload.alias = response.alias;</span>
+<span class="fc" id="L35">      payload.bigHeadUrl = response.bigHeadImg;</span>
+<span class="fc" id="L36">      payload.city = response.city</span>
+<span class="fc" id="L37">      payload.contactFlag = 3</span>
+<span class="fc" id="L38">      payload.contactType = 0</span>
+<span class="fc" id="L39">      payload.country = response.country</span>
+<span class="fc" id="L40">      payload.nickName = response.nickName</span>
+<span class="fc" id="L41">      payload.province = response.province</span>
+<span class="fc" id="L42">      payload.remark = &quot;&quot;</span>
+<span class="fc" id="L43">      payload.sex = ContactGender(response.sex)</span>
+<span class="fc" id="L44">      payload.signature = response.signature</span>
+<span class="fc" id="L45">      payload.smallHeadUrl = response.smallHeadImg</span>
+<span class="fc" id="L46">      payload.stranger = &quot;&quot;</span>
+<span class="fc" id="L47">      payload.tagList = &quot;&quot;</span>
+<span class="fc" id="L48">      payload.ticket = &quot;&quot;</span>
+<span class="fc" id="L49">      payload.userName = response.userName</span>
+<span class="fc" id="L50">      payload.verifyFlag = 0</span>
+<span class="fc" id="L51">      payload</span>
+    })
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

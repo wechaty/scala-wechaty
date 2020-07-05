@@ -212,43 +212,46 @@ import scala.reflect.runtime.universe._
 <span class="fc" id="L212">  def asyncCallback[ReqT, RespT, T](callMethod: MethodDescriptor[ReqT, RespT], req: ReqT)(callback: ClientCallback[RespT, T]): Future[T] = {</span>
 <span class="fc" id="L213">    val call    = channel.newCall(callMethod, asyncGrpcClient.getCallOptions)</span>
 <span class="fc" id="L214">    val promise = Promise[T]</span>
-<span class="fc" id="L215">    ClientCalls.asyncUnaryCall(call, req, new StreamObserver[RespT] {</span>
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">    ClientCalls.asyncUnaryCall(call, req, new StreamObserver[RespT] {</span>
       override def onNext(value: RespT): Unit = {
 <span class="fc" id="L217">        val result = callback(value)</span>
 <span class="fc" id="L218">        promise.success(result)</span>
       }
 
-<span class="nc" id="L221">      override def onError(t: Throwable): Unit = promise.failure(t)</span>
+      override def onError(t: Throwable): Unit = {
+<span class="nc bnc" id="L222" title="All 2 branches missed.">        logger.error(t.getMessage,t)</span>
+<span class="nc" id="L223">        promise.failure(t)</span>
+      }
 
       override def onCompleted(): Unit = {
-<span class="pc bpc" id="L224" title="1 of 2 branches missed.">        if (!promise.isCompleted) promise.failure(new IllegalStateException(&quot;server completed&quot;))</span>
+<span class="pc bpc" id="L227" title="1 of 2 branches missed.">        if (!promise.isCompleted) promise.failure(new IllegalStateException(&quot;server completed&quot;))</span>
       }
     })
-<span class="fc" id="L227">    promise.future</span>
+<span class="fc" id="L230">    promise.future</span>
   }
 
-<span class="fc" id="L230">  private val ACCESS_KEY_ID     = &quot;AKIA3PQY2OQG5FEXWMH6&quot;</span>
-<span class="fc" id="L231">  private val BUCKET            = &quot;macpro-message-file&quot;</span>
-<span class="fc" id="L232">  private val EXPIRE_TIME       = 3600 * 24 * 3</span>
-<span class="fc" id="L233">  private val PATH              = &quot;image-message&quot;</span>
-<span class="fc" id="L234">  private val SECRET_ACCESS_KEY = &quot;jw7Deo+W8l4FTOL2BXd/VubTJjt1mhm55sRhnsEn&quot;</span>
+<span class="fc" id="L233">  private val ACCESS_KEY_ID     = &quot;AKIA3PQY2OQG5FEXWMH6&quot;</span>
+<span class="fc" id="L234">  private val BUCKET            = &quot;macpro-message-file&quot;</span>
+<span class="fc" id="L235">  private val EXPIRE_TIME       = 3600 * 24 * 3</span>
+<span class="fc" id="L236">  private val PATH              = &quot;image-message&quot;</span>
+<span class="fc" id="L237">  private val SECRET_ACCESS_KEY = &quot;jw7Deo+W8l4FTOL2BXd/VubTJjt1mhm55sRhnsEn&quot;</span>
   //  private val s3 = new AmazonS3Client(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY));
-<span class="fc" id="L236">  private val s3                = AmazonS3ClientBuilder.standard()</span>
-<span class="fc" id="L237">    .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY)))</span>
+<span class="fc" id="L239">  private val s3                = AmazonS3ClientBuilder.standard()</span>
+<span class="fc" id="L240">    .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY_ID, SECRET_ACCESS_KEY)))</span>
     .enablePayloadSigning()
-<span class="fc" id="L239">    .withRegion(Regions.CN_NORTHWEST_1).build(); // 此处根据自己的 s3 地区位置改变</span>
+<span class="fc" id="L242">    .withRegion(Regions.CN_NORTHWEST_1).build(); // 此处根据自己的 s3 地区位置改变</span>
 
   def uploadFile(filename: String, stream: InputStream) {
     //    ACL: &quot;public-read&quot;,
     //    const s3 = new AWS.S3({ region: &quot;cn-northwest-1&quot;, signatureVersion: &quot;v4&quot; })
-<span class="nc" id="L244">    val meta       = new ObjectMetadata</span>
-<span class="nc" id="L245">    val key        = PATH + &quot;/&quot; + filename</span>
-<span class="nc" id="L246">    val params     = new PutObjectRequest(BUCKET, key, stream, meta)</span>
-<span class="nc" id="L247">    val result     = s3.putObject(params.withCannedAcl(CannedAccessControlList.PublicRead));</span>
+<span class="nc" id="L247">    val meta       = new ObjectMetadata</span>
+<span class="nc" id="L248">    val key        = PATH + &quot;/&quot; + filename</span>
+<span class="nc" id="L249">    val params     = new PutObjectRequest(BUCKET, key, stream, meta)</span>
+<span class="nc" id="L250">    val result     = s3.putObject(params.withCannedAcl(CannedAccessControlList.PublicRead));</span>
     //获取一个request
-<span class="nc" id="L249">    val urlRequest = new GeneratePresignedUrlRequest(BUCKET, key);</span>
+<span class="nc" id="L252">    val urlRequest = new GeneratePresignedUrlRequest(BUCKET, key);</span>
     //生成公用的url
-<span class="nc" id="L251">    s3.generatePresignedUrl(urlRequest);</span>
+<span class="nc" id="L254">    s3.generatePresignedUrl(urlRequest);</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
