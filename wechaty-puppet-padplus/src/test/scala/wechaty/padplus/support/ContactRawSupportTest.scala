@@ -63,7 +63,7 @@ class ContactRawSupportTest extends PadplusTestEventBase {
       .willReturn(responseBuilder.build())
     )
 
-    val future = instance.getContactSelfInfo()
+    val future = instance.contactSelfInfo()
 
     val grpcContact = new GetContactSelfInfoGrpcResponse
     grpcContact.userName = "jcai"
@@ -80,7 +80,7 @@ class ContactRawSupportTest extends PadplusTestEventBase {
       .willReturn(responseBuilder.build())
     )
 
-    val future = instance.getContactSelfInfo()
+    val future = instance.contactSelfInfo()
 
 
     val payload = Await.ready(future, 10 seconds)
