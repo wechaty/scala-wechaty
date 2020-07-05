@@ -11,7 +11,7 @@ import javax.imageio.ImageIO
 import wechaty.padplus.PuppetPadplus
 import wechaty.padplus.grpc.PadPlusServerOuterClass.{ApiType, ResponseType, StreamResponse}
 import wechaty.padplus.schemas.GrpcSchemas.GrpcQrCodeLogin
-import wechaty.padplus.schemas.ModelContact.{GetContactSelfInfoGrpcResponse, GrpcContactPayload, PadplusContactPayload}
+import wechaty.padplus.schemas.ModelContact.{GrpcContactPayload, PadplusContactPayload}
 import wechaty.padplus.schemas.ModelRoom.GrpcRoomPayload
 import wechaty.padplus.schemas.ModelUser.ScanData
 import wechaty.padplus.schemas.PadplusEnums.QrcodeStatus
@@ -61,9 +61,6 @@ trait ContactRawSupport extends LazyLogging{
         asyncRequestNothing(ApiType.GET_CONTACT,Some(json.toString)).flatMap(_=>promise.future)
     }
   }
-  def getContactSelfInfo():Future[GetContactSelfInfoGrpcResponse]={
-    asyncRequest[GetContactSelfInfoGrpcResponse](ApiType.GET_CONTACT_SELF_INFO)
-  }
 
   protected def loginPartialFunction(response: StreamResponse): PartialFunction[ResponseType, Unit] = {
     case ResponseType.QRCODE_SCAN =>
@@ -82,9 +79,9 @@ trait ContactRawSupport extends LazyLogging{
       //二维码的参数设置
       val hints             = new util.HashMap[DecodeHintType, String]();
       hints.put(DecodeHintType.CHARACTER_SET, "utf-8"); //设置二维码的编码
-    //得到解析结果,
-    val result  = multiFormatReader.decode(binaryBitmap, hints);
-    val payload = new EventScanPayload
+      //得到解析结果,
+      val result  = multiFormatReader.decode(binaryBitmap, hints);
+      val payload = new EventScanPayload
       payload.qrcode = result.getText
       logger.debug("Scan QR Code to login: %s\nhttps://wechaty.github.io/qrcode/%s\n".format(payload.status, payload.qrcode))
       emit(PuppetEventName.SCAN, payload)
@@ -104,9 +101,9 @@ trait ContactRawSupport extends LazyLogging{
       eventLoginPayload.contactId = padplusContactPayload.userName
       emit(PuppetEventName.LOGIN, eventLoginPayload)
 
-      Future {
-        getContact(padplusContactPayload.userName)
-      }
+      getContact(padplusContactPayload.userName).foreach(payload=>{
+        this.savePadplusContactPayload(payload)
+      })
     case ResponseType.AUTO_LOGIN =>
       logger.debug("response data:{}", response.getData)
       val autoLoginData = objectMapper.readTree(response.getData)
@@ -126,14 +123,10 @@ trait ContactRawSupport extends LazyLogging{
           selfId = Some(rawContactPayload.userName)
         }
 
-//        contactSelfInfo { padplusContact =>
-//          selfId = Some(padplusContact.userName)
-//          logger.debug("contactSelf:{}", padplusContact)
-//          savePadplusContactPayload(padplusContact)
-//          val eventLoginPayload = new EventLoginPayload
-//          eventLoginPayload.contactId = padplusContact.userName
-//          emit(PuppetEventName.LOGIN, eventLoginPayload)
-//        }
+        contactSelfInfo().foreach(payload=>{
+          savePadplusContactPayload(payload)
+        })
+
       } else {
         deleteUin()
         asyncRequest(ApiType.GET_QRCODE)
@@ -183,18 +176,8 @@ trait ContactRawSupport extends LazyLogging{
     val scanData    = objectMapper.readValue(scanRawData, classOf[ScanData])
     QrcodeStatus(scanData.status.intValue()) match {
       case QrcodeStatus.Scanned =>
-
       case QrcodeStatus.Confirmed =>
-//        contactSelfInfo { padplusContact =>
-//          selfId = Some(padplusContact.userName)
-//          logger.debug("contactSelf:{}", padplusContact)
-//          savePadplusContactPayload(padplusContact)
-//          val eventLoginPayload = new EventLoginPayload
-//          eventLoginPayload.contactId = padplusContact.userName
-//          emit(PuppetEventName.LOGIN, eventLoginPayload)
-//        }
       case QrcodeStatus.Canceled | QrcodeStatus.Expired =>
-
     }
   }
 

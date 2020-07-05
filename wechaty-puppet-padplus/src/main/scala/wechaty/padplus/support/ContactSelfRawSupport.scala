@@ -6,6 +6,8 @@ import wechaty.padplus.schemas.ModelContact.{GetContactSelfInfoGrpcResponse, Pad
 import wechaty.puppet.schemas.Contact.ContactGender
 import wechaty.puppet.support.ContactSelfSupport
 
+import scala.concurrent.Future
+
 /**
   *
   * @author <a href="mailto:jcai@ganshane.com">Jun Tsai</a>
@@ -26,28 +28,27 @@ trait ContactSelfRawSupport {
 
   override def logout(): Unit = ???
 
-  def contactSelfInfo(callback:PadplusContactPayload=>Unit):Unit={
-//    asyncRequest[GetContactSelfInfoGrpcResponse](ApiType.GET_CONTACT_SELF_INFO)
-    asyncRequest[GetContactSelfInfoGrpcResponse](ApiType.GET_CONTACT_SELF_INFO).map{ contactPayload =>
-        val payload = new PadplusContactPayload
-        payload.alias = contactPayload.alias;
-        payload.bigHeadUrl = contactPayload.bigHeadImg;
-        payload.city = contactPayload.city
-        payload.contactFlag = 3
-        payload.contactType = 0
-        payload.country = contactPayload.country
-        payload.nickName = contactPayload.nickName
-        payload.province = contactPayload.province
-        payload.remark = ""
-        payload.sex = ContactGender(contactPayload.sex)
-        payload.signature = contactPayload.signature
-        payload.smallHeadUrl = contactPayload.smallHeadImg
-        payload.stranger = ""
-        payload.tagList = ""
-        payload.ticket = ""
-        payload.userName = contactPayload.userName
-        payload.verifyFlag = 0
-        callback(payload)
-    }
+  def contactSelfInfo():Future[PadplusContactPayload]={
+    asyncRequest[GetContactSelfInfoGrpcResponse](ApiType.GET_CONTACT_SELF_INFO).map(response =>{
+      val payload = new PadplusContactPayload
+      payload.alias = response.alias;
+      payload.bigHeadUrl = response.bigHeadImg;
+      payload.city = response.city
+      payload.contactFlag = 3
+      payload.contactType = 0
+      payload.country = response.country
+      payload.nickName = response.nickName
+      payload.province = response.province
+      payload.remark = ""
+      payload.sex = ContactGender(response.sex)
+      payload.signature = response.signature
+      payload.smallHeadUrl = response.smallHeadImg
+      payload.stranger = ""
+      payload.tagList = ""
+      payload.ticket = ""
+      payload.userName = response.userName
+      payload.verifyFlag = 0
+      payload
+    })
   }
 }

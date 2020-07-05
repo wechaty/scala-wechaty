@@ -33,7 +33,7 @@ trait MessageSupport {
 
   def messageSendContact(conversationId: String, contactId: String): String
 
-  def messageSendFile         (conversationId: String, file: ResourceBox): String
+  def messageSendFile(conversationId: String, file: ResourceBox): String
 
   def messageSendMiniProgram(conversationId: String, miniProgramPayload: MiniProgramPayload): String
 

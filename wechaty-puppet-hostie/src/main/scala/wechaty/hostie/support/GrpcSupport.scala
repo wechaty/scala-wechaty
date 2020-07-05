@@ -151,7 +151,10 @@ trait GrpcSupport {
         val result = callback(value)
         promise.success(result)
       }
-      override def onError(t: Throwable): Unit = promise.failure(t)
+      override def onError(t: Throwable): Unit = {
+        logger.error(t.getMessage,t)
+        promise.failure(t)
+      }
       override def onCompleted(): Unit = {
         if(!promise.isCompleted) promise.failure(new IllegalStateException("server completed"))
       }
