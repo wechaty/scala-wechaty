@@ -279,7 +279,7 @@ Only one day! This is the fastest record in the world for translating the TypeSc
 [![contributor](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/images/6)](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/links/6)
 [![contributor](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/images/7)](https://sourcerer.io/fame/huan/wechaty/scala-wechaty/links/7)
 
-## Author
+## Creator
 
 [@jcai](https://github.com/jcai/) Jun Tsai <jcai@ganshane.com>
 
