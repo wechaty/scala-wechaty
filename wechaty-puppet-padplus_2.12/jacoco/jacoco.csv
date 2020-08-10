@@ -22,16 +22,16 @@ wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelMessage.PadplusMessageP
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcDeletedPayload,17,0,0,0,4,0,5,0,5,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelContact.SetContactSelfInfoGrpcResponse,52,0,0,0,9,0,15,0,15,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcGetCdnDnsPayload.snsCdn,38,0,2,0,6,0,10,0,9,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelMessage.,8,0,0,0,2,0,2,0,2,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.PadplusRoomMemberFlag.,32,0,0,0,4,0,5,0,5,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelMessage.,8,0,0,0,2,0,2,0,2,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelMessage.PadplusLocationMessagePayload,59,0,0,0,10,0,17,0,17,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelRoom.PadplusRoomMemberMap,10,0,0,0,3,0,3,0,3,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelTag.TagOtherOperationsGrpcResponse,45,0,0,0,8,0,13,0,13,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcGetA8KeyType,24,0,0,0,5,0,7,0,7,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.RoomAddTypeStatus.,32,0,0,0,4,0,5,0,5,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcGetCdnDnsPayload.appCdn,38,0,2,0,6,0,10,0,9,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelMessage.PadplusEmojiMessagePayload,38,0,0,0,7,0,11,0,11,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.PadplusMessageStatus.,16,0,0,0,2,0,3,0,3,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelMessage.PadplusEmojiMessagePayload,38,0,0,0,7,0,11,0,11,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelRoom.GrpcCreateRoomMember,17,0,0,0,4,0,5,0,5,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcGetMsgVoiceType,10,0,0,0,3,0,3,0,3,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelMessage.PadplusVideoMessagePayload,94,0,0,0,15,0,27,0,27,0
@@ -41,15 +41,15 @@ wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.PadplusEmojiTyp
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcCreateRoomMemberPayload,17,0,0,0,4,0,5,0,5,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.PadplusAutoLoginErrorType.,50,0,0,0,7,0,8,0,8,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelUser.,8,0,0,0,2,0,2,0,2,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelFriendship.PadplusRequestTokenPayload,38,0,0,0,7,0,11,0,11,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelRoom.,8,0,0,0,2,0,2,0,2,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelFriendship.PadplusRequestTokenPayload,38,0,0,0,7,0,11,0,11,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcRoomMemberDetail,52,0,0,0,9,0,15,0,15,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcGetContactQrcodePayload,17,0,0,0,4,0,5,0,5,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelUser.PadplusQrcodeLogin,45,0,0,0,8,0,13,0,13,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelMessage.PadplusAppMessagePayload,66,0,0,0,11,0,19,0,19,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.GrpcMQType.,80,0,0,0,10,0,11,0,11,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusError.PadplusError,9,0,0,0,1,0,2,0,2,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcRoomMemberRawPayload,24,0,0,0,5,0,7,0,7,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusError.PadplusError,9,0,0,0,1,0,2,0,2,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.ContactType.,32,0,0,0,4,0,5,0,5,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelRoom.GrpcGetAnnouncementData,38,0,0,0,7,0,11,0,11,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelFriendship.PadplusFriendshipPayload,38,0,0,0,7,0,11,0,11,0
@@ -90,8 +90,8 @@ wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelUser.GrpcLoginData,66,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.PadplusErrorType.,36,0,0,0,5,0,6,0,6,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelMessage.PadplusRecallData,3,0,0,0,2,0,1,0,1,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.EncryptionServiceError.,22,0,0,0,3,0,4,0,4,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcGetCdnDnsPayload,10,0,0,0,3,0,3,0,3,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelEvent.RoomTopicEvent,31,0,0,0,6,0,9,0,9,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcGetCdnDnsPayload,10,0,0,0,3,0,3,0,3,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,GrpcSchemas.GrpcGetCdnDnsPayload.dnsCdn,38,0,2,0,6,0,10,0,9,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,PadplusEnums.PadplusMessageType.,0,200,0,0,0,25,0,26,0,26
 wechaty-puppet-padplus_2.12,wechaty.padplus.schemas,ModelFriendship.FriendshipPayloadBase,31,0,0,0,6,0,9,0,9,0
@@ -184,7 +184,7 @@ wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.Respons
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerGrpc.PadPlusServerBlockingStub,28,0,0,0,7,0,4,0,4,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerGrpc.new AbstractStub.StubFactory() {...},0,10,0,0,0,2,0,2,0,2
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerGrpc.new AbstractStub.StubFactory() {...},10,0,0,0,2,0,2,0,2,0
-wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.RequestObject.Builder,758,222,86,18,217,68,94,14,46,10
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerGrpc.new AbstractStub.StubFactory() {...},10,0,0,0,2,0,2,0,2,0
+wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.RequestObject.Builder,758,222,86,18,217,68,94,14,46,10
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerGrpc.PadPlusServerFutureStub,20,0,0,0,5,0,3,0,3,0
 wechaty-puppet-padplus_2.12,wechaty.padplus.grpc,PadPlusServerOuterClass.InitConfig,242,182,31,16,66,59,43,18,22,15
