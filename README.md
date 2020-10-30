@@ -242,7 +242,7 @@ Scala Wechaty **BETA** Released
 
 Read more from our Multi-language Wechaty Beta Release event from our blog:
 
-- [Multi Language Wechaty Beta Release Announcement!](https://wechaty.github.io/2020/06/19/multi-language-wechaty-beta-release/)
+- [Multi Language Wechaty Beta Release Announcement!](https://wechaty.js.org/2020/06/19/multi-language-wechaty-beta-release/)
 
 ### v0.0.1 (Jun 3, 2020)
 
