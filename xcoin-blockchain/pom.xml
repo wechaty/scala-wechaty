@@ -28,56 +28,56 @@
       <groupId>com.typesafe.scala-logging</groupId>
       <artifactId>scala-logging_${scala.binary.version}</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.tron.trident</groupId>
-      <artifactId>core</artifactId>
-      <version>0.7.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.bouncycastle</groupId>
-          <artifactId>bcpkix-jdk15on</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>io.grpc</groupId>
-          <artifactId>grpc-netty-shaded</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>io.grpc</groupId>
-          <artifactId>grpc-okhttp</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.tron.trident</groupId>
-      <artifactId>abi</artifactId>
-      <version>0.7.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.tron.trident</groupId>
-      <artifactId>utils</artifactId>
-      <version>0.7.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>io.netty</groupId>
-          <artifactId>netty-all</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-stub</artifactId>
-      <version>${grpc.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-netty</artifactId>
-      <version>${grpc.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-protobuf</artifactId>
-      <version>${grpc.version}</version>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.tron.trident</groupId>-->
+<!--      <artifactId>core</artifactId>-->
+<!--      <version>0.7.0</version>-->
+<!--      <exclusions>-->
+<!--        <exclusion>-->
+<!--          <groupId>org.bouncycastle</groupId>-->
+<!--          <artifactId>bcpkix-jdk15on</artifactId>-->
+<!--        </exclusion>-->
+<!--        <exclusion>-->
+<!--          <groupId>io.grpc</groupId>-->
+<!--          <artifactId>grpc-netty-shaded</artifactId>-->
+<!--        </exclusion>-->
+<!--        <exclusion>-->
+<!--          <groupId>io.grpc</groupId>-->
+<!--          <artifactId>grpc-okhttp</artifactId>-->
+<!--        </exclusion>-->
+<!--      </exclusions>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.tron.trident</groupId>-->
+<!--      <artifactId>abi</artifactId>-->
+<!--      <version>0.7.0</version>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>org.tron.trident</groupId>-->
+<!--      <artifactId>utils</artifactId>-->
+<!--      <version>0.7.0</version>-->
+<!--      <exclusions>-->
+<!--        <exclusion>-->
+<!--          <groupId>io.netty</groupId>-->
+<!--          <artifactId>netty-all</artifactId>-->
+<!--        </exclusion>-->
+<!--      </exclusions>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>io.grpc</groupId>-->
+<!--      <artifactId>grpc-stub</artifactId>-->
+<!--      <version>${grpc.version}</version>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>io.grpc</groupId>-->
+<!--      <artifactId>grpc-netty</artifactId>-->
+<!--      <version>${grpc.version}</version>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>io.grpc</groupId>-->
+<!--      <artifactId>grpc-protobuf</artifactId>-->
+<!--      <version>${grpc.version}</version>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>org.web3j</groupId>
       <artifactId>core</artifactId>
@@ -92,16 +92,16 @@
       <artifactId>evm-abi-decoder</artifactId>
       <version>0.0.8</version>
     </dependency>
-    <dependency>
-      <groupId>com.google.protobuf</groupId>
-      <artifactId>protobuf-java</artifactId>
-      <version>${protobuf.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.salesforce.servicelibs</groupId>
-      <artifactId>reactor-grpc-stub</artifactId>
-      <version>1.2.4</version>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>com.google.protobuf</groupId>-->
+<!--      <artifactId>protobuf-java</artifactId>-->
+<!--      <version>${protobuf.version}</version>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>com.salesforce.servicelibs</groupId>-->
+<!--      <artifactId>reactor-grpc-stub</artifactId>-->
+<!--      <version>1.2.4</version>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>io.projectreactor</groupId>
       <artifactId>reactor-core</artifactId>

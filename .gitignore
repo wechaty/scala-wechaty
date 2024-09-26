@@ -36,3 +36,4 @@ support/var
 /blockchain/src/test/scala/xcoin/blockchain/services/TronApiMain.scala
 /blockchain/src/main/scala/xcoin/blockchain/services/TronApiReturnMain.scala
 /blockchain/src/test/scala/xcoin/blockchain/services/TronApiMonitorMain.scala
+submodules/**

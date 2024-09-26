@@ -15,6 +15,7 @@
   <name>xcoin</name>
   <description>xcoin core project</description>
   <modules>
+    <module>xcoin-trident</module>
     <module>xcoin-blockchain</module>
   </modules>
   <dependencyManagement>
