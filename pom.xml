@@ -1,0 +1,280 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.7.15</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+  <groupId>io.github.xcoin</groupId>
+  <artifactId>xcoin-core</artifactId>
+  <packaging>pom</packaging>
+  <version>0.0.1</version>
+  <name>xcoin</name>
+  <description>xcoin core project</description>
+  <modules>
+    <module>xcoin-blockchain</module>
+  </modules>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.scala-lang</groupId>
+        <artifactId>scala-library</artifactId>
+        <version>${scala.release.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.typesafe.scala-logging</groupId>
+        <artifactId>scala-logging_${scala.binary.version}</artifactId>
+        <version>3.9.5</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.module</groupId>
+        <artifactId>jackson-module-scala_${scala.binary.version}</artifactId>
+        <version>${jackson-bom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.tron.trident</groupId>
+        <artifactId>abi</artifactId>
+        <version>0.7.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.tron.trident</groupId>
+        <artifactId>utils</artifactId>
+        <version>0.7.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.tron.trident</groupId>
+        <artifactId>core</artifactId>
+        <version>0.7.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.bitcoinj</groupId>
+        <artifactId>bitcoinj-core</artifactId>
+        <version>0.16.2</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15to18</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-javalite</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>net.jcip</groupId>
+            <artifactId>jcip-annotations</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.web3j</groupId>
+        <artifactId>core</artifactId>
+        <version>4.10.3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
+        <version>${spring.boot.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>io.projectreactor</groupId>
+        <artifactId>reactor-test</artifactId>
+        <scope>test</scope>
+        <version>3.6.0</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>net.alchim31.maven</groupId>
+          <artifactId>scala-maven-plugin</artifactId>
+          <version>4.6.1</version>
+          <executions>
+            <!--          <execution>-->
+            <!--            <id>eclipse-add-source</id>-->
+            <!--            <goals>-->
+            <!--              <goal>add-source</goal>-->
+            <!--            </goals>-->
+            <!--          </execution>-->
+            <execution>
+              <id>scala-compile-first</id>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>compile</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>scala-test-compile-first</id>
+              <phase>process-test-resources</phase>
+              <goals>
+                <goal>testCompile</goal>
+              </goals>
+            </execution>
+            <!--          <execution>-->
+            <!--            &lt;!&ndash; <id>attach-scaladocs</id> &ndash;&gt;-->
+            <!--            <id>attach-javadocs</id>-->
+            <!--            &lt;!&ndash; <phase>verify</phase> &ndash;&gt;-->
+            <!--            <goals>-->
+            <!--              <goal>doc-jar</goal>-->
+            <!--            </goals>-->
+            <!--          </execution>-->
+          </executions>
+          <configuration>
+            <scalaVersion>${scala.release.version}</scalaVersion>
+            <!--
+            <recompileMode>incremental</recompileMode>
+            <useZincServer>true</useZincServer>
+            -->
+            <args>
+              <arg>-unchecked</arg>
+              <arg>-deprecation</arg>
+              <arg>-feature</arg>
+              <arg>-encoding</arg>
+              <arg>UTF-8</arg>
+              <arg>-language:postfixOps</arg>
+            </args>
+            <jvmArgs>
+              <jvmArg>-Xms1024m</jvmArg>
+              <jvmArg>-Xmx1024m</jvmArg>
+            </jvmArgs>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.1</version>
+          <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+            <optimize>true</optimize>
+            <encoding>UTF-8</encoding>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>com.github.os72</groupId>
+          <artifactId>protoc-jar-maven-plugin</artifactId>
+          <version>3.11.4</version>
+          <executions>
+            <execution>
+              <phase>generate-sources</phase>
+              <goals>
+                <goal>run</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <protocArtifact>com.google.protobuf:protoc:3.12.2</protocArtifact>
+            <inputDirectories>
+              <include>src/main/protobuf</include>
+            </inputDirectories>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.2.0</version>
+          <configuration>
+            <archive>
+              <addMavenDescriptor>false</addMavenDescriptor>
+            </archive>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+  <profiles>
+    <profile>
+      <id>unix</id>
+      <activation>
+        <os>
+          <family>unix</family>
+        </os>
+      </activation>
+      <properties>
+        <javacpp.platform>macosx-x86_64</javacpp.platform>
+        <resource-conf>${pom.basedir}/../support/development</resource-conf>
+        <os.detected.classifier>osx-x86_64</os.detected.classifier>
+      </properties>
+    </profile>
+    <profile>
+      <id>deploy</id>
+      <properties>
+        <javacpp.platform>linux-x86_64</javacpp.platform>
+        <os.detected.classifier>linux-x86_64</os.detected.classifier>
+        <resource-conf>${pom.basedir}/../support/production</resource-conf>
+      </properties>
+    </profile>    <!-- Deployment profile (required so these plugins are only used when deploying) -->
+  </profiles>
+  <contributors>
+    <contributor>
+      <name>Jun Tsai</name>
+      <email>jun.tsai@gmail.com</email>
+    </contributor>
+  </contributors>
+
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Jun Tsai</name>
+      <email>jun.tsai@gmail.com</email>
+    </developer>
+  </developers>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+
+    <repository>
+      <id>ossrh</id>
+      <name>Nexus Release Repository</name>
+      <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+    <site>
+      <id>github</id>
+      <name>scala-wechaty</name>
+      <url>https://wechaty.github.com/scala-wechaty</url>
+    </site>
+  </distributionManagement>
+
+  <scm>
+    <url>https://github.com/wechaty/scala-wechaty</url>
+    <connection>scm:git:ssh://github.com/wechaty/scala-wechaty.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/wechaty/scala-wechaty.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+  <properties>
+    <encoding>UTF-8</encoding>
+    <java.version>11</java.version>
+    <spring.boot.version>2.7.15</spring.boot.version>
+    <scala.binary.version>2.13</scala.binary.version>
+    <scala.release.version>2.13.11</scala.release.version>
+    <protobuf.version>3.12.0</protobuf.version>
+    <grpc.version>1.35.1</grpc.version>
+    <jackson-bom.version>2.14.3</jackson-bom.version>
+
+
+  </properties>
+</project>
