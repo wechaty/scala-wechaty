@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong
 class TronNodeClient(grpcEndpoint:String, grpcEndpointSolidity:String, apiKeys:Array[String])
   extends TronApi
     with TNCVoteSupport
-    with TransactionSupportImpl {
+    with TNCTransactionSupport {
   private val logger = Logger[TronNodeClient]
   private lazy val apiKeyClientInterceptor = new ApiKeyClientInterceptor(apiKeys)
   protected lazy val stub                    = {

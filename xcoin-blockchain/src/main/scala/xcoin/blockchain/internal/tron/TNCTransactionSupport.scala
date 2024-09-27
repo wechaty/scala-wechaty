@@ -14,7 +14,7 @@ import xcoin.core.services.XCoinException.{FailRequest, ResourceNotFound}
 
 import scala.util.{Failure, Success}
 
-trait TransactionSupportImpl extends TransactionSupport {
+trait TNCTransactionSupport extends TransactionSupport {
   self:TronNodeClient=>
   override def transactionByHash(txnId: String): Mono[TronApi.TransactionInfoPayload] = {
     val bsTxid  = parseAddress(txnId)
