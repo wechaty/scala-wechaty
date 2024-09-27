@@ -7,150 +7,53 @@
     <version>0.0.1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>xcoin-blockchain</artifactId>
+  <artifactId>xcoin-core</artifactId>
   <packaging>jar</packaging>
   <properties>
   </properties>
   <dependencies>
     <dependency>
-      <groupId>com.ganshane.xcoin</groupId>
-      <artifactId>xcoin-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.ben-manes.caffeine</groupId>
-      <artifactId>caffeine</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.data</groupId>-->
-<!--      <artifactId>spring-data-jdbc</artifactId>-->
-<!--    </dependency>-->
     <dependency>
       <groupId>com.typesafe.scala-logging</groupId>
       <artifactId>scala-logging_${scala.binary.version}</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.tron.trident</groupId>
-      <artifactId>core</artifactId>
-      <version>0.9.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.bouncycastle</groupId>
-          <artifactId>bcpkix-jdk15on</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>io.grpc</groupId>
-          <artifactId>grpc-netty-shaded</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>io.grpc</groupId>
-          <artifactId>grpc-okhttp</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.tron.trident</groupId>
-      <artifactId>abi</artifactId>
-      <version>0.9.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.tron.trident</groupId>
-      <artifactId>utils</artifactId>
-      <version>0.9.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>io.netty</groupId>
-          <artifactId>netty-all</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-stub</artifactId>
-      <version>${grpc.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-netty</artifactId>
-      <version>${grpc.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>io.grpc</groupId>
-      <artifactId>grpc-protobuf</artifactId>
-      <version>${grpc.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.protobuf</groupId>
-      <artifactId>protobuf-java</artifactId>
-      <version>${protobuf.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.protobuf</groupId>
-      <artifactId>protobuf-java-util</artifactId>
-      <version>${protobuf.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.salesforce.servicelibs</groupId>
-      <artifactId>reactor-grpc-stub</artifactId>
-      <version>1.2.4</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.web3j</groupId>
-      <artifactId>core</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.projectreactor.addons</groupId>
-      <artifactId>reactor-adapter</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>net.osslabz</groupId>
-      <artifactId>evm-abi-decoder</artifactId>
-      <version>0.0.8</version>
-    </dependency>
-<!--    <dependency>-->
-<!--      <groupId>com.google.protobuf</groupId>-->
-<!--      <artifactId>protobuf-java</artifactId>-->
-<!--      <version>${protobuf.version}</version>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>com.salesforce.servicelibs</groupId>-->
-<!--      <artifactId>reactor-grpc-stub</artifactId>-->
-<!--      <version>1.2.4</version>-->
-<!--    </dependency>-->
-    <dependency>
-      <groupId>io.projectreactor</groupId>
-      <artifactId>reactor-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.bouncycastle</groupId>
-      <artifactId>bcprov-jdk15on</artifactId>
-      <version>1.69</version>
-    </dependency>
-    <!-- webclient -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-webflux</artifactId>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-core</artifactId>
+      <version>2.2.9</version>
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>org.bitcoinj</groupId>
-      <artifactId>bitcoinj-core</artifactId>
-      <scope>provided</scope>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>com.fasterxml.jackson.module</groupId>
-      <artifactId>jackson-module-scala_${scala.binary.version}</artifactId>
-      <version>${jackson-bom.version}</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webflux</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jdbc</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>io.projectreactor</groupId>
-      <artifactId>reactor-test</artifactId>
-      <scope>test</scope>
+      <artifactId>reactor-core</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+      <version>2.3.6</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -206,7 +109,6 @@
 
           <protocArtifact>com.google.protobuf:protoc:${protobuf.version}</protocArtifact>
           <addProtoSources>all</addProtoSources>
-          <includeStdTypes>true</includeStdTypes>
           <includeMavenTypes>direct</includeMavenTypes>
           <includeDirectories>
             <include>src/main/proto/trident</include>
@@ -215,9 +117,9 @@
             <include>src/main/proto/trident</include>
           </inputDirectories>
           <outputTargets>
-<!--            <outputTarget>-->
-<!--              <type>java</type>-->
-<!--            </outputTarget>-->
+            <outputTarget>
+              <type>java</type>
+            </outputTarget>
 <!--            <outputTarget>-->
 <!--              <type>js</type>-->
 <!--              <outputDirectory>../hook/agent/protobuf</outputDirectory>-->
