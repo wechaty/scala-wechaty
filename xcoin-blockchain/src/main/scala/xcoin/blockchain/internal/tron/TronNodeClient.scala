@@ -10,7 +10,10 @@ import xcoin.blockchain.services.TronApi.TronNodeClientNetwork
 
 import java.util.concurrent.atomic.AtomicLong
 
-class TronNodeClient(grpcEndpoint:String, grpcEndpointSolidity:String, apiKeys:Array[String]) extends TronApi with TransactionSupportImpl {
+class TronNodeClient(grpcEndpoint:String, grpcEndpointSolidity:String, apiKeys:Array[String])
+  extends TronApi
+    with TNCVoteSupport
+    with TransactionSupportImpl {
   private val logger = Logger[TronNodeClient]
   private lazy val apiKeyClientInterceptor = new ApiKeyClientInterceptor(apiKeys)
   protected lazy val stub                    = {

@@ -1,12 +1,12 @@
 package xcoin.blockchain.services
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import reactor.core.publisher.Mono
+import reactor.core.publisher.{Flux, Mono}
 import xcoin.blockchain.services.TronApi.TronNodeClientNetwork
 
 import scala.util.Try
 
-trait TronApi extends TransactionSupport {
+trait TronApi extends TransactionSupport with VoteSupport {
 }
 trait TronNodeClientBuilder{
   def network(network:TronNodeClientNetwork.Type): Unit
@@ -19,6 +19,22 @@ trait TronNodeClientCustomizer{
 }
 trait TransactionSupport {
   def transactionByHash(txnHash: String): Mono[TronApi.TransactionInfoPayload]
+}
+trait VoteSupport{
+  def voteList():Flux[Witness]
+  class Witness{
+    var address:String = _
+    var voteCount:Long = _
+    var voterRate:Int = _
+    var isSR:Boolean = false
+
+    var reward:BigDecimal = _
+    var apr:BigDecimal = _
+
+    override def toString: String = {
+      s"$address:$apr"
+    }
+  }
 }
 object TronApi {
   object TronNodeClientNetwork extends Enumeration {
