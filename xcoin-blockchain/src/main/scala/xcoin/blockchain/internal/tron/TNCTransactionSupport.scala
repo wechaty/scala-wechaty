@@ -1,13 +1,12 @@
 package xcoin.blockchain.internal.tron
 
-import com.google.protobuf.ByteString
 import org.bouncycastle.util.encoders.Hex
 import org.springframework.util.{Assert, StringUtils}
 import org.tron.trident.api.GrpcAPI.BytesMessage
 import org.tron.trident.core.ApiWrapper.{parseAddress, parseHex}
 import org.tron.trident.proto.Response.TransactionInfo
 import reactor.core.publisher.Mono
-import xcoin.blockchain.services.{TransactionSupport, TronApi}
+import xcoin.blockchain.services.TronApi.TransactionSupport
 import xcoin.core.services.XCoinException
 import xcoin.core.services.XCoinException.{FailRequest, ResourceNotFound}
 

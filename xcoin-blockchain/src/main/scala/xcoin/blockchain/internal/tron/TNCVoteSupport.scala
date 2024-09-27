@@ -5,7 +5,7 @@ import org.tron.trident.core.ApiWrapper
 import org.tron.trident.core.ApiWrapper.parseAddress
 import org.tron.trident.utils.Base58Check
 import reactor.core.publisher.{Flux, Mono}
-import xcoin.blockchain.services.VoteSupport
+import xcoin.blockchain.services.TronApi.VoteSupport
 
 import java.util.stream.Collectors
 import scala.jdk.CollectionConverters.ListHasAsScala

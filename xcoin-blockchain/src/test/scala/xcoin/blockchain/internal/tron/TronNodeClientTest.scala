@@ -3,8 +3,7 @@ package xcoin.blockchain.internal.tron
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.Bean
-import xcoin.blockchain.services.TronApi.TronNodeClientNetwork
-import xcoin.blockchain.services.{TronNodeClientBuilder, TronNodeClientCustomizer}
+import xcoin.blockchain.services.TronApi.{TronNodeClientBuilder, TronNodeClientCustomizer, TronNodeClientNetwork}
 
 object TronNodeClientTest{
   @EnableAutoConfiguration

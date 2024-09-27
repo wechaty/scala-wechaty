@@ -8,7 +8,8 @@ import org.springframework.context.annotation.{Bean, Configuration, Import, Scop
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import xcoin.blockchain.internal.tron.TronNodeClient
 import xcoin.blockchain.internal.tron.TronNodeClient.DefaultTronNodeClientBuilder
-import xcoin.blockchain.services.{TronApi, TronNodeClientBuilder, TronNodeClientCustomizer}
+import xcoin.blockchain.services.TronApi.{TronNodeClientBuilder, TronNodeClientCustomizer}
+import xcoin.blockchain.services.{TronApi}
 
 import java.util
 import java.util.List

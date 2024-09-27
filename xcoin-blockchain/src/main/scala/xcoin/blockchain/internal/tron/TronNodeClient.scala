@@ -5,8 +5,8 @@ import io.grpc.Metadata.Key
 import io.grpc.{CallOptions, Channel, ClientCall, ClientInterceptor, ForwardingClientCall, ManagedChannelBuilder, Metadata, MethodDescriptor}
 import org.tron.trident.api.{ReactorWalletGrpc, ReactorWalletSolidityGrpc}
 import xcoin.blockchain.internal.tron.TronNodeClient.ApiKeyClientInterceptor
-import xcoin.blockchain.services.{TronApi, TronNodeClientBuilder}
-import xcoin.blockchain.services.TronApi.TronNodeClientNetwork
+import xcoin.blockchain.services.{TronApi}
+import xcoin.blockchain.services.TronApi.{TronNodeClientBuilder, TronNodeClientNetwork}
 
 import java.util.concurrent.atomic.AtomicLong
 
