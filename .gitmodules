@@ -1,5 +1,0 @@
-[submodule "submodules/trident"]
-	path = submodules/trident
-	url = https://github.com/tronprotocol/trident.git
-	ignore = dirty
-
