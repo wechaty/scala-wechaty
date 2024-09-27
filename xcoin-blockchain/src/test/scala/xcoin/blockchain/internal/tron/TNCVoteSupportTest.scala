@@ -15,7 +15,7 @@ class TNCVoteSupportTest {
 
   @Test
   def testList(): Unit = {
-    val list      = nodeClient.voteList().collectList().block()
+    val list      = nodeClient.voteList(5).collectList().block()
     list.forEach(println(_))
   }
 }

@@ -16,7 +16,7 @@ import scala.jdk.CollectionConverters.ListHasAsScala
 trait TNCVoteSupport extends VoteSupport {
 
   self: TronNodeClient =>
-  override def voteList(): Flux[Witness] = {
+  override def voteList(topN:Int=127): Flux[Witness] = {
     stub
       .listWitnesses(EmptyMessage.getDefaultInstance)
       .flatMapMany { response =>
@@ -32,7 +32,7 @@ trait TNCVoteSupport extends VoteSupport {
           }
           .sort((a, b) => b.voteCount.compareTo(a.voteCount))
           //top 127 candidates
-          .take(127)
+          .take(topN)
           .concatMap { wit =>
             val request = BytesMessage.newBuilder.setValue(parseAddress(wit.address)).build
             stub

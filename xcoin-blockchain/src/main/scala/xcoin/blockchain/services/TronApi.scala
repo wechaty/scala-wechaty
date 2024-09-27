@@ -51,7 +51,7 @@ object TronApi {
   }
 
   trait VoteSupport {
-    def voteList(): Flux[Witness]
+    def voteList(topN:Int=127): Flux[Witness]
 
     class Witness {
       var address  : String  = _
