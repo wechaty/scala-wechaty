@@ -7,7 +7,6 @@ import org.tron.trident.api.GrpcAPI.BytesMessage
 import org.tron.trident.core.ApiWrapper.{parseAddress, parseHex}
 import org.tron.trident.proto.Response.TransactionInfo
 import reactor.core.publisher.Mono
-import xcoin.blockchain.services.TronApi.TransactionInfoPayload
 import xcoin.blockchain.services.{TransactionSupport, TronApi}
 import xcoin.core.services.XCoinException
 import xcoin.core.services.XCoinException.{FailRequest, ResourceNotFound}
@@ -16,7 +15,7 @@ import scala.util.{Failure, Success}
 
 trait TNCTransactionSupport extends TransactionSupport {
   self:TronNodeClient=>
-  override def transactionByHash(txnId: String): Mono[TronApi.TransactionInfoPayload] = {
+  override def transactionByHash(txnId: String): Mono[TransactionInfoPayload] = {
     val bsTxid  = parseAddress(txnId)
     val request = BytesMessage.newBuilder.setValue(bsTxid).build
 
