@@ -12,9 +12,14 @@ import xcoin.blockchain.services.TronApi.{TronNodeClientBuilder, TronNodeClientN
 
 import java.util.concurrent.atomic.AtomicLong
 
-class TronNodeClient(protected val stub: ReactorWalletStub,solidityStub: ReactorWalletSolidityStub)
+class TronNodeClient(protected val stub: ReactorWalletStub,
+                     solidityStub: ReactorWalletSolidityStub,
+                     protected val network:TronNodeClientNetwork.Type,
+                    )
   extends TronApi
     with TNCVoteSupport
+    with TNCContractSupport
+    with TNCUSDTSupport
     with TNCAccountSupport
     with TNCResourceSupport
     with TNCTransactionSupport {
@@ -80,6 +85,10 @@ object TronNodeClient {
       val (_, grpcEndpointSolidity) = getGrpcEndpoint()
       val channelSolidity           = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).intercept(apiKeyClientInterceptor).usePlaintext.build()
       ReactorWalletSolidityGrpc.newReactorStub(channelSolidity)
+    }
+
+    override def buildTronNodeClient(walletStub: ReactorWalletStub, walletSolidityStub: ReactorWalletSolidityStub): TronApi = {
+      new TronNodeClient(walletStub,walletSolidityStub,network)
     }
   }
 }

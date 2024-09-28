@@ -16,5 +16,6 @@ object XCoinException{
   case object AccessDenied extends GenericError(2,"Access Denied")
   case class ResourceNotFound(resourcePath:String) extends GenericError(3,"resource [%s] not found".format(resourcePath))
   case class FailRequest(failMessage:String) extends GenericError(4,"failt to request:[%s]".format(failMessage))
+  case class InvalidReturn(failMessage:String) extends GenericError(5,"invalid return:[%s]".format(failMessage))
   case class Unknown(override val message:String) extends GenericError(9999, message)
 }

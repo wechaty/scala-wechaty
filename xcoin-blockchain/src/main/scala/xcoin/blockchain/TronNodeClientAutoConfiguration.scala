@@ -17,8 +17,12 @@ import java.util
 import java.util.List
 
 @AutoConfiguration
-@Import(Array(classOf[TronNodeClient]))
 class TronNodeClientAutoConfiguration {
+  @Bean
+  def tronNodeClient(builder: TronNodeClientBuilder,walletStub: ReactorWalletStub,walletSolidityStub: ReactorWalletSolidityStub): TronApi= {
+    builder.buildTronNodeClient(walletStub,walletSolidityStub)
+  }
+
   @Bean
   def reactorWalletStub(builder: TronNodeClientBuilder): ReactorWalletStub = {
     builder.buildReactorWalletStub()

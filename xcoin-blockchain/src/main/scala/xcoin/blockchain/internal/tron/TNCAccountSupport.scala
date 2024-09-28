@@ -14,6 +14,9 @@ import xcoin.core.services.XCoinException.InvalidParameter
 
 trait TNCAccountSupport extends AccountSupport{
   self:TronNodeClient =>
+  override def accountBalanceOfUSDT(owner:String):Mono[Long]={
+    usdtBalanceOf(owner)
+  }
   override def accountGet(address: String): Mono[TronAccount] = {
     val bsAddress             = parseAddress(address)
     val accountAddressMessage = AccountAddressMessage.newBuilder.setAddress(bsAddress).build
@@ -41,15 +44,15 @@ trait TNCAccountSupport extends AccountSupport{
 
         account.getFrozenV2List.stream().filter(_.getType == Common.ResourceCode.ENERGY).findFirst().ifPresent(x => {
           tronAccount.energyFrozenAmount = x.getAmount
-//          tronAccount.energyFrozen = x.getAmount / rate.energyRate
+          //          tronAccount.energyFrozen = x.getAmount / rate.energyRate
         })
         //第一个是带宽
         account.getFrozenV2List.stream().findFirst().ifPresent { x =>
           tronAccount.bandwidthFrozenAmount = x.getAmount
-//          tronAccount.bandwidthFrozen = x.getAmount / rate.bandwidthRate
+          //          tronAccount.bandwidthFrozen = x.getAmount / rate.bandwidthRate
         }
-//        tronAccount.energyStakedAmount = (tronAccount.energyDelegatedToOthers + tronAccount.energyFrozen) * rate.energyRate
-//        tronAccount.bandwidthStakedAmount = (tronAccount.bandwidthDelegatedToOthers + tronAccount.bandwidthFrozen) * rate.bandwidthRate
+        //        tronAccount.energyStakedAmount = (tronAccount.energyDelegatedToOthers + tronAccount.energyFrozen) * rate.energyRate
+        //        tronAccount.bandwidthStakedAmount = (tronAccount.bandwidthDelegatedToOthers + tronAccount.bandwidthFrozen) * rate.bandwidthRate
 
         //计算能量和带宽的恢复时间
         var bandwidthTime = account.getNetWindowSize
@@ -64,8 +67,8 @@ trait TNCAccountSupport extends AccountSupport{
         tronAccount.witnessPermission = TronPermission(account.getWitnessPermission)
         tronAccount.activePermission = account.getActivePermissionList.stream().map(TronPermission(_)).toArray(size=>new Array[TronPermission](size))
 
-//        println(Hex.toHexString(account.getWitnessPermission.getOperations.toByteArray))
-//        println(Hex.toHexString(account.getActivePermission(1).getOperations.toByteArray))
+        //        println(Hex.toHexString(account.getWitnessPermission.getOperations.toByteArray))
+        //        println(Hex.toHexString(account.getActivePermission(1).getOperations.toByteArray))
 
         tronAccount.rateMono = resourceRate().share()
         tronAccount

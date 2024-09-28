@@ -3,19 +3,26 @@ package xcoin.blockchain.services
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonProperty}
 import org.tron.trident.api.ReactorWalletGrpc.ReactorWalletStub
 import org.tron.trident.api.ReactorWalletSolidityGrpc.ReactorWalletSolidityStub
+import org.tron.trident.proto.Response
+import org.tron.trident.proto.Response.TransactionExtention
 import reactor.core.publisher.{Flux, Mono}
-import xcoin.blockchain.services.TronApi.{ResourceSupport, TransactionSupport, TronNodeClientNetwork, VoteSupport}
+import xcoin.blockchain.internal.tron.TronNodeClient
+import xcoin.blockchain.services.TronApi.{ContractSupport, ResourceSupport, TransactionSupport, TronNodeClientNetwork, USDTSupport, VoteSupport}
 
 import scala.util.Try
 
 trait TronApi
   extends TransactionSupport
     with VoteSupport
+    with ContractSupport
+    with USDTSupport
     with ResourceSupport
     {
 }
 object TronApi {
   trait TronNodeClientBuilder {
+    def buildTronNodeClient(walletStub: ReactorWalletStub, walletSolidityStub: ReactorWalletSolidityStub): TronApi
+
     def network(network: TronNodeClientNetwork.Type): Unit
 
     def apiKeys(keys: Array[String]): Unit
@@ -59,6 +66,12 @@ object TronApi {
       }
     }
   }
+  trait ContractSupport{
+    def contractTriggerConstant(owner:String,contractAddress:String,function:org.tron.trident.abi.datatypes.Function,valueOpt:Option[Long]=None):Mono[Response.TransactionExtention];
+  }
+  trait USDTSupport{
+    def usdtBalanceOf(owner:String):Mono[Long]
+  }
 
   trait VoteSupport {
     def voteList(topN:Int=127): Flux[Witness]
@@ -77,54 +90,59 @@ object TronApi {
       }
     }
   }
+
   trait AccountSupport {
-    def accountGet(address:String):Mono[TronAccount]
+    def accountGet(address: String): Mono[TronAccount]
 
     class TronAccount {
       var bandwidthRecoverTime: Long = _
       var energyRecoverTime   : Long = _
 
-      var address                     : String                = _
+      var address                           : String = _
       // 余额
-      var balanceSun                  : Long                  = _
+      var balanceSun                        : Long   = _
       // 创建时间
-      var createdTime                 : Long                  = _
+      var createdTime                       : Long   = _
       // 已使用带宽
-      var bandwidthUsed               : Long                  = _
+      var bandwidthUsed                     : Long   = _
       // 由其他人委托的带宽
-      var bandwidthDelegatedByOthersAmount  : Long                  = _
-      var bandwidthDelegatedByOthersV1Amount: Long                  = _
+      var bandwidthDelegatedByOthersAmount  : Long   = _
+      var bandwidthDelegatedByOthersV1Amount: Long   = _
       // 带宽委托给其他人
-      var bandwidthDelegatedToOthersAmount  : Long                  = _
+      var bandwidthDelegatedToOthersAmount  : Long   = _
       // 带宽冻结
-//      var bandwidthFrozen             : Long                  = _
+      //      var bandwidthFrozen             : Long                  = _
       // 带宽冻结的TRX数
-      var bandwidthFrozenAmount       : Long                  = _
+      var bandwidthFrozenAmount             : Long   = _
+
       // 账户质押获取能量的金额
-      def bandwidthStakedAmount       : Long                  = {
+      def bandwidthStakedAmount: Long = {
         bandwidthDelegatedToOthersAmount + bandwidthFrozenAmount
       }
+
       // 已使用带宽
-      var energyUsed                  : Long                  = _
+      var energyUsed                     : Long = _
       // 能量委托给其他人
-      var energyDelegatedToOthersAmount     : Long                  = _
+      var energyDelegatedToOthersAmount  : Long = _
       // 能量由其他人委托的
-      var energyDelegatedByOthersAmount     : Long                  = _
-      var energyDelegatedByOthersV1Amount   : Long                  = _
+      var energyDelegatedByOthersAmount  : Long = _
+      var energyDelegatedByOthersV1Amount: Long = _
       // 能量带宽冻结
-//      var energyFrozen                : Long                  = _
+      //      var energyFrozen                : Long                  = _
       // 能量带宽冻结的TRX
-      var energyFrozenAmount          : Long                  = _
+      var energyFrozenAmount             : Long = _
       @JsonIgnore
-      private[xcoin] var rateMono:Mono[ResourceRate] =  _
+      private[xcoin] var rateMono: Mono[ResourceRate] = _
+
       // 账户质押获取能量的金额
-      def energyStakedAmount          : Long                  = {
+      def energyStakedAmount: Long = {
         energyDelegatedToOthersAmount + energyFrozenAmount
       }
+
       // 账户权限
-      var ownerPermission             : TronPermission        = _
-      var witnessPermission           : TronPermission        = _
-      var activePermission            : Array[TronPermission] = _
+      var ownerPermission  : TronPermission        = _
+      var witnessPermission: TronPermission        = _
+      var activePermission : Array[TronPermission] = _
 
       // 可委托带宽
       def canDelegateBandwidth(): Mono[Long] = {
@@ -135,8 +153,8 @@ object TronApi {
         }
       }
 
-      def canDelegateBandwidthAmount():Mono[Long] = {
-        availableBandwidthV2Amount().map{a=>
+      def canDelegateBandwidthAmount(): Mono[Long] = {
+        availableBandwidthV2Amount().map { a =>
           math.min(bandwidthFrozenAmount, a)
         }
       }
@@ -150,21 +168,21 @@ object TronApi {
         }
       }
 
-      def canDelegateEnergyAmount():Mono[Long] = {
-        availableEnergyV2Amount().map(x=>math.min(energyFrozenAmount,x))
+      def canDelegateEnergyAmount(): Mono[Long] = {
+        availableEnergyV2Amount().map(x => math.min(energyFrozenAmount, x))
       }
 
       // 可用带宽
-      def availableBandwidthV2Amount():Mono[Long] = {
-        rateMono.map{rate=>
+      def availableBandwidthV2Amount(): Mono[Long] = {
+        rateMono.map { rate =>
           (bandwidthFrozenAmount + bandwidthDelegatedByOthersAmount - bandwidthUsed * rate.bandwidthRate).longValue
         }
       }
 
 
       //所有可用带宽，包含v1
-      def availableBandwidthAll():Mono[Long] = {
-        availableBandwidthV2Amount().map{a=>
+      def availableBandwidthAll(): Mono[Long] = {
+        availableBandwidthV2Amount().map { a =>
           a + bandwidthDelegatedByOthersV1Amount
         }
       }
@@ -174,8 +192,8 @@ object TronApi {
         availableEnergyV2Amount().map(_ + energyDelegatedByOthersV1Amount)
       }
 
-      def availableEnergyV2Amount():Mono[Long] = {
-        rateMono.map{rate=>
+      def availableEnergyV2Amount(): Mono[Long] = {
+        rateMono.map { rate =>
           (energyFrozenAmount + energyDelegatedByOthersAmount - energyUsed * rate.energyRate).longValue
         }
       }
@@ -198,12 +216,13 @@ object TronApi {
       }
 
       override def toString: String = {
-//        s"energy: used:${energyUsed} toOthers:${energyDelegatedToOthers} byOthers:${energyDelegatedByOthers} frozen:${energyFrozen} available:${availableEnergyAll()} " +
-//          s"bandwidth: used:${bandwidthUsed} toOthers:${bandwidthDelegatedToOthers} byOthers:${bandwidthDelegatedByOthers} frozen:${bandwidthFrozen} available:${availableBandwidthAll()}"
+        //        s"energy: used:${energyUsed} toOthers:${energyDelegatedToOthers} byOthers:${energyDelegatedByOthers} frozen:${energyFrozen} available:${availableEnergyAll()} " +
+        //          s"bandwidth: used:${bandwidthUsed} toOthers:${bandwidthDelegatedToOthers} byOthers:${bandwidthDelegatedByOthers} frozen:${bandwidthFrozen} available:${availableBandwidthAll()}"
         ""
       }
     }
 
+    def accountBalanceOfUSDT(owner: String): Mono[Long]
   }
   trait ResourceSupport{
     def resourceRate():Mono[ResourceRate]
