@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono
 import xcoin.blockchain.internal.tron.TronPermissionHelper.TronPermission
 import xcoin.blockchain.services.TronApi.{AccountSupport, SimpleTronPermission, TransactionSigned, TronPermission, TronPermissionKey, TronPermissionType}
 import xcoin.core.services.XCoinException
-import xcoin.core.services.XCoinException.InvalidParameter
+import xcoin.core.services.XCoinException.XInvalidParameterException
 
 trait TNCAccountSupport extends AccountSupport{
   self:TronNodeClient =>
@@ -106,7 +106,7 @@ object TronPermissionHelper{
     private[tron] def hasPermission(contractType:ContractType):Boolean={
       val operations = tronPermission.operations
       if (operations.length != 32) {
-        throw new XCoinException(InvalidParameter("operations",operations))
+        throw XInvalidParameterException("operations", operations)
       }
 
       val dataIndex = contractType.getNumber >> 3

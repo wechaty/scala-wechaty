@@ -8,7 +8,7 @@ import org.tron.trident.proto.Response.TransactionInfo
 import reactor.core.publisher.Mono
 import xcoin.blockchain.services.TronApi.TransactionSupport
 import xcoin.core.services.XCoinException
-import xcoin.core.services.XCoinException.{FailRequest, ResourceNotFound}
+import xcoin.core.services.XCoinException.{XFailRequestException, XResourceNotFoundException}
 
 import scala.util.{Failure, Success}
 
@@ -28,11 +28,11 @@ trait TNCTransactionSupport extends TransactionSupport {
         payload.result = {
           txn.getResult match {
             case TransactionInfo.code.SUCESS => Success(txnHash)
-            case TransactionInfo.code.FAILED => Failure(new XCoinException(FailRequest(txn.getResMessage.toStringUtf8)))
+            case TransactionInfo.code.FAILED => Failure(XFailRequestException(txn.getResMessage.toStringUtf8))
           }
         }
 
-        if(!StringUtils.hasText(txnHash)) payload.result = Failure(new XCoinException(ResourceNotFound(txnId)))
+        if(!StringUtils.hasText(txnHash)) payload.result = Failure(XResourceNotFoundException(txnId))
 
         payload.id = txnHash
         payload.blockNumber = txn.getBlockNumber.intValue

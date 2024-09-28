@@ -14,7 +14,7 @@ import org.tron.trident.proto.{Chain, Response}
 import reactor.core.publisher.Mono
 import xcoin.blockchain.services.TronApi.{ContractSupport, SimpleTronPermission, TransactionSigned}
 import xcoin.core.services.XCoinException
-import xcoin.core.services.XCoinException.InvalidReturn
+import xcoin.core.services.XCoinException.XInvalidReturnException
 
 trait TNCContractSupport extends ContractSupport {
   self: TronNodeClient =>
@@ -32,7 +32,7 @@ trait TNCContractSupport extends ContractSupport {
     stub.triggerConstantContract(triggerBuilder.build()).map { txn =>
       logger.debug("txn:{}",Hex.toHexString(txn.toByteArray))
       if(txn.getResult.getResult) txn
-      else throw new XCoinException(InvalidReturn("invalid contract result"))
+      else throw XInvalidReturnException("invalid contract result")
     }
   }
   override def contractTriggerCallBuilder(owner: String, contractAddress: String, function: datatypes.Function, valueOpt: Option[Long]): Mono[TransactionBuilder] = {
@@ -59,7 +59,7 @@ trait TNCContractSupport extends ContractSupport {
     stub.broadcastTransaction(txn.transaction).map[String] { ret =>
       if (!ret.getResult) {
         val message = this.resolveResultCode(ret.getCodeValue) + ", " + ret.getMessage.toStringUtf8
-        throw new XCoinException(InvalidReturn(message))
+        throw XInvalidReturnException(message)
       } else {
         txn.txnId
       }
