@@ -1,14 +1,19 @@
 package xcoin.blockchain.internal.tron
 
+import com.google.protobuf.Any
 import org.bouncycastle.util.encoders.Hex
 import org.tron.trident.api.GrpcAPI.AccountAddressMessage
 import org.tron.trident.core.ApiWrapper.parseAddress
+import org.tron.trident.proto.Chain.Transaction
 import org.tron.trident.proto.Chain.Transaction.Contract.{ContractType, parser}
+import org.tron.trident.proto.Chain.Transaction.{Contract, raw}
+import org.tron.trident.proto.Contract.TransferContract
+import org.tron.trident.proto.Response.TransactionExtention
 import org.tron.trident.proto.{Common, Contract}
 import org.tron.trident.utils.Base58Check
 import reactor.core.publisher.Mono
 import xcoin.blockchain.internal.tron.TronPermissionHelper.TronPermission
-import xcoin.blockchain.services.TronApi.{AccountSupport, TronPermission, TronPermissionKey, TronPermissionType}
+import xcoin.blockchain.services.TronApi.{AccountSupport, SimpleTronPermission, TransactionSigned, TronPermission, TronPermissionKey, TronPermissionType}
 import xcoin.core.services.XCoinException
 import xcoin.core.services.XCoinException.InvalidParameter
 
@@ -17,6 +22,14 @@ trait TNCAccountSupport extends AccountSupport{
   override def accountBalanceOfUSDT(owner:String):Mono[Long]={
     usdtBalanceOf(owner)
   }
+  override def accountTransferTRX(owner:String, target:String, amountSun:Long):Mono[Transaction]= {
+    val rawFrom = parseAddress(owner)
+    val rawTo   = parseAddress(target)
+    val req     = TransferContract.newBuilder
+      .setOwnerAddress(rawFrom).setToAddress(rawTo).setAmount(amountSun).build
+    contractCreateTransaction(req, ContractType.TransferContract).map(_.getTransaction)
+  }
+
   override def accountGet(address: String): Mono[TronAccount] = {
     val bsAddress             = parseAddress(address)
     val accountAddressMessage = AccountAddressMessage.newBuilder.setAddress(bsAddress).build
@@ -29,7 +42,6 @@ trait TNCAccountSupport extends AccountSupport{
         tronAccount.balanceSun = account.getBalance
         tronAccount.createdTime = account.getCreateTime
 
-        implicit def toLong(d: Double): Long = d.toLong
 
         tronAccount.bandwidthUsed = account.getNetUsage
         tronAccount.bandwidthDelegatedByOthersAmount = account.getAcquiredDelegatedFrozenV2BalanceForBandwidth

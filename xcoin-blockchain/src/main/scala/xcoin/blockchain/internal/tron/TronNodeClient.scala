@@ -13,7 +13,7 @@ import xcoin.blockchain.services.TronApi.{TronNodeClientBuilder, TronNodeClientN
 import java.util.concurrent.atomic.AtomicLong
 
 class TronNodeClient(protected val stub: ReactorWalletStub,
-                     solidityStub: ReactorWalletSolidityStub,
+                     protected val solidityStub: ReactorWalletSolidityStub,
                      protected val network:TronNodeClientNetwork.Type,
                     )
   extends TronApi

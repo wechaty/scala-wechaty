@@ -1,13 +1,16 @@
 package xcoin.blockchain.services
 
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonProperty}
+import org.tron.trident.abi.datatypes
 import org.tron.trident.api.ReactorWalletGrpc.ReactorWalletStub
 import org.tron.trident.api.ReactorWalletSolidityGrpc.ReactorWalletSolidityStub
-import org.tron.trident.proto.Response
+import org.tron.trident.core.transaction.TransactionBuilder
+import org.tron.trident.proto.Chain.Transaction
+import org.tron.trident.proto.{Chain, Response}
 import org.tron.trident.proto.Response.TransactionExtention
 import reactor.core.publisher.{Flux, Mono}
 import xcoin.blockchain.internal.tron.TronNodeClient
-import xcoin.blockchain.services.TronApi.{ContractSupport, ResourceSupport, TransactionSupport, TronNodeClientNetwork, USDTSupport, VoteSupport}
+import xcoin.blockchain.services.TronApi.{ContractSupport, ResourceSupport, SimpleTronPermission, TransactionSupport, TronNodeClientNetwork, USDTSupport, VoteSupport}
 
 import scala.util.Try
 
@@ -66,8 +69,18 @@ object TronApi {
       }
     }
   }
-  trait ContractSupport{
-    def contractTriggerConstant(owner:String,contractAddress:String,function:org.tron.trident.abi.datatypes.Function,valueOpt:Option[Long]=None):Mono[Response.TransactionExtention];
+
+  trait ContractSupport {
+    def contractTriggerConstant(owner: String, contractAddress: String, function: org.tron.trident.abi.datatypes.Function, valueOpt: Option[Long] = None): Mono[Response.TransactionExtention];
+
+    def contractTriggerCallBuilder(owner: String, contractAddress: String, function: datatypes.Function, valueOpt: Option[Long]): Mono[TransactionBuilder]
+
+    def contractSign(permission: SimpleTronPermission, transaction: Chain.Transaction): TransactionSigned
+
+    def contractBroadcast(txn: TransactionSigned): Mono[String]
+
+
+    def contractSignAndBroadcast(permission: SimpleTronPermission, transaction: Transaction): Mono[String]
   }
   trait USDTSupport{
     def usdtBalanceOf(owner:String):Mono[Long]
@@ -223,6 +236,8 @@ object TronApi {
     }
 
     def accountBalanceOfUSDT(owner: String): Mono[Long]
+
+    def accountTransferTRX(owner: String, target: String, amountSun: Long): Mono[Transaction]
   }
   trait ResourceSupport{
     def resourceRate():Mono[ResourceRate]
@@ -265,4 +280,9 @@ object TronApi {
     var address:String = _
     var weight:Long= _
   }
+  class SimpleTronPermission{
+    var key:String = _
+    var idOpt:Option[Int] = None
+  }
+  case class TransactionSigned(txnId: String, transaction: Transaction)
 }
