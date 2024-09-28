@@ -1,10 +1,16 @@
 package xcoin.blockchain.internal.tron
 
+import org.bouncycastle.util.encoders.Hex
 import org.tron.trident.api.GrpcAPI.AccountAddressMessage
 import org.tron.trident.core.ApiWrapper.parseAddress
-import org.tron.trident.proto.Common
+import org.tron.trident.proto.Chain.Transaction.Contract.{ContractType, parser}
+import org.tron.trident.proto.{Common, Contract}
+import org.tron.trident.utils.Base58Check
 import reactor.core.publisher.Mono
-import xcoin.blockchain.services.TronApi.AccountSupport
+import xcoin.blockchain.internal.tron.TronPermissionHelper.TronPermission
+import xcoin.blockchain.services.TronApi.{AccountSupport, TronPermission, TronPermissionKey, TronPermissionType}
+import xcoin.core.services.XCoinException
+import xcoin.core.services.XCoinException.InvalidParameter
 
 trait TNCAccountSupport extends AccountSupport{
   self:TronNodeClient =>
@@ -14,6 +20,7 @@ trait TNCAccountSupport extends AccountSupport{
 
     stub.getAccount(accountAddressMessage)
       .map{account=>
+        println(Hex.toHexString(account.toByteArray))
         val tronAccount = new TronAccount
         tronAccount.address = address
         tronAccount.balanceSun = account.getBalance
@@ -53,14 +60,67 @@ trait TNCAccountSupport extends AccountSupport{
         tronAccount.energyRecoverTime = energyTime
 
         //权限信息
-//        tronAccount.ownerPermission = TronPermission.toTronPermission(account.getOwnerPermission)
-//        tronAccount.witnessPermission = TronPermission.toTronPermission(account.getWitnessPermission)
-//        tronAccount.activePermission = account.getActivePermissionList.asScala.map(TronPermission.toTronPermission).toArray
+        tronAccount.ownerPermission = TronPermission(account.getOwnerPermission)
+        tronAccount.witnessPermission = TronPermission(account.getWitnessPermission)
+        tronAccount.activePermission = account.getActivePermissionList.stream().map(TronPermission(_)).toArray(size=>new Array[TronPermission](size))
+
+//        println(Hex.toHexString(account.getWitnessPermission.getOperations.toByteArray))
+//        println(Hex.toHexString(account.getActivePermission(1).getOperations.toByteArray))
 
         tronAccount.rateMono = resourceRate().share()
         tronAccount
 
       }
 
+  }
+}
+object TronPermissionHelper{
+  implicit class TronPermissionWrapper(tronPermission:TronPermission){
+    /**
+     * 是否有某项合约权限
+     * @param contractType 合约类型
+     * @return
+     */
+    private[tron] def hasPermission(contractType:ContractType):Boolean={
+      val operations = tronPermission.operations
+      if (operations.length != 32) {
+        throw new XCoinException(InvalidParameter("operations",operations))
+      }
+
+      val dataIndex = contractType.getNumber >> 3
+      val positionIndex = contractType.getNumber - (dataIndex << 3)
+      val data = 1 << positionIndex
+
+      (operations(dataIndex) & data )  == data
+    }
+    def hasPermission(address:String,contractType: ContractType):Boolean={
+      hasPermission(contractType) && {
+        val opt = tronPermission.keys.find(x=> x.address == address)
+        opt.isDefined && opt.get.weight >= tronPermission.threshold
+      }
+    }
+  }
+  object TronPermission{
+    def apply(permission:Common.Permission):TronPermission={
+      val tronPermission = new TronPermission
+      tronPermission.name = permission.getPermissionName
+      tronPermission.`type` = {
+        permission.getType match {
+          case Common.Permission.PermissionType.Owner => TronPermissionType.OWNER
+          case Common.Permission.PermissionType.Witness => TronPermissionType.WITNESS
+          case Common.Permission.PermissionType.Active => TronPermissionType.ACTIVE
+        }
+      }
+      tronPermission.operations = permission.getOperations.toByteArray
+      tronPermission.threshold= permission.getThreshold
+      tronPermission.keys = permission.getKeysList.stream().map[TronPermissionKey]{k=>
+        val key = new TronPermissionKey
+        key.address = Base58Check.bytesToBase58(k.getAddress.toByteArray)
+        key.weight = k.getWeight
+        key
+      }.toArray(size=>new Array[TronPermissionKey](size))
+
+      tronPermission
+    }
   }
 }

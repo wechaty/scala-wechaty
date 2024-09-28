@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import xcoin.blockchain.internal.tron.TronNodeClientTest.TestConfiguration
 
-import scala.jdk.CollectionConverters.ListHasAsScala
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE,
                 classes=Array(classOf[TestConfiguration]))

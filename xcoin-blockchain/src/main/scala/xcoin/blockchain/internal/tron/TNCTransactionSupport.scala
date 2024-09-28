@@ -21,6 +21,7 @@ trait TNCTransactionSupport extends TransactionSupport {
     stub
       .getTransactionInfoById(request)
       .map{txn=>
+        logger.debug("txn:{}",Hex.toHexString(txn.toByteArray))
         val payload = new TransactionInfoPayload
 
         val txnHash  = new String(Hex.encode(txn.getId.toByteArray))

@@ -4,21 +4,30 @@ import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.{ConditionalOnClass, ConditionalOnMissingBean}
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
 import org.springframework.context.ApplicationContext
-import org.springframework.context.annotation.{Bean, Configuration, Import, Scope}
+import org.springframework.context.annotation.{Bean, Configuration, Import, Lazy, Scope}
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
+import org.tron.trident.api.ReactorWalletGrpc.ReactorWalletStub
+import org.tron.trident.api.ReactorWalletSolidityGrpc.ReactorWalletSolidityStub
 import xcoin.blockchain.internal.tron.TronNodeClient
 import xcoin.blockchain.internal.tron.TronNodeClient.DefaultTronNodeClientBuilder
 import xcoin.blockchain.services.TronApi.{TronNodeClientBuilder, TronNodeClientCustomizer}
-import xcoin.blockchain.services.{TronApi}
+import xcoin.blockchain.services.TronApi
 
 import java.util
 import java.util.List
 
 @AutoConfiguration
+@Import(Array(classOf[TronNodeClient]))
 class TronNodeClientAutoConfiguration {
-  @Bean(name=Array("TronNodeClient"))
-  def tronNodeClient(builder: TronNodeClientBuilder): TronApi = {
-    builder.build()
+  @Bean
+  def reactorWalletStub(builder: TronNodeClientBuilder): ReactorWalletStub = {
+    builder.buildReactorWalletStub()
+  }
+
+  @Bean
+  @Lazy
+  def reactorWalletSolidityStub(builder: TronNodeClientBuilder): ReactorWalletSolidityStub = {
+    builder.buildReactorWalletSolidityStub()
   }
 
   @Bean

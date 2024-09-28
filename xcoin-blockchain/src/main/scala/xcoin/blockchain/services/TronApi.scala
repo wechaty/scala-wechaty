@@ -1,6 +1,8 @@
 package xcoin.blockchain.services
 
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonProperty}
+import org.tron.trident.api.ReactorWalletGrpc.ReactorWalletStub
+import org.tron.trident.api.ReactorWalletSolidityGrpc.ReactorWalletSolidityStub
 import reactor.core.publisher.{Flux, Mono}
 import xcoin.blockchain.services.TronApi.{ResourceSupport, TransactionSupport, TronNodeClientNetwork, VoteSupport}
 
@@ -18,8 +20,12 @@ object TronApi {
 
     def apiKeys(keys: Array[String]): Unit
 
-    def build(): TronApi
+    def buildReactorWalletStub(): ReactorWalletStub
+
+    def buildReactorWalletSolidityStub(): ReactorWalletSolidityStub
   }
+
+
 
   trait TronNodeClientCustomizer {
     def customize(tronNodeClientBuilder: TronNodeClientBuilder)
@@ -116,9 +122,9 @@ object TronApi {
         energyDelegatedToOthersAmount + energyFrozenAmount
       }
       // 账户权限
-//      var ownerPermission             : TronPermission        = _
-//      var witnessPermission           : TronPermission        = _
-//      var activePermission            : Array[TronPermission] = Array()
+      var ownerPermission             : TronPermission        = _
+      var witnessPermission           : TronPermission        = _
+      var activePermission            : Array[TronPermission] = _
 
       // 可委托带宽
       def canDelegateBandwidth(): Mono[Long] = {
@@ -220,8 +226,24 @@ object TronApi {
     val TEST_SHASTA: Type = Value(2)
   }
 
-  class TronPermissionAddress {
-    var permissionIdOpt     : Option[Int]    = None
-    var permissionKeyPairOpt: Option[String] = None
+  class TronPermission{
+    var name: String = _
+    @JsonProperty("type")
+    var `type`: TronPermissionType.Type = _
+    var id: Int = _
+    var threshold: Long = _
+    var operations: Array[Byte]= _
+    @JsonProperty("keys")
+    var keys: Array[TronPermissionKey] = _
+  }
+  object TronPermissionType extends Enumeration {
+    type Type=Value
+    val OWNER=Value(0)
+    val WITNESS=Value(1)
+    val ACTIVE=Value(2)
+  }
+  class TronPermissionKey{
+    var address:String = _
+    var weight:Long= _
   }
 }

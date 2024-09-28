@@ -3,32 +3,22 @@ package xcoin.blockchain.internal.tron
 import com.typesafe.scalalogging.Logger
 import io.grpc.Metadata.Key
 import io.grpc.{CallOptions, Channel, ClientCall, ClientInterceptor, ForwardingClientCall, ManagedChannelBuilder, Metadata, MethodDescriptor}
+import org.tron.trident.api.ReactorWalletGrpc.ReactorWalletStub
+import org.tron.trident.api.ReactorWalletSolidityGrpc.ReactorWalletSolidityStub
 import org.tron.trident.api.{ReactorWalletGrpc, ReactorWalletSolidityGrpc}
 import xcoin.blockchain.internal.tron.TronNodeClient.ApiKeyClientInterceptor
-import xcoin.blockchain.services.{TronApi}
+import xcoin.blockchain.services.TronApi
 import xcoin.blockchain.services.TronApi.{TronNodeClientBuilder, TronNodeClientNetwork}
 
 import java.util.concurrent.atomic.AtomicLong
 
-class TronNodeClient(grpcEndpoint:String, grpcEndpointSolidity:String, apiKeys:Array[String])
+class TronNodeClient(protected val stub: ReactorWalletStub,solidityStub: ReactorWalletSolidityStub)
   extends TronApi
     with TNCVoteSupport
     with TNCAccountSupport
     with TNCResourceSupport
     with TNCTransactionSupport {
   protected val logger = Logger[TronNodeClient]
-  private lazy val apiKeyClientInterceptor = new ApiKeyClientInterceptor(apiKeys)
-  protected lazy val stub                    = {
-    logger.info("creating stub")
-    val channel = ManagedChannelBuilder.forTarget(grpcEndpoint).intercept(apiKeyClientInterceptor).usePlaintext.build()
-    ReactorWalletGrpc.newReactorStub(channel)
-  }
-  protected lazy val stubSolidity            = {
-    logger.info("creating stubSolidity")
-    val channelSolidity = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).intercept(apiKeyClientInterceptor).usePlaintext.build()
-    ReactorWalletSolidityGrpc.newReactorStub(channelSolidity)
-  }
-
 }
 object TronNodeClient {
   class ApiKeyClientInterceptor(apiKeys: Array[String]) extends ClientInterceptor {
@@ -54,32 +44,43 @@ object TronNodeClient {
   }
 
   class DefaultTronNodeClientBuilder extends TronNodeClientBuilder {
-    private var network = TronNodeClientNetwork.MAIN
-    private var apiKeys = Array[String]()
+
+    private val logger                                           = Logger[DefaultTronNodeClientBuilder]
+    private var network                                          = TronNodeClientNetwork.MAIN
+    private var apiKeyClientInterceptor: ApiKeyClientInterceptor = new ApiKeyClientInterceptor(Array())
 
     def network(network: TronNodeClientNetwork.Type): Unit = {
       this.network = network
     }
 
     def apiKeys(keys: Array[String]): Unit = {
-      this.apiKeys = keys
+      this.apiKeyClientInterceptor = new ApiKeyClientInterceptor(keys)
     }
 
-    def build(): TronApi = {
-      val (grpcEndpoint, grpcEndpointSolidity) = {
-        network match {
-          case TronNodeClientNetwork.MAIN =>
-            ("grpc.trongrid.io:50051", "grpc.trongrid.io:50052")
-          case TronNodeClientNetwork.TEST_NILE =>
-            ("grpc.nile.trongrid.io:50051", "grpc.nile.trongrid.io:50061")
-          case TronNodeClientNetwork.TEST_SHASTA =>
-            ("grpc.shasta.trongrid.io:50051", "grpc.shasta.trongrid.io:50052")
-        }
+    private def getGrpcEndpoint(): (String, String) = {
+      network match {
+        case TronNodeClientNetwork.MAIN =>
+          ("grpc.trongrid.io:50051", "grpc.trongrid.io:50052")
+        case TronNodeClientNetwork.TEST_NILE =>
+          ("grpc.nile.trongrid.io:50051", "grpc.nile.trongrid.io:50061")
+        case TronNodeClientNetwork.TEST_SHASTA =>
+          ("grpc.shasta.trongrid.io:50051", "grpc.shasta.trongrid.io:50052")
       }
-
-      new TronNodeClient(grpcEndpoint, grpcEndpointSolidity, this.apiKeys)
     }
 
+    override def buildReactorWalletStub(): ReactorWalletStub = {
+      logger.info("creating stub")
+      val (grpcEndpoint, _) = getGrpcEndpoint()
+      val channel           = ManagedChannelBuilder.forTarget(grpcEndpoint).intercept(apiKeyClientInterceptor).usePlaintext.build()
+      ReactorWalletGrpc.newReactorStub(channel)
+    }
+
+    override def buildReactorWalletSolidityStub(): ReactorWalletSolidityStub = {
+      logger.info("creating stubSolidity")
+      val (_, grpcEndpointSolidity) = getGrpcEndpoint()
+      val channelSolidity           = ManagedChannelBuilder.forTarget(grpcEndpointSolidity).intercept(apiKeyClientInterceptor).usePlaintext.build()
+      ReactorWalletSolidityGrpc.newReactorStub(channelSolidity)
+    }
   }
 }
 
