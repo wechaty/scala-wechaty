@@ -22,6 +22,13 @@ trait TNCAccountSupport extends AccountSupport{
   override def accountBalanceOfUSDT(owner:String):Mono[Long]={
     usdtBalanceOf(owner)
   }
+
+  override def accountTransferTRX(owner: String, target: String, amountSun: Long,permission: SimpleTronPermission): Mono[String] = {
+    accountTransferTRX(owner, target, amountSun).flatMap {tx=>
+      contractSignAndBroadcast(permission,tx)
+    }
+  }
+
   override def accountTransferTRX(owner:String, target:String, amountSun:Long):Mono[Transaction]= {
     val rawFrom = parseAddress(owner)
     val rawTo   = parseAddress(target)

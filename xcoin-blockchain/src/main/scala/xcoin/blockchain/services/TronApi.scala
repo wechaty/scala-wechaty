@@ -238,6 +238,8 @@ object TronApi {
     def accountBalanceOfUSDT(owner: String): Mono[Long]
 
     def accountTransferTRX(owner: String, target: String, amountSun: Long): Mono[Transaction]
+
+    def accountTransferTRX(owner: String, target: String, amountSun: Long, permission: SimpleTronPermission): Mono[String]
   }
   trait ResourceSupport{
     def resourceRate():Mono[ResourceRate]
