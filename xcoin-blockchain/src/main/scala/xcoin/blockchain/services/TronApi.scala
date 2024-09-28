@@ -10,7 +10,7 @@ import org.tron.trident.proto.{Chain, Response}
 import org.tron.trident.proto.Response.TransactionExtention
 import reactor.core.publisher.{Flux, Mono}
 import xcoin.blockchain.internal.tron.TronNodeClient
-import xcoin.blockchain.services.TronApi.{ContractSupport, ResourceSupport, SimpleTronPermission, TransactionSupport, TronNodeClientNetwork, USDTSupport, VoteSupport}
+import xcoin.blockchain.services.TronApi.{BlockSupport, ContractSupport, ResourceSupport, SimpleTronPermission, TransactionSupport, TronNodeClientNetwork, USDTSupport, VoteSupport}
 
 import scala.util.Try
 
@@ -19,6 +19,7 @@ trait TronApi
     with VoteSupport
     with ContractSupport
     with USDTSupport
+    with BlockSupport
     with ResourceSupport
     {
 }
@@ -240,6 +241,9 @@ object TronApi {
     def accountTransferTRX(owner: String, target: String, amountSun: Long): Mono[Transaction]
 
     def accountTransferTRX(owner: String, target: String, amountSun: Long, permission: SimpleTronPermission): Mono[String]
+  }
+  trait BlockSupport{
+   def blockLatestId():Mono[Long]
   }
   trait ResourceSupport{
     def resourceRate():Mono[ResourceRate]

@@ -21,6 +21,7 @@ class TronNodeClient(protected val stub: ReactorWalletStub,
     with TNCContractSupport
     with TNCUSDTSupport
     with TNCAccountSupport
+    with TNCBlockSupport
     with TNCResourceSupport
     with TNCTransactionSupport {
   protected val logger = Logger[TronNodeClient]
