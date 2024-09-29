@@ -16,10 +16,10 @@ import org.tron.trident.proto.Contract.TriggerSmartContract
 import org.tron.trident.proto.Response
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
-import xcoin.blockchain.internal.tron.TronNodeClientTest.TestConfiguration
+import xcoin.blockchain.internal.tron.TronNodeClientTest.TestNileConfiguration
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE,
-                classes=Array(classOf[TestConfiguration]))
+                classes=Array(classOf[TestNileConfiguration]))
 class TNCUSDTSupportTest {
 
   @Autowired

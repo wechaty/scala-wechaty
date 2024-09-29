@@ -15,12 +15,12 @@ import org.tron.trident.proto.Chain.Transaction.Contract.ContractType
 import org.tron.trident.proto.Response
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
-import xcoin.blockchain.internal.tron.TronNodeClientTest.TestConfiguration
+import xcoin.blockchain.internal.tron.TronNodeClientTest.TestNileConfiguration
 import xcoin.blockchain.internal.tron.TronPermissionHelper.TronPermissionWrapper
 import xcoin.blockchain.services.TronApi.TronPermission
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE,
-                classes=Array(classOf[TestConfiguration]))
+                classes=Array(classOf[TestNileConfiguration]))
 class TNCAccountSupportTest {
   private val logger = Logger[TNCAccountSupportTest]
   @Autowired

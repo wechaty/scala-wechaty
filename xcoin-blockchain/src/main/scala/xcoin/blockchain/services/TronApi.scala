@@ -30,6 +30,7 @@ object TronApi {
     def network(network: TronNodeClientNetwork.Type): Unit
 
     def apiKeys(keys: Array[String]): Unit
+    def quickNodeKey(key:String):Unit
 
     def buildReactorWalletStub(): ReactorWalletStub
 
@@ -280,6 +281,7 @@ object TronApi {
     val MAIN       : Type = Value(0)
     val TEST_NILE  : Type = Value(1)
     val TEST_SHASTA: Type = Value(2)
+    val MAIN_QUICK_NODE: Type = Value(3)
   }
 
   class TronPermission{

@@ -9,11 +9,11 @@ import org.tron.trident.abi.datatypes.Address
 import org.tron.trident.abi.datatypes.generated.Uint256
 import org.tron.trident.core.ApiWrapper.parseAddress
 import reactor.test.StepVerifier
-import xcoin.blockchain.internal.tron.TronNodeClientTest.TestConfiguration
+import xcoin.blockchain.internal.tron.TronNodeClientTest.TestNileConfiguration
 import xcoin.blockchain.services.TronApi.SimpleTronPermission
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE,
-                classes=Array(classOf[TestConfiguration]))
+                classes=Array(classOf[TestNileConfiguration]))
 class TNCContractSupportTest {
   private val logger = Logger[TNCContractSupportTest]
 

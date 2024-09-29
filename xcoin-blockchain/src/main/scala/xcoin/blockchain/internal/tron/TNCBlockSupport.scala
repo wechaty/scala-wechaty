@@ -25,7 +25,7 @@ trait TNCBlockSupport extends BlockSupport {
   override def blockLatestId(): Mono[Long] = {
     stub.getNowBlock(EmptyMessage.getDefaultInstance)
       .map { block =>
-        dumpProtobufMessage(block)
+//        dumpProtobufMessage(block)
         if (block.hasBlockHeader) block.getBlockHeader.getRawData.getNumber
         else throw XInvalidReturnException("Fail to get latest block.")
       }

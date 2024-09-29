@@ -18,14 +18,14 @@ import org.tron.trident.proto.Contract.{DelegateResourceContract, TransferContra
 import org.tron.trident.proto.{Chain, Response}
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
-import xcoin.blockchain.internal.tron.TronNodeClientTest.TestConfiguration
+import xcoin.blockchain.internal.tron.TronNodeClientTest.TestNileConfiguration
 import xcoin.blockchain.services.TronApi.TronNodeClientNetwork
 import xcoin.blockchain.services.TronModel.BlockProcessedEvent
 
 import scala.util.Using
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE,
-                classes=Array(classOf[TestConfiguration]))
+                classes=Array(classOf[TestNileConfiguration]))
 class TNCBlockSupportTest {
   private val logger = Logger[TNCBlockSupportTest]
 
