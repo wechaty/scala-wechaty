@@ -6,7 +6,9 @@ object TronModel {
     val USDT = Value(1)
     val TRX  = Value(2)
   }
-  trait AddressChangeEvent {
+  trait BlockEvent
+  case class BlockProcessedEvent(blockId:Long,blockTimestamp:Long) extends BlockEvent
+  trait AddressChangeEvent extends BlockEvent {
     var blockId       : Long           = _
     var blockTimestamp: Long           = _
     var txnHash       : String         = _

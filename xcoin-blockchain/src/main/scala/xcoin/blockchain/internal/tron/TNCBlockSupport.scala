@@ -4,24 +4,166 @@ import com.typesafe.scalalogging.Logger
 import org.bouncycastle.util.encoders.Hex
 import org.tron.trident.abi.TypeDecoder
 import org.tron.trident.abi.datatypes.generated.Uint256
-import org.tron.trident.api.GrpcAPI.EmptyMessage
-import org.tron.trident.proto.{Common, Contract}
-import org.tron.trident.proto.Contract.{TransferContract, TriggerSmartContract}
+import org.tron.trident.api.GrpcAPI.{BlockLimit, EmptyMessage}
+import org.tron.trident.proto.Chain.Transaction
+import org.tron.trident.proto.Chain.Transaction.Contract.ContractType
+import org.tron.trident.proto.{Chain, Common, Contract, Response}
+import org.tron.trident.proto.Contract.{AccountCreateContract, DelegateResourceContract, TransferContract, TriggerSmartContract, UnDelegateResourceContract}
 import org.tron.trident.utils.Base58Check.bytesToBase58
-import reactor.core.publisher.Mono
-import xcoin.blockchain.internal.tron.USDTSupport.{MAIN_USDT_CONTRACT_ADDRESS, MAIN_USDT_TRANSFER_FROM_METHOD_ID, MAIN_USDT_TRANSFER_METHOD_ID, SHASTA_USDT_CONTRACT_ADDRESS, SHASTA_USDT_TRANSFER_METHOD_ID}
+import reactor.core.publisher.{Flux, Mono}
+import xcoin.blockchain.internal.tron.USDTSupport.{MAIN_USDT_CONTRACT_ADDRESS, MAIN_USDT_TRANSFER_FROM_METHOD_ID, MAIN_USDT_TRANSFER_METHOD_ID, NILE_USDT_CONTRACT_ADDRESS, NILE_USDT_TRANSFER_FROM_METHOD_ID, NILE_USDT_TRANSFER_METHOD_ID, SHASTA_USDT_CONTRACT_ADDRESS, SHASTA_USDT_TRANSFER_FROM_METHOD_ID, SHASTA_USDT_TRANSFER_METHOD_ID}
 import xcoin.blockchain.services.TronApi.{BlockSupport, TronNodeClientNetwork}
 import xcoin.blockchain.services.TronModel._
-import xcoin.core.services.XCoinException.XInvalidReturnException
+import xcoin.core.services.XCoinException.{XInvalidReturnException, XInvalidStateException}
+
+import java.io.{File, FileOutputStream}
+import java.time.Duration
+import scala.util.Using
 
 trait TNCBlockSupport extends BlockSupport {
   self: TronNodeClient =>
   override def blockLatestId(): Mono[Long] = {
     stub.getNowBlock(EmptyMessage.getDefaultInstance)
       .map { block =>
+        dumpProtobufMessage(block)
         if (block.hasBlockHeader) block.getBlockHeader.getRawData.getNumber
         else throw XInvalidReturnException("Fail to get latest block.")
       }
+  }
+  override def blockEvent(blockId:Long):Flux[BlockEvent]={
+    val blockLimit = BlockLimit.newBuilder().setStartNum(blockId).setEndNum(blockId + 1).build();
+    stub
+      .getBlockByLimitNext2(blockLimit)
+      .flatMapMany(parseBlockList(_))
+  }
+  override def blockEventStream(start:Long, blockSegmentSize:Int = 10):Flux[BlockEvent]={
+    def getBlockList(startNum: Long): Mono[(Long, Response.BlockListExtention)] = {
+      val endNum     = startNum + blockSegmentSize
+      if (endNum - startNum > 100) {
+        throw XInvalidStateException("The difference between startNum and endNum cannot be greater than 100, please check it.");
+      }
+      val blockLimit = BlockLimit.newBuilder().setStartNum(startNum).setEndNum(endNum).build();
+      logger.debug("loop block from {}", startNum)
+      this.stub.getBlockByLimitNext2(blockLimit).map[(Long, Response.BlockListExtention)]((startNum, _))
+        .onErrorResume { (e: Throwable) =>
+          logger.error("fail get block data", e)
+          Mono.just((startNum, Response.BlockListExtention.getDefaultInstance))
+        }
+    }
+
+    getBlockList(start)
+      .expand { case (lastStartNum: Long, blockListExtention: Response.BlockListExtention) =>
+        val nextBlockId = {
+          if (blockListExtention.getBlockCount > 0) {
+            blockListExtention.getBlock(blockListExtention.getBlockCount - 1).getBlockHeader.getRawData.getNumber + 1
+          } else lastStartNum
+        }
+        if (blockListExtention.getBlockList.size() != blockSegmentSize) {
+          //说明已经抓取完全，需要等待一下
+          Mono.delay(Duration.ofSeconds(2)).flatMap { _ =>
+            getBlockList(nextBlockId)
+          }
+        } else {
+          getBlockList(nextBlockId)
+        }
+      }
+      .concatMap { case (_, blockList: Response.BlockListExtention) =>
+        parseBlockList(blockList)
+      }
+  }
+  private def parseBlockList(blockExtension: Response.BlockListExtention):Flux[BlockEvent]={
+    logger.whenDebugEnabled{
+      logger.debug("get block size:{}", blockExtension.getBlockList.size())
+
+      /*
+      if(blockExtension.getBlockCount > 0) {
+        val blockId = blockExtension.getBlock(0).getBlockHeader.getRawData.getNumber
+        Using.resource(new FileOutputStream(new File(s"block_${blockId}.bin"))) { os =>
+          os.write(blockExtension.toByteArray)
+        }
+      }
+      logger.debug("block data:{}", Hex.toHexString(blockExtension.toByteArray))
+       */
+    }
+    var blockId = 0L
+    Flux.fromIterable(blockExtension.getBlockList).concatMap { block =>
+      blockId = block.getBlockHeader.getRawData.getNumber
+      val blockTimestamp = block.getBlockHeader.getRawData.getTimestamp
+      logger.info("process block:{}", blockId)
+      Flux.fromIterable(block.getTransactionsList)
+        .filter(_.getResult.getResult)
+        .concatMap[BlockEvent] { (txn:Response.TransactionExtention) =>
+          val rawData  = txn.getTransaction.getRawData
+          val noteData = txn.getTransaction.getRawData.getData
+          val noteOpt  = if (noteData.isEmpty) None else Some(noteData.toStringUtf8)
+          val txnHash  = new String(Hex.encode(txn.getTxid.toByteArray))
+          //确保交易成功
+          val success  = txn.getResult.getResult &&
+            (txn.getTransaction.getRetCount > 0) &&
+            txn.getTransaction.getRet(0).getContractRet == Transaction.Result.contractResult.SUCCESS
+          //          if (!success) {
+          //            logger.debug("transaction {} not successful,result:{}", txnHash, txn.getTransaction.getRetList)
+          //          }
+          Flux.fromIterable[Chain.Transaction.Contract](rawData.getContractList)
+            .filter(_ => success)
+            .concatMap { (contract: Chain.Transaction.Contract) =>
+              logger.whenDebugEnabled {
+                //                logger.debug("contract: {}", Hex.toHexString(contract.getParameter.getValue.toByteArray))
+              }
+              var list = List[BlockEvent]()
+              try {
+                contract.getType match {
+                  case ContractType.AccountCreateContract =>
+                    val accountCreateContract = AccountCreateContract.parseFrom(contract.getParameter.getValue)
+                    val ownerAddress          = bytesToBase58(accountCreateContract.getOwnerAddress.toByteArray)
+                    val activatedAccount      = bytesToBase58(accountCreateContract.getAccountAddress.toByteArray)
+                    list = List(AccountActivatedEvent(ownerAddress, activatedAccount))
+                  case ContractType.TransferContract =>
+                    //TRX转账
+                    val transferContract = TransferContract.parseFrom(contract.getParameter.getValue)
+                    //                    transferResultOpt = Some(TronBlockChainHelper.parseTransferContract(transferContract))
+                    list = BlockSupport.parseTransferContract(transferContract)
+                  case ContractType.TriggerSmartContract =>
+                    val triggerSmartContract = TriggerSmartContract.parseFrom(contract.getParameter.getValue)
+                    //只解析出来USDT的智能合约，其他合约忽略
+                    list = BlockSupport.parseUSDTSmartTrigger(triggerSmartContract, txnHash, network)
+
+                    if (list.isEmpty) {
+                      val ownerAddress    = bytesToBase58(triggerSmartContract.getOwnerAddress.toByteArray)
+                      val contractAddress = bytesToBase58(triggerSmartContract.getContractAddress.toByteArray)
+                      list = List(TriggerSmartContractEvent(ownerAddress, contractAddress))
+                    }
+
+                  case ContractType.DelegateResourceContract =>
+                    //解析代理的合约
+                    val delegateResource = DelegateResourceContract.parseFrom(contract.getParameter.getValue)
+                    list = BlockSupport.parse(delegateResource)
+                  case ContractType.UnDelegateResourceContract =>
+                    //解析代理的合约
+                    val delegateResource = UnDelegateResourceContract.parseFrom(contract.getParameter.getValue)
+                    list = BlockSupport.parse(delegateResource)
+                  case other =>
+                  //                    logger.debug("contract({}) not supported", other)
+                }
+              } catch {
+                case e: Throwable =>
+                  logger.error(e.toString, e)
+              }
+              Flux.fromArray(list.toArray).map {
+                case transferResult: AddressChangeEvent =>
+                  transferResult.blockId = blockId
+                  transferResult.blockTimestamp = blockTimestamp
+                  transferResult.txnHash = txnHash
+                  transferResult.note = noteOpt
+                  if (txn.getTransaction.getRetCount > 0)
+                    transferResult.fee = txn.getTransaction.getRet(0).getFee
+                  transferResult
+                case event => event
+              }
+            }
+        }
+        .concatWithValues(BlockProcessedEvent(blockId,blockTimestamp))
+    }
   }
 }
 object BlockSupport{
@@ -77,18 +219,12 @@ object BlockSupport{
 
     val methodId = DATA.substring(0, 8);
 
-    val isMain = network == TronNodeClientNetwork.MAIN
 
-    if (
-    //非主网络
-      (!isMain && contractAddress == SHASTA_USDT_CONTRACT_ADDRESS && methodId == SHASTA_USDT_TRANSFER_METHOD_ID) ||
-        //主网络
-        (isMain && contractAddress == MAIN_USDT_CONTRACT_ADDRESS && methodId == MAIN_USDT_TRANSFER_METHOD_ID)
-    ) {
+    def parseTransferData(): Unit = {
       try {
         val rawRecipient   = TypeDecoder.decodeAddress(DATA.substring(8, 72)) //, 0, new TypeReference[Address]() {}); //recipient address
         val receiveAddress = rawRecipient.getValue //.toString;
-        val rawAmount      = TypeDecoder.decodeNumeric[Uint256](DATA.substring(72, 136),classOf[Uint256])
+        val rawAmount      = TypeDecoder.decodeNumeric[Uint256](DATA.substring(72, 136), classOf[Uint256])
         val amount         = rawAmount.getValue;
         list :+= TransferOutEvent(CoinType.USDT, ownerAddress, amount.longValue(), receiveAddress)
         list :+= TransferInEvent(CoinType.USDT, receiveAddress, amount.longValue(), ownerAddress)
@@ -98,18 +234,13 @@ object BlockSupport{
           logger.error("fail to parse block transaction %s,data:%s smart contract:%s".format(txnHash, DATA, Hex.toHexString(smartContract.toByteArray)), e)
       }
     }
-    //授权转账的模式
-    //https://tronscan.io/#/transaction/aa50e19142345f872a9d5546e6d280bcfc8693f47e674994a3c5bedeb6466dcf
-    else if (
-    //主网络
-      (isMain && contractAddress == MAIN_USDT_CONTRACT_ADDRESS && methodId == MAIN_USDT_TRANSFER_FROM_METHOD_ID)
-    ) {
+    def parseTransferFromData(): Unit = {
       try {
         val rawFrom        = TypeDecoder.decodeAddress(DATA.substring(8, 8 + 64)) //, 0, new TypeReference[Address]() {}); //recipient address
         val fromAddress    = rawFrom.getValue //.toString;
         val rawRecipient   = TypeDecoder.decodeAddress(DATA.substring(8 + 64, 8 + 64 + 64)) //, 0, new TypeReference[Address]() {}); //recipient address
         val receiveAddress = rawRecipient.getValue //.toString;
-        val rawAmount      = TypeDecoder.decodeNumeric[Uint256](DATA.substring(8 + 64 + 64, 8 + 64 + 64 + 64),classOf[Uint256])
+        val rawAmount      = TypeDecoder.decodeNumeric[Uint256](DATA.substring(8 + 64 + 64, 8 + 64 + 64 + 64), classOf[Uint256])
         val amount         = rawAmount.getValue;
         list :+= TransferOutEvent(CoinType.USDT, fromAddress, amount.longValue(), receiveAddress)
         list :+= TransferInEvent(CoinType.USDT, receiveAddress, amount.longValue(), fromAddress)
@@ -120,6 +251,22 @@ object BlockSupport{
       }
     }
 
+    network match {
+      case TronNodeClientNetwork.MAIN if contractAddress == MAIN_USDT_CONTRACT_ADDRESS && methodId == MAIN_USDT_TRANSFER_METHOD_ID =>
+        parseTransferData()
+      case TronNodeClientNetwork.MAIN if contractAddress == MAIN_USDT_CONTRACT_ADDRESS && methodId == MAIN_USDT_TRANSFER_FROM_METHOD_ID =>
+        parseTransferFromData()
+      case TronNodeClientNetwork.TEST_SHASTA if contractAddress == SHASTA_USDT_CONTRACT_ADDRESS && methodId == SHASTA_USDT_TRANSFER_METHOD_ID =>
+        parseTransferData()
+      case TronNodeClientNetwork.TEST_SHASTA if contractAddress == SHASTA_USDT_CONTRACT_ADDRESS && methodId == SHASTA_USDT_TRANSFER_FROM_METHOD_ID =>
+        parseTransferFromData()
+      case TronNodeClientNetwork.TEST_NILE if contractAddress == NILE_USDT_CONTRACT_ADDRESS && methodId == NILE_USDT_TRANSFER_METHOD_ID =>
+        parseTransferData()
+      case TronNodeClientNetwork.TEST_NILE if contractAddress == NILE_USDT_CONTRACT_ADDRESS && methodId == NILE_USDT_TRANSFER_FROM_METHOD_ID =>
+        parseTransferFromData()
+      case other =>
+//        logger.warn("not supported for method:{}#{}@{} for {}",contractAddress,methodId,other,txnHash)
+    }
     list
   }
 }

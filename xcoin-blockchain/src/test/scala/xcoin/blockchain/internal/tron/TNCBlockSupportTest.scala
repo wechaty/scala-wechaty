@@ -1,28 +1,79 @@
 package xcoin.blockchain.internal.tron
 
+import com.typesafe.scalalogging.Logger
 import org.bouncycastle.util.encoders.Hex
 import org.junit.jupiter.api.{Assertions, Test}
+import org.mockito.{ArgumentMatcher, ArgumentMatchers}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.BDDMockito.`given`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.tron.trident.abi.TypeDecoder
 import org.tron.trident.abi.datatypes.generated.Uint256
+import org.tron.trident.api.GrpcAPI.{BlockLimit, EmptyMessage}
+import org.tron.trident.api.ReactorWalletGrpc.ReactorWalletStub
+import org.tron.trident.api.WalletGrpc.WalletStub
 import org.tron.trident.proto.Contract.{DelegateResourceContract, TransferContract, TriggerSmartContract}
+import org.tron.trident.proto.{Chain, Response}
+import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 import xcoin.blockchain.internal.tron.TronNodeClientTest.TestConfiguration
 import xcoin.blockchain.services.TronApi.TronNodeClientNetwork
+import xcoin.blockchain.services.TronModel.BlockProcessedEvent
+
+import scala.util.Using
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE,
                 classes=Array(classOf[TestConfiguration]))
 class TNCBlockSupportTest {
+  private val logger = Logger[TNCBlockSupportTest]
 
   @Autowired
-  private val tronApi: TronNodeClient = null
+  private val tronApi: TronNodeClient      = null
+  @MockBean
+  private val walletStub:ReactorWalletStub = null
+
+  private lazy val blockNow= {
+    Using.resource(getClass.getResourceAsStream("/BlockNow.bin")) { is =>
+      Chain.Block.parseFrom(is)
+    }
+  }
+  private lazy val blockListFrom65651810 = {
+    Using.resource(getClass.getResourceAsStream("/block_65651810.bin")) { is =>
+      Response.BlockListExtention.parseFrom(is)
+    }
+  }
+  private lazy val blockListFrom65651811={
+    Using.resource(getClass.getResourceAsStream("/block_65651811.bin")){is=>
+      Response.BlockListExtention.parseFrom(is)
+    }
+  }
+  @Test
+  def testLatestId(): Unit = {
+    given(walletStub.getNowBlock(EmptyMessage.getDefaultInstance)).willReturn{
+      Mono.just(blockNow)
+    }
+    StepVerifier.create(tronApi.blockLatestId())
+      .assertNext { id =>
+        Assertions.assertEquals(50661023, id)
+      }
+      .verifyComplete()
+  }
 
   @Test
-  def testConstant(): Unit = {
-    StepVerifier.create(tronApi.blockLatestId())
-      .assertNext{id=>
-        Assertions.assertTrue(id>0)
+  def testEvents(): Unit = {
+    `given`(walletStub.getBlockByLimitNext2(ArgumentMatchers.argThat[BlockLimit](new ArgumentMatcher[BlockLimit]() {
+      override def matches(t: BlockLimit): Boolean = t!= null && t.getStartNum == 65651810
+    }))).willReturn(Mono.just(blockListFrom65651810))
+    `given`(walletStub.getBlockByLimitNext2(ArgumentMatchers.argThat[BlockLimit](new ArgumentMatcher[BlockLimit](){
+      override def matches(t: BlockLimit): Boolean = t!=null && t.getStartNum == 65651811
+    }))).willReturn(Mono.just(blockListFrom65651811))
+
+    StepVerifier.create(tronApi.blockEvent(65651810))
+      .expectNextCount(634)
+      .assertNext{last=>
+        Assertions.assertTrue(last.isInstanceOf[BlockProcessedEvent])
       }
       .verifyComplete()
   }

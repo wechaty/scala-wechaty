@@ -14,5 +14,6 @@ object XCoinException{
   case class XResourceNotFoundException(resourcePath:String) extends XCoinException(3, "resource [%s] not found".format(resourcePath))
   case class XFailRequestException(failMessage:String) extends XCoinException(4, "failt to request:[%s]".format(failMessage))
   case class XInvalidReturnException(failMessage:String) extends XCoinException(5, "invalid return:[%s]".format(failMessage))
+  case class XInvalidStateException(failMessage:String) extends XCoinException(5, "invalid state:[%s]".format(failMessage))
   case class XUnknownException(message:String) extends XCoinException(9999, message)
 }

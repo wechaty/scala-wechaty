@@ -1,8 +1,10 @@
 package xcoin.blockchain.internal.tron
 
+import com.google.protobuf.Message
 import com.typesafe.scalalogging.Logger
 import io.grpc.Metadata.Key
 import io.grpc.{CallOptions, Channel, ClientCall, ClientInterceptor, ForwardingClientCall, ManagedChannelBuilder, Metadata, MethodDescriptor}
+import org.bouncycastle.util.encoders.Hex
 import org.tron.trident.api.ReactorWalletGrpc.ReactorWalletStub
 import org.tron.trident.api.ReactorWalletSolidityGrpc.ReactorWalletSolidityStub
 import org.tron.trident.api.{ReactorWalletGrpc, ReactorWalletSolidityGrpc}
@@ -10,7 +12,9 @@ import xcoin.blockchain.internal.tron.TronNodeClient.ApiKeyClientInterceptor
 import xcoin.blockchain.services.TronApi
 import xcoin.blockchain.services.TronApi.{TronNodeClientBuilder, TronNodeClientNetwork}
 
+import java.io.{File, FileOutputStream}
 import java.util.concurrent.atomic.AtomicLong
+import scala.util.Using
 
 class TronNodeClient(protected val stub: ReactorWalletStub,
                      protected val solidityStub: ReactorWalletSolidityStub,
@@ -25,6 +29,14 @@ class TronNodeClient(protected val stub: ReactorWalletStub,
     with TNCResourceSupport
     with TNCTransactionSupport {
   protected val logger = Logger[TronNodeClient]
+  protected def dumpProtobufMessage(message:Message): Unit = {
+    logger.whenDebugEnabled {
+      logger.debug("Name:{},Message:{}",message.getClass.getSimpleName, Hex.toHexString(message.toByteArray))
+      Using.resource(new FileOutputStream(new File(s"${message.getClass.getSimpleName}-${System.currentTimeMillis()}.bin"))) { os =>
+        os.write(message.toByteArray)
+      }
+    }
+  }
 }
 object TronNodeClient {
   class ApiKeyClientInterceptor(apiKeys: Array[String]) extends ClientInterceptor {

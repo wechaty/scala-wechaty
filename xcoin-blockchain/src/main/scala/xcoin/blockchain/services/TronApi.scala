@@ -242,8 +242,24 @@ object TronApi {
 
     def accountTransferTRX(owner: String, target: String, amountSun: Long, permission: SimpleTronPermission): Mono[String]
   }
-  trait BlockSupport{
-   def blockLatestId():Mono[Long]
+
+  trait BlockSupport {
+    def blockLatestId(): Mono[Long]
+
+    /**
+     * 从某一个区块开始读取链上的事件，该方法无限输出
+     * @param start 开始的位置
+     * @param blockSegmentSize 每次读取的块长度
+     * @return 区块上的时间
+     */
+    def blockEventStream(start: Long, blockSegmentSize: Int = 10): Flux[TronModel.BlockEvent]
+
+    /**
+     * 得到某一个区块的事件
+     * @param blockId 区块的ID
+     * @return 区块的事件
+     */
+    def blockEvent(blockId: Long): Flux[TronModel.BlockEvent]
   }
   trait ResourceSupport{
     def resourceRate():Mono[ResourceRate]
