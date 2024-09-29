@@ -8,21 +8,21 @@
     <version>2.7.15</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
-  <groupId>com.ganshane.xcoin</groupId>
-  <artifactId>xcoin-project</artifactId>
+  <groupId>com.ganshane.xcoin.core</groupId>
+  <artifactId>xcoin-core-project</artifactId>
   <packaging>pom</packaging>
   <version>0.1-SNAPSHOT</version>
   <name>xcoin</name>
   <description>xcoin core project</description>
   <modules>
     <module>xcoin-blockchain</module>
-    <module>xcoin-core</module>
+    <module>xcoin-utils</module>
   </modules>
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.ganshane.xcoin</groupId>
-        <artifactId>xcoin-core</artifactId>
+        <groupId>com.ganshane.xcoin.core</groupId>
+        <artifactId>xcoin-utils</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -250,7 +250,7 @@
   <distributionManagement>
     <snapshotRepository>
       <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
     </snapshotRepository>
 
     <repository>
