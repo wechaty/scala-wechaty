@@ -16,13 +16,13 @@
   <description>xcoin core project</description>
   <modules>
     <module>xcoin-blockchain</module>
-    <module>xcoin-utils</module>
+    <module>xcoin-core</module>
   </modules>
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>com.ganshane.xcoin.core</groupId>
-        <artifactId>xcoin-utils</artifactId>
+        <artifactId>xcoin-core</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

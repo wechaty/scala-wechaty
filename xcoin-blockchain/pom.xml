@@ -14,7 +14,7 @@
   <dependencies>
     <dependency>
       <groupId>com.ganshane.xcoin.core</groupId>
-      <artifactId>xcoin-utils</artifactId>
+      <artifactId>xcoin-core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.github.ben-manes.caffeine</groupId>
