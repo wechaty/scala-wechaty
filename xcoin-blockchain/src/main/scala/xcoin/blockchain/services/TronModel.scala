@@ -1,10 +1,25 @@
 package xcoin.blockchain.services
 
+import org.tron.trident.proto.Common.ResourceCode
+
 object TronModel {
   object CoinType extends Enumeration {
     type Type = Value
     val USDT = Value(1)
     val TRX  = Value(2)
+  }
+  object ResourceType extends Enumeration {
+    type Type = Value
+    val ENERGY = Value(1)
+    val BANDWIDTH = Value(2)
+    implicit class ResourceTypWrapper(v:Type) {
+      def toTronResourceCode = {
+        this match {
+          case ENERGY => ResourceCode.ENERGY
+          case BANDWIDTH => ResourceCode.BANDWIDTH
+        }
+      }
+    }
   }
   trait BlockEvent
   case class BlockProcessedEvent(blockId:Long,blockTimestamp:Long) extends BlockEvent

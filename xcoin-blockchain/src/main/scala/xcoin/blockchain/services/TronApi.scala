@@ -1,9 +1,11 @@
 package xcoin.blockchain.services
 
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonProperty}
+import org.bouncycastle.util.encoders.Hex
 import org.tron.trident.abi.datatypes
 import org.tron.trident.api.ReactorWalletGrpc.ReactorWalletStub
 import org.tron.trident.api.ReactorWalletSolidityGrpc.ReactorWalletSolidityStub
+import org.tron.trident.core.ApiWrapper
 import org.tron.trident.core.transaction.TransactionBuilder
 import org.tron.trident.proto.Chain.Transaction
 import org.tron.trident.proto.{Chain, Response}
@@ -11,7 +13,9 @@ import org.tron.trident.proto.Response.TransactionExtention
 import reactor.core.publisher.{Flux, Mono}
 import xcoin.blockchain.internal.tron.TronNodeClient
 import xcoin.blockchain.services.TronApi.{BlockSupport, ContractSupport, ResourceSupport, SimpleTronPermission, TransactionSupport, TronNodeClientNetwork, USDTSupport, VoteSupport}
+import xcoin.blockchain.services.TronModel.ResourceType.Type
 
+import java.time.Duration
 import scala.util.Try
 
 trait TronApi
@@ -241,7 +245,7 @@ object TronApi {
 
     def accountTransferTRX(owner: String, target: String, amountSun: Long): Mono[Transaction]
 
-    def accountTransferTRX(owner: String, target: String, amountSun: Long, permission: SimpleTronPermission): Mono[String]
+    def accountActivate(owner: String, accountAddress: String): Mono[Transaction]
   }
 
   trait BlockSupport {
@@ -262,9 +266,38 @@ object TronApi {
      */
     def blockEvent(blockId: Long): Flux[TronModel.BlockEvent]
   }
-  trait ResourceSupport{
-    def resourceRate():Mono[ResourceRate]
 
+  trait ResourceSupport {
+    /**
+     * 得到1资源需要质押的TRX(单位为SUN)
+     *
+     * @return 资源比例
+     * @see [[ResourceRate]]
+     */
+    def resourceRate(): Mono[ResourceRate]
+
+    /**
+     * 代理资源
+     *
+     * @param owner        资源所属地址
+     * @param receiver     资源接受地址
+     * @param stakedTRXSun 资源对应需要质押的TRX数(单位sun)
+     * @param resourceType 资源类型
+     * @param lockDuration 锁定的时间段
+     * @return 交易数据
+     */
+    def resourceDelegate(owner: String, receiver: String, stakedTRXSun: Long, resourceType: Type, lockDuration: Duration = Duration.ZERO): Mono[Transaction]
+
+    /**
+     * 代理资源
+     *
+     * @param owner        资源所属地址
+     * @param receiver     资源接受地址
+     * @param stakedTRXSun 资源对应需要质押的TRX数(单位sun)
+     * @param resourceType 资源类型
+     * @return 交易数据
+     */
+    def resourceReclaim(owner: String, receiver: String, stakedTRXSun: Long, resourceType: Type): Mono[Transaction]
   }
 
   /**
@@ -274,7 +307,9 @@ object TronApi {
    * @param bandwidthRate 1带宽需要质押的TRX(单位为SUN)
    */
   case class ResourceRate(/** 1能量需要质押的TRX(单位为SUN) * */
-                          energyRate: Double, bandwidthRate: Double)
+                          energyRate: Double,
+                          /** 1带宽需要质押的TRX(单位为SUN) * */
+                          bandwidthRate: Double)
 
   object TronNodeClientNetwork extends Enumeration {
     type Type = Value

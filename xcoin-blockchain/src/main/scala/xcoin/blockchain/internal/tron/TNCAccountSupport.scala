@@ -1,32 +1,22 @@
 package xcoin.blockchain.internal.tron
 
-import com.google.protobuf.Any
 import org.bouncycastle.util.encoders.Hex
 import org.tron.trident.api.GrpcAPI.AccountAddressMessage
-import org.tron.trident.core.ApiWrapper.parseAddress
+import org.tron.trident.core.ApiWrapper.{createAccountCreateContract, parseAddress}
 import org.tron.trident.proto.Chain.Transaction
-import org.tron.trident.proto.Chain.Transaction.Contract.{ContractType, parser}
-import org.tron.trident.proto.Chain.Transaction.{Contract, raw}
+import org.tron.trident.proto.Chain.Transaction.Contract.ContractType
+import org.tron.trident.proto.Common
 import org.tron.trident.proto.Contract.TransferContract
-import org.tron.trident.proto.Response.TransactionExtention
-import org.tron.trident.proto.{Common, Contract}
 import org.tron.trident.utils.Base58Check
 import reactor.core.publisher.Mono
-import xcoin.blockchain.internal.tron.TronPermissionHelper.TronPermission
-import xcoin.blockchain.services.TronApi.{AccountSupport, SimpleTronPermission, TransactionSigned, TronPermission, TronPermissionKey, TronPermissionType}
-import xcoin.core.services.XCoinException
+import xcoin.blockchain.services.TronPermissionHelper.TronPermission
+import xcoin.blockchain.services.TronApi.{AccountSupport, TronPermission, TronPermissionKey, TronPermissionType}
 import xcoin.core.services.XCoinException.XInvalidParameterException
 
 trait TNCAccountSupport extends AccountSupport{
   self:TronNodeClient =>
   override def accountBalanceOfUSDT(owner:String):Mono[Long]={
     usdtBalanceOf(owner)
-  }
-
-  override def accountTransferTRX(owner: String, target: String, amountSun: Long,permission: SimpleTronPermission): Mono[String] = {
-    accountTransferTRX(owner, target, amountSun).flatMap {tx=>
-      contractSignAndBroadcast(permission,tx)
-    }
   }
 
   override def accountTransferTRX(owner:String, target:String, amountSun:Long):Mono[Transaction]= {
@@ -36,6 +26,15 @@ trait TNCAccountSupport extends AccountSupport{
       .setOwnerAddress(rawFrom).setToAddress(rawTo).setAmount(amountSun).build
     contractCreateTransaction(req, ContractType.TransferContract).map(_.getTransaction)
   }
+
+  override def accountActivate(owner: String, accountAddress: String): Mono[Transaction] = {
+    val bsOwnerAddress   = parseAddress(owner)
+    val bsAccountAddress = parseAddress(accountAddress)
+    val contract         = createAccountCreateContract(bsOwnerAddress, bsAccountAddress)
+
+    contractCreateTransaction(contract, ContractType.AccountCreateContract).map(_.getTransaction)
+  }
+
 
   override def accountGet(address: String): Mono[TronAccount] = {
     val bsAddress             = parseAddress(address)
@@ -96,53 +95,4 @@ trait TNCAccountSupport extends AccountSupport{
 
   }
 }
-object TronPermissionHelper{
-  implicit class TronPermissionWrapper(tronPermission:TronPermission){
-    /**
-     * 是否有某项合约权限
-     * @param contractType 合约类型
-     * @return
-     */
-    private[tron] def hasPermission(contractType:ContractType):Boolean={
-      val operations = tronPermission.operations
-      if (operations.length != 32) {
-        throw XInvalidParameterException("operations", operations)
-      }
 
-      val dataIndex = contractType.getNumber >> 3
-      val positionIndex = contractType.getNumber - (dataIndex << 3)
-      val data = 1 << positionIndex
-
-      (operations(dataIndex) & data )  == data
-    }
-    def hasPermission(address:String,contractType: ContractType):Boolean={
-      hasPermission(contractType) && {
-        val opt = tronPermission.keys.find(x=> x.address == address)
-        opt.isDefined && opt.get.weight >= tronPermission.threshold
-      }
-    }
-  }
-  object TronPermission{
-    def apply(permission:Common.Permission):TronPermission={
-      val tronPermission = new TronPermission
-      tronPermission.name = permission.getPermissionName
-      tronPermission.`type` = {
-        permission.getType match {
-          case Common.Permission.PermissionType.Owner => TronPermissionType.OWNER
-          case Common.Permission.PermissionType.Witness => TronPermissionType.WITNESS
-          case Common.Permission.PermissionType.Active => TronPermissionType.ACTIVE
-        }
-      }
-      tronPermission.operations = permission.getOperations.toByteArray
-      tronPermission.threshold= permission.getThreshold
-      tronPermission.keys = permission.getKeysList.stream().map[TronPermissionKey]{k=>
-        val key = new TronPermissionKey
-        key.address = Base58Check.bytesToBase58(k.getAddress.toByteArray)
-        key.weight = k.getWeight
-        key
-      }.toArray(size=>new Array[TronPermissionKey](size))
-
-      tronPermission
-    }
-  }
-}

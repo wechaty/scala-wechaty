@@ -16,7 +16,7 @@ import org.tron.trident.proto.Response
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
 import xcoin.blockchain.internal.tron.TronNodeClientTest.TestNileConfiguration
-import xcoin.blockchain.internal.tron.TronPermissionHelper.TronPermissionWrapper
+import xcoin.blockchain.services.TronPermissionHelper.TronPermissionWrapper
 import xcoin.blockchain.services.TronApi.TronPermission
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE,
@@ -72,21 +72,9 @@ class TNCAccountSupportTest {
     val catPermission = account.activePermission(1)
     Assertions.assertEquals("100CAT",catPermission.name)
     Assertions.assertEquals(1,catPermission.threshold)
-    Assertions.assertTrue(catPermission.hasPermission(ContractType.DelegateResourceContract))
     Assertions.assertFalse(catPermission.hasPermission("123",ContractType.DelegateResourceContract))
     Assertions.assertTrue(catPermission.hasPermission("TWmfLmUSuTgm8m92ZbkgxT6BJfjdmx2QxS",ContractType.DelegateResourceContract))
     Assertions.assertTrue(catPermission.hasPermission("TWmfLmUSuTgm8m92ZbkgxT6BJfjdmx2QxS",ContractType.UnDelegateResourceContract))
     Assertions.assertFalse(catPermission.hasPermission("TWmfLmUSuTgm8m92ZbkgxT6BJfjdmx2QxS",ContractType.UpdateBrokerageContract))
-  }
-  @Test
-  def testPermission(): Unit = {
-    val tronPermission = new TronPermission
-//    val activate1="7fff1fc0033efb0f000000000000000000000000000000000000000000000000"
-    val activate2="0000000000000006000000000000000000000000000000000000000000000000"
-    tronPermission.operations = Hex.decode(activate2)
-    Assertions.assertTrue(tronPermission.hasPermission(ContractType.DelegateResourceContract))
-    Assertions.assertFalse(tronPermission.hasPermission(ContractType.AccountCreateContract))
-    Assertions.assertFalse(tronPermission.hasPermission(ContractType.UpdateBrokerageContract))
-    Assertions.assertTrue(tronPermission.hasPermission(ContractType.UnDelegateResourceContract))
   }
 }

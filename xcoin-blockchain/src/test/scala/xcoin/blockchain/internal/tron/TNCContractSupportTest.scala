@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.tron.trident.abi.TypeReference
 import org.tron.trident.abi.datatypes.Address
 import org.tron.trident.abi.datatypes.generated.Uint256
-import org.tron.trident.core.ApiWrapper.parseAddress
 import reactor.test.StepVerifier
 import xcoin.blockchain.internal.tron.TronNodeClientTest.TestNileConfiguration
 import xcoin.blockchain.services.TronApi.SimpleTronPermission
