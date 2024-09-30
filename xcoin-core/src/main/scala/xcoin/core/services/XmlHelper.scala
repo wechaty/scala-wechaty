@@ -2,6 +2,7 @@ package xcoin.core.services
 
 import jakarta.xml.bind.JAXBContext
 import jakarta.xml.bind.util.ValidationEventCollector
+import xcoin.core.services.XCoinException.XInvalidParameterException
 
 import java.io.{InputStream, InputStreamReader}
 import java.nio.charset.StandardCharsets
@@ -35,7 +36,7 @@ object XmlHelper {
         if (veOption.isDefined) {
           val ve  = veOption.get
           val vel = ve.getLocator
-          throw new RuntimeException("line %s column %s :%s".format(vel.getLineNumber, vel.getColumnNumber, ve.getMessage))
+          throw XInvalidParameterException("line %s column %s :%s".format(vel.getLineNumber, vel.getColumnNumber, ve.getMessage))
         }
       }
     }

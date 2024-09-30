@@ -5,7 +5,7 @@ import org.junit.jupiter.api.{Assertions, Test}
 import xcoin.core.services.XmlHelperTest.AClass
 
 import java.io.ByteArrayInputStream
-import scala.util.Using
+import scala.util.{Try, Using}
 
 class XmlHelperTest {
 
@@ -17,6 +17,14 @@ class XmlHelperTest {
       val a = XmlHelper.parseXML[AClass](new ByteArrayInputStream(xml.toString.getBytes()), Some(xsd))
       Assertions.assertEquals("hello", a.e)
     }
+    val result = Try {
+      val xml2= "<root><b>hello</b></root>"
+      Using.resource(getClass.getResourceAsStream("/test.xsd")) { xsd =>
+        val a = XmlHelper.parseXML[AClass](new ByteArrayInputStream(xml2.getBytes()), Some(xsd))
+        Assertions.assertEquals("hello", a.e)
+      }
+    }
+    Assertions.assertTrue(result.isFailure)
   }
 }
 object XmlHelperTest{
