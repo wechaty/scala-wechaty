@@ -1,7 +1,7 @@
 syntax = "proto3";
 package crypto;
 
-option java_package = "xcoin.blockchain.proto";
+option java_package = "xcoin.blockchain.crypto.proto";
 
 
 message CryptoData {
