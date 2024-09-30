@@ -42,7 +42,7 @@ object TronApi {
 
 
   trait TronNodeClientCustomizer {
-    def customize(tronNodeClientBuilder: TronNodeClientBuilder)
+    def customize(tronNodeClientBuilder: TronNodeClientBuilder):Unit
   }
 
   trait TransactionSupport {
