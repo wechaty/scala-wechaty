@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.tron.trident.api.GrpcAPI.AccountAddressMessage
 import org.tron.trident.api.ReactorWalletGrpc.ReactorWalletStub
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType
+import org.tron.trident.proto.Common.AccountType
 import org.tron.trident.proto.Response
 import reactor.core.publisher.Mono
 import reactor.test.StepVerifier
@@ -43,6 +44,7 @@ class TNCAccountSupportTest {
 
     val account = tronNodeClient.accountGet("TSKnicj3bfk7M7KTjtecHXLz2jvdveFtqq").block()
     Assertions.assertTrue(account.activePermission.length > 0)
+    Assertions.assertEquals(AccountType.Normal,account.`type`)
 
     StepVerifier
       .create(account.canDelegateBandwidth())
