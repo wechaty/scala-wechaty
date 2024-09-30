@@ -99,19 +99,26 @@
     </dependency>
 
     <dependency>
-      <groupId>org.web3j</groupId>
-      <artifactId>core</artifactId>
+      <groupId>io.projectreactor.addons</groupId>
+      <artifactId>reactor-adapter</artifactId>
+    </dependency>
+    <!--
+    <dependency>
+      <groupId>org.bitcoinj</groupId>
+      <artifactId>bitcoinj-core</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>io.projectreactor.addons</groupId>
-      <artifactId>reactor-adapter</artifactId>
+      <groupId>org.web3j</groupId>
+      <artifactId>core</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>net.osslabz</groupId>
       <artifactId>evm-abi-decoder</artifactId>
       <version>0.0.8</version>
     </dependency>
+    -->
 <!--    <dependency>-->
 <!--      <groupId>com.google.protobuf</groupId>-->
 <!--      <artifactId>protobuf-java</artifactId>-->
@@ -138,11 +145,6 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>org.bitcoinj</groupId>
-      <artifactId>bitcoinj-core</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>com.fasterxml.jackson.module</groupId>
       <artifactId>jackson-module-scala_${scala.binary.version}</artifactId>
       <version>${jackson-bom.version}</version>
@@ -157,12 +159,12 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-inline</artifactId>
-      <version>${mockito.version}</version>
-      <scope>test</scope>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.mockito</groupId>-->
+<!--      <artifactId>mockito-inline</artifactId>-->
+<!--      <version>${mockito.version}</version>-->
+<!--      <scope>test</scope>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>org.junit.vintage</groupId>
       <artifactId>junit-vintage-engine</artifactId>

@@ -1,13 +1,11 @@
 package xcoin.core.services
 
-import com.sun.org.apache.xerces.internal.dom.DOMInputImpl
-import org.w3c.dom.ls.{LSInput, LSResourceResolver}
+import jakarta.xml.bind.JAXBContext
+import jakarta.xml.bind.util.ValidationEventCollector
 
 import java.io.{InputStream, InputStreamReader}
 import java.nio.charset.StandardCharsets
 import javax.xml.XMLConstants
-import javax.xml.bind.JAXBContext
-import javax.xml.bind.util.ValidationEventCollector
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.SchemaFactory
 
@@ -25,16 +23,6 @@ object XmlHelper {
       //.unmarshal(reader).asInstanceOf[T]
       if (xsd.isDefined) {
         val sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-        sf.setResourceResolver(new LSResourceResolver {
-          override def resolveResource(`type`: String, namespaceURI: String, publicId: String, systemId: String, baseURI: String): LSInput = {
-            val input = new DOMInputImpl()
-            if (systemId.endsWith("monad.xsd")) {
-              //仅仅处理系统的文件 TODO 调整为能够自动识别文件路径
-              input.setByteStream(getClass.getResourceAsStream("/monad.xsd"))
-            }
-            input
-          }
-        })
         val schemaSource = new StreamSource(xsd.get, "xml")
         val schema       = sf.newSchema(schemaSource)
         unmarshaller.setSchema(schema)

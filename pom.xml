@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.15</version>
+    <version>3.3.4</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.ganshane.xcoin.core</groupId>
@@ -55,6 +55,7 @@
         <artifactId>core</artifactId>
         <version>0.7.0</version>
       </dependency>
+      <!--
       <dependency>
         <groupId>org.bitcoinj</groupId>
         <artifactId>bitcoinj-core</artifactId>
@@ -79,6 +80,7 @@
         <artifactId>core</artifactId>
         <version>4.10.3</version>
       </dependency>
+      -->
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-test</artifactId>
