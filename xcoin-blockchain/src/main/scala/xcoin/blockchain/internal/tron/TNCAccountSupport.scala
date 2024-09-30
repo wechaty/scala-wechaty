@@ -6,11 +6,13 @@ import org.tron.trident.core.ApiWrapper.{createAccountCreateContract, parseAddre
 import org.tron.trident.proto.Chain.Transaction
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType
 import org.tron.trident.proto.Common
+import org.tron.trident.proto.Common.AccountType
 import org.tron.trident.proto.Contract.TransferContract
 import org.tron.trident.utils.Base58Check
 import reactor.core.publisher.Mono
 import xcoin.blockchain.services.TronPermissionHelper.TronPermission
 import xcoin.blockchain.services.TronApi.{AccountSupport, TronPermission, TronPermissionKey, TronPermissionType}
+import xcoin.blockchain.services.TronModel.TronAccount
 import xcoin.core.services.XCoinException.XInvalidParameterException
 
 trait TNCAccountSupport extends AccountSupport{
@@ -36,6 +38,12 @@ trait TNCAccountSupport extends AccountSupport{
   }
 
 
+  override def accountIsNormalActivated(accountAddress: String): Mono[Boolean] = {
+    accountGet(accountAddress)
+      .filter(_.`type` == AccountType.Normal)
+      .map(_.createdTime > 0)
+  }
+
   override def accountGet(address: String): Mono[TronAccount] = {
     val bsAddress             = parseAddress(address)
     val accountAddressMessage = AccountAddressMessage.newBuilder.setAddress(bsAddress).build
@@ -44,6 +52,7 @@ trait TNCAccountSupport extends AccountSupport{
       .map{account=>
         println(Hex.toHexString(account.toByteArray))
         val tronAccount = new TronAccount
+        tronAccount.`type` = account.getType
         tronAccount.address = address
         tronAccount.balanceSun = account.getBalance
         tronAccount.createdTime = account.getCreateTime

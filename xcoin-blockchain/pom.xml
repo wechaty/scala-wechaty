@@ -202,21 +202,22 @@
           </execution>
         </executions>
         <configuration>
-
           <protocArtifact>com.google.protobuf:protoc:${protobuf.version}</protocArtifact>
           <addProtoSources>all</addProtoSources>
           <includeStdTypes>true</includeStdTypes>
           <includeMavenTypes>direct</includeMavenTypes>
           <includeDirectories>
             <include>src/main/proto/trident</include>
+            <include>src/main/proto/xcoin</include>
           </includeDirectories>
           <inputDirectories>
             <include>src/main/proto/trident</include>
+            <include>src/main/proto/xcoin</include>
           </inputDirectories>
           <outputTargets>
-<!--            <outputTarget>-->
-<!--              <type>java</type>-->
-<!--            </outputTarget>-->
+            <outputTarget>
+              <type>java</type>
+            </outputTarget>
 <!--            <outputTarget>-->
 <!--              <type>js</type>-->
 <!--              <outputDirectory>../hook/agent/protobuf</outputDirectory>-->

@@ -17,7 +17,7 @@ object TronPermissionHelper {
     private[services] def hasPermission(contractType: ContractType): Boolean = {
       val operations = tronPermission.operations
       if (operations.length != 32) {
-        throw XInvalidParameterException("operations", operations)
+        throw new XInvalidParameterException("operations", operations)
       }
 
       val dataIndex     = contractType.getNumber >> 3

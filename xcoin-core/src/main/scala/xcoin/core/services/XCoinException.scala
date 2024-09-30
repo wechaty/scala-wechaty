@@ -1,7 +1,7 @@
 package xcoin.core.services
 
 
-abstract class XCoinException(code:Int,message:String) extends RuntimeException(message) {
+abstract class XCoinException(val code:Int,message:String) extends RuntimeException(message) {
   def errorName= this match {
     case e :Product=> e.productPrefix
     case other => this.getClass.getSimpleName
@@ -9,7 +9,11 @@ abstract class XCoinException(code:Int,message:String) extends RuntimeException(
 }
 
 object XCoinException{
-  case class XInvalidParameterException(name:String, value:Any) extends XCoinException(1, "invalid value [%s] for [%s]".format(value, name))
+  case class XInvalidParameterException(message:String) extends XCoinException(1, message){
+    def this(name:String, value:Any){
+      this("invalid value [%s] for [%s]".format(value, name))
+    }
+  }
   case object XAccessDeniedException extends XCoinException(2, "Access Denied")
   case class XResourceNotFoundException(resourcePath:String) extends XCoinException(3, "resource [%s] not found".format(resourcePath))
   case class XFailRequestException(failMessage:String) extends XCoinException(4, "failt to request:[%s]".format(failMessage))

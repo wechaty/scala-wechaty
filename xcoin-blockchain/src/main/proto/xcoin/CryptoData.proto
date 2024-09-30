@@ -1,0 +1,10 @@
+syntax = "proto3";
+package crypto;
+
+option java_package = "xcoin.blockchain.proto";
+
+
+message CryptoData {
+  uint32 version = 1; //加密版本
+  bytes encryptData = 2; //加密后的数据
+}
