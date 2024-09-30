@@ -178,13 +178,6 @@
   <build>
     <resources>
       <resource>
-        <directory>../support/assembly</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>version.properties</include>
-        </includes>
-      </resource>
-      <resource>
         <directory>src/main/resources</directory>
       </resource>
       <resource>
@@ -242,51 +235,4 @@
       </plugin>
     </plugins>
   </build>
-  <profiles>
-    <profile>
-      <id>deploy</id>
-      <build>
-        <finalName>xcoin-${project.version}.${BUILD_ID}</finalName>
-        <plugins>
-          <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <phase>initialize</phase>
-                <goals>
-                  <goal>copy-dependencies</goal>
-                </goals>
-                <configuration>
-                  <overWriteReleases>false</overWriteReleases>
-                  <includeScope>runtime</includeScope>
-                  <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>run</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <finalName>xcoin-${project.version}.${BUILD_ID}</finalName>
-                  <descriptors>
-                    <descriptor>../support/assembly/bin-xcoin.xml</descriptor>
-                  </descriptors>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-      <properties>
-        <javacpp.platform>linux-x86_64</javacpp.platform>
-      </properties>
-    </profile>
-  </profiles>
 </project>
