@@ -1,20 +1,15 @@
 package xcoin.blockchain.services
 
-import com.fasterxml.jackson.annotation.{JsonIgnore, JsonProperty}
-import org.bouncycastle.util.encoders.Hex
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.tron.trident.abi.datatypes
 import org.tron.trident.api.ReactorWalletGrpc.ReactorWalletStub
 import org.tron.trident.api.ReactorWalletSolidityGrpc.ReactorWalletSolidityStub
-import org.tron.trident.core.ApiWrapper
 import org.tron.trident.core.transaction.TransactionBuilder
 import org.tron.trident.proto.Chain.Transaction
-import org.tron.trident.proto.Common.AccountType
 import org.tron.trident.proto.{Chain, Response}
-import org.tron.trident.proto.Response.TransactionExtention
 import reactor.core.publisher.{Flux, Mono}
-import xcoin.blockchain.internal.tron.TronNodeClient
-import xcoin.blockchain.services.TronApi.{AccountSupport, BlockSupport, ContractSupport, ResourceSupport, SimpleTronPermission, TransactionSupport, TronNodeClientNetwork, USDTSupport, VoteSupport}
-import xcoin.blockchain.services.TronModel.ResourceType.Type
+import xcoin.blockchain.services.TronApi._
+import xcoin.blockchain.services.TronBridge.ResourceType
 import xcoin.blockchain.services.TronModel.TronAccount
 
 import java.time.Duration
@@ -163,7 +158,7 @@ object TronApi {
      * @param lockDuration 锁定的时间段
      * @return 交易数据
      */
-    def resourceDelegate(owner: String, receiver: String, stakedTRXSun: Long, resourceType: Type, lockDuration: Duration = Duration.ZERO): Mono[Transaction]
+    def resourceDelegate(owner: String, receiver: String, stakedTRXSun: Long, resourceType: ResourceType, lockDuration: Duration = Duration.ZERO): Mono[Transaction]
 
     /**
      * 代理资源
@@ -174,7 +169,7 @@ object TronApi {
      * @param resourceType 资源类型
      * @return 交易数据
      */
-    def resourceReclaim(owner: String, receiver: String, stakedTRXSun: Long, resourceType: Type): Mono[Transaction]
+    def resourceReclaim(owner: String, receiver: String, stakedTRXSun: Long, resourceType: ResourceType): Mono[Transaction]
   }
 
   /**

@@ -7,18 +7,17 @@ import org.tron.trident.abi.datatypes.generated.Uint256
 import org.tron.trident.api.GrpcAPI.{BlockLimit, EmptyMessage}
 import org.tron.trident.proto.Chain.Transaction
 import org.tron.trident.proto.Chain.Transaction.Contract.ContractType
+import org.tron.trident.proto.Contract._
 import org.tron.trident.proto.{Chain, Common, Contract, Response}
-import org.tron.trident.proto.Contract.{AccountCreateContract, DelegateResourceContract, TransferContract, TriggerSmartContract, UnDelegateResourceContract}
 import org.tron.trident.utils.Base58Check.bytesToBase58
 import reactor.core.publisher.{Flux, Mono}
-import xcoin.blockchain.internal.tron.USDTSupport.{MAIN_USDT_CONTRACT_ADDRESS, MAIN_USDT_TRANSFER_FROM_METHOD_ID, MAIN_USDT_TRANSFER_METHOD_ID, NILE_USDT_CONTRACT_ADDRESS, NILE_USDT_TRANSFER_FROM_METHOD_ID, NILE_USDT_TRANSFER_METHOD_ID, SHASTA_USDT_CONTRACT_ADDRESS, SHASTA_USDT_TRANSFER_FROM_METHOD_ID, SHASTA_USDT_TRANSFER_METHOD_ID}
+import xcoin.blockchain.internal.tron.USDTSupport._
 import xcoin.blockchain.services.TronApi.{BlockSupport, TronNodeClientNetwork}
+import xcoin.blockchain.services.TronBridge.CoinType
 import xcoin.blockchain.services.TronModel._
 import xcoin.core.services.XCoinException.{XInvalidReturnException, XInvalidStateException}
 
-import java.io.{File, FileOutputStream}
 import java.time.Duration
-import scala.util.Using
 
 trait TNCBlockSupport extends BlockSupport {
   self: TronNodeClient =>

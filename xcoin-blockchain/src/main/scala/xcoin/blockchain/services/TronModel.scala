@@ -4,26 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import org.tron.trident.proto.Common.{AccountType, ResourceCode}
 import reactor.core.publisher.Mono
 import xcoin.blockchain.services.TronApi.{ResourceRate, TronPermission}
+import xcoin.blockchain.services.TronBridge.{CoinType, ResourceType}
 
 object TronModel {
-  object CoinType extends Enumeration {
-    type Type = Value
-    val USDT = Value(1)
-    val TRX  = Value(2)
-  }
-  object ResourceType extends Enumeration {
-    type Type = Value
-    val ENERGY = Value(1)
-    val BANDWIDTH = Value(2)
-    implicit class ResourceTypWrapper(v:Type) {
-      def toTronResourceCode = {
-        this match {
-          case ENERGY => ResourceCode.ENERGY
-          case BANDWIDTH => ResourceCode.BANDWIDTH
-        }
-      }
-    }
-  }
   trait BlockEvent
   case class BlockProcessedEvent(blockId:Long,blockTimestamp:Long) extends BlockEvent
   trait AddressChangeEvent extends BlockEvent {
@@ -55,12 +38,12 @@ object TronModel {
 
   case class ReclaimBandwidthInEvent(override val address: String, override val stakeAmountSun: Long, override val relativeAddress: String) extends ReclaimEnergyEvent(address, stakeAmountSun, relativeAddress)
 
-  abstract class TransferChangeEvent(val coinType: CoinType.Type, val address: String, val amountSun: Long, val relativeAddress: String) extends AddressChangeEvent {
+  abstract class TransferChangeEvent(val coinType: CoinType, val address: String, val amountSun: Long, val relativeAddress: String) extends AddressChangeEvent {
   }
 
-  case class TransferOutEvent(override val coinType: CoinType.Type, override val address: String, override val amountSun: Long, override val relativeAddress: String) extends TransferChangeEvent(coinType, address, amountSun, relativeAddress) {}
+  case class TransferOutEvent(override val coinType: CoinType, override val address: String, override val amountSun: Long, override val relativeAddress: String) extends TransferChangeEvent(coinType, address, amountSun, relativeAddress) {}
 
-  case class TransferInEvent(override val coinType: CoinType.Type, override val address: String, override val amountSun: Long, override val relativeAddress: String) extends TransferChangeEvent(coinType, address, amountSun, relativeAddress) {}
+  case class TransferInEvent(override val coinType: CoinType, override val address: String, override val amountSun: Long, override val relativeAddress: String) extends TransferChangeEvent(coinType, address, amountSun, relativeAddress) {}
 
   case class TriggerSmartContractEvent(address: String, contractAddress: String) extends AddressChangeEvent
 
@@ -194,4 +177,12 @@ object TronModel {
     }
   }
 
+  implicit class ResourceTypWrapper(v: ResourceType) {
+    def toTronResourceCode = {
+      v match {
+        case ResourceType.ENERGY => ResourceCode.ENERGY
+        case ResourceType.BANDWIDTH => ResourceCode.BANDWIDTH
+      }
+    }
+  }
 }
